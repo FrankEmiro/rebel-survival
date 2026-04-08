@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#c9a84c">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Resilienza">
+  <meta name="description" content="Strumenti pratici per gestire emergenze energetiche e alimentari">
+  <title>Kit Resilienza</title>
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Nunito:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Phosphor Icons (locale — offline-ready) -->
+  <link rel="stylesheet" href="js/vendor/phosphor/style.css">
+
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="css/print.css" media="print">
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <header id="topbar">
+    <div id="topbar-left">
+      <div class="topbar-logo">
+        <i class="ph ph-lightning-fill logo-bolt"></i>
+        <span id="page-title">Dashboard</span>
+      </div>
+    </div>
+    <div id="topbar-right">
+      <span id="offline-badge" class="badge badge-warning hidden">
+        <i class="ph ph-wifi-slash"></i> OFFLINE
+      </span>
+    </div>
+  </header>
+
+  <!-- SIDEBAR (desktop) -->
+  <nav id="sidebar">
+    <div class="sidebar-logo">
+      <i class="ph ph-lightning-fill"></i>
+      <div>
+        <div class="logo-text">Kit Resilienza</div>
+        <div class="logo-sub">SURVIVAL TOOLKIT v1.0</div>
+      </div>
+    </div>
+
+    <ul class="nav-list">
+      <li><a href="#" class="nav-link active" data-section="home">
+        <i class="ph ph-house-simple"></i> Dashboard
+      </a></li>
+      <li><a href="#" class="nav-link" data-section="settings">
+        <i class="ph ph-sliders"></i> Dimensioni
+      </a></li>
+
+      <li class="nav-group-label">— Pianificazione</li>
+      <li><a href="#" class="nav-link" data-section="kit">
+        <i class="ph ph-backpack"></i> Kit Emergenza
+      </a></li>
+      <li><a href="#" class="nav-link" data-section="lista-spesa">
+        <i class="ph ph-shopping-cart-simple"></i> Lista Spesa
+      </a></li>
+
+      <li class="nav-group-label">— Guide</li>
+      <li><a href="#" class="nav-link" data-section="guide">
+        <i class="ph ph-books"></i> Guide Offline
+      </a></li>
+    </ul>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main id="main-content">
+
+    <!-- ===== HOME / DASHBOARD ===== -->
+    <section id="section-home" class="section active">
+      <div id="dashboard-root"></div>
+    </section>
+
+    <!-- ===== ACQUA ===== -->
+    <section id="section-acqua" class="section">
+      <div class="section-header">
+        <h1><i class="ph ph-drop"></i> Acqua</h1>
+        <p class="subtitle">Fabbisogno idrico, scorte e purificazione</p>
+      </div>
+      <div id="acqua-root"></div>
+    </section>
+
+    <!-- ===== CIBO ===== -->
+    <section id="section-cibo" class="section">
+      <div class="section-header">
+        <h1><i class="ph ph-fork-knife"></i> Cibo</h1>
+        <p class="subtitle">Scorte alimentari a lunga conservazione</p>
+      </div>
+      <div id="cibo-root"></div>
+    </section>
+
+    <!-- ===== ENERGIA ===== -->
+    <section id="section-energia" class="section">
+      <div class="section-header">
+        <h1><i class="ph ph-lightning"></i> Energia</h1>
+        <p class="subtitle">Autonomia elettrica e priorità consumi</p>
+      </div>
+      <div id="energia-root"></div>
+    </section>
+
+    <!-- ===== RISCALDAMENTO ===== -->
+    <section id="section-riscaldamento" class="section">
+      <div class="section-header">
+        <h1><i class="ph ph-flame"></i> Riscaldamento</h1>
+        <p class="subtitle">Combustibile alternativo e autonomia termica</p>
+      </div>
+      <div id="riscaldamento-root"></div>
+    </section>
+
+    <!-- ===== CARBURANTE ===== -->
+    <section id="section-carburante" class="section">
+      <div class="section-header">
+        <h1><i class="ph ph-gas-pump"></i> Carburante</h1>
+        <p class="subtitle">Autonomia mobilità e piano spostamenti</p>
+      </div>
+      <div id="carburante-root"></div>
+    </section>
+
+    <!-- ===== BUDGET ===== -->
+    <section id="section-budget" class="section">
+      <div class="section-header">
+        <h1><i class="ph ph-currency-eur"></i> Budget</h1>
+        <p class="subtitle">Piano acquisti prioritizzato per budget disponibile</p>
+      </div>
+      <div id="budget-root"></div>
+    </section>
+
+    <!-- ===== KIT EMERGENZA ===== -->
+    <section id="section-kit" class="section">
+      <div class="section-header">
+        <h1><i class="ph ph-backpack"></i> Kit Emergenza</h1>
+        <p class="subtitle">Checklist completa: casa, auto, go-bag</p>
+      </div>
+      <div id="kit-root"></div>
+    </section>
+
+    <!-- ===== LISTA SPESA ===== -->
+    <section id="section-lista-spesa" class="section">
+      <div class="section-header">
+        <h1><i class="ph ph-shopping-cart-simple"></i> Lista Spesa</h1>
+        <p class="subtitle">Generata dai calcolatori — stampabile</p>
+      </div>
+      <div id="lista-spesa-root"></div>
+    </section>
+
+    <!-- ===== GUIDE ===== -->
+    <section id="section-guide" class="section">
+      <div class="section-header">
+        <h1><i class="ph ph-books"></i> Guide Offline</h1>
+        <p class="subtitle">Tutto il necessario — disponibile senza connessione</p>
+      </div>
+      <div id="guide-root"></div>
+    </section>
+
+    <!-- ===== DIMENSIONI (ex Impostazioni) ===== -->
+    <section id="section-settings" class="section">
+      <div class="section-header">
+        <h1><i class="ph ph-sliders"></i> Dimensioni</h1>
+        <p class="subtitle">Aggiorna i tuoi dati reali — ogni modifica aggiorna il Dashboard</p>
+      </div>
+      <div id="settings-root"></div>
+    </section>
+
+  </main>
+
+  <!-- BOTTOM NAV (mobile) -->
+  <nav id="bottom-nav">
+    <a href="#" class="bottom-nav-item active" data-section="home">
+      <i class="ph ph-house-simple bottom-nav-icon"></i>
+      <span class="bottom-nav-label">Home</span>
+    </a>
+    <a href="#" class="bottom-nav-item" data-section="settings">
+      <i class="ph ph-sliders bottom-nav-icon"></i>
+      <span class="bottom-nav-label">Dimensioni</span>
+    </a>
+    <a href="#" class="bottom-nav-item" data-section="guide">
+      <i class="ph ph-books bottom-nav-icon"></i>
+      <span class="bottom-nav-label">Guide</span>
+    </a>
+    <a href="#" class="bottom-nav-item" data-section="budget">
+      <i class="ph ph-currency-eur bottom-nav-icon"></i>
+      <span class="bottom-nav-label">Budget</span>
+    </a>
+    <a href="#" class="bottom-nav-item" data-section="kit">
+      <i class="ph ph-backpack bottom-nav-icon"></i>
+      <span class="bottom-nav-label">Kit</span>
+    </a>
+  </nav>
+
+  <div id="print-area" class="hidden"></div>
+
+  <!-- SCRIPTS -->
+  <script src="js/storage.js"></script>
+  <script src="js/modules/scenari.js"></script>
+  <script src="js/modules/settings.js"></script>
+  <script src="js/modules/dashboard.js"></script>
+  <script src="js/modules/acqua.js"></script>
+  <script src="js/modules/cibo.js"></script>
+  <script src="js/modules/energia.js"></script>
+  <script src="js/modules/riscaldamento.js"></script>
+  <script src="js/modules/carburante.js"></script>
+  <script src="js/modules/budget.js"></script>
+  <script src="js/modules/kit.js"></script>
+  <script src="js/modules/lista-spesa.js"></script>
+  <script src="js/data/guides.js"></script>
+  <script src="js/modules/guide.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

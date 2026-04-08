@@ -1,0 +1,7 @@
+{
+  "name": "kit-resilienza",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "npx serve . -p 5500 --no-clipboard"
+  }
+}

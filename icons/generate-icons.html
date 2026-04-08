@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<!-- Apri questo file nel browser per generare le icone PNG.
+     Clic "Genera & Scarica" per entrambe le dimensioni. -->
+<html>
+<head><title>Genera Icone PWA</title></head>
+<body style="font-family:sans-serif;padding:20px;background:#0d1117;color:#e6edf3">
+  <h2>Genera Icone PWA — Kit Resilienza</h2>
+  <canvas id="c192" width="192" height="192" style="display:none"></canvas>
+  <canvas id="c512" width="512" height="512" style="display:none"></canvas>
+  <button onclick="gen()" style="padding:12px 24px;background:#f97316;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:1rem">
+    Genera e Scarica Icone
+  </button>
+  <p id="status" style="margin-top:12px;color:#8b949e"></p>
+  <script>
+    function drawIcon(canvas) {
+      const ctx = canvas.getContext('2d');
+      const s = canvas.width;
+      const r = s * 0.16;
+      // Sfondo scuro con bordi arrotondati
+      ctx.fillStyle = '#0d1117';
+      ctx.beginPath();
+      ctx.roundRect(0, 0, s, s, r);
+      ctx.fill();
+      // Bordo arancione
+      ctx.strokeStyle = '#f97316';
+      ctx.lineWidth = s * 0.04;
+      ctx.beginPath();
+      ctx.roundRect(s*0.04, s*0.04, s*0.92, s*0.92, r);
+      ctx.stroke();
+      // Emoji ⚡
+      ctx.font = `${s*0.5}px serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('⚡', s/2, s*0.42);
+      // Testo
+      ctx.font = `bold ${s*0.1}px sans-serif`;
+      ctx.fillStyle = '#f97316';
+      ctx.fillText('RESILIENZA', s/2, s*0.82);
+    }
+    function gen() {
+      ['192','512'].forEach(size => {
+        const c = document.getElementById('c'+size);
+        drawIcon(c);
+        const a = document.createElement('a');
+        a.download = 'icon-'+size+'.png';
+        a.href = c.toDataURL('image/png');
+        a.click();
+      });
+      document.getElementById('status').textContent = '✅ Icone scaricate! Sposta icon-192.png e icon-512.png nella cartella /icons/';
+    }
+  </script>
+</body>
+</html>
