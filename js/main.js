@@ -95,10 +95,30 @@ function registerSW() {
   }
 }
 
+// Disclaimer
+function showDisclaimer() {
+  document.getElementById('disclaimer-overlay').classList.remove('hidden');
+}
+
+function initDisclaimer() {
+  const overlay = document.getElementById('disclaimer-overlay');
+  const btn = document.getElementById('disclaimer-accept');
+
+  btn.addEventListener('click', () => {
+    overlay.classList.add('hidden');
+    localStorage.setItem('disclaimer_accepted', '1');
+  });
+
+  if (!localStorage.getItem('disclaimer_accepted')) {
+    overlay.classList.remove('hidden');
+  }
+}
+
 // App init
 document.addEventListener('DOMContentLoaded', () => {
   bindNavClicks();
   initOfflineDetection();
   registerSW();
+  initDisclaimer();
   navigateTo('home');
 });

@@ -1173,6 +1173,12 @@ const SettingsModule = (() => {
       <p id="s-save-msg" class="text-center text-secondary text-sm mt-12 hidden">
         <i class="ph ph-check-circle"></i> Profilo aggiornato — Dashboard sincronizzato
       </p>
+      <div class="legal-footer">
+        <button class="legal-link" onclick="showDisclaimer()">
+          <i class="ph ph-shield-warning"></i> Note legali
+        </button>
+        <span class="legal-version">v1.0 — uso personale</span>
+      </div>
     `;
 
     populateFromStorage();
