@@ -1,5 +1,5 @@
-const CACHE_NAME = 'kit-resilienza-v35';
-const CDN_CACHE  = 'kit-resilienza-cdn-v35';
+const CACHE_NAME = 'kit-resilienza-v36';
+const CDN_CACHE  = 'kit-resilienza-cdn-v36';
 
 // Asset locali — cache-first
 const LOCAL_ASSETS = [
@@ -25,6 +25,9 @@ const LOCAL_ASSETS = [
   '/js/modules/strumenti.js',
   '/js/vendor/phosphor/style.css',
   '/js/vendor/phosphor/Phosphor.woff2',
+  '/js/vendor/leaflet/leaflet.js',
+  '/js/vendor/leaflet/leaflet.css',
+  '/js/data/italy-regions.geojson',
   '/manifest.json',
   '/icons/icon-192.png',
   '/icons/icon-512.png',
@@ -37,7 +40,7 @@ const LOCAL_ASSETS = [
 ];
 
 // CDN esterni — network-first con fallback cache
-const CDN_HOSTS = ['fonts.googleapis.com', 'fonts.gstatic.com', 'unpkg.com'];
+const CDN_HOSTS = ['fonts.googleapis.com', 'fonts.gstatic.com', 'unpkg.com', 'tile.openstreetmap.org'];
 
 self.addEventListener('install', e => {
   e.waitUntil(

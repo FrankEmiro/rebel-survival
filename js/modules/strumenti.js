@@ -1,5 +1,5 @@
 /* ============================================================
-   Strumenti di Campo — Bussola, GPS, Torcia, Batteria, Rete, SOS
+   Strumenti di Campo — Bussola, GPS, Torcia, Batteria, Rete, SOS, Mappa
    ============================================================ */
 const StrumentiModule = (() => {
 
@@ -17,6 +17,14 @@ const StrumentiModule = (() => {
   let sosFlashEl      = null;
   let audioCtx        = null;
   let wakeLock        = null;
+
+  /* ── MAPPA ── */
+  let _map            = null;
+  let _gpsMarker      = null;
+  let _gpsCircle      = null;
+  let _layerOSM       = null;
+  let _layerRegioni   = null;
+  let _mapReady       = false;
 
   /* ── UTILITY ── */
   function deg2card(d) {
@@ -142,6 +150,29 @@ const StrumentiModule = (() => {
       <button class="btn btn-outline btn-sm btn-full mt-8" onclick="StrumentiModule.copyCoords()">
         <i class="ph ph-copy"></i> Copia coordinate
       </button>`);
+    _mapUpdateGPS();
+  }
+
+  function _mapUpdateGPS() {
+    if (!_map || !gpsPos) return;
+    const lat = gpsPos.latitude;
+    const lon = gpsPos.longitude;
+    const acc = gpsPos.accuracy || 50;
+    const latlng = L.latLng(lat, lon);
+
+    if (_gpsMarker) {
+      _gpsMarker.setLatLng(latlng);
+      _gpsCircle.setLatLng(latlng).setRadius(acc);
+    } else {
+      _gpsMarker = L.circleMarker(latlng, {
+        radius: 8, color: '#c9a84c', fillColor: '#c9a84c',
+        fillOpacity: 0.9, weight: 2,
+      }).addTo(_map).bindPopup(`<b>Posizione</b><br>${lat.toFixed(5)}, ${lon.toFixed(5)}`);
+      _gpsCircle = L.circle(latlng, {
+        radius: acc, color: '#c9a84c', fillColor: '#c9a84c',
+        fillOpacity: 0.1, weight: 1,
+      }).addTo(_map);
+    }
   }
 
   function _gpsContent(html) {
@@ -342,6 +373,67 @@ const StrumentiModule = (() => {
   }
 
   /* ── WAKE LOCK ── */
+  function _initMap() {
+    if (_mapReady) return;
+    const el = document.getElementById('st-map');
+    if (!el || typeof L === 'undefined') return;
+
+    _map = L.map('st-map', { zoomControl: true, attributionControl: false }).setView([42.5, 12.5], 6);
+
+    // Layer OSM
+    _layerOSM = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution: '© OpenStreetMap',
+    }).addTo(_map);
+
+    // Layer Regioni GeoJSON
+    fetch('/js/data/italy-regions.geojson')
+      .then(r => r.json())
+      .then(data => {
+        _layerRegioni = L.geoJSON(data, {
+          style: {
+            color: '#c9a84c', weight: 1.5,
+            fillColor: '#1a2214', fillOpacity: 0.5,
+          },
+          onEachFeature: (feature, layer) => {
+            if (feature.properties && feature.properties.reg_name) {
+              layer.bindTooltip(feature.properties.reg_name, {
+                permanent: false, className: 'map-region-tooltip',
+              });
+            }
+          },
+        }).addTo(_map);
+
+        // Layer control
+        L.control.layers(
+          { 'OSM': _layerOSM },
+          { 'Regioni': _layerRegioni },
+          { collapsed: false, position: 'topright' }
+        ).addTo(_map);
+      })
+      .catch(() => {});
+
+    // Bottone centra su GPS
+    const LocateBtn = L.Control.extend({
+      options: { position: 'topleft' },
+      onAdd: () => {
+        const btn = L.DomUtil.create('button', 'map-locate-btn');
+        btn.innerHTML = '<i class="ph ph-crosshair"></i>';
+        btn.title = 'Centra su posizione';
+        L.DomEvent.on(btn, 'click', e => {
+          L.DomEvent.stopPropagation(e);
+          if (gpsPos) _map.setView([gpsPos.latitude, gpsPos.longitude], 12);
+          else alert('Attiva prima il GPS');
+        });
+        return btn;
+      },
+    });
+    _map.addControl(new LocateBtn());
+
+    _mapReady = true;
+    if (gpsPos) _mapUpdateGPS();
+  }
+
   async function _requestWakeLock() {
     try { if ('wakeLock' in navigator) wakeLock = await navigator.wakeLock.request('screen'); } catch(e) {}
   }
@@ -420,12 +512,25 @@ const StrumentiModule = (() => {
           <p class="st-status">Morse: vibrazione + lampeggio + audio</p>
         </div>
 
+        <!-- MAPPA -->
+        <div class="st-card st-card-full">
+          <div class="st-card-hdr">
+            <span><i class="ph ph-map-trifold"></i> Mappa Italia</span>
+            <span class="st-map-hint">Dot arancio = posizione GPS · Attiva GPS per centrare</span>
+          </div>
+          <div id="st-map"></div>
+          <p class="st-status text-dim" style="font-size:0.72rem;margin-top:6px">
+            Tile © <a href="https://openstreetmap.org" target="_blank" rel="noopener" style="color:var(--text-dim)">OpenStreetMap</a> contributors · Regioni © ISTAT CC BY
+          </p>
+        </div>
+
       </div>`;
 
     _networkUI();
     initBattery();
     window.addEventListener('online',  _networkUI);
     window.addEventListener('offline', _networkUI);
+    setTimeout(_initMap, 100);
   }
 
   /* ── PUBLIC ── */
@@ -440,6 +545,7 @@ const StrumentiModule = (() => {
     if (torchOn) toggleTorch();
     if (sosActive) _stopSOS();
     if (wakeLock) { try { wakeLock.release(); } catch(e) {} wakeLock = null; }
+    if (_map) { _map.remove(); _map = null; _mapReady = false; _gpsMarker = null; _gpsCircle = null; }
     window.removeEventListener('online',  _networkUI);
     window.removeEventListener('offline', _networkUI);
   }
