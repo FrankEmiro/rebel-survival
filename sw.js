@@ -1,5 +1,5 @@
-const CACHE_NAME = 'kit-resilienza-v32';
-const CDN_CACHE  = 'kit-resilienza-cdn-v32';
+const CACHE_NAME = 'kit-resilienza-v33';
+const CDN_CACHE  = 'kit-resilienza-cdn-v33';
 
 // Asset locali — cache-first
 const LOCAL_ASSETS = [
@@ -28,7 +28,7 @@ const LOCAL_ASSETS = [
   '/manifest.json',
   '/icons/icon-192.png',
   '/icons/icon-512.png',
-  '/guides/pc/vademecum.pdf',
+  '/guides/pc/multirischio.pdf',
   '/guides/pc/terremoto.pdf',
   '/guides/pc/alluvione.pdf',
   '/guides/pc/maremoto.pdf',
