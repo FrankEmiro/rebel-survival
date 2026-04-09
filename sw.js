@@ -1,5 +1,5 @@
-const CACHE_NAME = 'kit-resilienza-v29';
-const CDN_CACHE  = 'kit-resilienza-cdn-v29';
+const CACHE_NAME = 'kit-resilienza-v30';
+const CDN_CACHE  = 'kit-resilienza-cdn-v30';
 
 // Asset locali — cache-first
 const LOCAL_ASSETS = [
@@ -22,6 +22,7 @@ const LOCAL_ASSETS = [
   '/js/modules/guide.js',
   '/js/modules/settings.js',
   '/js/modules/dashboard.js',
+  '/js/modules/strumenti.js',
   '/js/vendor/phosphor/style.css',
   '/js/vendor/phosphor/Phosphor.woff2',
   '/manifest.json',

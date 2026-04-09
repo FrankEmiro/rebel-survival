@@ -2407,6 +2407,219 @@ input, select, textarea { font-family: 'Nunito', sans-serif; font-size: 1rem; }
 .btn-reset-dim.btn-reset-danger:hover { background: rgba(181,48,32,0.08); color: var(--danger); }
 
 /* ============================================================
+   STRUMENTI DI CAMPO
+   ============================================================ */
+.st-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+.st-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.st-card-center { align-items: center; text-align: center; }
+.st-card-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 10px;
+}
+.st-toggle {
+  background: var(--accent-muted);
+  border: 1px solid var(--border-accent);
+  color: var(--accent);
+  border-radius: var(--radius-sm);
+  padding: 3px 12px;
+  font-size: 0.78rem;
+  font-family: 'Nunito', sans-serif;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.st-toggle:hover { background: rgba(201,168,76,0.22); }
+.st-idle-msg, .st-status { color: var(--text-secondary); font-size: 0.82rem; text-align: center; }
+.st-loading  { color: var(--accent); font-size: 0.85rem; text-align: center; }
+.st-unavail  { color: var(--danger); font-size: 0.82rem; text-align: center; }
+
+/* Compass */
+.st-compass-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+.compass-rose {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  flex-shrink: 0;
+}
+.compass-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid var(--border-accent);
+  background: var(--bg-primary);
+}
+.cr-n, .cr-e, .cr-s, .cr-o {
+  position: absolute;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  z-index: 2;
+}
+.cr-n { top: 4px;  left: 50%; transform: translateX(-50%); color: var(--danger); }
+.cr-s { bottom: 4px; left: 50%; transform: translateX(-50%); }
+.cr-e { right: 6px; top: 50%; transform: translateY(-50%); }
+.cr-o { left: 6px;  top: 50%; transform: translateY(-50%); }
+.compass-needle {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 4px;
+  height: 90px;
+  z-index: 3;
+  transition: transform 0.25s ease;
+}
+.needle-n {
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 45px;
+  background: var(--danger);
+  border-radius: 2px 2px 0 0;
+}
+.needle-s {
+  position: absolute;
+  bottom: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 45px;
+  background: var(--text-dim);
+  border-radius: 0 0 2px 2px;
+}
+.compass-readout { text-align: center; }
+.compass-deg-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1;
+}
+.compass-card-val {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  letter-spacing: 0.1em;
+  margin-top: 4px;
+}
+
+/* GPS */
+.st-gps-grid { display: flex; flex-direction: column; gap: 6px; }
+.st-gps-row  { display: flex; justify-content: space-between; align-items: center; font-size: 0.88rem; }
+.st-gps-lbl  { color: var(--text-secondary); font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; }
+.st-gps-dms  { font-size: 0.72rem; color: var(--text-secondary); text-align: center; margin-top: 8px; line-height: 1.6; }
+
+/* Torcia */
+.st-big-btn {
+  width: 110px; height: 110px;
+  border-radius: 50%;
+  border: 2px solid var(--border-accent);
+  background: var(--bg-primary);
+  color: var(--text-secondary);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 6px;
+  font-size: 2rem;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.st-big-btn span { font-size: 0.85rem; }
+.st-big-btn:hover { border-color: var(--accent); color: var(--accent); }
+.st-big-btn.st-big-btn-on {
+  border-color: var(--accent);
+  background: rgba(201,168,76,0.12);
+  color: var(--accent);
+  box-shadow: 0 0 20px rgba(201,168,76,0.3);
+}
+
+/* Batteria */
+.st-batt-row  { display: flex; align-items: center; gap: 14px; }
+.st-batt-icon {
+  flex: 1;
+  height: 28px;
+  border: 2px solid var(--border-accent);
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+}
+.st-batt-fill {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  transition: width 0.5s;
+  border-radius: 2px;
+}
+.st-batt-fill.good { background: var(--success); }
+.st-batt-fill.warn { background: var(--warning); }
+.st-batt-fill.bad  { background: var(--danger); }
+.st-batt-pct { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700; mix-blend-mode: difference; }
+.st-batt-info { display: flex; flex-direction: column; gap: 2px; font-size: 0.82rem; min-width: 80px; }
+
+/* Rete */
+.st-net-status { display: flex; align-items: center; gap: 8px; font-family: 'Rajdhani', sans-serif; font-size: 1.2rem; font-weight: 700; letter-spacing: 0.08em; }
+.st-net-status.good { color: var(--success); }
+.st-net-status.bad  { color: var(--danger); }
+.st-net-detail { display: flex; justify-content: space-between; font-size: 0.85rem; margin-top: 6px; }
+
+/* SOS */
+.st-sos-btn {
+  width: 130px; height: 130px;
+  border-radius: 50%;
+  border: 3px solid var(--danger);
+  background: rgba(181,48,32,0.1);
+  color: var(--danger);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 6px;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.st-sos-btn span { font-size: 0.9rem; }
+.st-sos-btn:hover { background: rgba(181,48,32,0.2); }
+.st-sos-btn.st-sos-active {
+  background: var(--danger);
+  color: #fff;
+  box-shadow: 0 0 30px rgba(181,48,32,0.6);
+  animation: sos-pulse 1s infinite;
+}
+@keyframes sos-pulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(181,48,32,0.5); }
+  50%       { box-shadow: 0 0 40px rgba(181,48,32,0.9); }
+}
+
+/* ============================================================
    SCROLLBAR
    ============================================================ */
 ::-webkit-scrollbar { width: 6px; height: 6px; }

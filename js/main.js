@@ -14,6 +14,7 @@ const SECTION_TITLES = {
   'lista-spesa': 'Lista Spesa',
   guide: 'Guide Offline',
   settings: 'Dimensioni',
+  strumenti: 'Strumenti di Campo',
 };
 
 // Sezione corrente
@@ -63,6 +64,7 @@ function initSection(section) {
     case 'lista-spesa': ListaSpesaModule.init(); break;
     case 'guide':       GuideModule.init(); break;
     case 'settings':    SettingsModule.init(); break;
+    case 'strumenti':   StrumentiModule.init(); break;
   }
 }
 
