@@ -2813,3 +2813,13 @@ input, select, textarea { font-family: 'Nunito', sans-serif; font-size: 1rem; }
   color: var(--danger);
   flex-shrink: 0;
 }
+
+/* ---- Guide source link ---- */
+.guide-source-link {
+  color: var(--text-dim);
+  text-decoration: none;
+  display: inline-flex; align-items: center; gap: 3px;
+  transition: color 0.15s;
+}
+.guide-source-link:hover { color: var(--accent); }
+.guide-source-link i { font-size: 0.75rem; }

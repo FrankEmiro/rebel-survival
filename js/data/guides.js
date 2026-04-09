@@ -1989,3 +1989,56 @@ const PC_GUIDES = [
     file: '/guides/pc/incendi-boschivi.pdf',
   },
 ];
+
+/* ── URL di riferimento per ogni guida ── */
+const GUIDE_SOURCE_URLS = {
+  // Acqua
+  'acqua-purificazione':        'https://www.who.int/publications/i/item/9789241549950',
+  'acqua-stoccaggio':           'https://www.ready.gov/water',
+  'acqua-raccolta-pioggia':     'https://www.ready.gov/water',
+  'acqua-fonti-alternative':    'https://armypubs.army.mil/',
+
+  // Cibo
+  'cibo-conservazione':         'https://nchfp.uga.edu/',
+  'cibo-scorte-piano':          'https://www.ready.gov/food',
+  'orto-emergenza':             'https://www.usda.gov/',
+  'cibo-cottura-campo':         'https://armypubs.army.mil/',
+
+  // Energia
+  'energia-blackout-protocollo':'https://www.ready.gov/power-outages',
+  'energia-generatore':         'https://www.ready.gov/generators',
+  'isolamento-stanza':          'https://www.ready.gov/shelter',
+
+  // Calore
+  'riscaldamento-alternativo':  'https://www.ready.gov/extreme-cold',
+  'ipotermia-prevenzione':      'https://www.cdc.gov/niosh/topics/cold/',
+
+  // Medico
+  'kit-medico':                 'https://www.cri.it/',
+  'primo-soccorso':             'https://www.ifrc.org/',
+  'farmaci-scorta':             'https://www.who.int/',
+
+  // Comunicazioni
+  'comm-piano-famiglia':        'https://www.ready.gov/make-a-plan',
+  'comm-pmr446':                'https://www.etsi.org/',
+  'comm-radio-canali':          'https://www.protezionecivile.gov.it/',
+
+  // Pianificazione
+  'gobag-checklist':            'https://www.ready.gov/kit',
+  'mappe-offline':              'https://www.openstreetmap.org/',
+  'evacuazione-piano':          'https://www.ready.gov/evacuation',
+  'sicurezza-casa':             'https://www.ready.gov/home-fires',
+  'community-resilienza':       'https://www.ready.gov/cert',
+
+  // Survival
+  'survival-fuoco':             'https://armypubs.army.mil/',
+  'survival-nodi':              'https://www.scout.org/',
+  'survival-riparo':            'https://armypubs.army.mil/',
+  'survival-navigazione':       'https://armypubs.army.mil/',
+  'survival-acqua-natura':      'https://armypubs.army.mil/',
+  'survival-piante':            'https://www.cai.it/',
+  'survival-trappole':          'https://armypubs.army.mil/',
+  'survival-primo-soccorso-campo': 'https://www.cri.it/',
+  'survival-conservazione-cibo':   'https://nchfp.uga.edu/',
+  'survival-segnalazione':         'https://www.cnsas.it/',
+};

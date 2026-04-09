@@ -63,7 +63,10 @@ const GuideModule = (() => {
           <div class="guide-card2-meta">
             <div class="guide-card2-title">${g.title}</div>
             <div class="guide-card2-sub">
-              <span class="guide-source">${g.source}</span>
+              ${GUIDE_SOURCE_URLS[g.id]
+                ? `<a class="guide-source guide-source-link" href="${GUIDE_SOURCE_URLS[g.id]}" target="_blank" rel="noopener" onclick="event.stopPropagation()"><i class="ph ph-arrow-square-out"></i> ${g.source}</a>`
+                : `<span class="guide-source">${g.source}</span>`
+              }
               <span class="guide-readtime"><i class="ph ph-clock"></i> ${g.readTime}</span>
             </div>
           </div>
