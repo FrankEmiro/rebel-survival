@@ -1,5 +1,5 @@
-const CACHE_NAME = 'kit-resilienza-v31';
-const CDN_CACHE  = 'kit-resilienza-cdn-v31';
+const CACHE_NAME = 'kit-resilienza-v32';
+const CDN_CACHE  = 'kit-resilienza-cdn-v32';
 
 // Asset locali — cache-first
 const LOCAL_ASSETS = [
@@ -28,6 +28,12 @@ const LOCAL_ASSETS = [
   '/manifest.json',
   '/icons/icon-192.png',
   '/icons/icon-512.png',
+  '/guides/pc/vademecum.pdf',
+  '/guides/pc/terremoto.pdf',
+  '/guides/pc/alluvione.pdf',
+  '/guides/pc/maremoto.pdf',
+  '/guides/pc/vulcano.pdf',
+  '/guides/pc/incendi-boschivi.pdf',
 ];
 
 // CDN esterni — network-first con fallback cache

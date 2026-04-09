@@ -1950,3 +1950,42 @@ const GUIDE_CATEGORIES = [
   { id: 'comm',     label: 'Comunicazioni',  icon: 'ph-radio'         },
   { id: 'mobilita', label: 'Mobilità',       icon: 'ph-car'           },
 ];
+
+const PC_GUIDES = [
+  {
+    name: 'Vademecum Completo',
+    desc: 'Guida generale alla preparazione per le emergenze',
+    icon: 'ph-book-open',
+    file: '/guides/pc/vademecum.pdf',
+  },
+  {
+    name: 'Terremoto',
+    desc: 'Cosa fare prima, durante e dopo un sisma',
+    icon: 'ph-waves',
+    file: '/guides/pc/terremoto.pdf',
+  },
+  {
+    name: 'Alluvione',
+    desc: 'Comportamenti corretti in caso di alluvione',
+    icon: 'ph-drop-half',
+    file: '/guides/pc/alluvione.pdf',
+  },
+  {
+    name: 'Maremoto',
+    desc: 'Riconoscere i segnali e mettersi in salvo',
+    icon: 'ph-waves',
+    file: '/guides/pc/maremoto.pdf',
+  },
+  {
+    name: 'Vulcano',
+    desc: 'Rischio vulcanico: come prepararsi e reagire',
+    icon: 'ph-flame',
+    file: '/guides/pc/vulcano.pdf',
+  },
+  {
+    name: 'Incendi Boschivi',
+    desc: 'Prevenzione e comportamenti in caso di incendio',
+    icon: 'ph-fire',
+    file: '/guides/pc/incendi-boschivi.pdf',
+  },
+];

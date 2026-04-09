@@ -190,6 +190,29 @@ const GuideModule = (() => {
           <i class="ph ph-info"></i> Nella finestra che si apre, imposta <strong>Destinazione → Salva come PDF</strong> e clicca Salva.
         </p>
       </div>
+
+      <!-- GUIDE UFFICIALI PROTEZIONE CIVILE -->
+      <div class="pc-guides-section mt-16">
+        <div class="pc-guides-header">
+          <i class="ph ph-shield-star"></i>
+          <div>
+            <div class="pc-guides-title">Guide Ufficiali — Protezione Civile</div>
+            <div class="pc-guides-sub">Licenza CC BY 4.0 · Fonte: sito Io non rischio. Dipartimento della Protezione Civile — Presidenza del Consiglio dei Ministri</div>
+          </div>
+        </div>
+        <div class="pc-guides-grid">
+          ${PC_GUIDES.map(g => `
+            <a class="pc-guide-card" href="${g.file}" target="_blank" rel="noopener">
+              <div class="pc-guide-icon"><i class="ph ${g.icon}"></i></div>
+              <div class="pc-guide-info">
+                <div class="pc-guide-name">${g.name}</div>
+                <div class="pc-guide-desc">${g.desc}</div>
+              </div>
+              <i class="ph ph-file-pdf pc-guide-arrow"></i>
+            </a>
+          `).join('')}
+        </div>
+      </div>
     `;
 
     _renderList();
