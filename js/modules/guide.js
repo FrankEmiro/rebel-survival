@@ -32,19 +32,31 @@ const GuideModule = (() => {
 
     const sectionBlocks = (g.sections || []).map((sec, i) => {
       const expanded = sections.has(i);
+      const slug = sec.heading
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '')
+        .slice(0, 40);
+      const imgSrc = `/js/images/guides/${g.id}--${slug}.png`;
+
       let body = '';
       if (sec.steps) {
         body = `<ol class="guide-steps">${sec.steps.map(s => `<li>${s}</li>`).join('')}</ol>`;
       } else if (sec.content) {
         body = `<p class="guide-sec-content">${sec.content}</p>`;
       }
+
       return `
         <div class="guide-sec${expanded ? ' open' : ''}">
           <button class="guide-sec-btn" onclick="GuideModule._toggleSection('${g.id}', ${i})">
             <span>${sec.heading}</span>
             <i class="ph ${expanded ? 'ph-caret-up' : 'ph-caret-down'}"></i>
           </button>
-          <div class="guide-sec-body">${body}</div>
+          <div class="guide-sec-body">
+            <img class="guide-sec-img" src="${imgSrc}" alt="${sec.heading}"
+                 onerror="this.style.display='none'" loading="lazy">
+            ${body}
+          </div>
         </div>`;
     }).join('');
 

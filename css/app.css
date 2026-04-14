@@ -2886,3 +2886,16 @@ input, select, textarea { font-family: 'Nunito', sans-serif; font-size: 1rem; }
   border-radius: 3px;
   box-shadow: none;
 }
+
+/* ============================================================
+   GUIDE SECTION IMAGES
+   ============================================================ */
+.guide-sec-img {
+  display: block;
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto 14px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: #f5f0e8;
+}
