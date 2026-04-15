@@ -19,6 +19,8 @@ const StrumentiModule = (() => {
   let wakeLock        = null;
 
   /* ── MAPPA ── */
+  let _compassDeg     = 0;   // angolo corrente accumulato (non wrappato) per evitare spin
+
   let _map            = null;
   let _gpsMarker      = null;
   let _gpsCircle      = null;
@@ -78,6 +80,7 @@ const StrumentiModule = (() => {
       compassListener = null;
     }
     compassHeading = null;
+    _compassDeg = 0;
     const btn = document.getElementById('st-compass-toggle');
     if (btn) btn.textContent = 'Attiva';
     _compassStatus('Bussola ferma');
@@ -88,7 +91,14 @@ const StrumentiModule = (() => {
     const needle = document.querySelector('.compass-needle');
     const degEl  = document.getElementById('compass-deg');
     const cardEl = document.getElementById('compass-card');
-    if (needle) needle.style.transform = `translate(-50%, -50%) rotate(${compassHeading}deg)`;
+
+    // Calcola percorso angolare più corto per evitare spin 360° al wrap 0°/360°
+    let delta = compassHeading - ((_compassDeg % 360) + 360) % 360;
+    if (delta >  180) delta -= 360;
+    if (delta < -180) delta += 360;
+    _compassDeg += delta;
+
+    if (needle) needle.style.transform = `translate(-50%, -50%) rotate(${_compassDeg}deg)`;
     if (degEl)  degEl.textContent  = compassHeading + '°';
     if (cardEl) cardEl.textContent = deg2card(compassHeading);
   }
