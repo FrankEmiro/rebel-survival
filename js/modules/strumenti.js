@@ -24,6 +24,9 @@ const StrumentiModule = (() => {
   let _gpsCircle      = null;
   let _layerOSM       = null;
   let _layerRegioni   = null;
+  let _layerProvince  = null;
+  let _layerComuni    = null;
+  let _comuniLoading  = false;
   let _mapReady       = false;
 
   /* ── UTILITY ── */
@@ -373,6 +376,23 @@ const StrumentiModule = (() => {
   }
 
   /* ── WAKE LOCK ── */
+  function _geoStyle(color, weight, fillOpacity) {
+    return { color, weight, fillColor: '#1a2214', fillOpacity, opacity: 0.9 };
+  }
+
+  function _geoLayer(data, nameKey, tooltipClass) {
+    return L.geoJSON(data, {
+      style: _geoStyle('#c9a84c', 1, 0.35),
+      onEachFeature: (feature, layer) => {
+        const name = feature.properties && feature.properties[nameKey];
+        if (name) {
+          layer.bindTooltip(name, { permanent: false, className: tooltipClass, sticky: true });
+          layer.on('click', () => layer.openTooltip());
+        }
+      },
+    });
+  }
+
   function _initMap() {
     if (_mapReady) return;
     const el = document.getElementById('st-map');
@@ -383,35 +403,29 @@ const StrumentiModule = (() => {
     // Layer OSM
     _layerOSM = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 18,
-      attribution: '© OpenStreetMap',
     }).addTo(_map);
 
-    // Layer Regioni GeoJSON
-    fetch('/js/data/italy-regions.geojson')
-      .then(r => r.json())
-      .then(data => {
-        _layerRegioni = L.geoJSON(data, {
-          style: {
-            color: '#c9a84c', weight: 1.5,
-            fillColor: '#1a2214', fillOpacity: 0.5,
-          },
-          onEachFeature: (feature, layer) => {
-            if (feature.properties && feature.properties.reg_name) {
-              layer.bindTooltip(feature.properties.reg_name, {
-                permanent: false, className: 'map-region-tooltip',
-              });
-            }
-          },
-        }).addTo(_map);
+    // Carica regioni e province in parallelo
+    Promise.all([
+      fetch('/js/data/italy-regions.geojson').then(r => r.json()),
+      fetch('/js/data/italy-provinces.geojson').then(r => r.json()),
+    ]).then(([regioni, province]) => {
+      _layerRegioni  = _geoLayer(regioni,  'reg_name',  'map-region-tooltip').addTo(_map);
+      _layerProvince = _geoLayer(province, 'prov_name', 'map-region-tooltip');
 
-        // Layer control
-        L.control.layers(
-          { 'OSM': _layerOSM },
-          { 'Regioni': _layerRegioni },
-          { collapsed: false, position: 'topright' }
-        ).addTo(_map);
-      })
-      .catch(() => {});
+      // Layer control — base + overlays
+      const overlays = {
+        '<span class="map-lbl">Regioni</span>':  _layerRegioni,
+        '<span class="map-lbl">Province</span>': _layerProvince,
+        '<span class="map-lbl">Comuni <small>(zoom 10+)</small></span>': _dummyComuniLayer(),
+      };
+      L.control.layers({ 'OSM': _layerOSM }, overlays, { collapsed: false, position: 'topright' }).addTo(_map);
+
+      // Attiva/disattiva comuni in base allo zoom e al toggle
+      _map.on('overlayadd',    e => { if (e.name.includes('Comuni')) _onComuniToggle(true);  });
+      _map.on('overlayremove', e => { if (e.name.includes('Comuni')) _onComuniToggle(false); });
+      _map.on('zoomend', _checkComuniZoom);
+    }).catch(() => {});
 
     // Bottone centra su GPS
     const LocateBtn = L.Control.extend({
@@ -422,7 +436,7 @@ const StrumentiModule = (() => {
         btn.title = 'Centra su posizione';
         L.DomEvent.on(btn, 'click', e => {
           L.DomEvent.stopPropagation(e);
-          if (gpsPos) _map.setView([gpsPos.latitude, gpsPos.longitude], 12);
+          if (gpsPos) _map.setView([gpsPos.latitude, gpsPos.longitude], 13);
           else alert('Attiva prima il GPS');
         });
         return btn;
@@ -432,6 +446,48 @@ const StrumentiModule = (() => {
 
     _mapReady = true;
     if (gpsPos) _mapUpdateGPS();
+  }
+
+  // Layer placeholder per comuni (il vero layer viene caricato lazy)
+  function _dummyComuniLayer() {
+    return L.layerGroup();
+  }
+
+  let _comuniEnabled = false;
+
+  function _onComuniToggle(enabled) {
+    _comuniEnabled = enabled;
+    if (enabled) _loadComuni();
+    else if (_layerComuni) { _map.removeLayer(_layerComuni); }
+  }
+
+  function _checkComuniZoom() {
+    if (!_comuniEnabled || !_layerComuni) return;
+    if (_map.getZoom() >= 10) {
+      if (!_map.hasLayer(_layerComuni)) _map.addLayer(_layerComuni);
+    } else {
+      if (_map.hasLayer(_layerComuni)) _map.removeLayer(_layerComuni);
+    }
+  }
+
+  function _loadComuni() {
+    if (_layerComuni) { _checkComuniZoom(); return; }
+    if (_comuniLoading) return;
+    _comuniLoading = true;
+
+    // Mostra indicatore loading
+    const hint = document.getElementById('st-map-hint');
+    if (hint) hint.textContent = 'Caricamento comuni... (36MB, attendere)';
+
+    fetch('/js/data/italy-municipalities.geojson')
+      .then(r => r.json())
+      .then(data => {
+        _layerComuni = _geoLayer(data, 'name', 'map-region-tooltip');
+        _comuniLoading = false;
+        if (hint) hint.textContent = '';
+        if (_comuniEnabled) _checkComuniZoom();
+      })
+      .catch(() => { _comuniLoading = false; });
   }
 
   async function _requestWakeLock() {
@@ -516,7 +572,7 @@ const StrumentiModule = (() => {
         <div class="st-card st-card-full">
           <div class="st-card-hdr">
             <span><i class="ph ph-map-trifold"></i> Mappa Italia</span>
-            <span class="st-map-hint">Dot arancio = posizione GPS · Attiva GPS per centrare</span>
+            <span class="st-map-hint" id="st-map-hint">Dot arancio = posizione GPS · Attiva GPS per centrare</span>
           </div>
           <div id="st-map"></div>
           <p class="st-status text-dim" style="font-size:0.72rem;margin-top:6px">
@@ -545,7 +601,7 @@ const StrumentiModule = (() => {
     if (torchOn) toggleTorch();
     if (sosActive) _stopSOS();
     if (wakeLock) { try { wakeLock.release(); } catch(e) {} wakeLock = null; }
-    if (_map) { _map.remove(); _map = null; _mapReady = false; _gpsMarker = null; _gpsCircle = null; }
+    if (_map) { _map.remove(); _map = null; _mapReady = false; _gpsMarker = null; _gpsCircle = null; _layerComuni = null; _comuniEnabled = false; _comuniLoading = false; }
     window.removeEventListener('online',  _networkUI);
     window.removeEventListener('offline', _networkUI);
   }

@@ -1,5 +1,5 @@
-const CACHE_NAME = 'kit-resilienza-v37';
-const CDN_CACHE  = 'kit-resilienza-cdn-v37';
+const CACHE_NAME = 'kit-resilienza-v38';
+const CDN_CACHE  = 'kit-resilienza-cdn-v38';
 
 // Asset locali — cache-first
 const LOCAL_ASSETS = [
@@ -28,6 +28,7 @@ const LOCAL_ASSETS = [
   '/js/vendor/leaflet/leaflet.js',
   '/js/vendor/leaflet/leaflet.css',
   '/js/data/italy-regions.geojson',
+  '/js/data/italy-provinces.geojson',
   '/manifest.json',
   '/icons/icon-192.png',
   '/icons/icon-512.png',
