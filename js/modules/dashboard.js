@@ -79,153 +79,196 @@ const DashboardModule = (() => {
   /* ── TASK LIBRARY ── */
   // resolve: funzione(profilo) → true se la dimensione soddisfa la soglia (auto-complete)
   // resolve: null → task manuale (checkbox utente)
-  // excludeScenarios: nasconde il task quando uno di questi scenari è attivo
-  // scenarios: mostra il task SOLO quando uno di questi scenari è attivo (o nessuno scenario)
+  // Scenario → tasks mapping gestito in scenari.js tramite scenario.taskMap
   const ALL_TASKS = [
     // ACQUA
-    { id:'ac01', axis:'acqua',    scoreBonus:20, nav:'settings', tab:'acqua',    threats:['acqua'],               guide:'acqua-stoccaggio',            resolve: p=>(p.acqua_scorte_litri||0)>=30,                        excludeScenarios:['survival-natura'],                  text:'Accumula acqua: 5L/persona/giorno × 30 giorni in taniche' },
-    { id:'ac02', axis:'acqua',    scoreBonus:15, nav:'settings', tab:'acqua',    threats:['acqua'],               guide:'acqua-purificazione',         resolve: p=>!!p.ha_filtro,   field:'ha_filtro',                                                                text:'Acquista filtro portatile (Sawyer / LifeStraw)' },
-    { id:'ac03', axis:'acqua',    scoreBonus:10, nav:'settings', tab:'acqua',    threats:['acqua'],               guide:'acqua-raccolta-pioggia',      resolve: p=>!!p.ha_pioggia,  field:'ha_pioggia',               excludeScenarios:['survival-natura','evacuazione','incendio-zona'], text:'Imposta sistema raccolta acqua piovana' },
-    { id:'ac04', axis:'acqua',    scoreBonus: 6, nav:'settings', tab:'acqua',    threats:['acqua'],               guide:'acqua-purificazione',         resolve: null,                                                    excludeScenarios:['survival-natura'],                  text:'Scorta candeggina non profumata per purificazione (4 gocce/L)' },
+    { id:'ac01', axis:'acqua',    scoreBonus:20, nav:'settings', tab:'acqua',    threats:['acqua'],               guide:'acqua-stoccaggio',            resolve: p=>(p.acqua_scorte_litri||0)>=30,                        text:'Accumula acqua: 5L/persona/giorno × 30 giorni in taniche' },
+    { id:'ac02', axis:'acqua',    scoreBonus:15, nav:'settings', tab:'acqua',    threats:['acqua'],               guide:'acqua-purificazione',         resolve: p=>!!p.ha_filtro,   field:'ha_filtro',                text:'Acquista filtro portatile (Sawyer / LifeStraw)' },
+    { id:'ac03', axis:'acqua',    scoreBonus:10, nav:'settings', tab:'acqua',    threats:['acqua'],               guide:'acqua-raccolta-pioggia',      resolve: p=>!!p.ha_pioggia,  field:'ha_pioggia',               text:'Imposta sistema raccolta acqua piovana' },
+    { id:'ac04', axis:'acqua',    scoreBonus: 6, nav:'settings', tab:'acqua',    threats:['acqua'],               guide:'acqua-purificazione',         resolve: null,                                                    text:'Scorta candeggina non profumata per purificazione (4 gocce/L)' },
     // CIBO
-    { id:'ci01', axis:'cibo',     scoreBonus:25, nav:'settings', tab:'cibo',     threats:['cibo'],                guide:'cibo-scorte-piano',           resolve: p=>(p.cibo_scorte_giorni||0)>=14,                        excludeScenarios:['survival-natura'],                  text:'Scorte alimentari 30+ giorni' },
-    { id:'ci02', axis:'cibo',     scoreBonus:10, nav:'settings', tab:'cibo',     threats:['cibo'],                guide:'cibo-cottura-campo',          resolve: null,                                                                                                   text:'Fornello da campo + cartucce gas (min 3 per 30gg)' },
-    { id:'ci03', axis:'cibo',     scoreBonus: 8, nav:'guide',    tab:null,       threats:['cibo'],                guide:'orto-emergenza',              resolve: null,                                                    excludeScenarios:['survival-natura','terremoto','alluvione','incendio-zona','evacuazione','blackout-breve','blackout-mobile','caldo','tempesta-invernale'], text:'Avvia orto emergenza (ravanelli 25gg, lattuga 45gg)' },
-    { id:'ci04', axis:'cibo',     scoreBonus: 5, nav:'settings', tab:'cibo',     threats:['cibo'],                guide:'cibo-conservazione',          resolve: null,                                                    excludeScenarios:['survival-natura'],                  text:'Apriscatole manuale + set utensili da campo' },
+    { id:'ci01', axis:'cibo',     scoreBonus:25, nav:'settings', tab:'cibo',     threats:['cibo'],                guide:'cibo-scorte-piano',           resolve: p=>(p.cibo_scorte_giorni||0)>=14,                        text:'Scorte alimentari 30+ giorni' },
+    { id:'ci02', axis:'cibo',     scoreBonus:10, nav:'settings', tab:'cibo',     threats:['cibo'],                guide:'cibo-cottura-campo',          resolve: null,                                                    text:'Fornello da campo + cartucce gas (min 3 per 30gg)' },
+    { id:'ci03', axis:'cibo',     scoreBonus: 8, nav:'guide',    tab:null,       threats:['cibo'],                guide:'orto-emergenza',              resolve: null,                                                    text:'Avvia orto emergenza (ravanelli 25gg, lattuga 45gg)' },
+    { id:'ci04', axis:'cibo',     scoreBonus: 5, nav:'settings', tab:'cibo',     threats:['cibo'],                guide:'cibo-conservazione',          resolve: null,                                                    text:'Apriscatole manuale + set utensili da campo' },
     // ENERGIA
-    { id:'en01', axis:'energia',  scoreBonus:25, nav:'settings', tab:'energia',  threats:['blackout'],            guide:'energia-generatore',          resolve: p=>!!(p.en_pannelli||p.en_batteria||p.en_generatore),    excludeScenarios:['survival-natura','terremoto','incendio-zona','evacuazione'], text:'Installa/verifica fonte energia alternativa' },
-    { id:'en02', axis:'energia',  scoreBonus:12, nav:'settings', tab:'energia',  threats:['blackout'],            guide:'energia-blackout-protocollo', resolve: null,                                                                                                   text:'Power bank 20.000mAh per ogni adulto' },
-    { id:'en03', axis:'energia',  scoreBonus:10, nav:'settings', tab:'energia',  threats:['blackout'],            guide:'energia-generatore',          resolve: p=>!!p.en_pannelli,         field:'en_pannelli',          excludeScenarios:['survival-natura'],                  text:'Pannello solare portatile 100W+ con uscita USB-C' },
-    { id:'en04', axis:'energia',  scoreBonus: 8, nav:'settings', tab:'sicurezza',threats:['blackout'],            guide:'sicurezza-casa',              resolve: p=>!!p.has_rilevatore_co,   field:'has_rilevatore_co',    excludeScenarios:['survival-natura'],                  text:'Rilevatori CO installati se usi combustibili al chiuso' },
-    { id:'en05', axis:'energia',  scoreBonus: 6, nav:'guide',    tab:null,       threats:['blackout'],            guide:'energia-blackout-protocollo', resolve: null,                                                    excludeScenarios:['survival-natura'],                  text:'Definisci protocollo blackout: priorità consumi, lista azioni' },
+    { id:'en01', axis:'energia',  scoreBonus:25, nav:'settings', tab:'energia',  threats:['blackout'],            guide:'energia-generatore',          resolve: p=>!!(p.en_pannelli||p.en_batteria||p.en_generatore),    text:'Installa/verifica fonte energia alternativa' },
+    { id:'en02', axis:'energia',  scoreBonus:12, nav:'settings', tab:'energia',  threats:['blackout'],            guide:'energia-blackout-protocollo', resolve: null,                                                    text:'Power bank 20.000mAh per ogni adulto' },
+    { id:'en03', axis:'energia',  scoreBonus:10, nav:'settings', tab:'energia',  threats:['blackout'],            guide:'energia-generatore',          resolve: p=>!!p.en_pannelli,         field:'en_pannelli',          text:'Pannello solare portatile 100W+ con uscita USB-C' },
+    { id:'en04', axis:'energia',  scoreBonus: 8, nav:'settings', tab:'sicurezza',threats:['blackout'],            guide:'sicurezza-casa',              resolve: p=>!!p.has_rilevatore_co,   field:'has_rilevatore_co',    text:'Rilevatori CO installati se usi combustibili al chiuso' },
+    { id:'en05', axis:'energia',  scoreBonus: 6, nav:'guide',    tab:null,       threats:['blackout'],            guide:'energia-blackout-protocollo', resolve: null,                                                    text:'Definisci protocollo blackout: priorità consumi, lista azioni' },
     // CALORE
-    { id:'ca01', axis:'calore',   scoreBonus:30, nav:'settings', tab:'calore',   threats:['gas','freddo'],        guide:'riscaldamento-alternativo',   resolve: p=>!!(p.risc_legna||p.risc_pellet||p.risc_gpl),          excludeScenarios:['survival-natura','terremoto','alluvione','incendio-zona','evacuazione','caldo'], text:'Attiva riscaldamento alternativo (pellet/legna/GPL)' },
-    { id:'ca02', axis:'calore',   scoreBonus:15, nav:'settings', tab:'calore',   threats:['gas','freddo'],        guide:'riscaldamento-alternativo',   resolve: p=>(p.combustibile_kg||0)>=10,                           excludeScenarios:['survival-natura','incendio-zona','evacuazione','caldo'], text:'Stocca combustibile alternativo 30+ giorni' },
-    { id:'ca03', axis:'calore',   scoreBonus:10, nav:'settings', tab:'calore',   threats:['freddo'],              guide:'ipotermia-prevenzione',       resolve: null,                                                                                                   text:'Coperte termiche di emergenza (min 2 per persona)' },
-    { id:'ca04', axis:'calore',   scoreBonus: 8, nav:'guide',    tab:null,       threats:['freddo'],              guide:'isolamento-stanza',           resolve: null,                                                    excludeScenarios:['survival-natura','caldo'],           text:'Isola una stanza principale (tende termiche, nastro)' },
+    { id:'ca01', axis:'calore',   scoreBonus:30, nav:'settings', tab:'calore',   threats:['gas','freddo'],        guide:'riscaldamento-alternativo',   resolve: p=>!!(p.risc_legna||p.risc_pellet||p.risc_gpl),          text:'Attiva riscaldamento alternativo (pellet/legna/GPL)' },
+    { id:'ca02', axis:'calore',   scoreBonus:15, nav:'settings', tab:'calore',   threats:['gas','freddo'],        guide:'riscaldamento-alternativo',   resolve: p=>(p.combustibile_kg||0)>=10,                           text:'Stocca combustibile alternativo 30+ giorni' },
+    { id:'ca03', axis:'calore',   scoreBonus:10, nav:'settings', tab:'calore',   threats:['freddo'],              guide:'ipotermia-prevenzione',       resolve: null,                                                    text:'Coperte termiche di emergenza (min 2 per persona)' },
+    { id:'ca04', axis:'calore',   scoreBonus: 8, nav:'guide',    tab:null,       threats:['freddo'],              guide:'isolamento-stanza',           resolve: null,                                                    text:'Isola una stanza principale (tende termiche, nastro)' },
     // COMM
-    { id:'co01', axis:'comm',     scoreBonus:30, nav:'settings', tab:'comm',     threats:['comm'],                guide:'comm-radio-canali',           resolve: p=>!!p.has_radio,           field:'has_radio',                                                            text:'Radio FM/AM portatile a manovella' },
-    { id:'co02', axis:'comm',     scoreBonus:20, nav:'settings', tab:'comm',     threats:['comm'],                guide:'comm-pmr446',                 resolve: p=>!!p.has_walkie,          field:'has_walkie',                                                           text:'Coppia walkie-talkie PMR446 (canale 8 emergenza)' },
-    { id:'co03', axis:'comm',     scoreBonus:12, nav:'settings', tab:'comm',     threats:['comm','medico'],       guide:'comm-piano-famiglia',         resolve: p=>!!p.comm_contatti_stampati, field:'comm_contatti_stampati', excludeScenarios:['survival-natura'],   text:'Lista contatti emergenza stampata + piano ritrovo fisso' },
-    { id:'co04', axis:'comm',     scoreBonus: 8, nav:'settings', tab:'comm',     threats:['comm'],                guide:'energia-blackout-protocollo', resolve: null,                                                                                                   text:'Tutti i power bank caricati e mantenuti > 80%' },
+    { id:'co01', axis:'comm',     scoreBonus:30, nav:'settings', tab:'comm',     threats:['comm'],                guide:'comm-radio-canali',           resolve: p=>!!p.has_radio,           field:'has_radio',            text:'Radio FM/AM portatile a manovella' },
+    { id:'co02', axis:'comm',     scoreBonus:20, nav:'settings', tab:'comm',     threats:['comm'],                guide:'comm-pmr446',                 resolve: p=>!!p.has_walkie,          field:'has_walkie',           text:'Coppia walkie-talkie PMR446 (canale 8 emergenza)' },
+    { id:'co03', axis:'comm',     scoreBonus:12, nav:'settings', tab:'comm',     threats:['comm','medico'],       guide:'comm-piano-famiglia',         resolve: p=>!!p.comm_contatti_stampati, field:'comm_contatti_stampati', text:'Lista contatti emergenza stampata + piano ritrovo fisso' },
+    { id:'co04', axis:'comm',     scoreBonus: 8, nav:'settings', tab:'comm',     threats:['comm'],                guide:'energia-blackout-protocollo', resolve: null,                                                    text:'Tutti i power bank caricati e mantenuti > 80%' },
     // MOBILITÀ
-    { id:'mo01', axis:'mobilita', scoreBonus:20, nav:'settings', tab:'mobilita', threats:['carburante'],          guide:'evacuazione-piano',           resolve: p=>(p.carburante_litri||0)>=20,                          excludeScenarios:['survival-natura','pandemia','razionamento','cibo','gas','acqua','blackout-breve','blackout-lungo','blackout-mobile'], text:'Fai il pieno + tanica 10-20L approvata' },
-    { id:'mo02', axis:'mobilita', scoreBonus:15, nav:'settings', tab:'mobilita', threats:['carburante','medico'], guide:'gobag-checklist',             resolve: p=>!!p.has_gobag,           field:'has_gobag',                                                            text:'Go-bag pronto: documenti, contanti, farmaci, cambio' },
-    { id:'mo03', axis:'mobilita', scoreBonus:10, nav:'guide',    tab:null,       threats:['carburante'],          guide:'mappe-offline',               resolve: null,                                                    excludeScenarios:['survival-natura','pandemia','razionamento','cibo','gas','acqua','blackout-breve','blackout-lungo','blackout-mobile'], text:'Mappe offline scaricate (Maps.me o Organic Maps)' },
-    { id:'mo04', axis:'mobilita', scoreBonus: 8, nav:'settings', tab:'mobilita', threats:['carburante'],          guide:'evacuazione-piano',           resolve: null,                                                    excludeScenarios:['survival-natura','pandemia','razionamento','cibo','gas','acqua','blackout-breve','blackout-lungo','blackout-mobile'], text:'Percorsi alternativi e punti rifornimento identificati' },
-    { id:'mo05', axis:'mobilita', scoreBonus: 6, nav:'guide',    tab:null,       threats:['carburante','freddo'], guide:'evacuazione-piano',           resolve: null,                                                    excludeScenarios:['survival-natura','pandemia','razionamento','cibo','gas','acqua','blackout-breve','blackout-lungo','blackout-mobile'], text:'Piano evacuazione: route, punto ritrovo fuori comune, zaino pronto' },
+    { id:'mo01', axis:'mobilita', scoreBonus:20, nav:'settings', tab:'mobilita', threats:['carburante'],          guide:'evacuazione-piano',           resolve: p=>(p.carburante_litri||0)>=20,                          text:'Fai il pieno + tanica 10-20L approvata' },
+    { id:'mo02', axis:'mobilita', scoreBonus:15, nav:'settings', tab:'mobilita', threats:['carburante','medico'], guide:'gobag-checklist',             resolve: p=>!!p.has_gobag,           field:'has_gobag',            text:'Go-bag pronto: documenti, contanti, farmaci, cambio' },
+    { id:'mo03', axis:'mobilita', scoreBonus:10, nav:'guide',    tab:null,       threats:['carburante'],          guide:'mappe-offline',               resolve: null,                                                    text:'Mappe offline scaricate (Maps.me o Organic Maps)' },
+    { id:'mo04', axis:'mobilita', scoreBonus: 8, nav:'settings', tab:'mobilita', threats:['carburante'],          guide:'evacuazione-piano',           resolve: null,                                                    text:'Percorsi alternativi e punti rifornimento identificati' },
+    { id:'mo05', axis:'mobilita', scoreBonus: 6, nav:'guide',    tab:null,       threats:['carburante','freddo'], guide:'evacuazione-piano',           resolve: null,                                                    text:'Piano evacuazione: route, punto ritrovo fuori comune, zaino pronto' },
     // MEDICO
-    { id:'me01', axis:'mobilita', scoreBonus:20, nav:'settings', tab:'medico',   threats:['medico'],              guide:'kit-medico',                  resolve: p=>!!p.has_kit_medico,      field:'has_kit_medico',                                                       text:'Kit medico completo: antipiretici, disinfettante, bende, farmaci cronici' },
-    { id:'me02', axis:'mobilita', scoreBonus:12, nav:'settings', tab:'medico',   threats:['medico'],              guide:'farmaci-scorta',              resolve: p=>!!(p.has_farmaci_cronici&&(p.farmaci_scorta_giorni||0)>=14),                                           text:'Scorta farmaci cronici per 30+ giorni' },
-    { id:'me03', axis:'mobilita', scoreBonus: 8, nav:'settings', tab:'medico',   threats:['medico'],              guide:'primo-soccorso',              resolve: p=>!!p.has_bls_corso,       field:'has_bls_corso',                                                        text:'Corso primo soccorso base (BLS/BLSD)' },
+    { id:'me01', axis:'mobilita', scoreBonus:20, nav:'settings', tab:'medico',   threats:['medico'],              guide:'kit-medico',                  resolve: p=>!!p.has_kit_medico,      field:'has_kit_medico',       text:'Kit medico completo: antipiretici, disinfettante, bende, farmaci cronici' },
+    { id:'me02', axis:'mobilita', scoreBonus:12, nav:'settings', tab:'medico',   threats:['medico'],              guide:'farmaci-scorta',              resolve: p=>!!(p.has_farmaci_cronici&&(p.farmaci_scorta_giorni||0)>=14), text:'Scorta farmaci cronici per 30+ giorni' },
+    { id:'me03', axis:'mobilita', scoreBonus: 8, nav:'settings', tab:'medico',   threats:['medico'],              guide:'primo-soccorso',              resolve: p=>!!p.has_bls_corso,       field:'has_bls_corso',        text:'Corso primo soccorso base (BLS/BLSD)' },
     // SICUREZZA
-    { id:'si01', axis:'energia',  scoreBonus:10, nav:'settings', tab:'sicurezza',threats:['blackout','freddo'],   guide:'sicurezza-casa',              resolve: p=>!!(p.has_estintore&&p.has_rilevatore_co),             excludeScenarios:['survival-natura','terremoto','alluvione','incendio-zona','evacuazione'], text:'Sicurezza casa: estintore, rilevatore CO, rinforzo serrature' },
-    { id:'si02', axis:'comm',     scoreBonus: 8, nav:'settings', tab:'sicurezza',threats:['comm','cibo'],         guide:'community-resilienza',        resolve: p=>!!p.has_rete_vicinato,   field:'has_rete_vicinato',    excludeScenarios:['survival-natura'],                  text:'Rete di vicinato: identifica vicini, competenze, persone fragili' },
+    { id:'si01', axis:'energia',  scoreBonus:10, nav:'settings', tab:'sicurezza',threats:['blackout','freddo'],   guide:'sicurezza-casa',              resolve: p=>!!(p.has_estintore&&p.has_rilevatore_co),             text:'Sicurezza casa: estintore, rilevatore CO, rinforzo serrature' },
+    { id:'si02', axis:'comm',     scoreBonus: 8, nav:'settings', tab:'sicurezza',threats:['comm','cibo'],         guide:'community-resilienza',        resolve: p=>!!p.has_rete_vicinato,   field:'has_rete_vicinato',    text:'Rete di vicinato: identifica vicini, competenze, persone fragili' },
 
     // ── TERREMOTO ─────────────────────────────────────────────────────────────
-    { id:'ter01', axis:'mobilita', scoreBonus:12, nav:'guide', tab:null, threats:['acqua','cibo'],         guide:'gobag-checklist',           resolve: null, scenarios:['terremoto'],          text:'Fissa mobili pesanti alle pareti (librerie, armadi) — prevenzione crollo' },
-    { id:'ter02', axis:'mobilita', scoreBonus:15, nav:'guide', tab:null, threats:['blackout','acqua'],     guide:'acqua-stoccaggio',          resolve: null, scenarios:['terremoto'],          text:'Kit 72h sotto il letto: acqua, torcia, radio, farmaci, copia documenti' },
+    { id:'ter01', axis:'mobilita', scoreBonus:12, nav:'guide', tab:null, threats:['acqua','cibo'],         guide:'gobag-checklist',           resolve: null, text:'Fissa mobili pesanti alle pareti (librerie, armadi) — prevenzione crollo' },
+    { id:'ter02', axis:'mobilita', scoreBonus:15, nav:'guide', tab:null, threats:['blackout','acqua'],     guide:'acqua-stoccaggio',          resolve: null, text:'Kit 72h sotto il letto: acqua, torcia, radio, farmaci, copia documenti' },
+    { id:'ter03', axis:'mobilita', scoreBonus:15, nav:'guide', tab:null, threats:['blackout','acqua'],     guide:'gobag-checklist',           resolve: null, text:'Dopo la scossa: stai fuori — rientra SOLO dopo verifica strutturale delle autorità competenti' },
+    { id:'ter04', axis:'acqua',   scoreBonus:12, nav:'guide', tab:null, threats:['acqua'],                guide:'acqua-purificazione',       resolve: null, text:'Acqua post-sisma non garantita: usa solo scorte o acqua purificata (bollitura 1 min)' },
     // ── ALLUVIONE ─────────────────────────────────────────────────────────────
-    { id:'all01', axis:'acqua',    scoreBonus:15, nav:'guide', tab:null, threats:['acqua'],                guide:'acqua-stoccaggio',          resolve: null, scenarios:['alluvione'],          text:'Soglie anti-allagamento + sacchi di sabbia per porte e finestre basse' },
-    { id:'all02', axis:'cibo',     scoreBonus:10, nav:'guide', tab:null, threats:['acqua','cibo'],         guide:'cibo-scorte-piano',         resolve: null, scenarios:['alluvione'],          text:'Sposta farmaci, documenti e beni vitali al piano superiore' },
+    { id:'all01', axis:'acqua',    scoreBonus:15, nav:'guide', tab:null, threats:['acqua'],                guide:'acqua-stoccaggio',          resolve: null, text:'Soglie anti-allagamento + sacchi di sabbia per porte e finestre basse' },
+    { id:'all02', axis:'cibo',     scoreBonus:10, nav:'guide', tab:null, threats:['acqua','cibo'],         guide:'cibo-scorte-piano',         resolve: null, text:'Sposta farmaci, documenti e beni vitali al piano superiore' },
+    { id:'all03', axis:'energia',  scoreBonus:15, nav:'guide', tab:null, threats:['acqua','blackout'],     guide:'sicurezza-casa',            resolve: null, text:'Stacca corrente dal quadro elettrico se l\'acqua sale entro 30cm dalle prese' },
+    { id:'all04', axis:'mobilita', scoreBonus:10, nav:'guide', tab:null, threats:['acqua','cibo'],         guide:'kit-medico',                resolve: null, text:'Dopo alluvione: guanti e stivali per il fango (leptospirosi) — non toccare acqua a mani nude' },
     // ── PANDEMIA ──────────────────────────────────────────────────────────────
-    { id:'pan01', axis:'mobilita', scoreBonus:18, nav:'guide', tab:null, threats:['medico'],               guide:'kit-medico',                resolve: null, scenarios:['pandemia'],           text:'Scorta DPI: maschere FFP2, guanti nitrile, disinfettante mani (1+ mese)' },
-    { id:'pan02', axis:'comm',     scoreBonus:12, nav:'guide', tab:null, threats:['medico','comm'],        guide:'comm-piano-famiglia',       resolve: null, scenarios:['pandemia'],           text:'Protocollo isolamento: stanza dedicata, bagno separato, turni cucina' },
+    { id:'pan01', axis:'mobilita', scoreBonus:18, nav:'guide', tab:null, threats:['medico'],               guide:'kit-medico',                resolve: null, text:'Scorta DPI: maschere FFP2, guanti nitrile, disinfettante mani (1+ mese)' },
+    { id:'pan02', axis:'comm',     scoreBonus:12, nav:'guide', tab:null, threats:['medico','comm'],        guide:'comm-piano-famiglia',       resolve: null, text:'Protocollo isolamento: stanza dedicata, bagno separato, turni cucina' },
+    { id:'pan03', axis:'mobilita', scoreBonus:15, nav:'guide', tab:null, threats:['medico','cibo'],        guide:'farmaci-scorta',            resolve: null, text:'Farmaci OTC 30+ giorni: paracetamolo, ibuprofene, antidiarroico (loperamide), sali ORS' },
+    { id:'pan04', axis:'mobilita', scoreBonus:10, nav:'guide', tab:null, threats:['medico','comm'],        guide:'kit-medico',                resolve: null, text:'Zona pulita/sporca per ingressi: cambio vestiti all\'entrata, borsa spesa isolata fuori' },
     // ── CRISI ECONOMICA ───────────────────────────────────────────────────────
-    { id:'eco01', axis:'mobilita', scoreBonus:20, nav:'guide', tab:null, threats:['cibo','carburante'],    guide:'evacuazione-piano',         resolve: null, scenarios:['crisi-economica'],    text:'Riserva contanti fuori banca: 1-3 mesi di spese essenziali in casa' },
-    { id:'eco02', axis:'cibo',     scoreBonus:12, nav:'guide', tab:null, threats:['cibo'],                 guide:'cibo-scorte-piano',         resolve: null, scenarios:['crisi-economica'],    text:'Filiera corta: mercati locali, baratto, orti condivisi, gruppi acquisto' },
+    { id:'eco01', axis:'mobilita', scoreBonus:20, nav:'guide', tab:null, threats:['cibo','carburante'],    guide:'evacuazione-piano',         resolve: null, text:'Riserva contanti fuori banca: 1-3 mesi di spese essenziali in casa' },
+    { id:'eco02', axis:'cibo',     scoreBonus:12, nav:'guide', tab:null, threats:['cibo'],                 guide:'cibo-scorte-piano',         resolve: null, text:'Filiera corta: mercati locali, baratto, orti condivisi, gruppi acquisto' },
+    { id:'eco03', axis:'cibo',     scoreBonus:12, nav:'guide', tab:null, threats:['cibo'],                 guide:'cibo-conservazione',        resolve: null, text:'Cucina di sussistenza: zuppe di legumi, pane fatto in casa, conserve e fermentati fai-da-te' },
+    { id:'eco04', axis:'mobilita', scoreBonus: 8, nav:'guide', tab:null, threats:['cibo','carburante'],    guide:'evacuazione-piano',         resolve: null, text:'Consolida spostamenti: più commissioni in una sola uscita — valuta bici per tratte brevi' },
     // ── INCENDIO ZONA ─────────────────────────────────────────────────────────
-    { id:'inc01', axis:'mobilita', scoreBonus:20, nav:'guide', tab:null, threats:['carburante','comm'],    guide:'evacuazione-piano',         resolve: null, scenarios:['incendio-zona'],      text:'Piano fuga: percorsi lontani da boschi, punto ritrovo prestabilito' },
-    { id:'inc02', axis:'acqua',    scoreBonus:12, nav:'guide', tab:null, threats:['acqua','comm'],         guide:'sicurezza-casa',            resolve: null, scenarios:['incendio-zona'],      text:'Rimuovi materiale infiammabile entro 10m dalla casa; tieni prato irrigato' },
+    { id:'inc01', axis:'mobilita', scoreBonus:20, nav:'guide', tab:null, threats:['carburante','comm'],    guide:'evacuazione-piano',         resolve: null, text:'Piano fuga: percorsi lontani da boschi, punto ritrovo prestabilito' },
+    { id:'inc02', axis:'acqua',    scoreBonus:12, nav:'guide', tab:null, threats:['acqua','comm'],         guide:'sicurezza-casa',            resolve: null, text:'Rimuovi materiale infiammabile entro 10m dalla casa; tieni prato irrigato' },
+    { id:'inc03', axis:'mobilita', scoreBonus:12, nav:'guide', tab:null, threats:['acqua','comm'],         guide:'kit-medico',                resolve: null, text:'Qualità aria: finestre chiuse, mascherina FFP2 se esci — evita attività fisica all\'aperto' },
+    { id:'inc04', axis:'mobilita', scoreBonus:10, nav:'guide', tab:null, threats:['carburante','comm'],    guide:'evacuazione-piano',         resolve: null, text:'Tieni l\'auto parcheggiata in uscita e carica — ordine di evacuazione può arrivare in 30 min' },
     // ── EVACUAZIONE ───────────────────────────────────────────────────────────
-    { id:'eva01', axis:'mobilita', scoreBonus:18, nav:'guide', tab:null, threats:['carburante','acqua'],   guide:'gobag-checklist',           resolve: null, scenarios:['evacuazione'],        text:'Documenti in busta impermeabile nella go-bag (CI, passaporto, polizze)' },
-    { id:'eva02', axis:'mobilita', scoreBonus:12, nav:'guide', tab:null, threats:['carburante','cibo'],    guide:'gobag-checklist',           resolve: null, scenarios:['evacuazione'],        text:'Contanti + carta carburante prepagata in go-bag (ATM potrebbero non funzionare)' },
+    { id:'eva01', axis:'mobilita', scoreBonus:18, nav:'guide', tab:null, threats:['carburante','acqua'],   guide:'gobag-checklist',           resolve: null, text:'Documenti in busta impermeabile nella go-bag (CI, passaporto, polizze)' },
+    { id:'eva02', axis:'mobilita', scoreBonus:12, nav:'guide', tab:null, threats:['carburante','cibo'],    guide:'gobag-checklist',           resolve: null, text:'Contanti + carta carburante prepagata in go-bag (ATM potrebbero non funzionare)' },
+    { id:'eva03', axis:'mobilita', scoreBonus:15, nav:'guide', tab:null, threats:['carburante','medico'],  guide:'kit-medico',                resolve: null, text:'Farmaci salvavita in go-bag + foglio scritto con allergie, condizioni mediche, terapie' },
+    { id:'eva04', axis:'mobilita', scoreBonus: 8, nav:'guide', tab:null, threats:['carburante','acqua'],   guide:'gobag-checklist',           resolve: null, text:'Animali domestici: trasportino/guinzaglio pronti — i rifugi di emergenza possono non accettarli' },
     // ── BLACKOUT LUNGO ────────────────────────────────────────────────────────
-    { id:'blt01', axis:'cibo',     scoreBonus:15, nav:'guide', tab:null, threats:['cibo','blackout'],      guide:'cibo-scorte-piano',         resolve: null, scenarios:['blackout-lungo'],     text:'Frigorifero: consuma o sposta i perishables entro le prime 4h dal blackout' },
-    { id:'blt02', axis:'mobilita', scoreBonus:12, nav:'guide', tab:null, threats:['blackout','medico'],    guide:'kit-medico',                resolve: null, scenarios:['blackout-lungo'],     text:'Priorità carica: dispositivi medici (insulina frigo, CPAP, concentratore O2)' },
+    { id:'blt01', axis:'cibo',     scoreBonus:15, nav:'guide', tab:null, threats:['cibo','blackout'],      guide:'cibo-scorte-piano',         resolve: null, text:'Frigorifero: consuma o sposta i perishables entro le prime 4h dal blackout' },
+    { id:'blt02', axis:'mobilita', scoreBonus:12, nav:'guide', tab:null, threats:['blackout','medico'],    guide:'kit-medico',                resolve: null, text:'Priorità carica: dispositivi medici (insulina frigo, CPAP, concentratore O2)' },
+    { id:'blt03', axis:'energia',  scoreBonus:12, nav:'guide', tab:null, threats:['blackout'],             guide:'energia-generatore',        resolve: null, text:'Raziona carburante generatore: usa solo nelle fasce critiche (cottura, ricarica, pompa acqua)' },
+    { id:'blt04', axis:'comm',     scoreBonus: 8, nav:'guide', tab:null, threats:['blackout','comm'],      guide:'community-resilienza',      resolve: null, text:'Organizza turni con vicini per accesso al generatore — divide il consumo e il carico termico' },
     // ── TEMPESTA INVERNALE ────────────────────────────────────────────────────
-    { id:'tem01', axis:'calore',   scoreBonus:18, nav:'guide', tab:null, threats:['freddo','blackout'],    guide:'riscaldamento-alternativo', resolve: null, scenarios:['tempesta-invernale'], text:'Scorta legna/pellet al coperto + kit sbloccaggio auto (catene, pala, sale)' },
-    { id:'tem02', axis:'comm',     scoreBonus:10, nav:'guide', tab:null, threats:['freddo','blackout'],    guide:'comm-piano-famiglia',       resolve: null, scenarios:['tempesta-invernale'], text:'Non uscire durante la tempesta: radio per aggiornamenti, check famiglia ogni 2h' },
+    { id:'tem01', axis:'calore',   scoreBonus:18, nav:'guide', tab:null, threats:['freddo','blackout'],    guide:'riscaldamento-alternativo', resolve: null, text:'Scorta legna/pellet al coperto + kit sbloccaggio auto (catene, pala, sale)' },
+    { id:'tem02', axis:'comm',     scoreBonus:10, nav:'guide', tab:null, threats:['freddo','blackout'],    guide:'comm-piano-famiglia',       resolve: null, text:'Non uscire durante la tempesta: radio per aggiornamenti, check famiglia ogni 2h' },
+    { id:'tem03', axis:'acqua',    scoreBonus:10, nav:'guide', tab:null, threats:['acqua','freddo'],       guide:'acqua-stoccaggio',          resolve: null, text:'Tubature esposte: lascia scorrere acqua a filo nelle ore di gelo — previene rotture e allagamenti' },
     // ── CALDO ESTREMO ─────────────────────────────────────────────────────────
-    { id:'cal01', axis:'mobilita', scoreBonus:12, nav:'guide', tab:null, threats:['acqua','medico'],       guide:'kit-medico',                resolve: null, scenarios:['caldo'],              text:'Identifica luoghi freschi vicini: centri diurni comunali, biblioteche, amici' },
-    { id:'cal02', axis:'mobilita', scoreBonus:15, nav:'guide', tab:null, threats:['medico','acqua'],       guide:'kit-medico',                resolve: null, scenarios:['caldo'],              text:'Check giornaliero anziani e bambini: sintomi colpo di calore, 2L acqua/giorno' },
+    { id:'cal01', axis:'mobilita', scoreBonus:12, nav:'guide', tab:null, threats:['acqua','medico'],       guide:'kit-medico',                resolve: null, text:'Identifica luoghi freschi vicini: centri diurni comunali, biblioteche, amici' },
+    { id:'cal02', axis:'mobilita', scoreBonus:15, nav:'guide', tab:null, threats:['medico','acqua'],       guide:'kit-medico',                resolve: null, text:'Check giornaliero anziani e bambini: sintomi colpo di calore, 2L acqua/giorno' },
+    { id:'cal03', axis:'acqua',    scoreBonus:10, nav:'guide', tab:null, threats:['acqua','medico'],       guide:'acqua-purificazione',       resolve: null, text:'Ore 11–17 al chiuso: tapparelle abbassate sul lato soleggiato — apri tutte le finestre di notte' },
     // ── GAS ───────────────────────────────────────────────────────────────────
-    { id:'gas01', axis:'calore',   scoreBonus:20, nav:'guide', tab:null, threats:['gas'],                  guide:'riscaldamento-alternativo', resolve: null, scenarios:['gas'],                text:'Chiudi rubinetto gas principale + ventila subito + non usare interruttori elettrici' },
+    { id:'gas01', axis:'calore',   scoreBonus:20, nav:'guide', tab:null, threats:['gas'],                  guide:'riscaldamento-alternativo', resolve: null, text:'Chiudi rubinetto gas principale + ventila subito + non usare interruttori elettrici' },
+    { id:'gas02', axis:'cibo',     scoreBonus:15, nav:'guide', tab:null, threats:['gas'],                  guide:'cibo-cottura-campo',        resolve: null, text:'Cucinare senza metano: fornello GPL da campeggio — 1 cartuccia 227g = ~2h cottura' },
+    { id:'gas03', axis:'calore',   scoreBonus:12, nav:'guide', tab:null, threats:['gas'],                  guide:'riscaldamento-alternativo', resolve: null, text:'Acqua calda: pentola su fonte alternativa · riduci docce a 1/giorno con acqua tiepida' },
     // ── ACQUA CONTAMINATA ─────────────────────────────────────────────────────
-    { id:'acq01', axis:'acqua',    scoreBonus:18, nav:'guide', tab:null, threats:['acqua'],                guide:'acqua-purificazione',       resolve: null, scenarios:['acqua'],              text:'Non usare acqua corrente: solo imbottigliata o filtrata fino a deroga revocata' },
-
+    { id:'acq01', axis:'acqua',    scoreBonus:18, nav:'guide', tab:null, threats:['acqua'],                guide:'acqua-purificazione',       resolve: null, text:'Non usare acqua corrente: solo imbottigliata o filtrata fino a deroga revocata' },
+    { id:'acq02', axis:'acqua',    scoreBonus:20, nav:'guide', tab:null, threats:['acqua'],                guide:'acqua-stoccaggio',          resolve: null, text:'Riempi SUBITO vasche, secchi e ogni contenitore disponibile — l\'acquedotto può cedere ulteriormente' },
+    { id:'acq03', axis:'acqua',    scoreBonus:15, nav:'guide', tab:null, threats:['acqua'],                guide:'acqua-purificazione',       resolve: null, text:'Protocollo purificazione attivo: 1 min ebollizione o 4 gocce candeggina/L + 30 min attesa' },
+    { id:'acq04', axis:'acqua',    scoreBonus:10, nav:'guide', tab:null, threats:['acqua'],                guide:'acqua-purificazione',       resolve: null, text:'Raziona: 2.5L/persona/giorno per bere · 1L igiene · acqua sporca per WC e pulizie' },
     // ── BLACKOUT BREVE ─────────────────────────────────────────────────────────
-    { id:'bbs01', axis:'cibo',    scoreBonus:10, nav:'guide', tab:null, threats:['blackout'],            guide:'cibo-conservazione',          resolve: null, scenarios:['blackout-breve'],                                   text:'NON aprire frigo/congelatore: mantiene freddo 4–6h — pianifica i pasti da ora' },
-    { id:'bbs02', axis:'comm',    scoreBonus:12, nav:'guide', tab:null, threats:['blackout','comm'],     guide:'energia-blackout-protocollo', resolve: null, scenarios:['blackout-breve'],                                   text:'Carica ADESSO tutti i dispositivi e power bank — spegni elettrodomestici non essenziali' },
-    { id:'bbs03', axis:'comm',    scoreBonus:10, nav:'guide', tab:null, threats:['blackout','comm'],     guide:'comm-radio-canali',           resolve: null, scenarios:['blackout-breve'],                                   text:'Chiama numero guasti fornitore + radio FM per aggiornamenti sulla durata' },
+    { id:'bbs01', axis:'cibo',    scoreBonus:10, nav:'guide', tab:null, threats:['blackout'],             guide:'cibo-conservazione',          resolve: null, text:'NON aprire frigo/congelatore: mantiene freddo 4–6h — pianifica i pasti da ora' },
+    { id:'bbs02', axis:'comm',    scoreBonus:12, nav:'guide', tab:null, threats:['blackout','comm'],      guide:'energia-blackout-protocollo', resolve: null, text:'Carica ADESSO tutti i dispositivi e power bank — spegni elettrodomestici non essenziali' },
+    { id:'bbs03', axis:'comm',    scoreBonus:10, nav:'guide', tab:null, threats:['blackout','comm'],      guide:'comm-radio-canali',           resolve: null, text:'Chiama numero guasti fornitore + radio FM per aggiornamenti sulla durata' },
     // ── RAZIONAMENTO ──────────────────────────────────────────────────────────
-    { id:'raz01', axis:'energia', scoreBonus:18, nav:'guide', tab:null, threats:['blackout'],            guide:'energia-blackout-protocollo', resolve: null, scenarios:['razionamento'],                                     text:'Mappa le fasce orarie con energia: concentra lavatrice, cottura e ricariche in quelle finestre' },
-    { id:'raz02', axis:'cibo',    scoreBonus:12, nav:'guide', tab:null, threats:['cibo','blackout'],     guide:'cibo-cottura-campo',          resolve: null, scenarios:['razionamento'],                                     text:'Cucina in batch durante le fasce: zuppe e legumi per 2–3 giorni, raffredda rapido' },
-    { id:'raz03', axis:'energia', scoreBonus:10, nav:'guide', tab:null, threats:['blackout'],            guide:'energia-blackout-protocollo', resolve: null, scenarios:['razionamento'],                                     text:'Disconnetti tutti i dispositivi in stand-by nelle fasce off — risparmio fino al 20%' },
-    { id:'raz04', axis:'cibo',    scoreBonus: 8, nav:'guide', tab:null, threats:['cibo'],                guide:'cibo-conservazione',          resolve: null, scenarios:['razionamento'],                                     text:'Frigo a 5°C ottimale — apri una volta per pasto con lista ingredienti già preparata' },
+    { id:'raz01', axis:'energia', scoreBonus:18, nav:'guide', tab:null, threats:['blackout'],             guide:'energia-blackout-protocollo', resolve: null, text:'Mappa le fasce orarie con energia: concentra lavatrice, cottura e ricariche in quelle finestre' },
+    { id:'raz02', axis:'cibo',    scoreBonus:12, nav:'guide', tab:null, threats:['cibo','blackout'],      guide:'cibo-cottura-campo',          resolve: null, text:'Cucina in batch durante le fasce: zuppe e legumi per 2–3 giorni, raffredda rapido' },
+    { id:'raz03', axis:'energia', scoreBonus:10, nav:'guide', tab:null, threats:['blackout'],             guide:'energia-blackout-protocollo', resolve: null, text:'Disconnetti tutti i dispositivi in stand-by nelle fasce off — risparmio fino al 20%' },
+    { id:'raz04', axis:'cibo',    scoreBonus: 8, nav:'guide', tab:null, threats:['cibo'],                 guide:'cibo-conservazione',          resolve: null, text:'Frigo a 5°C ottimale — apri una volta per pasto con lista ingredienti già preparata' },
     // ── INTERRUZIONE FORNITURE ALIMENTARI ─────────────────────────────────────
-    { id:'cib01', axis:'cibo',    scoreBonus:18, nav:'guide', tab:null, threats:['cibo'],                guide:'cibo-scorte-piano',           resolve: null, scenarios:['cibo'],                                             text:'Pianifica menù settimanale dalle scorte: prima fresco e aperto, poi scatolame, poi secco' },
-    { id:'cib02', axis:'cibo',    scoreBonus:15, nav:'guide', tab:null, threats:['cibo'],                guide:'community-resilienza',        resolve: null, scenarios:['cibo'],                                             text:'Filiera corta: identifica mercati locali, agricoltori diretti, gruppi acquisto solidale (GAS)' },
-    { id:'cib03', axis:'cibo',    scoreBonus:12, nav:'guide', tab:null, threats:['cibo'],                guide:'cibo-conservazione',          resolve: null, scenarios:['cibo'],                                             text:'Impara fermentazione: crauti in 7 giorni, kimchi in 14 — conserva verdure senza energia' },
-    { id:'cib04', axis:'cibo',    scoreBonus: 8, nav:'guide', tab:null, threats:['cibo'],                guide:'cibo-conservazione',          resolve: null, scenarios:['cibo'],                                             text:'Zero sprechi: bucce e fondi per brodo, pane secco in pan di pane, avanzi proteici in frittata' },
-    // ── EMERGENZA ACQUA ───────────────────────────────────────────────────────
-    { id:'acq02', axis:'acqua',   scoreBonus:20, nav:'guide', tab:null, threats:['acqua'],               guide:'acqua-stoccaggio',            resolve: null, scenarios:['acqua'],                                            text:'Riempi SUBITO vasche, secchi e ogni contenitore disponibile — l\'acquedotto può cedere ulteriormente' },
-    { id:'acq03', axis:'acqua',   scoreBonus:15, nav:'guide', tab:null, threats:['acqua'],               guide:'acqua-purificazione',         resolve: null, scenarios:['acqua'],                                            text:'Protocollo purificazione attivo: 1 min ebollizione o 4 gocce candeggina/L + 30 min attesa' },
-    { id:'acq04', axis:'acqua',   scoreBonus:10, nav:'guide', tab:null, threats:['acqua'],               guide:'acqua-purificazione',         resolve: null, scenarios:['acqua'],                                            text:'Raziona: 2.5L/persona/giorno per bere · 1L igiene · acqua sporca per WC e pulizie' },
-    // ── GAS ───────────────────────────────────────────────────────────────────
-    { id:'gas02', axis:'cibo',    scoreBonus:15, nav:'guide', tab:null, threats:['gas'],                 guide:'cibo-cottura-campo',          resolve: null, scenarios:['gas'],                                              text:'Cucinare senza metano: fornello GPL da campeggio — 1 cartuccia 227g = ~2h cottura' },
-    { id:'gas03', axis:'calore',  scoreBonus:12, nav:'guide', tab:null, threats:['gas'],                 guide:'riscaldamento-alternativo',   resolve: null, scenarios:['gas'],                                              text:'Acqua calda: pentola su fonte alternativa · riduci docce a 1/giorno con acqua tiepida' },
+    { id:'cib01', axis:'cibo',    scoreBonus:18, nav:'guide', tab:null, threats:['cibo'],                 guide:'cibo-scorte-piano',           resolve: null, text:'Pianifica menù settimanale dalle scorte: prima fresco e aperto, poi scatolame, poi secco' },
+    { id:'cib02', axis:'cibo',    scoreBonus:15, nav:'guide', tab:null, threats:['cibo'],                 guide:'community-resilienza',        resolve: null, text:'Filiera corta: identifica mercati locali, agricoltori diretti, gruppi acquisto solidale (GAS)' },
+    { id:'cib03', axis:'cibo',    scoreBonus:12, nav:'guide', tab:null, threats:['cibo'],                 guide:'cibo-conservazione',          resolve: null, text:'Impara fermentazione: crauti in 7 giorni, kimchi in 14 — conserva verdure senza energia' },
+    { id:'cib04', axis:'cibo',    scoreBonus: 8, nav:'guide', tab:null, threats:['cibo'],                 guide:'cibo-conservazione',          resolve: null, text:'Zero sprechi: bucce e fondi per brodo, pane secco in pan di pane, avanzi proteici in frittata' },
     // ── BLACKOUT RETE MOBILE ──────────────────────────────────────────────────
-    { id:'bmo01', axis:'comm',    scoreBonus:20, nav:'guide', tab:null, threats:['comm'],                guide:'comm-radio-canali',           resolve: null, scenarios:['blackout-mobile'],                                  text:'Radio FM/AM: RAI Radio 1 emergenze nazionali — 97.7 MHz o 1332 kHz in AM' },
-    { id:'bmo02', axis:'comm',    scoreBonus:15, nav:'guide', tab:null, threats:['comm'],                guide:'comm-piano-famiglia',         resolve: null, scenarios:['blackout-mobile'],                                  text:'Recati al punto di ritrovo fisico prestabilito — lascia nota cartacea sulla porta di casa' },
-    { id:'bmo03', axis:'comm',    scoreBonus:12, nav:'guide', tab:null, threats:['comm'],                guide:'comm-pmr446',                 resolve: null, scenarios:['blackout-mobile'],                                  text:'Walkie-talkie PMR446 canale 8: check ogni 4h con familiari nel raggio di 2–5km' },
-    // ── TERREMOTO (aggiuntive) ────────────────────────────────────────────────
-    { id:'ter03', axis:'mobilita',scoreBonus:15, nav:'guide', tab:null, threats:['blackout','acqua'],    guide:'gobag-checklist',             resolve: null, scenarios:['terremoto'],                                        text:'Dopo la scossa: stai fuori — rientra SOLO dopo verifica strutturale delle autorità competenti' },
-    { id:'ter04', axis:'acqua',   scoreBonus:12, nav:'guide', tab:null, threats:['acqua'],               guide:'acqua-purificazione',         resolve: null, scenarios:['terremoto'],                                        text:'Acqua post-sisma non garantita: usa solo scorte o acqua purificata (bollitura 1 min)' },
-    // ── ALLUVIONE (aggiuntive) ────────────────────────────────────────────────
-    { id:'all03', axis:'energia', scoreBonus:15, nav:'guide', tab:null, threats:['acqua','blackout'],    guide:'sicurezza-casa',              resolve: null, scenarios:['alluvione'],                                        text:'Stacca corrente dal quadro elettrico se l\'acqua sale entro 30cm dalle prese' },
-    { id:'all04', axis:'mobilita',scoreBonus:10, nav:'guide', tab:null, threats:['acqua','cibo'],        guide:'kit-medico',                  resolve: null, scenarios:['alluvione'],                                        text:'Dopo alluvione: guanti e stivali per il fango (leptospirosi) — non toccare acqua a mani nude' },
-    // ── INCENDIO ZONA (aggiuntive) ────────────────────────────────────────────
-    { id:'inc03', axis:'mobilita',scoreBonus:12, nav:'guide', tab:null, threats:['acqua','comm'],        guide:'kit-medico',                  resolve: null, scenarios:['incendio-zona'],                                    text:'Qualità aria: finestre chiuse, mascherina FFP2 se esci — evita attività fisica all\'aperto' },
-    { id:'inc04', axis:'mobilita',scoreBonus:10, nav:'guide', tab:null, threats:['carburante','comm'],   guide:'evacuazione-piano',           resolve: null, scenarios:['incendio-zona'],                                    text:'Tieni l\'auto parcheggiata in uscita e carica — ordine di evacuazione può arrivare in 30 min' },
-    // ── EVACUAZIONE (aggiuntive) ──────────────────────────────────────────────
-    { id:'eva03', axis:'mobilita',scoreBonus:15, nav:'guide', tab:null, threats:['carburante','medico'], guide:'kit-medico',                  resolve: null, scenarios:['evacuazione'],                                      text:'Farmaci salvavita in go-bag + foglio scritto con allergie, condizioni mediche, terapie' },
-    { id:'eva04', axis:'mobilita',scoreBonus: 8, nav:'guide', tab:null, threats:['carburante','acqua'],  guide:'gobag-checklist',             resolve: null, scenarios:['evacuazione'],                                      text:'Animali domestici: trasportino/guinzaglio pronti — i rifugi di emergenza possono non accettarli' },
-    // ── PANDEMIA (aggiuntive) ─────────────────────────────────────────────────
-    { id:'pan03', axis:'mobilita',scoreBonus:15, nav:'guide', tab:null, threats:['medico','cibo'],       guide:'farmaci-scorta',              resolve: null, scenarios:['pandemia'],                                         text:'Farmaci OTC 30+ giorni: paracetamolo, ibuprofene, antidiarroico (loperamide), sali ORS' },
-    { id:'pan04', axis:'mobilita',scoreBonus:10, nav:'guide', tab:null, threats:['medico','comm'],       guide:'kit-medico',                  resolve: null, scenarios:['pandemia'],                                         text:'Zona pulita/sporca per ingressi: cambio vestiti all\'entrata, borsa spesa isolata fuori' },
-    // ── CRISI ECONOMICA (aggiuntive) ──────────────────────────────────────────
-    { id:'eco03', axis:'cibo',    scoreBonus:12, nav:'guide', tab:null, threats:['cibo'],                guide:'cibo-conservazione',          resolve: null, scenarios:['crisi-economica'],                                  text:'Cucina di sussistenza: zuppe di legumi, pane fatto in casa, conserve e fermentati fai-da-te' },
-    { id:'eco04', axis:'mobilita',scoreBonus: 8, nav:'guide', tab:null, threats:['cibo','carburante'],   guide:'evacuazione-piano',           resolve: null, scenarios:['crisi-economica'],                                  text:'Consolida spostamenti: più commissioni in una sola uscita — valuta bici per tratte brevi' },
-    // ── BLACKOUT LUNGO (aggiuntive) ───────────────────────────────────────────
-    { id:'blt03', axis:'energia', scoreBonus:12, nav:'guide', tab:null, threats:['blackout'],            guide:'energia-generatore',          resolve: null, scenarios:['blackout-lungo'],                                   text:'Raziona carburante generatore: usa solo nelle fasce critiche (cottura, ricarica, pompa acqua)' },
-    { id:'blt04', axis:'comm',    scoreBonus: 8, nav:'guide', tab:null, threats:['blackout','comm'],     guide:'community-resilienza',        resolve: null, scenarios:['blackout-lungo'],                                   text:'Organizza turni con vicini per accesso al generatore — divide il consumo e il carico termico' },
-    // ── TEMPESTA INVERNALE (aggiuntive) ───────────────────────────────────────
-    { id:'tem03', axis:'acqua',   scoreBonus:10, nav:'guide', tab:null, threats:['acqua','freddo'],      guide:'acqua-stoccaggio',            resolve: null, scenarios:['tempesta-invernale'],                                text:'Tubature esposte: lascia scorrere acqua a filo nelle ore di gelo — previene rotture e allagamenti' },
-    // ── CALDO ESTREMO (aggiuntive) ────────────────────────────────────────────
-    { id:'cal03', axis:'acqua',   scoreBonus:10, nav:'guide', tab:null, threats:['acqua','medico'],      guide:'acqua-purificazione',         resolve: null, scenarios:['caldo'],                                            text:'Ore 11–17 al chiuso: tapparelle abbassate sul lato soleggiato — apri tutte le finestre di notte' },
+    { id:'bmo01', axis:'comm',    scoreBonus:20, nav:'guide', tab:null, threats:['comm'],                 guide:'comm-radio-canali',           resolve: null, text:'Radio FM/AM: RAI Radio 1 emergenze nazionali — 97.7 MHz o 1332 kHz in AM' },
+    { id:'bmo02', axis:'comm',    scoreBonus:15, nav:'guide', tab:null, threats:['comm'],                 guide:'comm-piano-famiglia',         resolve: null, text:'Recati al punto di ritrovo fisico prestabilito — lascia nota cartacea sulla porta di casa' },
+    { id:'bmo03', axis:'comm',    scoreBonus:12, nav:'guide', tab:null, threats:['comm'],                 guide:'comm-pmr446',                 resolve: null, text:'Walkie-talkie PMR446 canale 8: check ogni 4h con familiari nel raggio di 2–5km' },
 
-    // ── SURVIVAL IN NATURA (solo per scenario 'survival-natura') ──────────────
-    { id:'sv01', axis:'acqua',    scoreBonus:20, nav:'settings', tab:'acqua',    threats:['acqua'],               guide:'acqua-purificazione',              resolve: p=>!!p.ha_filtro,   field:'ha_filtro',                scenarios:['survival-natura'],                         text:'Filtro Sawyer Mini + pastiglie Micropur nel kit' },
-    { id:'sv02', axis:'acqua',    scoreBonus:10, nav:'guide',    tab:null,       threats:['acqua'],               guide:'survival-acqua-natura',            resolve: null,                                                    scenarios:['survival-natura'],                         text:'Studia distillazione solare e raccolta rugiada' },
-    { id:'sv03', axis:'cibo',     scoreBonus:20, nav:'guide',    tab:null,       threats:['cibo'],                guide:'survival-trappole',               resolve: null,                                                    scenarios:['survival-natura'],                         text:'Razioni liofilizzate 3+ giorni (2000 kcal/giorno) + kit pesca' },
-    { id:'sv04', axis:'cibo',     scoreBonus:10, nav:'guide',    tab:null,       threats:['cibo'],                guide:'survival-piante',                 resolve: null,                                                    scenarios:['survival-natura'],                         text:'Impara piante commestibili sicure nella tua zona' },
-    { id:'sv05', axis:'calore',   scoreBonus:25, nav:'guide',    tab:null,       threats:['freddo'],              guide:'survival-riparo',                 resolve: null,                                                    scenarios:['survival-natura'],                         text:'Sacco a pelo -10°C + telo mylar bivacchetto nel kit' },
-    { id:'sv06', axis:'calore',   scoreBonus:15, nav:'guide',    tab:null,       threats:['freddo'],              guide:'survival-fuoco',                  resolve: null,                                                    scenarios:['survival-natura'],                         text:'Acciarino ferrocerio + paracord 550: costruisci fuoco e lean-to' },
-    { id:'sv07', axis:'calore',   scoreBonus:10, nav:'guide',    tab:null,       threats:['freddo'],              guide:'survival-riparo',                 resolve: null,                                                    scenarios:['survival-natura'],                         text:'Studia regola dei 3 e costruzione riparo di emergenza' },
-    { id:'sv08', axis:'comm',     scoreBonus:20, nav:'guide',    tab:null,       threats:['comm'],                guide:'survival-segnalazione',           resolve: null,                                                    scenarios:['survival-natura'],                         text:'Fischietto Fox 40 + specchio di segnalazione nel kit' },
-    { id:'sv09', axis:'comm',     scoreBonus:15, nav:'guide',    tab:null,       threats:['comm'],                guide:'survival-navigazione',            resolve: null,                                                    scenarios:['survival-natura'],                         text:'Bussola baseplate + cartina topografica 1:25.000 zona' },
-    { id:'sv10', axis:'mobilita', scoreBonus:12, nav:'guide',    tab:null,       threats:['comm'],                guide:'survival-navigazione',            resolve: null,                                                    scenarios:['survival-natura'],                         text:'Coltello survival full tang (lama 10-15cm) sempre con te' },
-    { id:'sv11', axis:'mobilita', scoreBonus:15, nav:'settings', tab:'medico',   threats:['medico'],              guide:'survival-primo-soccorso-campo',   resolve: p=>!!p.has_kit_medico,      field:'has_kit_medico',       scenarios:['survival-natura'],                         text:'IFAK avanzato: garze emostatiche, laccio CAT, chest seal' },
-    { id:'sv12', axis:'comm',     scoreBonus: 8, nav:'guide',    tab:null,       threats:['comm'],                guide:'survival-navigazione',            resolve: null,                                                    scenarios:['survival-natura'],                         text:'Studia orientamento senza strumenti: sole, stelle, acqua' },
-    { id:'sv13', axis:'cibo',     scoreBonus:15, nav:'guide',    tab:null,       threats:['cibo'],                guide:'survival-trappole',               resolve: null,                                                    scenarios:['survival-natura'],                         text:'Studia loop snare e spring snare + tieni filo metallico nel kit' },
-    { id:'sv14', axis:'calore',   scoreBonus:12, nav:'guide',    tab:null,       threats:['freddo','comm'],        guide:'survival-nodi',                   resolve: null,                                                    scenarios:['survival-natura'],                         text:'Impara 5 nodi fondamentali: bowline, reef, clove hitch, prusik, lashing' },
-    { id:'sv15', axis:'cibo',     scoreBonus:10, nav:'guide',    tab:null,       threats:['cibo'],                guide:'survival-conservazione-cibo',      resolve: null,                                                    scenarios:['survival-natura'],                         text:'Tecniche conservazione senza energia: essiccatura, salatura, fermentazione' },
+    // ── SURVIVAL IN NATURA ────────────────────────────────────────────────────
+    { id:'sv01', axis:'acqua',    scoreBonus:20, nav:'settings', tab:'acqua',    threats:['acqua'],  guide:'acqua-purificazione',            resolve: p=>!!p.ha_filtro,      field:'ha_filtro',      text:'Filtro Sawyer Mini + pastiglie Micropur nel kit' },
+    { id:'sv02', axis:'acqua',    scoreBonus:10, nav:'guide',    tab:null,       threats:['acqua'],  guide:'survival-acqua-natura',          resolve: null,                                          text:'Studia distillazione solare e raccolta rugiada' },
+    { id:'sv03', axis:'cibo',     scoreBonus:20, nav:'guide',    tab:null,       threats:['cibo'],   guide:'survival-trappole',              resolve: null,                                          text:'Razioni liofilizzate 3+ giorni (2000 kcal/giorno) + kit pesca' },
+    { id:'sv04', axis:'cibo',     scoreBonus:10, nav:'guide',    tab:null,       threats:['cibo'],   guide:'survival-piante',                resolve: null,                                          text:'Impara piante commestibili sicure nella tua zona' },
+    { id:'sv05', axis:'calore',   scoreBonus:25, nav:'guide',    tab:null,       threats:['freddo'], guide:'survival-riparo',                resolve: null,                                          text:'Sacco a pelo -10°C + telo mylar bivacchetto nel kit' },
+    { id:'sv06', axis:'calore',   scoreBonus:15, nav:'guide',    tab:null,       threats:['freddo'], guide:'survival-fuoco',                 resolve: null,                                          text:'Acciarino ferrocerio + paracord 550: costruisci fuoco e lean-to' },
+    { id:'sv07', axis:'calore',   scoreBonus:10, nav:'guide',    tab:null,       threats:['freddo'], guide:'survival-riparo',                resolve: null,                                          text:'Studia regola dei 3 e costruzione riparo di emergenza' },
+    { id:'sv08', axis:'comm',     scoreBonus:20, nav:'guide',    tab:null,       threats:['comm'],   guide:'survival-segnalazione',          resolve: null,                                          text:'Fischietto Fox 40 + specchio di segnalazione nel kit' },
+    { id:'sv09', axis:'comm',     scoreBonus:15, nav:'guide',    tab:null,       threats:['comm'],   guide:'survival-navigazione',           resolve: null,                                          text:'Bussola baseplate + cartina topografica 1:25.000 zona' },
+    { id:'sv10', axis:'mobilita', scoreBonus:12, nav:'guide',    tab:null,       threats:['comm'],   guide:'survival-navigazione',           resolve: null,                                          text:'Coltello survival full tang (lama 10-15cm) sempre con te' },
+    { id:'sv11', axis:'mobilita', scoreBonus:15, nav:'settings', tab:'medico',   threats:['medico'], guide:'survival-primo-soccorso-campo',  resolve: p=>!!p.has_kit_medico, field:'has_kit_medico', text:'IFAK avanzato: garze emostatiche, laccio CAT, chest seal' },
+    { id:'sv12', axis:'comm',     scoreBonus: 8, nav:'guide',    tab:null,       threats:['comm'],   guide:'survival-navigazione',           resolve: null,                                          text:'Studia orientamento senza strumenti: sole, stelle, acqua' },
+    { id:'sv13', axis:'cibo',     scoreBonus:15, nav:'guide',    tab:null,       threats:['cibo'],   guide:'survival-trappole',              resolve: null,                                          text:'Studia loop snare e spring snare + tieni filo metallico nel kit' },
+    { id:'sv14', axis:'calore',   scoreBonus:12, nav:'guide',    tab:null,       threats:['freddo'], guide:'survival-nodi',                  resolve: null,                                          text:'Impara 5 nodi fondamentali: bowline, reef, clove hitch, prusik, lashing' },
+    { id:'sv15', axis:'cibo',     scoreBonus:10, nav:'guide',    tab:null,       threats:['cibo'],   guide:'survival-conservazione-cibo',    resolve: null,                                          text:'Tecniche conservazione senza energia: essiccatura, salatura, fermentazione' },
   ];
 
   /* ── VIEW MODE ── */
-  let taskView = 'minacce'; // 'minacce' | 'priorita'
+  let taskView = 'minacce'; // 'minacce' | 'priorita' | 'focus'
   function setView(mode) { taskView = mode; render(); }
+
+  /* ── SCORE DELTA TOAST ── */
+  function _showScoreToast(axis, bonus, checked) {
+    if (!checked) return;
+    const AXIS_LABEL = { acqua:'ACQUA', cibo:'CIBO', energia:'ENERGIA', calore:'CALORE', comm:'COMM', mobilita:'MOBILITÀ' };
+    const toast = document.createElement('div');
+    toast.className = 'score-toast';
+    toast.innerHTML = `<i class="ph ph-arrow-up"></i> +${bonus} ${AXIS_LABEL[axis] || axis}`;
+    document.body.appendChild(toast);
+    requestAnimationFrame(() => toast.classList.add('score-toast-show'));
+    setTimeout(() => { toast.classList.remove('score-toast-show'); setTimeout(() => toast.remove(), 300); }, 1800);
+  }
+
+  /* ── SCENARIO PICKER MODAL ── */
+  function openScenarioPicker() {
+    const existing = document.getElementById('scenario-picker-modal');
+    if (existing) { existing.remove(); return; }
+    const profilo = SettingsModule.get();
+    const current = profilo.scenario_id;
+    const scenarios = window.SCENARI_LIST || [];
+    const modal = document.createElement('div');
+    modal.id = 'scenario-picker-modal';
+    modal.className = 'sp-modal';
+    modal.innerHTML = `
+      <div class="sp-backdrop" onclick="DashboardModule.openScenarioPicker()"></div>
+      <div class="sp-drawer">
+        <div class="sp-header">
+          <span>Cambia Scenario</span>
+          <button class="sp-close" onclick="DashboardModule.openScenarioPicker()"><i class="ph ph-x"></i></button>
+        </div>
+        <div class="sp-list">
+          <div class="sp-item${!current ? ' sp-active' : ''}" onclick="DashboardModule._pickScenario(null)">
+            <span class="sp-icon">🔍</span>
+            <div class="sp-info"><strong>Auto-rilevamento</strong><span>Minacce da profilo</span></div>
+            ${!current ? '<i class="ph ph-check sp-check"></i>' : ''}
+          </div>
+          ${scenarios.map(s => `
+            <div class="sp-item${current === s.id ? ' sp-active' : ''}" onclick="DashboardModule._pickScenario('${s.id}')">
+              <span class="sp-icon">${s.icon}</span>
+              <div class="sp-info"><strong>${s.titolo}</strong><span>${s.desc}</span></div>
+              ${current === s.id ? '<i class="ph ph-check sp-check"></i>' : ''}
+            </div>`).join('')}
+        </div>
+      </div>`;
+    document.body.appendChild(modal);
+    requestAnimationFrame(() => modal.classList.add('sp-open'));
+  }
+
+  function _pickScenario(id) {
+    const p = SettingsModule.get();
+    p.scenario_id = id;
+    if (typeof Storage !== 'undefined') Storage.set('profilo', p);
+    if (typeof SettingsModule !== 'undefined') SettingsModule._syncFromStorage?.();
+    openScenarioPicker();
+    render();
+  }
 
   /* ── SCORING DA PROFILO ── */
   function scoreFromDays(d) {
@@ -282,17 +325,23 @@ const DashboardModule = (() => {
     return { acqua, cibo, energia, calore, comm, mobilita };
   }
 
+  function _scenarioTaskIds(scenarioId) {
+    if (!scenarioId || scenarioId === 'custom') return null;
+    const sc = (window.SCENARI_LIST || []).find(s => s.id === scenarioId);
+    if (!sc || !sc.taskMap) return null;
+    return new Set(Object.values(sc.taskMap).flat());
+  }
+
   function computeCurrentScores(profilo, activeIds, scenarioId) {
     const base = computeBaseScores(profilo);
     const done = Storage.get('task-checks') || {};
+    const scenarioTasks = _scenarioTaskIds(scenarioId);
 
-    // Bonus solo da task rilevanti per le minacce/scenario attivi
-    // (evita che task survival gonfino il punteggio in scenari normali)
     ALL_TASKS.forEach(task => {
-      const relevant    = !activeIds || task.threats.some(tid => activeIds.includes(tid));
-      const inScenario  = !task.scenarios || !scenarioId || task.scenarios.includes(scenarioId);
-      const notExcluded = !task.excludeScenarios || !scenarioId || !task.excludeScenarios.includes(scenarioId);
-      if (!relevant || !inScenario || !notExcluded) return;
+      const relevant = !activeIds || task.threats.some(tid => activeIds.includes(tid));
+      if (!relevant) return;
+      // Scenario attivo: solo task nel taskMap; nessuno scenario: tutti i task rilevanti per minaccia
+      if (scenarioTasks && !scenarioTasks.has(task.id)) return;
       const completed = task.resolve ? task.resolve(profilo) : !!done[task.id];
       if (completed) base[task.axis] = Math.min(100, base[task.axis] + task.scoreBonus);
     });
@@ -300,8 +349,14 @@ const DashboardModule = (() => {
     return base;
   }
 
-  function computeRequiredScores(activeThreats) {
+  function computeRequiredScores(activeThreats, scenarioId) {
     if (activeThreats.length === 0) return { acqua:0, cibo:0, energia:0, calore:0, comm:0, mobilita:0 };
+    // Scenario con required esplicito → usa quello
+    if (scenarioId && scenarioId !== 'custom') {
+      const sc = (window.SCENARI_LIST || []).find(s => s.id === scenarioId);
+      if (sc && sc.required) return { ...sc.required };
+    }
+    // Fallback: max tra le minacce attive
     const req = { acqua:0, cibo:0, energia:0, calore:0, comm:0, mobilita:0 };
     activeThreats.forEach(tid => {
       const threat = THREATS.find(t => t.id === tid);
@@ -391,25 +446,42 @@ const DashboardModule = (() => {
   }
 
   /* ── TIMELINE RISORSE ── */
-  function buildTimeline(current, profilo) {
+  function buildTimeline(current, profilo, activeIds, scenarioId) {
     const rows = [
-      { label:'Acqua',   icon:'ph-drop',      pct:current.acqua,    val: profilo.acqua_scorte_litri ? profilo.acqua_scorte_litri+'L' : '—', nav:'acqua' },
-      { label:'Cibo',    icon:'ph-fork-knife', pct:current.cibo,     val: profilo.cibo_scorte_giorni ? profilo.cibo_scorte_giorni+'gg' : '—', nav:'cibo' },
-      { label:'Energia', icon:'ph-lightning',  pct:current.energia,  val: current.energia+'%', nav:'energia' },
-      { label:'Calore',  icon:'ph-flame',      pct:current.calore,   val: current.calore+'%', nav:'riscaldamento' },
-      { label:'Comm.',   icon:'ph-radio',      pct:current.comm,     val: current.comm+'%', nav:'settings', tab:'comm' },
-      { label:'Mobilità',icon:'ph-car',        pct:current.mobilita, val: profilo.carburante_litri ? profilo.carburante_litri+'L' : '—', nav:'carburante' },
+      { id:'acqua',    label:'Acqua',   icon:'ph-drop',      pct:current.acqua,    val: profilo.acqua_scorte_litri ? profilo.acqua_scorte_litri+'L' : '—', nav:'acqua' },
+      { id:'cibo',     label:'Cibo',    icon:'ph-fork-knife', pct:current.cibo,     val: profilo.cibo_scorte_giorni ? profilo.cibo_scorte_giorni+'gg' : '—', nav:'cibo' },
+      { id:'energia',  label:'Energia', icon:'ph-lightning',  pct:current.energia,  val: current.energia+'%', nav:'energia' },
+      { id:'calore',   label:'Calore',  icon:'ph-flame',      pct:current.calore,   val: current.calore+'%', nav:'riscaldamento' },
+      { id:'comm',     label:'Comm.',   icon:'ph-radio',      pct:current.comm,     val: current.comm+'%', nav:'settings', tab:'comm' },
+      { id:'mobilita', label:'Mobilità',icon:'ph-car',        pct:current.mobilita, val: profilo.carburante_litri ? profilo.carburante_litri+'L' : '—', nav:'carburante' },
     ];
+
+    const done = Storage.get('task-checks') || {};
+    const scenarioTasks = _scenarioTaskIds(scenarioId);
+
+    function bestTask(axisId) {
+      return ALL_TASKS
+        .filter(t => t.axis === axisId && t.threats.some(tid => (activeIds||[]).includes(tid)))
+        .filter(t => !scenarioTasks || scenarioTasks.has(t.id))
+        .filter(t => !(t.resolve ? t.resolve(profilo) : !!done[t.id]))
+        .sort((a, b) => b.scoreBonus - a.scoreBonus)[0];
+    }
 
     return rows.map(r => {
       const cls = r.pct >= 70 ? 'good' : r.pct >= 35 ? 'warn' : 'bad';
       const onclick = r.tab
         ? `navigateTo('${r.nav}'); setTimeout(()=>SettingsModule._tab('${r.tab}'), 180)`
         : `navigateTo('${r.nav}')`;
+      const next = activeIds?.length ? bestTask(r.id) : null;
+      const nextHtml = next
+        ? `<div class="timeline-next" onclick="event.stopPropagation(); DashboardModule.goToTask('${next.id}')">
+             <i class="ph ph-arrow-elbow-right-down"></i>+${next.scoreBonus} pts · ${next.text.length > 52 ? next.text.slice(0,52)+'…' : next.text}
+           </div>` : '';
       return `<div class="timeline-row" onclick="${onclick}" style="cursor:pointer" title="→ ${r.nav}">
         <div class="timeline-label"><i class="ph ${r.icon}"></i><span>${r.label}</span></div>
         <div class="timeline-bar"><div class="timeline-fill ${cls}" style="width:${r.pct}%"></div></div>
         <div class="timeline-val">${r.val}</div>
+        ${nextHtml}
       </div>`;
     }).join('');
   }
@@ -478,11 +550,11 @@ const DashboardModule = (() => {
   /* ── TASK BOARD ── */
   function buildTaskBoard(current, required, activeIds, detected, done, profilo) {
     const scenarioId = profilo.scenario_id;
+    const scenarioTasks = _scenarioTaskIds(scenarioId);
     // Arricchisce ogni task con urgency + completed (auto o manuale)
     const enriched = ALL_TASKS
       .filter(t => t.threats.some(tid => activeIds.includes(tid)))
-      .filter(t => !t.scenarios || !scenarioId || t.scenarios.includes(scenarioId))
-      .filter(t => !t.excludeScenarios || !scenarioId || !t.excludeScenarios.includes(scenarioId))
+      .filter(t => !scenarioTasks || scenarioTasks.has(t.id))
       .map(t => {
         const gap = (required[t.axis] || 0) - (current[t.axis] || 0);
         const isAutoTask = !!t.resolve;
@@ -502,26 +574,40 @@ const DashboardModule = (() => {
       </div>`;
     }
 
-    return taskView === 'minacce'
-      ? _buildByThreat(enriched, detected, current)
-      : _buildByPriority(enriched);
+    return taskView === 'focus'
+      ? _buildFocus(enriched)
+      : taskView === 'minacce'
+        ? _buildByThreat(enriched, detected, current, required, scenarioId)
+        : _buildByPriority(enriched);
   }
 
   /* Vista: Per Minaccia */
-  function _buildByThreat(enriched, detected, current) {
+  function _buildByThreat(enriched, detected, current, required, scenarioId) {
+    const sc = scenarioId && scenarioId !== 'custom'
+      ? (window.SCENARI_LIST || []).find(s => s.id === scenarioId) : null;
+    const seenIds = new Set();
+
     return detected.map(threat => {
-      const tTasks = enriched
-        .filter(t => t.threats.includes(threat.id))
-        .sort((a, b) => (a.completed - b.completed) || (b.gap - a.gap));
+      let tTasks;
+      if (sc && sc.taskMap && sc.taskMap[threat.id]) {
+        // Scenario mode: ogni task appartiene esattamente al suo threat nel taskMap
+        const ownedIds = new Set(sc.taskMap[threat.id]);
+        tTasks = enriched.filter(t => ownedIds.has(t.id) && !seenIds.has(t.id));
+      } else {
+        // Auto-detect mode: fallback a task.threats
+        tTasks = enriched.filter(t => t.threats.includes(threat.id) && !seenIds.has(t.id));
+      }
+      tTasks.forEach(t => seenIds.add(t.id));
+      tTasks = tTasks.sort((a, b) => (a.completed - b.completed) || (b.gap - a.gap));
       if (tTasks.length === 0) return '';
 
-      const fullThreat = THREATS.find(x => x.id === threat.id);
-      const gapAxes = fullThreat
-        ? Object.keys(fullThreat.required)
-            .map(k => ({ k, gap: Math.max(0, (fullThreat.required[k]||0) - (current[k]||0)) }))
-            .filter(x => x.gap > 0)
-            .sort((a,b) => b.gap - a.gap)
-        : [];
+      // Gap badge: usa required specifico della threat (non scenario intero)
+      const threatDef = THREATS.find(x => x.id === threat.id);
+      const threatRequired = threatDef ? threatDef.required : required;
+      const gapAxes = Object.keys(threatRequired)
+        .map(k => ({ k, gap: Math.max(0, (threatRequired[k]||0) - (current[k]||0)) }))
+        .filter(x => x.gap > 0)
+        .sort((a,b) => b.gap - a.gap);
 
       const done = tTasks.filter(t => t.completed).length;
       const resolved = done === tTasks.length;
@@ -541,6 +627,30 @@ const DashboardModule = (() => {
         <div class="threat-group-tasks">${tTasks.map(renderTaskCard).join('')}</div>
       </div>`;
     }).filter(Boolean).join('');
+  }
+
+  /* Vista: Focus — top 3 task per impatto massimo */
+  function _buildFocus(enriched) {
+    const top = enriched
+      .filter(t => !t.completed)
+      .map(t => ({ ...t, impact: Math.max(0, t.gap) * t.scoreBonus }))
+      .sort((a, b) => b.impact - a.impact)
+      .slice(0, 3);
+
+    if (top.length === 0) return `<div class="tasks-empty">
+      <i class="ph ph-trophy" style="font-size:2rem;color:var(--success);display:block;margin-bottom:8px"></i>
+      <p>Nessun task pendente — ottimo lavoro!</p></div>`;
+
+    return `<div class="focus-header">
+        <i class="ph ph-crosshair"></i>
+        Le 3 azioni con il massimo impatto sui tuoi punteggi
+      </div>
+      <div class="focus-tasks">${top.map((t, i) => `
+        <div class="focus-rank">
+          <span class="focus-num">${i + 1}</span>
+          ${renderTaskCard(t)}
+        </div>`).join('')}
+      </div>`;
   }
 
   /* Vista: Per Priorità (Kanban) */
@@ -637,16 +747,15 @@ const DashboardModule = (() => {
     }
     const activeIds = detected.map(t => t.id);
     const current  = computeCurrentScores(profilo, activeIds, scenarioId);
-    const required = computeRequiredScores(activeIds);
+    const required = computeRequiredScores(activeIds, scenarioId);
     const done     = Storage.get('task-checks') || {};
     const persone  = (profilo.adulti||0) + (profilo.bambini||0) + (profilo.anziani||0);
     const avgScore = Math.round(Object.values(current).reduce((a,b)=>a+b,0) / 6);
 
-    // Progress bar: stessi filtri scenario/excludeScenarios usati nel task board
+    const scenarioTasks = _scenarioTaskIds(scenarioId);
     const visibleTasks = ALL_TASKS
       .filter(t => t.threats.some(tid => activeIds.includes(tid)))
-      .filter(t => !t.scenarios || !scenarioId || t.scenarios.includes(scenarioId))
-      .filter(t => !t.excludeScenarios || !scenarioId || !t.excludeScenarios.includes(scenarioId));
+      .filter(t => !scenarioTasks || scenarioTasks.has(t.id));
     const completedVisible = visibleTasks.filter(t => t.resolve ? t.resolve(profilo) : !!done[t.id]).length;
     const progressPct      = visibleTasks.length > 0 ? Math.round(completedVisible / visibleTasks.length * 100) : 0;
 
@@ -666,7 +775,10 @@ const DashboardModule = (() => {
         <div class="status-banner-text">
           <strong>${bannerLabel}</strong>
           ${detected.length > 0 ? `— ${detected.length} minaccia/e rilevata/e` : ' — nessuna minaccia rilevata'}
-          ${scenarioName ? `<span class="banner-scenario-chip"><i class="ph ph-warning-octagon"></i>${scenarioName}</span>` : ''}
+          <button class="banner-scenario-chip${scenarioName ? '' : ' banner-scenario-chip-empty'}" onclick="DashboardModule.openScenarioPicker()">
+            <i class="ph ${scenarioName ? 'ph-warning-octagon' : 'ph-swap'}"></i>
+            ${scenarioName || 'Cambia scenario'}
+          </button>
         </div>
         <div class="status-banner-score">${avgScore}<span style="font-size:0.65rem;opacity:0.7">/100</span></div>
       </div>
@@ -725,7 +837,7 @@ const DashboardModule = (() => {
         </div>
         <div class="card">
           <h3><i class="ph ph-chart-bar"></i> Risorse</h3>
-          ${buildTimeline(current, profilo)}
+          ${buildTimeline(current, profilo, activeIds, scenarioId)}
           <button class="btn btn-outline btn-sm btn-full mt-16" onclick="navigateTo('settings')">
             <i class="ph ph-pencil"></i> Aggiorna scorte
           </button>
@@ -738,6 +850,10 @@ const DashboardModule = (() => {
           <h3><i class="ph ph-list-checks"></i> Task Operative</h3>
           <div class="task-board-controls">
             <div class="task-view-toggle">
+              <button class="tvt-btn${taskView === 'focus' ? ' active' : ''}"
+                onclick="DashboardModule.setView('focus')" title="Top 3 task per impatto massimo">
+                <i class="ph ph-crosshair"></i> Focus
+              </button>
               <button class="tvt-btn${taskView === 'minacce' ? ' active' : ''}"
                 onclick="DashboardModule.setView('minacce')">
                 <i class="ph ph-target"></i> Minacce
@@ -762,12 +878,11 @@ const DashboardModule = (() => {
 
   function toggleTask(id, checked) {
     const task = ALL_TASKS.find(t => t.id === id);
+    if (task) _showScoreToast(task.axis, task.scoreBonus, checked);
     if (task && task.field) {
-      // Scrive direttamente nel profilo → sincronizza Dimensioni
       if (typeof SettingsModule !== 'undefined') {
         SettingsModule.setField(task.field, checked);
       }
-      // setField chiama DashboardModule.render() internamente
     } else {
       const done = Storage.get('task-checks') || {};
       done[id] = checked;
@@ -778,5 +893,5 @@ const DashboardModule = (() => {
 
   function init() { render(); }
 
-  return { init, render, toggleTask, setView, openGuide, goToTask };
+  return { init, render, toggleTask, setView, openGuide, goToTask, openScenarioPicker, _pickScenario };
 })();

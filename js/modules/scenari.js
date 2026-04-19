@@ -12,6 +12,10 @@ const ScenariModule = (() => {
       desc: 'Interruzione elettricità < 24 ore',
       severity: 1,
       threats: ['blackout'],
+      required: { acqua:30, cibo:40, energia:65, calore:40, comm:55, mobilita:20 },
+      taskMap: {
+        blackout: ['en01','en02','en03','en04','en05','si01','bbs01','bbs02','bbs03'],
+      },
       steps: [
         { fase: 'IMMEDIATO (0-30 min)', azioni: [
           'Verifica se il blackout è solo tuo (controlla altri edifici)',
@@ -40,6 +44,12 @@ const ScenariModule = (() => {
       desc: 'Interruzione elettricità > 24 ore',
       severity: 2,
       threats: ['blackout', 'cibo', 'comm'],
+      required: { acqua:55, cibo:70, energia:85, calore:65, comm:75, mobilita:40 },
+      taskMap: {
+        blackout: ['en01','en02','en03','en04','en05','si01','blt01','blt02','blt03'],
+        cibo:    ['ci01','ci02','ci03','ci04'],
+        comm:    ['co01','co02','co03','co04','si02','blt04'],
+      },
       steps: [
         { fase: 'PRIME 24 ORE', azioni: [
           'Attiva fonte energetica alternativa (generatore, pannelli, batteria)',
@@ -79,6 +89,10 @@ const ScenariModule = (() => {
       desc: 'Stop fornitura gas metano',
       severity: 2,
       threats: ['gas'],
+      required: { acqua:40, cibo:65, energia:55, calore:90, comm:40, mobilita:35 },
+      taskMap: {
+        gas: ['ca01','ca02','gas01','gas02','gas03'],
+      },
       steps: [
         { fase: 'IMMEDIATO', azioni: [
           'Chiudi rubinetto gas principale',
@@ -108,6 +122,11 @@ const ScenariModule = (() => {
       desc: 'Fasce orarie limitate (es. 6h/giorno)',
       severity: 2,
       threats: ['blackout', 'cibo'],
+      required: { acqua:45, cibo:70, energia:80, calore:50, comm:50, mobilita:25 },
+      taskMap: {
+        blackout: ['en01','en02','en03','en04','en05','si01','raz01','raz03'],
+        cibo:    ['ci01','ci02','ci03','ci04','raz02','raz04'],
+      },
       steps: [
         { fase: 'PIANIFICAZIONE FASCE', azioni: [
           'Identifica le fasce orarie con energia disponibile',
@@ -137,6 +156,10 @@ const ScenariModule = (() => {
       desc: 'Scaffali vuoti, prezzi alle stelle',
       severity: 2,
       threats: ['cibo'],
+      required: { acqua:60, cibo:90, energia:45, calore:45, comm:40, mobilita:45 },
+      taskMap: {
+        cibo: ['ci01','ci02','ci03','ci04','cib01','cib02','cib03','cib04'],
+      },
       steps: [
         { fase: 'IMMEDIATO', azioni: [
           'Attiva le scorte già preparate: non fare scorte in preda al panico',
@@ -166,6 +189,11 @@ const ScenariModule = (() => {
       desc: 'Acquedotto interrotto o non potabile',
       severity: 3,
       threats: ['acqua', 'cibo'],
+      required: { acqua:90, cibo:60, energia:45, calore:35, comm:40, mobilita:30 },
+      taskMap: {
+        acqua: ['ac01','ac02','ac03','ac04','acq01','acq02','acq03','acq04'],
+        cibo:  ['ci01','ci02','ci03','ci04'],
+      },
       steps: [
         { fase: 'IMMEDIATO', azioni: [
           'Riempi vasche da bagno, secchi, contenitori disponibili',
@@ -196,6 +224,13 @@ const ScenariModule = (() => {
       desc: 'Devi lasciare casa in 30-60 minuti',
       severity: 3,
       threats: ['carburante', 'acqua', 'cibo', 'comm'],
+      required: { acqua:70, cibo:75, energia:60, calore:50, comm:80, mobilita:85 },
+      taskMap: {
+        carburante: ['mo02','eva01','eva02','eva03','eva04'],
+        acqua:      ['ac01','ac02','ac04'],
+        cibo:       ['ci01','ci02','ci04'],
+        comm:       ['co01','co02','co03','co04','si02'],
+      },
       steps: [
         { fase: 'PRIMI 10 MINUTI', azioni: [
           'Prendi il bag out bag già preparato',
@@ -229,6 +264,15 @@ const ScenariModule = (() => {
       desc: 'Sisma significativo — danni strutturali possibili',
       severity: 3,
       threats: ['blackout', 'acqua', 'cibo', 'freddo', 'comm', 'carburante'],
+      required: { acqua:85, cibo:75, energia:70, calore:65, comm:80, mobilita:75 },
+      taskMap: {
+        blackout:   ['en02','en03','en04','en05'],
+        acqua:      ['ac01','ac02','ac03','ac04','ter04'],
+        cibo:       ['ci01','ci02','ci04'],
+        freddo:     ['ca02','ca03','ca04'],
+        comm:       ['co01','co02','co03','co04','si02'],
+        carburante: ['mo01','mo02','mo03','mo04','mo05','ter01','ter02','ter03'],
+      },
       steps: [
         { fase: 'DURANTE LA SCOSSA', azioni: [
           'Riparati sotto un tavolo robusto o nel vano di una porta portante',
@@ -268,6 +312,13 @@ const ScenariModule = (() => {
       desc: 'Esondazione o rischio allagamento zona',
       severity: 3,
       threats: ['acqua', 'cibo', 'comm', 'carburante'],
+      required: { acqua:85, cibo:70, energia:60, calore:40, comm:75, mobilita:70 },
+      taskMap: {
+        acqua:      ['ac01','ac02','ac03','ac04','all01','all03'],
+        cibo:       ['ci01','ci02','ci04','all02','all04'],
+        comm:       ['co01','co02','co03','co04','si02'],
+        carburante: ['mo01','mo02','mo03','mo04','mo05'],
+      },
       steps: [
         { fase: 'PREALLARME (allerta meteo)', azioni: [
           'Monitora canali ufficiali: protezione civile, comune, allertameteo.gov.it',
@@ -302,6 +353,12 @@ const ScenariModule = (() => {
       desc: 'Temperature estreme (> 38°C) per più giorni',
       severity: 2,
       threats: ['acqua', 'blackout', 'medico'],
+      required: { acqua:80, cibo:55, energia:65, calore:30, comm:60, mobilita:45 },
+      taskMap: {
+        acqua:   ['ac01','ac02','ac03','ac04','cal03'],
+        blackout:['en01','en02','en03','en04','en05','si01'],
+        medico:  ['me01','me02','me03','co03','cal01','cal02'],
+      },
       steps: [
         { fase: 'PROTEZIONE PERSONALE', azioni: [
           'Bevi almeno 2L di acqua al giorno — non aspettare la sete',
@@ -339,6 +396,13 @@ const ScenariModule = (() => {
       desc: 'Gelo estremo, neve abbondante, strade bloccate',
       severity: 2,
       threats: ['acqua', 'blackout', 'freddo', 'carburante'],
+      required: { acqua:70, cibo:70, energia:80, calore:90, comm:65, mobilita:65 },
+      taskMap: {
+        acqua:      ['ac01','ac02','ac03','ac04','tem03'],
+        blackout:   ['en01','en02','en03','en04','en05','si01','tem02'],
+        freddo:     ['ca01','ca02','ca03','ca04','tem01'],
+        carburante: ['mo01','mo02','mo03','mo04','mo05'],
+      },
       steps: [
         { fase: 'PRIMA DELLA TEMPESTA', azioni: [
           'Scorta carburante per auto + generatore (se presente)',
@@ -372,6 +436,13 @@ const ScenariModule = (() => {
       desc: 'Lockdown, isolamento obbligatorio, ospedali saturi',
       severity: 2,
       threats: ['cibo', 'acqua', 'medico', 'comm'],
+      required: { acqua:65, cibo:85, energia:50, calore:50, comm:75, mobilita:45 },
+      taskMap: {
+        cibo:   ['ci01','ci02','ci03','ci04'],
+        acqua:  ['ac01','ac02','ac03','ac04'],
+        medico: ['me01','me02','me03','co03','pan01','pan03','pan04'],
+        comm:   ['co01','co02','co04','si02','pan02'],
+      },
       steps: [
         { fase: 'ISOLAMENTO DOMESTICO', azioni: [
           'Attiva le scorte alimentari già preparate',
@@ -404,6 +475,11 @@ const ScenariModule = (() => {
       desc: 'Inflazione severa, prezzi alle stelle, forniture instabili',
       severity: 1,
       threats: ['cibo', 'carburante'],
+      required: { acqua:45, cibo:85, energia:45, calore:40, comm:40, mobilita:65 },
+      taskMap: {
+        cibo:       ['ci01','ci02','ci03','ci04','eco02','eco03'],
+        carburante: ['mo01','mo02','mo03','mo04','mo05','eco01','eco04'],
+      },
       steps: [
         { fase: 'GESTIONE IMMEDIATA', azioni: [
           'Censisci le scorte disponibili in casa',
@@ -434,6 +510,12 @@ const ScenariModule = (() => {
       desc: 'Incendio boschivo o industriale nelle vicinanze',
       severity: 3,
       threats: ['acqua', 'comm', 'carburante'],
+      required: { acqua:65, cibo:55, energia:60, calore:35, comm:80, mobilita:85 },
+      taskMap: {
+        acqua:      ['ac01','ac02','ac04','inc02'],
+        comm:       ['co01','co02','co03','co04','si02','inc03'],
+        carburante: ['mo01','mo02','mo03','mo04','mo05','inc01','inc04'],
+      },
       steps: [
         { fase: 'PREALLARME', azioni: [
           'Monitora direzione e velocità del vento — determina il rischio',
@@ -471,6 +553,10 @@ const ScenariModule = (() => {
       desc: 'Telefonia e internet assenti per ore/giorni',
       severity: 1,
       threats: ['comm'],
+      required: { acqua:30, cibo:35, energia:45, calore:30, comm:90, mobilita:25 },
+      taskMap: {
+        comm: ['co01','co02','co03','co04','si02','bmo01','bmo02','bmo03'],
+      },
       steps: [
         { fase: 'COMUNICAZIONE ALTERNATIVA', azioni: [
           'Attiva radio FM/AM: i canali istituzionali trasmettono informazioni',
@@ -500,6 +586,14 @@ const ScenariModule = (() => {
       desc: 'Disperso o isolato in ambiente naturale',
       severity: 3,
       threats: ['acqua', 'cibo', 'freddo', 'comm', 'medico'],
+      required: { acqua:85, cibo:75, energia:30, calore:85, comm:80, mobilita:60 },
+      taskMap: {
+        acqua:  ['sv01','sv02'],
+        cibo:   ['sv03','sv04','sv13','sv15'],
+        freddo: ['ca03','sv05','sv06','sv07','sv14'],
+        comm:   ['co01','co02','co04','sv08','sv09','sv10','sv12'],
+        medico: ['me01','me02','me03','sv11'],
+      },
       steps: [
         { fase: 'REGOLA DEI 3 (priorità assolute)', azioni: [
           '3 minuti senza aria → priorità numero 1: vie aeree libere',

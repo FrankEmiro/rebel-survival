@@ -59,6 +59,9 @@ const SettingsModule = (() => {
   /* ── TAB SWITCH ── */
   function _tab(id) {
     activeTab = id;
+    // Re-render tab bar so completeness pills update
+    const bar = document.querySelector('.settings-tab-bar');
+    if (bar) bar.outerHTML = _tabBar();
     document.querySelectorAll('.stab-btn').forEach(b =>
       b.classList.toggle('active', b.dataset.tab === id));
     document.querySelectorAll('.stab-panel').forEach(p =>
@@ -97,6 +100,7 @@ const SettingsModule = (() => {
       ha_filtro:  c('s-ha-filtro'),
       tetto_mq:   Math.round(n('s-tetto', 60)),
       cibo_scorte_giorni: Math.round(n('s-cibo-giorni', 0)),
+      cibo_attivita: s('s-cibo-attivita', 'normale'),
       en_pannelli:   c('s-en-pannelli'),
       en_batteria:   c('s-en-batteria'),
       en_generatore: c('s-en-generatore'),
@@ -166,12 +170,21 @@ const SettingsModule = (() => {
 
   function _rAcqua(p) {
     const persone = (p.adulti || 2) + (p.bambini || 0) * 0.7 + (p.anziani || 0) * 0.9;
-    const giorni  = Math.round((p.acqua_scorte_litri || 0) / Math.max(1, persone * 3));
-    _badge('sr-acqua', giorni + 'gg', 'autonomia acqua', giorni >= 30 ? 'good' : giorni >= 7 ? 'warn' : 'bad');
+    // OMS: 2L bere + 1L cottura + 5L igiene base = 8L/persona/giorno (minimo dignità)
+    // Sopravvivenza pura: 2L/giorno — mostriamo entrambi
+    const litriGiorno = persone * 8;
+    const giorni = Math.round((p.acqua_scorte_litri || 0) / Math.max(1, litriGiorno));
+    const giorni2L = Math.round((p.acqua_scorte_litri || 0) / Math.max(1, persone * 2));
+    const sub = `autonomia (8L/p) · sopravv. ${giorni2L}gg`;
+    _badge('sr-acqua', giorni + 'gg', sub, giorni >= 30 ? 'good' : giorni >= 7 ? 'warn' : 'bad');
   }
   function _rCibo(p) {
     const g = p.cibo_scorte_giorni || 0;
-    _badge('sr-cibo', g + 'gg', 'autonomia cibo', g >= 30 ? 'good' : g >= 7 ? 'warn' : 'bad');
+    const persone = (p.adulti || 2) + (p.bambini || 0) * 0.7 + (p.anziani || 0) * 0.9;
+    const kcalMap = { sedentario: 1800, normale: 2200, fisico: 3500 };
+    const kcalGiorno = (kcalMap[p.cibo_attivita] || 2200) * persone;
+    const sub = `autonomia · ${Math.round(kcalGiorno)} kcal/giorno fam.`;
+    _badge('sr-cibo', g + 'gg', sub, g >= 30 ? 'good' : g >= 7 ? 'warn' : 'bad');
   }
   function _rEnergia(p) {
     const fonti = [p.en_pannelli && 'Solare', p.en_batteria && 'Batteria', p.en_generatore && 'Gen.'].filter(Boolean);
@@ -180,8 +193,26 @@ const SettingsModule = (() => {
   }
   function _rCalore(p) {
     const r = [p.risc_legna && 'Legna', p.risc_pellet && 'Pellet', p.risc_gpl && 'GPL'].filter(Boolean);
-    _badge('sr-calore', r.length > 0 ? r.join('+') : 'Nessuno', 'riscaldamento alt.',
-      r.length >= 1 ? 'good' : 'bad');
+
+    // Stima giorni dal combustibile stoccato
+    const ggMap   = { a:600, b:900, c:1400, d:2100, e:2800, f:3800 };
+    const isolMap = { scarso:1.8, medio:1.2, buono:0.7, ottimo:0.4 };
+    const zoneGG  = ggMap[p.ri_zona]    || 2100;
+    const isol    = isolMap[p.isolamento] || 1.2;
+    const mq      = p.mq || 80;
+    // Consumo stimato (kWh/giorno) durante la stagione di riscaldamento
+    // formula: U_equiv × mq × GG_giornalieri / η_stufa
+    const dailyKwh = (0.15 * mq * isol * (zoneGG / 180)) / 0.65;
+    const kwhPerKg = p.risc_gpl ? 10 : 4;   // GPL ~10 kWh/kg; legna/pellet ~4 kWh/kg
+    const totalKwh = (p.combustibile_kg || 0) * kwhPerKg;
+    const giorni   = dailyKwh > 0 && totalKwh > 0 ? Math.round(totalKwh / dailyKwh) : 0;
+    const hasFuel  = (p.combustibile_kg || 0) > 0;
+
+    const sub = r.length > 0 && hasFuel
+      ? `~${giorni}gg · ${Math.round(dailyKwh)}kWh/giorno stimato`
+      : 'riscaldamento alternativo';
+    _badge('sr-calore', r.length > 0 ? r.join('+') : 'Nessuno', sub,
+      r.length >= 1 && (giorni >= 30 || !hasFuel) ? 'good' : r.length >= 1 ? 'warn' : 'bad');
   }
   function _rComm(p) {
     // Count independent channels (excluding standard internet which can fail)
@@ -450,14 +481,46 @@ const SettingsModule = (() => {
     if (typeof DashboardModule !== 'undefined') DashboardModule.render();
   }
 
+  /* ── TAB COMPLETENESS ── */
+  const TAB_FIELDS = {
+    acqua:    { keys: ['acqua_scorte_litri','ha_filtro','ha_pozzo','ha_pioggia'], positives: ['ha_filtro','ha_pozzo','ha_pioggia'], numThreshold: { acqua_scorte_litri: 30 } },
+    cibo:     { keys: ['cibo_scorte_giorni'], numThreshold: { cibo_scorte_giorni: 14 } },
+    energia:  { keys: ['en_pannelli','en_batteria','en_generatore'], positives: ['en_pannelli','en_batteria','en_generatore'] },
+    calore:   { keys: ['risc_legna','risc_pellet','risc_gpl','combustibile_kg'], positives: ['risc_legna','risc_pellet','risc_gpl'], numThreshold: { combustibile_kg: 10 } },
+    comm:     { keys: ['has_radio','has_walkie','has_sat_phone','has_mesh'], positives: ['has_radio','has_walkie','has_sat_phone','has_mesh'] },
+    mobilita: { keys: ['carburante_litri','has_gobag'], numThreshold: { carburante_litri: 20 }, positives: ['has_gobag'] },
+    medico:   { keys: ['has_kit_medico','has_farmaci_cronici','has_bls_corso','has_manuale_ps'], positives: ['has_kit_medico','has_farmaci_cronici','has_bls_corso','has_manuale_ps'] },
+    sicurezza:{ keys: ['has_estintore','has_rilevatore_co','has_serrature_rinforzate','has_rete_vicinato'], positives: ['has_estintore','has_rilevatore_co','has_serrature_rinforzate','has_rete_vicinato'] },
+  };
+
+  function _tabCompleteness(tabId) {
+    const def = TAB_FIELDS[tabId];
+    if (!def) return null;
+    const p = get();
+    let filled = 0;
+    const total = def.keys.length;
+    def.keys.forEach(k => {
+      const v = p[k];
+      if (def.positives?.includes(k)) { if (v) filled++; }
+      else if (def.numThreshold?.[k] !== undefined) { if ((v || 0) >= def.numThreshold[k]) filled++; }
+      else if (v != null && v !== 0 && v !== false && v !== '') filled++;
+    });
+    return { filled, total, pct: Math.round(filled / total * 100) };
+  }
+
   /* ── HTML BUILDERS ── */
   function _tabBar() {
     return `<div class="settings-tab-bar">
-      ${TABS.map(t => `
-        <button class="stab-btn${t.id === activeTab ? ' active' : ''}" data-tab="${t.id}"
+      ${TABS.map(t => {
+        const comp = _tabCompleteness(t.id);
+        const pillHtml = comp
+          ? `<span class="stab-pill ${comp.pct >= 100 ? 'stab-pill-done' : comp.pct >= 50 ? 'stab-pill-mid' : 'stab-pill-low'}">${comp.filled}/${comp.total}</span>`
+          : '';
+        return `<button class="stab-btn${t.id === activeTab ? ' active' : ''}" data-tab="${t.id}"
           onclick="SettingsModule._tab('${t.id}')">
-          <i class="ph ${t.icon}"></i><span>${t.label}</span>
-        </button>`).join('')}
+          <i class="ph ${t.icon}"></i><span>${t.label}</span>${pillHtml}
+        </button>`;
+      }).join('')}
     </div>`;
   }
 
@@ -633,6 +696,15 @@ const SettingsModule = (() => {
         </div>
         <span class="form-hint">Giorni di autonomia per tutta la famiglia — aggiorna dopo ogni acquisto</span>
       </div>
+    </div>
+    <div class="card">
+      <h3><i class="ph ph-person-simple-run"></i> Livello Attività Fisica</h3>
+      <p class="text-secondary text-sm mb-12">Determina il fabbisogno calorico giornaliero stimato per la famiglia.</p>
+      <select id="s-cibo-attivita">
+        <option value="sedentario">Sedentario — 1 800 kcal/p (riposo, anziani, bambini piccoli)</option>
+        <option value="normale" selected>Normale — 2 200 kcal/p (adulto medio, attività leggera)</option>
+        <option value="fisico">Lavoro fisico — 3 500 kcal/p (emergenza attiva, lavori pesanti)</option>
+      </select>
     </div>
     <div class="card">
       <h3><i class="ph ph-target"></i> Target di Riferimento</h3>
@@ -946,6 +1018,7 @@ const SettingsModule = (() => {
 
     // Cibo
     sv('s-cibo-giorni', p.cibo_scorte_giorni || 0);
+    sv('s-cibo-attivita', p.cibo_attivita || 'normale');
 
     // Energia
     sc('s-en-pannelli', p.en_pannelli); sc('s-en-batteria', p.en_batteria); sc('s-en-generatore', p.en_generatore);
