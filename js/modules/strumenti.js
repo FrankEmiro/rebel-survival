@@ -31,6 +31,9 @@ const StrumentiModule = (() => {
   let _layerComuni    = null;
   let _comuniLoading  = false;
   let _mapReady       = false;
+  let _waypointMarker = null;
+  let _waypointLine   = null;
+  let _settingWaypoint = false;
 
   /* ── UTILITY ── */
   function deg2card(d) {
@@ -113,11 +116,120 @@ const StrumentiModule = (() => {
     if (needle) needle.style.transform = `translate(-50%, -50%) rotate(${_compassDeg}deg)`;
     if (degEl)  degEl.textContent  = compassHeading + '°';
     if (cardEl) cardEl.textContent = deg2card(compassHeading);
+    // aggiorna icona heading sulla mappa
+    if (_gpsMarker) _gpsMarker.setIcon(_makeHeadingIcon(compassHeading));
   }
 
   function _compassStatus(msg) {
     const el = document.getElementById('compass-status');
     if (el) el.textContent = msg;
+  }
+
+  /* ── HEADING ICON (GPS marker con cono direzionale) ── */
+  function _makeHeadingIcon(heading) {
+    const hasCone = heading != null;
+    const cone = hasCone
+      ? `<polygon points="20,2 14,18 26,18" fill="#c9a84c" opacity="0.65"/>`
+      : '';
+    return L.divIcon({
+      className: '',
+      html: `<svg viewBox="0 0 40 40" width="40" height="40"
+               style="transform:rotate(${hasCone ? heading : 0}deg);overflow:visible;display:block">
+               ${cone}
+               <circle cx="20" cy="20" r="8" fill="#c9a84c" stroke="white" stroke-width="2.5"/>
+               <circle cx="20" cy="20" r="3" fill="white"/>
+             </svg>`,
+      iconSize: [40, 40],
+      iconAnchor: [20, 20],
+      popupAnchor: [0, -20],
+    });
+  }
+
+  /* ── WAYPOINT MATH ── */
+  function _haversineKm(lat1, lon1, lat2, lon2) {
+    const R = 6371, toR = Math.PI / 180;
+    const dLat = (lat2 - lat1) * toR, dLon = (lon2 - lon1) * toR;
+    const a = Math.sin(dLat/2)**2 + Math.cos(lat1*toR)*Math.cos(lat2*toR)*Math.sin(dLon/2)**2;
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  }
+
+  function _bearingDeg(lat1, lon1, lat2, lon2) {
+    const toR = Math.PI / 180;
+    const y = Math.sin((lon2-lon1)*toR) * Math.cos(lat2*toR);
+    const x = Math.cos(lat1*toR)*Math.sin(lat2*toR) - Math.sin(lat1*toR)*Math.cos(lat2*toR)*Math.cos((lon2-lon1)*toR);
+    return (Math.atan2(y, x) * 180/Math.PI + 360) % 360;
+  }
+
+  /* ── WAYPOINT LINE + HUD ── */
+  function _updateWaypointLine() {
+    if (!_waypointMarker || !gpsPos) return;
+    const from = [gpsPos.latitude, gpsPos.longitude];
+    const wll  = _waypointMarker.getLatLng();
+    const to   = [wll.lat, wll.lng];
+    if (_waypointLine) {
+      _waypointLine.setLatLngs([from, to]);
+    } else {
+      _waypointLine = L.polyline([from, to], {
+        color: '#e85c40', weight: 2.5, dashArray: '7 5', opacity: 0.9,
+      }).addTo(_map);
+    }
+    const dist = _haversineKm(from[0], from[1], to[0], to[1]);
+    const brg  = _bearingDeg(from[0], from[1], to[0], to[1]);
+    const distTxt = dist < 1 ? Math.round(dist * 1000) + ' m' : dist.toFixed(1) + ' km';
+    const hud = document.getElementById('map-waypoint-hud');
+    if (hud) {
+      hud.textContent = `▶ ${distTxt}  ·  ${Math.round(brg)}° ${deg2card(brg)}`;
+      hud.style.display = 'block';
+    }
+  }
+
+  function _clearWaypoint() {
+    if (_waypointMarker) { _map.removeLayer(_waypointMarker); _waypointMarker = null; }
+    if (_waypointLine)   { _map.removeLayer(_waypointLine);   _waypointLine   = null; }
+    const hud = document.getElementById('map-waypoint-hud');
+    if (hud) hud.style.display = 'none';
+    const btn = document.querySelector('.map-waypoint-btn');
+    if (btn) btn.classList.remove('active');
+  }
+
+  function _onMapClickWaypoint(e) {
+    _settingWaypoint = false;
+    const wpIcon = L.divIcon({
+      className: '',
+      html: `<svg viewBox="0 0 24 36" width="24" height="36" style="overflow:visible">
+               <path d="M12 0 C5.4 0 0 5.4 0 12 C0 21 12 36 12 36 C12 36 24 21 24 12 C24 5.4 18.6 0 12 0Z"
+                     fill="#e85c40" stroke="white" stroke-width="1.5"/>
+               <circle cx="12" cy="12" r="4" fill="white"/>
+             </svg>`,
+      iconSize: [24, 36],
+      iconAnchor: [12, 36],
+    });
+    _waypointMarker = L.marker(e.latlng, { icon: wpIcon }).addTo(_map);
+    _waypointMarker.bindPopup(`<b>Meta</b><br>${e.latlng.lat.toFixed(5)}, ${e.latlng.lng.toFixed(5)}`);
+    _updateWaypointLine();
+    const btn = document.querySelector('.map-waypoint-btn');
+    if (btn) btn.classList.add('active');
+  }
+
+  function _toggleWaypoint() {
+    if (_waypointMarker) {
+      _clearWaypoint();
+      _settingWaypoint = false;
+      _map.off('click', _onMapClickWaypoint);
+    } else if (_settingWaypoint) {
+      // annulla modo selezione
+      _settingWaypoint = false;
+      _map.off('click', _onMapClickWaypoint);
+      const btn = document.querySelector('.map-waypoint-btn');
+      if (btn) btn.classList.remove('active');
+    } else {
+      _settingWaypoint = true;
+      const hint = document.getElementById('st-map-hint');
+      if (hint) hint.textContent = 'Tocca la mappa per impostare la meta →';
+      const btn = document.querySelector('.map-waypoint-btn');
+      if (btn) btn.classList.add('active');
+      _map.once('click', _onMapClickWaypoint);
+    }
   }
 
   function toggleCompass() {
@@ -189,17 +301,19 @@ const StrumentiModule = (() => {
 
     if (_gpsMarker) {
       _gpsMarker.setLatLng(latlng);
+      _gpsMarker.setIcon(_makeHeadingIcon(compassHeading));
       _gpsCircle.setLatLng(latlng).setRadius(acc);
     } else {
-      _gpsMarker = L.circleMarker(latlng, {
-        radius: 8, color: '#c9a84c', fillColor: '#c9a84c',
-        fillOpacity: 0.9, weight: 2,
+      _gpsMarker = L.marker(latlng, {
+        icon: _makeHeadingIcon(compassHeading),
+        zIndexOffset: 1000,
       }).addTo(_map).bindPopup(`<b>Posizione</b><br>${lat.toFixed(5)}, ${lon.toFixed(5)}`);
       _gpsCircle = L.circle(latlng, {
         radius: acc, color: '#c9a84c', fillColor: '#c9a84c',
         fillOpacity: 0.1, weight: 1,
       }).addTo(_map);
     }
+    if (_waypointMarker) _updateWaypointLine();
   }
 
   function _gpsContent(html) {
@@ -468,6 +582,19 @@ const StrumentiModule = (() => {
     });
     _map.addControl(new LocateBtn());
 
+    // Bottone waypoint
+    const WaypointBtn = L.Control.extend({
+      options: { position: 'topleft' },
+      onAdd: () => {
+        const btn = L.DomUtil.create('button', 'map-locate-btn map-waypoint-btn');
+        btn.innerHTML = '<i class="ph ph-navigation-arrow"></i>';
+        btn.title = 'Imposta meta (tap sulla mappa)';
+        L.DomEvent.on(btn, 'click', e => { L.DomEvent.stopPropagation(e); _toggleWaypoint(); });
+        return btn;
+      },
+    });
+    _map.addControl(new WaypointBtn());
+
     _mapReady = true;
     if (gpsPos) _mapUpdateGPS();
   }
@@ -630,7 +757,10 @@ const StrumentiModule = (() => {
             <span><i class="ph ph-map-trifold"></i> Mappa Italia</span>
             <span class="st-map-hint" id="st-map-hint">Dot arancio = posizione GPS · Attiva GPS per centrare</span>
           </div>
-          <div id="st-map"></div>
+          <div class="st-map-wrap">
+            <div id="st-map"></div>
+            <div id="map-waypoint-hud" class="map-waypoint-hud" style="display:none"></div>
+          </div>
           <p class="st-status text-dim" style="font-size:0.72rem;margin-top:6px">
             Tile © <a href="https://openstreetmap.org" target="_blank" rel="noopener" style="color:var(--text-dim)">OpenStreetMap</a> contributors · Regioni © ISTAT CC BY
           </p>
@@ -657,7 +787,7 @@ const StrumentiModule = (() => {
     if (torchOn) toggleTorch();
     if (sosActive) _stopSOS();
     if (wakeLock) { try { wakeLock.release(); } catch(e) {} wakeLock = null; }
-    if (_map) { _map.remove(); _map = null; _mapReady = false; _gpsMarker = null; _gpsCircle = null; _layerComuni = null; _comuniEnabled = false; _comuniLoading = false; }
+    if (_map) { _map.remove(); _map = null; _mapReady = false; _gpsMarker = null; _gpsCircle = null; _waypointMarker = null; _waypointLine = null; _settingWaypoint = false; _layerComuni = null; _comuniEnabled = false; _comuniLoading = false; }
     window.removeEventListener('online',  _networkUI);
     window.removeEventListener('offline', _networkUI);
   }
