@@ -62,10 +62,7 @@
 
       <li class="nav-group-label">— Pianificazione</li>
       <li><a href="#" class="nav-link" data-section="kit">
-        <i class="ph ph-backpack"></i> Kit Emergenza
-      </a></li>
-      <li><a href="#" class="nav-link" data-section="lista-spesa">
-        <i class="ph ph-shopping-cart-simple"></i> Lista Spesa
+        <i class="ph ph-backpack"></i> Kit & Lista Spesa
       </a></li>
 
       <li class="nav-group-label">— Guide</li>
@@ -142,22 +139,22 @@
       <div id="budget-root"></div>
     </section>
 
-    <!-- ===== KIT EMERGENZA ===== -->
+    <!-- ===== KIT EMERGENZA + LISTA SPESA ===== -->
     <section id="section-kit" class="section">
       <div class="section-header">
-        <h1><i class="ph ph-backpack"></i> Kit Emergenza</h1>
-        <p class="subtitle">Checklist completa: casa, auto, go-bag</p>
+        <h1><i class="ph ph-backpack"></i> Kit & Lista Spesa</h1>
+        <p class="subtitle">Checklist kit emergenza e lista acquisti per scenario</p>
+      </div>
+      <div class="kit-inner-tabs">
+        <button class="kit-itab active" data-kit-tab="kit">
+          <i class="ph ph-backpack"></i> Kit Emergenza
+        </button>
+        <button class="kit-itab" data-kit-tab="lista-spesa">
+          <i class="ph ph-shopping-cart-simple"></i> Lista Spesa
+        </button>
       </div>
       <div id="kit-root"></div>
-    </section>
-
-    <!-- ===== LISTA SPESA ===== -->
-    <section id="section-lista-spesa" class="section">
-      <div class="section-header">
-        <h1><i class="ph ph-shopping-cart-simple"></i> Lista Spesa</h1>
-        <p class="subtitle">Generata dai calcolatori — stampabile</p>
-      </div>
-      <div id="lista-spesa-root"></div>
+      <div id="lista-spesa-root" class="hidden"></div>
     </section>
 
     <!-- ===== STRUMENTI DI CAMPO ===== -->
@@ -199,6 +196,10 @@
       <i class="ph ph-sliders bottom-nav-icon"></i>
       <span class="bottom-nav-label">Dimensioni</span>
     </a>
+    <a href="#" class="bottom-nav-item" data-section="kit">
+      <i class="ph ph-backpack bottom-nav-icon"></i>
+      <span class="bottom-nav-label">Kit</span>
+    </a>
     <a href="#" class="bottom-nav-item" data-section="guide">
       <i class="ph ph-books bottom-nav-icon"></i>
       <span class="bottom-nav-label">Guide</span>
@@ -206,10 +207,6 @@
     <a href="#" class="bottom-nav-item" data-section="strumenti">
       <i class="ph ph-compass bottom-nav-icon"></i>
       <span class="bottom-nav-label">Strumenti</span>
-    </a>
-    <a href="#" class="bottom-nav-item" data-section="kit">
-      <i class="ph ph-backpack bottom-nav-icon"></i>
-      <span class="bottom-nav-label">Kit</span>
     </a>
   </nav>
 

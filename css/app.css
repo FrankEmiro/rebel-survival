@@ -3193,3 +3193,42 @@ input, select, textarea { font-family: 'Nunito', sans-serif; font-size: 1rem; }
 .stab-pill-done { background: rgba(95,168,50,0.2); color: var(--success); }
 .stab-pill-mid  { background: rgba(200,133,42,0.2); color: var(--warning); }
 .stab-pill-low  { background: rgba(181,48,32,0.15); color: var(--danger); }
+.stab-pill-low  { background: rgba(181,48,32,0.2);  color: var(--danger);  }
+
+/* ============================================================
+   KIT — Inner tab bar (Kit Emergenza / Lista Spesa)
+   ============================================================ */
+.kit-inner-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 4px;
+}
+.kit-itab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: calc(var(--radius) - 2px);
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.kit-itab:hover { color: var(--text-primary); }
+.kit-itab.active {
+  background: var(--accent);
+  color: #1a1a0e;
+}
+.kit-itab i { font-size: 1rem; }

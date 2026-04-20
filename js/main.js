@@ -10,8 +10,7 @@ const SECTION_TITLES = {
   riscaldamento: 'Riscaldamento',
   carburante: 'Carburante',
   budget: 'Budget',
-  kit: 'Kit Emergenza',
-  'lista-spesa': 'Lista Spesa',
+  kit: 'Kit & Lista Spesa',
   guide: 'Guide Offline',
   settings: 'Dimensioni',
   strumenti: 'Strumenti di Campo',
@@ -20,7 +19,21 @@ const SECTION_TITLES = {
 // Sezione corrente
 let currentSection = 'home';
 
+function switchKitTab(tab) {
+  document.querySelectorAll('.kit-itab').forEach(b => b.classList.toggle('active', b.dataset.kitTab === tab));
+  document.getElementById('kit-root').classList.toggle('hidden', tab !== 'kit');
+  document.getElementById('lista-spesa-root').classList.toggle('hidden', tab !== 'lista-spesa');
+  if (tab === 'lista-spesa') ListaSpesaModule.init();
+  if (tab === 'kit') KitModule.init();
+}
+
 function navigateTo(section) {
+  // lista-spesa è ora un tab interno a section-kit
+  if (section === 'lista-spesa') {
+    navigateTo('kit');
+    switchKitTab('lista-spesa');
+    return;
+  }
   if (!document.getElementById('section-' + section)) return;
 
   // Hide all sections
@@ -60,8 +73,7 @@ function initSection(section) {
     case 'riscaldamento': RiscaldamentoModule.init(); break;
     case 'carburante':  CarburanteModule.init(); break;
     case 'budget':      BudgetModule.init(); break;
-    case 'kit':         KitModule.init(); break;
-    case 'lista-spesa': ListaSpesaModule.init(); break;
+    case 'kit':         KitModule.init(); switchKitTab('kit'); break;
     case 'guide':       GuideModule.init(); break;
     case 'settings':    SettingsModule.init(); break;
     case 'strumenti':   StrumentiModule.init(); break;
@@ -76,6 +88,9 @@ function bindNavClicks() {
       const target = el.dataset.section || el.dataset.nav;
       if (target) navigateTo(target);
     });
+  });
+  document.querySelectorAll('[data-kit-tab]').forEach(btn => {
+    btn.addEventListener('click', () => switchKitTab(btn.dataset.kitTab));
   });
 }
 
