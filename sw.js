@@ -1,5 +1,5 @@
-const CACHE_NAME = 'kit-resilienza-v40';
-const CDN_CACHE  = 'kit-resilienza-cdn-v40';
+const CACHE_NAME = 'kit-resilienza-v41';
+const CDN_CACHE  = 'kit-resilienza-cdn-v41';
 
 // Asset locali — cache-first
 const LOCAL_ASSETS = [
@@ -30,8 +30,8 @@ const LOCAL_ASSETS = [
   '/js/data/italy-regions.geojson',
   '/js/data/italy-provinces.geojson',
   '/manifest.json',
-  '/icons/icon-192.png',
-  '/icons/icon-512.png',
+  '/icons/icon-2-192.png',
+  '/icons/icon-2-512.png',
   '/guides/pc/multirischio.pdf',
   '/guides/pc/terremoto.pdf',
   '/guides/pc/alluvione.pdf',
