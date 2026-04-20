@@ -595,6 +595,36 @@ const StrumentiModule = (() => {
     });
     _map.addControl(new WaypointBtn());
 
+    // Bottone fullscreen
+    const FullscreenBtn = L.Control.extend({
+      options: { position: 'topleft' },
+      onAdd: () => {
+        const btn = L.DomUtil.create('button', 'map-locate-btn map-fs-btn');
+        btn.innerHTML = '<i class="ph ph-arrows-out"></i>';
+        btn.title = 'Fullscreen';
+        L.DomEvent.on(btn, 'click', e => {
+          L.DomEvent.stopPropagation(e);
+          const wrap = document.querySelector('.st-map-wrap');
+          if (!wrap) return;
+          if (!document.fullscreenElement) {
+            wrap.requestFullscreen().catch(() => {});
+            btn.innerHTML = '<i class="ph ph-arrows-in"></i>';
+          } else {
+            document.exitFullscreen().catch(() => {});
+            btn.innerHTML = '<i class="ph ph-arrows-out"></i>';
+          }
+        });
+        document.addEventListener('fullscreenchange', () => {
+          if (!document.fullscreenElement) {
+            btn.innerHTML = '<i class="ph ph-arrows-out"></i>';
+          }
+          setTimeout(() => _map && _map.invalidateSize(), 200);
+        }, { once: false });
+        return btn;
+      },
+    });
+    _map.addControl(new FullscreenBtn());
+
     _mapReady = true;
     if (gpsPos) _mapUpdateGPS();
   }

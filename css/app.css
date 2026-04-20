@@ -3320,3 +3320,20 @@ input, select, textarea { font-family: 'Nunito', sans-serif; font-size: 1rem; }
   background: var(--accent) !important;
   color: #1a1a0e !important;
 }
+
+/* mappa fullscreen */
+.st-map-wrap:fullscreen,
+.st-map-wrap:-webkit-full-screen {
+  background: #0d1117;
+  display: flex;
+  flex-direction: column;
+}
+.st-map-wrap:fullscreen #st-map,
+.st-map-wrap:-webkit-full-screen #st-map {
+  flex: 1;
+  height: 100% !important;
+}
+.st-map-wrap:fullscreen .map-waypoint-hud,
+.st-map-wrap:-webkit-full-screen .map-waypoint-hud {
+  bottom: 24px;
+}
