@@ -19,7 +19,8 @@ const StrumentiModule = (() => {
   let wakeLock        = null;
 
   /* ── MAPPA ── */
-  let _compassDeg     = 0;   // angolo corrente accumulato (non wrappato) per evitare spin
+  let _compassDeg         = 0;   // angolo corrente accumulato (non wrappato) per evitare spin
+  let _compassAbsDetected = false;  // true se riceviamo heading assoluto (iOS o Android absolute)
 
   let _map            = null;
   let _gpsMarker      = null;
@@ -56,12 +57,22 @@ const StrumentiModule = (() => {
       } catch(e) { _compassStatus('Impossibile richiedere il permesso'); return; }
     }
 
+    _compassAbsDetected = false;
+
     compassListener = e => {
       let h;
       if (e.webkitCompassHeading != null) {
-        h = e.webkitCompassHeading;                   // iOS
+        // iOS — sempre assoluto
+        h = e.webkitCompassHeading;
+        _compassAbsDetected = true;
       } else if (e.alpha != null) {
-        h = (360 - e.alpha + 360) % 360;             // Android
+        h = (360 - e.alpha + 360) % 360;
+        if (e.absolute === true) {
+          _compassAbsDetected = true;
+        } else if (!_compassAbsDetected) {
+          // Android con solo orientamento relativo — avvisa di calibrare
+          _compassStatus('⚠️ Nord relativo — calibra ruotando il tel. a forma di ∞');
+        }
       }
       if (h == null) return;
       compassHeading = Math.round(h);
@@ -81,6 +92,7 @@ const StrumentiModule = (() => {
     }
     compassHeading = null;
     _compassDeg = 0;
+    _compassAbsDetected = false;
     const btn = document.getElementById('st-compass-toggle');
     if (btn) btn.textContent = 'Attiva';
     _compassStatus('Bussola ferma');
@@ -145,11 +157,13 @@ const StrumentiModule = (() => {
   function _gpsUpdate() {
     if (!gpsPos) return;
     const p   = gpsPos;
-    const lat = p.latitude.toFixed(6);
-    const lon = p.longitude.toFixed(6);
-    const alt = p.altitude  != null ? Math.round(p.altitude)      + ' m'     : '—';
-    const acc = p.accuracy  != null ? Math.round(p.accuracy)      + ' m'     : '—';
-    const spd = p.speed     != null ? (p.speed * 3.6).toFixed(1)  + ' km/h'  : '—';
+    const lat    = p.latitude.toFixed(6);
+    const lon    = p.longitude.toFixed(6);
+    const alt    = p.altitude != null ? Math.round(p.altitude) + ' m' : '—';
+    const spd    = p.speed    != null ? (p.speed * 3.6).toFixed(1) + ' km/h' : '—';
+    const accM   = p.accuracy != null ? Math.round(p.accuracy) : null;
+    const accTier = accM == null ? '' : accM < 10 ? '<span class="gps-tier gps-good">ottimo</span>' : accM < 50 ? '<span class="gps-tier gps-warn">buono</span>' : '<span class="gps-tier gps-bad">scarso</span>';
+    const acc    = accM != null ? `${accM} m ${accTier}` : '—';
 
     _gpsContent(`
       <div class="st-gps-grid">
@@ -576,6 +590,38 @@ const StrumentiModule = (() => {
             <i class="ph ph-siren"></i><span>INVIA SOS</span>
           </button>
           <p class="st-status">Morse: vibrazione + lampeggio + audio</p>
+        </div>
+
+        <!-- NUMERI EMERGENZA -->
+        <div class="st-card">
+          <div class="st-card-hdr"><span><i class="ph ph-phone-call"></i> Numeri Emergenza</span></div>
+          <div class="st-emerg-grid">
+            <a class="st-emerg-num" href="tel:112">
+              <span class="st-emerg-code">112</span>
+              <span class="st-emerg-label">Emergenza Europea</span>
+            </a>
+            <a class="st-emerg-num" href="tel:118">
+              <span class="st-emerg-code">118</span>
+              <span class="st-emerg-label">Soccorso Sanitario</span>
+            </a>
+            <a class="st-emerg-num" href="tel:115">
+              <span class="st-emerg-code">115</span>
+              <span class="st-emerg-label">Vigili del Fuoco</span>
+            </a>
+            <a class="st-emerg-num" href="tel:113">
+              <span class="st-emerg-code">113</span>
+              <span class="st-emerg-label">Polizia di Stato</span>
+            </a>
+            <a class="st-emerg-num" href="tel:1515">
+              <span class="st-emerg-code">1515</span>
+              <span class="st-emerg-label">Emergenza Ambientale</span>
+            </a>
+            <a class="st-emerg-num" href="tel:1530">
+              <span class="st-emerg-code">1530</span>
+              <span class="st-emerg-label">Guardia Costiera</span>
+            </a>
+          </div>
+          <p class="st-status" style="text-align:center;margin-top:8px">Tocca un numero per chiamare</p>
         </div>
 
         <!-- MAPPA -->

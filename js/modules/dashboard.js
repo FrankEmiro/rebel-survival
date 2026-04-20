@@ -556,10 +556,19 @@ const DashboardModule = (() => {
       .filter(t => t.threats.some(tid => activeIds.includes(tid)))
       .filter(t => !scenarioTasks || scenarioTasks.has(t.id))
       .map(t => {
-        const gap = (required[t.axis] || 0) - (current[t.axis] || 0);
+        // Usa il più stringente tra scenario.required e threat.required per quell'asse
+        const threatReqForAxis = t.threats
+          .filter(tid => activeIds.includes(tid))
+          .reduce((max, tid) => {
+            const td = THREATS.find(x => x.id === tid);
+            return td ? Math.max(max, td.required[t.axis] || 0) : max;
+          }, 0);
+        const effectiveRequired = Math.max(required[t.axis] || 0, threatReqForAxis);
+        const gap = effectiveRequired - (current[t.axis] || 0);
         const isAutoTask = !!t.resolve;
         const completed  = isAutoTask ? t.resolve(profilo) : !!done[t.id];
-        return { ...t, gap, urgency: gap > 45 ? 'critico' : gap > 20 ? 'urgente' : 'pianificato', completed, isAutoTask };
+        const urgency = gap <= 0 ? 'pianificato' : gap > 45 ? 'critico' : gap > 20 ? 'urgente' : 'pianificato';
+        return { ...t, gap, urgency, completed, isAutoTask };
       });
 
     if (enriched.length === 0) {
@@ -601,12 +610,13 @@ const DashboardModule = (() => {
       tTasks = tTasks.sort((a, b) => (a.completed - b.completed) || (b.gap - a.gap));
       if (tTasks.length === 0) return '';
 
-      // Gap badge: usa required specifico della threat (non scenario intero)
+      // Gap badge: usa required specifico della threat, solo assi con task disponibili
       const threatDef = THREATS.find(x => x.id === threat.id);
       const threatRequired = threatDef ? threatDef.required : required;
+      const taskAxes = new Set(tTasks.map(t => t.axis));
       const gapAxes = Object.keys(threatRequired)
         .map(k => ({ k, gap: Math.max(0, (threatRequired[k]||0) - (current[k]||0)) }))
-        .filter(x => x.gap > 0)
+        .filter(x => x.gap > 0 && taskAxes.has(x.k))
         .sort((a,b) => b.gap - a.gap);
 
       const done = tTasks.filter(t => t.completed).length;
@@ -632,14 +642,14 @@ const DashboardModule = (() => {
   /* Vista: Focus — top 3 task per impatto massimo */
   function _buildFocus(enriched) {
     const top = enriched
-      .filter(t => !t.completed)
-      .map(t => ({ ...t, impact: Math.max(0, t.gap) * t.scoreBonus }))
+      .filter(t => !t.completed && t.gap > 0)   // solo task con gap reale
+      .map(t => ({ ...t, impact: t.gap * t.scoreBonus }))
       .sort((a, b) => b.impact - a.impact)
       .slice(0, 3);
 
     if (top.length === 0) return `<div class="tasks-empty">
-      <i class="ph ph-trophy" style="font-size:2rem;color:var(--success);display:block;margin-bottom:8px"></i>
-      <p>Nessun task pendente — ottimo lavoro!</p></div>`;
+      <i class="ph ph-check-circle" style="font-size:2rem;color:var(--success);display:block;margin-bottom:8px"></i>
+      <p>Nessun task critico per questo scenario — controlla <strong>Dimensioni</strong> per eventuali deficit non coperti.</p></div>`;
 
     return `<div class="focus-header">
         <i class="ph ph-crosshair"></i>
@@ -815,14 +825,24 @@ const DashboardModule = (() => {
         ${detected.length === 0
           ? `<div class="threats-ok"><i class="ph ph-shield-check"></i> Nessuna minaccia critica rilevata — continua ad aggiornare le scorte</div>`
           : `<div class="threat-grid">
-              ${detected.map(t => `
-                <div class="threat-card threat-card-active">
+              ${detected.map(t => {
+                const tDef = THREATS.find(x => x.id === t.id);
+                // Threat risolta se tutti gli assi sono sopra il più stringente tra threat.required e scenario.required
+                const satisfied = tDef
+                  ? Object.keys(tDef.required).every(k => {
+                      const eff = Math.max(tDef.required[k] || 0, required[k] || 0);
+                      return (current[k] || 0) >= eff;
+                    })
+                  : false;
+                return `<div class="threat-card ${satisfied ? 'threat-card-satisfied' : 'threat-card-active'}">
                   <div class="threat-card-top">
-                    <i class="ph ${t.icon}"></i>
+                    <i class="ph ${satisfied ? 'ph-shield-check' : t.icon}"></i>
                     <span class="threat-card-label">${t.label}</span>
+                    ${satisfied ? '<span class="threat-card-ok">OK</span>' : ''}
                   </div>
                   <div class="threat-card-reason">${t.reason}</div>
-                </div>`).join('')}
+                </div>`;
+              }).join('')}
             </div>`}
       </div>
 
