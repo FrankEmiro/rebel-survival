@@ -222,7 +222,7 @@ const DashboardModule = (() => {
 
   function _guideImagePaths() {
     const paths = [];
-    (window.GUIDES_DATA || []).forEach(g => {
+    (typeof GUIDES_DATA !== 'undefined' ? GUIDES_DATA : []).forEach(g => {
       (g.sections || []).forEach(sec => {
         const slug = sec.heading.toLowerCase()
           .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40);
