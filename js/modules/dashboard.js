@@ -214,6 +214,114 @@ const DashboardModule = (() => {
   let taskView = 'minacce'; // 'minacce' | 'priorita' | 'focus'
   function setView(mode) { taskView = mode; render(); }
 
+  /* ── OFFLINE PACKS ── */
+  const MAP_PACK_PATHS = [
+    '/js/data/italy-municipalities.geojson',
+    '/js/data/italy-provinces.geojson',
+  ];
+
+  function _guideImagePaths() {
+    const paths = [];
+    (window.GUIDES_DATA || []).forEach(g => {
+      (g.sections || []).forEach(sec => {
+        const slug = sec.heading.toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40);
+        paths.push(`/js/images/guides/${g.id}--${slug}.png`);
+      });
+    });
+    return paths;
+  }
+
+  async function _downloadBatch(cacheName, paths, progEl) {
+    const cache = await caches.open(cacheName);
+    const BATCH = 6;
+    let done = 0;
+    for (let i = 0; i < paths.length; i += BATCH) {
+      await Promise.allSettled(paths.slice(i, i + BATCH).map(async p => {
+        try { const r = await fetch(p); if (r.ok) await cache.put(p, r); } catch {}
+        done++;
+        if (progEl) progEl.textContent = `${done} / ${paths.length}`;
+      }));
+    }
+  }
+
+  async function downloadGuidesPack() {
+    const btn = document.getElementById('op-guides-btn');
+    const prog = document.getElementById('op-guides-prog');
+    if (!btn || btn.disabled) return;
+    btn.disabled = true;
+    btn.innerHTML = '<i class="ph ph-spinner"></i> Download…';
+    await _downloadBatch('kit-resilienza-guides', _guideImagePaths(), prog);
+    Storage.set('offline-guides', 'done');
+    render();
+  }
+
+  async function downloadMapPack() {
+    const btn = document.getElementById('op-map-btn');
+    const prog = document.getElementById('op-map-prog');
+    if (!btn || btn.disabled) return;
+    btn.disabled = true;
+    btn.innerHTML = '<i class="ph ph-spinner"></i> Download…';
+    await _downloadBatch('kit-resilienza-map', MAP_PACK_PATHS, prog);
+    Storage.set('offline-map', 'done');
+    render();
+  }
+
+  function _buildOfflineCard() {
+    const guidesOk = !!Storage.get('offline-guides');
+    const mapOk    = !!Storage.get('offline-map');
+    if (guidesOk && mapOk) return '';
+
+    const guideItem = guidesOk
+      ? `<div class="op-item op-done">
+          <i class="ph ph-books"></i><span>Immagini Guide</span>
+          <span class="op-ok"><i class="ph ph-check-circle"></i> Offline</span>
+        </div>`
+      : `<div class="op-item">
+          <div class="op-info">
+            <i class="ph ph-books"></i>
+            <div><strong>Immagini Guide</strong><span class="op-size">~114 MB · 135 file</span></div>
+          </div>
+          <div class="op-action">
+            <span id="op-guides-prog" class="op-prog"></span>
+            <button id="op-guides-btn" class="btn btn-sm btn-outline"
+              onclick="DashboardModule.downloadGuidesPack()">
+              <i class="ph ph-download-simple"></i> Scarica
+            </button>
+          </div>
+        </div>`;
+
+    const mapItem = mapOk
+      ? `<div class="op-item op-done">
+          <i class="ph ph-map-trifold"></i><span>Mappa Vettoriale Italia</span>
+          <span class="op-ok"><i class="ph ph-check-circle"></i> Offline</span>
+        </div>`
+      : `<div class="op-item">
+          <div class="op-info">
+            <i class="ph ph-map-trifold"></i>
+            <div><strong>Mappa Vettoriale Italia</strong><span class="op-size">~42 MB · Comuni + Province</span></div>
+          </div>
+          <div class="op-action">
+            <span id="op-map-prog" class="op-prog"></span>
+            <button id="op-map-btn" class="btn btn-sm btn-outline"
+              onclick="DashboardModule.downloadMapPack()">
+              <i class="ph ph-download-simple"></i> Scarica
+            </button>
+          </div>
+        </div>`;
+
+    return `<div class="card op-card">
+      <div class="op-header">
+        <i class="ph ph-cloud-arrow-down"></i>
+        <div>
+          <strong>Contenuto Offline Disponibile</strong>
+          <p class="text-secondary text-sm mt-4">Scarica per usare l'app completamente senza connessione</p>
+        </div>
+      </div>
+      <div class="op-items">${guideItem}${mapItem}</div>
+    </div>`;
+  }
+
   /* ── SCORE DELTA TOAST ── */
   function _showScoreToast(axis, bonus, checked) {
     if (!checked) return;
@@ -779,6 +887,7 @@ const DashboardModule = (() => {
     }
 
     root.innerHTML = `
+      ${_buildOfflineCard()}
       <!-- STATUS -->
       <div class="status-banner ${bannerCls}">
         <i class="ph ${bannerIcon}"></i>
@@ -913,5 +1022,5 @@ const DashboardModule = (() => {
 
   function init() { render(); }
 
-  return { init, render, toggleTask, setView, openGuide, goToTask, openScenarioPicker, _pickScenario };
+  return { init, render, toggleTask, setView, openGuide, goToTask, openScenarioPicker, _pickScenario, downloadGuidesPack, downloadMapPack };
 })();

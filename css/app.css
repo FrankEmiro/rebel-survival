@@ -3232,3 +3232,61 @@ input, select, textarea { font-family: 'Nunito', sans-serif; font-size: 1rem; }
   color: #1a1a0e;
 }
 .kit-itab i { font-size: 1rem; }
+
+/* ============================================================
+   OFFLINE PACK CARD
+   ============================================================ */
+.op-card {
+  border-left: 4px solid var(--accent);
+  background: linear-gradient(135deg, rgba(201,168,76,0.06) 0%, var(--bg-card) 60%);
+  margin-bottom: 16px;
+}
+.op-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.op-header > i {
+  font-size: 1.6rem;
+  color: var(--accent);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.op-items { display: flex; flex-direction: column; gap: 10px; }
+.op-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.op-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+.op-info > i { font-size: 1.3rem; color: var(--text-secondary); flex-shrink: 0; }
+.op-info div { display: flex; flex-direction: column; gap: 2px; }
+.op-info strong { font-size: 0.9rem; color: var(--text-primary); }
+.op-size { font-size: 0.72rem; color: var(--text-secondary); }
+.op-action { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.op-prog {
+  font-size: 0.72rem;
+  color: var(--accent);
+  font-family: 'JetBrains Mono', monospace;
+  min-width: 64px;
+  text-align: right;
+}
+.op-done {
+  gap: 10px;
+  opacity: 0.7;
+}
+.op-done > i { font-size: 1.2rem; color: var(--text-secondary); }
+.op-done > span { flex: 1; font-size: 0.88rem; color: var(--text-secondary); }
+.op-ok { font-size: 0.8rem; color: var(--success); display: flex; align-items: center; gap: 4px; }
