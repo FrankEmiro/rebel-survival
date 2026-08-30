@@ -1158,13 +1158,11 @@ const SettingsModule = (() => {
   }
 
   /* ── EXPORT ── */
+  // Scarica un backup JSON di TUTTI i dati salvati (profilo, checklist kit,
+  // task dashboard, checklist scenari, risultati calcolatori, ecc.) con un
+  // numero di versione dello schema per eventuali migrazioni future.
   function exportData() {
-    const data = {
-      version: 1,
-      exportedAt: new Date().toISOString(),
-      profilo: Storage.get('profilo') || {},
-      taskChecks: Storage.get('task-checks') || {},
-    };
+    const data = Storage.exportAll();
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
     const url  = URL.createObjectURL(blob);
     const a    = document.createElement('a');
@@ -1185,11 +1183,10 @@ const SettingsModule = (() => {
       const reader = new FileReader();
       reader.onload = ev => {
         try {
-          const data = JSON.parse(ev.target.result);
-          if (!data.profilo) throw new Error('File non valido');
-          if (!confirm(`Importare il backup del ${(data.exportedAt||'').slice(0,10)}? I dati attuali verranno sovrascritti.`)) return;
-          Storage.set('profilo', data.profilo);
-          if (data.taskChecks) Storage.set('task-checks', data.taskChecks);
+          const payload = JSON.parse(ev.target.result);
+          const dateLabel = (payload.exportedAt || '').slice(0, 10) || 'selezionato';
+          if (!confirm(`Importare il backup del ${dateLabel}? I dati attuali verranno sovrascritti.`)) return;
+          Storage.importAll(payload);
           init();
           if (typeof DashboardModule !== 'undefined') DashboardModule.render();
           alert('Backup importato correttamente.');
