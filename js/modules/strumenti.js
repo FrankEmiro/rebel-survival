@@ -540,9 +540,12 @@ const StrumentiModule = (() => {
 
     _map = L.map('st-map', { zoomControl: true, attributionControl: false }).setView([42.5, 12.5], 6);
 
-    // Layer OSM
+    // Layer OSM — subdomain fisso ('a'): le tile scaricate per uso offline vengono
+    // richieste sempre dallo stesso host, così la cache le serve senza mismatch
+    // (con rotazione a/b/c una tile su tre andrebbe in cache-miss anche se già scaricata)
     _layerOSM = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 18,
+      subdomains: 'a',
     }).addTo(_map);
 
     // Carica regioni e province in parallelo
@@ -673,6 +676,139 @@ const StrumentiModule = (() => {
       .catch(() => { _comuniLoading = false; });
   }
 
+  /* ── MAPPA OFFLINE PER PROSSIMITÀ ── */
+  // Scarica le tile OSM in un raggio configurabile attorno a una posizione salvata,
+  // per garantire la mappa anche senza connessione (oltre al pack "confini comunali/province"
+  // già scaricabile dal Dashboard, che resta invariato).
+  const TILES_ZOOM_MIN = 12, TILES_ZOOM_MAX = 15;
+  const TILES_MAX_COUNT = 3000; // limite di responsabilità verso i server tile pubblici OSM
+  const TILES_CACHE = 'kit-resilienza-tiles';
+
+  function _lon2tile(lon, z) { return Math.floor((lon + 180) / 360 * Math.pow(2, z)); }
+  function _lat2tile(lat, z) {
+    const rad = lat * Math.PI / 180;
+    return Math.floor((1 - Math.log(Math.tan(rad) + 1 / Math.cos(rad)) / Math.PI) / 2 * Math.pow(2, z));
+  }
+
+  function _tilesForRadius(lat, lon, radiusKm) {
+    const urls = [];
+    const latDelta = radiusKm / 111;
+    const lonDelta = radiusKm / (111 * Math.cos(lat * Math.PI / 180));
+    const latMin = lat - latDelta, latMax = lat + latDelta;
+    const lonMin = lon - lonDelta, lonMax = lon + lonDelta;
+    for (let z = TILES_ZOOM_MIN; z <= TILES_ZOOM_MAX; z++) {
+      const xMin = _lon2tile(lonMin, z), xMax = _lon2tile(lonMax, z);
+      const yMin = _lat2tile(latMax, z), yMax = _lat2tile(latMin, z); // lat decresce quando y cresce
+      for (let x = xMin; x <= xMax; x++) {
+        for (let y = yMin; y <= yMax; y++) {
+          urls.push(`https://a.tile.openstreetmap.org/${z}/${x}/${y}.png`);
+        }
+      }
+    }
+    return urls;
+  }
+
+  async function _downloadTiles(urls, progEl) {
+    const cache = await caches.open(TILES_CACHE);
+    const BATCH = 6;
+    let done = 0;
+    for (let i = 0; i < urls.length; i += BATCH) {
+      await Promise.allSettled(urls.slice(i, i + BATCH).map(async u => {
+        try { const r = await fetch(u); if (r.ok) await cache.put(u, r); } catch(e) {}
+        done++;
+        if (progEl) progEl.textContent = `${done} / ${urls.length}`;
+      }));
+    }
+  }
+
+  function _saveHomeLocation() {
+    if (!gpsPos) { alert('Attiva prima il GPS per acquisire la posizione da salvare'); return; }
+    Storage.set('home-location', { lat: gpsPos.latitude, lon: gpsPos.longitude, savedAt: new Date().toISOString() });
+    Storage.remove('tiles-pack-done'); // la posizione è cambiata: il pacchetto scaricato non è più valido
+    _renderTilesPack();
+  }
+
+  function _tilesRadiusChange(val) {
+    const r = Math.min(20, Math.max(1, Utils.int(val, 5)));
+    Storage.set('tiles-radius', r);
+    _renderTilesPack();
+  }
+
+  async function _downloadTilesPack() {
+    const home = Storage.get('home-location');
+    if (!home) return;
+    const radius = Storage.get('tiles-radius') || 5;
+    const urls = _tilesForRadius(home.lat, home.lon, radius);
+    if (urls.length > TILES_MAX_COUNT) {
+      alert(`Troppe tile da scaricare (${urls.length}). Riduci il raggio (max consigliato ~${TILES_MAX_COUNT} tile per non sovraccaricare i server OSM pubblici).`);
+      return;
+    }
+    const btn = document.getElementById('st-tiles-btn');
+    const prog = document.getElementById('st-tiles-prog');
+    if (!btn || btn.disabled) return;
+    btn.disabled = true;
+    btn.innerHTML = '<i class="ph ph-spinner"></i> Download…';
+    await _downloadTiles(urls, prog);
+    Storage.set('tiles-pack-done', { count: urls.length, radius, doneAt: new Date().toISOString() });
+    _renderTilesPack();
+  }
+
+  async function _deleteTilesPack() {
+    if (!confirm('Eliminare le tile scaricate per uso offline?')) return;
+    await caches.delete(TILES_CACHE);
+    Storage.remove('tiles-pack-done');
+    _renderTilesPack();
+  }
+
+  function _renderTilesPack() {
+    const el = document.getElementById('st-tiles-pack');
+    if (!el) return;
+    const home = Storage.get('home-location');
+
+    if (!home) {
+      el.innerHTML = `
+        <div class="st-tiles-setup">
+          <p class="text-secondary text-xs">Salva una posizione di riferimento per scaricare la mappa dell'area circostante e usarla senza connessione.</p>
+          <button class="btn btn-outline btn-sm" onclick="StrumentiModule._saveHomeLocation()">
+            <i class="ph ph-map-pin-simple-area"></i> Salva posizione attuale (GPS attivo)
+          </button>
+        </div>`;
+      return;
+    }
+
+    const radius = Storage.get('tiles-radius') || 5;
+    const packDone = Storage.get('tiles-pack-done');
+    const count = _tilesForRadius(home.lat, home.lon, radius).length;
+    const stale = packDone && packDone.radius !== radius;
+
+    el.innerHTML = `
+      <div class="st-tiles-setup">
+        <div class="st-tiles-loc">
+          <i class="ph ph-map-pin-simple-area"></i>
+          <span>Riferimento: ${home.lat.toFixed(4)}, ${home.lon.toFixed(4)}</span>
+          <button class="btn btn-outline btn-sm" onclick="StrumentiModule._saveHomeLocation()">Aggiorna</button>
+        </div>
+        <div class="form-group">
+          <label>Raggio da scaricare (km)</label>
+          <input type="number" min="1" max="20" step="1" value="${radius}"
+            oninput="StrumentiModule._tilesRadiusChange(this.value)">
+        </div>
+        <p class="text-secondary text-xs">~${count} tile stimate (zoom ${TILES_ZOOM_MIN}–${TILES_ZOOM_MAX})</p>
+        ${packDone && !stale
+          ? `<div class="op-item op-done">
+              <i class="ph ph-map-trifold"></i><span>Tile area locale (raggio ${packDone.radius}km)</span>
+              <span class="op-ok"><i class="ph ph-check-circle"></i> Offline</span>
+              <button class="btn btn-outline btn-sm" onclick="StrumentiModule._deleteTilesPack()">Elimina</button>
+            </div>`
+          : `<div class="st-tiles-action">
+              <span id="st-tiles-prog" class="op-prog"></span>
+              <button id="st-tiles-btn" class="btn btn-sm btn-outline" onclick="StrumentiModule._downloadTilesPack()">
+                <i class="ph ph-download-simple"></i> Scarica tile per uso offline
+              </button>
+            </div>`}
+      </div>`;
+  }
+
   async function _requestWakeLock() {
     try { if ('wakeLock' in navigator) wakeLock = await navigator.wakeLock.request('screen'); } catch(e) {}
   }
@@ -796,12 +932,14 @@ const StrumentiModule = (() => {
           <p class="st-status text-dim" style="font-size:0.72rem;margin-top:6px">
             Tile © <a href="https://openstreetmap.org" target="_blank" rel="noopener" style="color:var(--text-dim)">OpenStreetMap</a> contributors · Regioni © ISTAT CC BY
           </p>
+          <div id="st-tiles-pack"></div>
         </div>
 
       </div>`;
 
     _networkUI();
     initBattery();
+    _renderTilesPack();
     window.addEventListener('online',  _networkUI);
     window.addEventListener('offline', _networkUI);
     setTimeout(_initMap, 100);
@@ -824,6 +962,9 @@ const StrumentiModule = (() => {
     window.removeEventListener('offline', _networkUI);
   }
 
-  return { init, destroy, toggleCompass, toggleGPS, toggleTorch, toggleSOS, copyCoords };
+  return {
+    init, destroy, toggleCompass, toggleGPS, toggleTorch, toggleSOS, copyCoords,
+    _saveHomeLocation, _tilesRadiusChange, _downloadTilesPack, _deleteTilesPack,
+  };
 
 })();

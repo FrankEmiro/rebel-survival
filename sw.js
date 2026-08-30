@@ -44,6 +44,12 @@ const LOCAL_ASSETS = [
 // CDN esterni — network-first con fallback cache
 const CDN_HOSTS = ['fonts.googleapis.com', 'fonts.gstatic.com', 'unpkg.com', 'tile.openstreetmap.org'];
 
+// Cache dei "pacchetti offline" scaricati manualmente dall'utente (immagini guide,
+// confini comunali/province, tile mappa area locale) — NON vanno cancellate ad ogni
+// aggiornamento del service worker, altrimenti l'utente perderebbe silenziosamente
+// i download offline al prossimo deploy dell'app.
+const PACK_CACHES = ['kit-resilienza-guides', 'kit-resilienza-map', 'kit-resilienza-tiles'];
+
 self.addEventListener('install', e => {
   e.waitUntil(
     caches.open(CACHE_NAME).then(cache => cache.addAll(LOCAL_ASSETS))
@@ -55,7 +61,7 @@ self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys().then(keys =>
       Promise.all(
-        keys.filter(k => k !== CACHE_NAME && k !== CDN_CACHE)
+        keys.filter(k => k !== CACHE_NAME && k !== CDN_CACHE && !PACK_CACHES.includes(k))
             .map(k => caches.delete(k))
       )
     )

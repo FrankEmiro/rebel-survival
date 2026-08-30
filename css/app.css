@@ -3291,6 +3291,18 @@ input, select, textarea { font-family: 'Nunito', sans-serif; font-size: 1rem; }
 .op-done > span { flex: 1; font-size: 0.88rem; color: var(--text-secondary); }
 .op-ok { font-size: 0.8rem; color: var(--success); display: flex; align-items: center; gap: 4px; }
 
+.st-tiles-setup { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+.st-tiles-loc {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  flex-wrap: wrap;
+}
+.st-tiles-loc > i { color: var(--accent); }
+.st-tiles-action { display: flex; align-items: center; gap: 8px; }
+
 /* ============================================================
    MAP — Heading icon, Waypoint HUD, Controls
    ============================================================ */
