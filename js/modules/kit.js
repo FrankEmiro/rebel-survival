@@ -189,7 +189,7 @@ const KitModule = (() => {
               return `
                 <li class="checklist-item ${checked ? 'checked' : ''}"
                   onclick="KitModule.toggleItem('${item.id}', this)">
-                  <input type="checkbox" ${checked ? 'checked' : ''} onclick="event.stopPropagation()">
+                  <input type="checkbox" ${checked ? 'checked' : ''}>
                   <div class="flex-1">
                     <div class="checklist-label">${item.nome}</div>
                     ${item.note ? `<div class="checklist-meta">${item.note}</div>` : ''}
