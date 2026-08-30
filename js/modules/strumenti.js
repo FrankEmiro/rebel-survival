@@ -346,6 +346,8 @@ const StrumentiModule = (() => {
         await torchTrack.applyConstraints({ advanced: [{ torch: true }] });
         torchOn = true;
       } catch(e) {
+        if (torchStream) torchStream.getTracks().forEach(t => t.stop());
+        torchStream = null; torchTrack = null;
         const s = document.getElementById('st-torch-status');
         if (s) s.textContent = 'Torcia non supportata su questo dispositivo';
         return;

@@ -36,6 +36,12 @@ function navigateTo(section) {
   }
   if (!document.getElementById('section-' + section)) return;
 
+  // Ferma sensori/mappa/stream della sezione Strumenti prima di lasciarla
+  // (GPS, bussola, torcia, wake lock) per evitare che restino attivi in background
+  if (currentSection === 'strumenti' && section !== 'strumenti' && typeof StrumentiModule !== 'undefined') {
+    StrumentiModule.destroy();
+  }
+
   // Hide all sections
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
 
