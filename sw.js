@@ -8,6 +8,7 @@ const LOCAL_ASSETS = [
   '/css/app.css',
   '/css/print.css',
   '/js/main.js',
+  '/js/utils.js',
   '/js/storage.js',
   '/js/modules/acqua.js',
   '/js/modules/cibo.js',

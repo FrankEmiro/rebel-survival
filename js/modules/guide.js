@@ -116,7 +116,7 @@ const GuideModule = (() => {
     if (visible.length === 0) {
       list.innerHTML = `<div class="guide-empty">
         <i class="ph ph-magnifying-glass"></i>
-        <p>Nessuna guida trovata per "<strong>${searchQuery}</strong>"</p>
+        <p>Nessuna guida trovata per "<strong>${Utils.escapeHtml(searchQuery)}</strong>"</p>
       </div>`;
       return;
     }

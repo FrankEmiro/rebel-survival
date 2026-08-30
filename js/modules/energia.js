@@ -117,8 +117,8 @@ const EnergiaModule = (() => {
         <input type="checkbox" id="dev-${d.id}" ${selectedDevices[d.id] !== false ? 'checked' : ''}
           onchange="EnergiaModule.toggleDevice('${d.id}')">
         <div style="flex:1">
-          <div class="checklist-label">${d.nome}</div>
-          <div class="checklist-meta">${d.categoria}</div>
+          <div class="checklist-label">${Utils.escapeHtml(d.nome)}</div>
+          <div class="checklist-meta">${Utils.escapeHtml(d.categoria)}</div>
         </div>
         <div style="display:flex;gap:8px;align-items:center">
           <input type="number" id="watt-${d.id}" value="${d.watt}" min="1"
@@ -205,7 +205,7 @@ const EnergiaModule = (() => {
     const prioritaEl = document.getElementById('en-priorita-list');
     prioritaEl.innerHTML = deviceResults.map((d, i) => `
       <div class="result-row">
-        <span class="result-label">${i + 1}. ${d.nome}</span>
+        <span class="result-label">${i + 1}. ${Utils.escapeHtml(d.nome)}</span>
         <span class="result-value">${d.kwhDay.toFixed(3)} kWh/g
           <span class="text-secondary text-xs">(${d.watt}W × ${d.hDay}h)</span>
         </span>
