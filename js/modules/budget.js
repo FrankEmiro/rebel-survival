@@ -93,7 +93,7 @@ const BudgetModule = (() => {
   `;
 
   function calculate() {
-    const budget   = parseFloat(document.getElementById('bu-budget').value) || 500;
+    const budget   = Utils.num(document.getElementById('bu-budget').value, 500);
     const priorita = document.getElementById('bu-priorita').value;
 
     let voci = [...VOCI].sort((a, b) => a.priorita - b.priorita);

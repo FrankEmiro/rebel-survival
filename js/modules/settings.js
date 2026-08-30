@@ -72,7 +72,7 @@ const SettingsModule = (() => {
   /* ── COLLECT ALL FORM VALUES ── */
   function _collect() {
     const base = get();
-    const n  = (id, def = 0) => { const el = document.getElementById(id); return el ? (parseFloat(el.value) || def) : (base[id] ?? def); };
+    const n  = (id, def = 0) => { const el = document.getElementById(id); return el ? Utils.num(el.value, def) : (base[id] ?? def); };
     const s  = (id, def = '') => { const el = document.getElementById(id); return el ? el.value : (base[id] ?? def); };
     const c  = (id)           => { const el = document.getElementById(id); return el ? el.checked : (base[id] ?? false); };
 
@@ -278,9 +278,9 @@ const SettingsModule = (() => {
   }
 
   function renderClimateVis() {
-    const min = parseInt(document.getElementById('s-temp-min')?.value) || 0;
-    const max = parseInt(document.getElementById('s-temp-max')?.value) || 32;
-    const now = parseInt(document.getElementById('s-temp-now')?.value) || 18;
+    const min = Utils.int(document.getElementById('s-temp-min')?.value, 0);
+    const max = Utils.int(document.getElementById('s-temp-max')?.value, 32);
+    const now = Utils.int(document.getElementById('s-temp-now')?.value, 18);
     const lbl = _tLabel(now);
     const badge = document.getElementById('s-temp-now-badge');
     if (badge) { badge.textContent = lbl.text; badge.className = 'temp-badge ' + lbl.cls; }

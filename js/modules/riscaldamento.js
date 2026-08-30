@@ -141,14 +141,14 @@ const RiscaldamentoModule = (() => {
   `;
 
   function calculate() {
-    const mq          = parseFloat(document.getElementById('ri-mq').value) || 80;
+    const mq          = Utils.num(document.getElementById('ri-mq').value, 80);
     const isolamento  = document.getElementById('ri-isolamento').value;
     const zona        = document.getElementById('ri-zona').value;
-    const ore         = parseFloat(document.getElementById('ri-ore').value) || 10;
-    const temp        = parseFloat(document.getElementById('ri-temp').value) || 18;
-    const giorni      = parseInt(document.getElementById('ri-giorni').value) || 30;
+    const ore         = Utils.num(document.getElementById('ri-ore').value, 10);
+    const temp        = Utils.num(document.getElementById('ri-temp').value, 18);
+    const giorni      = Utils.int(document.getElementById('ri-giorni').value, 30);
     const combustibile= document.getElementById('ri-combustibile').value;
-    const scortaAtt   = parseFloat(document.getElementById('ri-scorta').value) || 0;
+    const scortaAtt   = Utils.num(document.getElementById('ri-scorta').value, 0);
 
     const wMq = ISOLAMENTO[isolamento].wMq;
     const tempExt = zona === 'f' ? -5 : zona === 'e' ? 0 : zona === 'd' ? 2 : zona === 'c' ? 5 : 8;

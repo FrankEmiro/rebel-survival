@@ -147,10 +147,10 @@ const CiboModule = (() => {
   };
 
   function calculate() {
-    const adulti   = parseInt(document.getElementById('cb-adulti').value) || 0;
-    const anziani  = parseInt(document.getElementById('cb-anziani').value) || 0;
-    const bambini  = parseInt(document.getElementById('cb-bambini').value) || 0;
-    const giorni   = parseInt(document.getElementById('cb-giorni').value) || 30;
+    const adulti   = Utils.int(document.getElementById('cb-adulti').value, 0);
+    const anziani  = Utils.int(document.getElementById('cb-anziani').value, 0);
+    const bambini  = Utils.int(document.getElementById('cb-bambini').value, 0);
+    const giorni   = Utils.int(document.getElementById('cb-giorni').value, 30);
     const persone  = adulti + anziani + bambini;
 
     if (persone === 0) { alert('Inserisci almeno una persona'); return; }

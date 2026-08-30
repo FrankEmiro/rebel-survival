@@ -79,11 +79,11 @@ const AcquaModule = (() => {
   `;
 
   function calculate() {
-    const persone  = parseInt(document.getElementById('aq-persone').value) || 3;
-    const giorni   = parseInt(document.getElementById('aq-giorni').value) || 30;
+    const persone  = Utils.int(document.getElementById('aq-persone').value, 3);
+    const giorni   = Utils.int(document.getElementById('aq-giorni').value, 30);
     const clima    = document.getElementById('aq-clima').value;
     const pioggia  = document.getElementById('aq-pioggia').value === 'si';
-    const tetto    = parseFloat(document.getElementById('aq-tetto').value) || 0;
+    const tetto    = Utils.num(document.getElementById('aq-tetto').value, 0);
 
     const climaMult = clima === 'caldo' ? 1.3 : clima === 'freddo' ? 0.85 : 1;
     const minDay    = 2.5 * climaMult;   // L/persona/giorno minimo

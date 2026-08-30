@@ -150,9 +150,9 @@ const EnergiaModule = (() => {
   }
 
   function calculate() {
-    const pannelli   = parseFloat(document.getElementById('en-pannelli').value) || 0;
-    const batteria   = parseFloat(document.getElementById('en-batteria').value) || 0;
-    const generatore = parseFloat(document.getElementById('en-generatore').value) || 0;
+    const pannelli   = Utils.num(document.getElementById('en-pannelli').value, 0);
+    const batteria   = Utils.num(document.getElementById('en-batteria').value, 0);
+    const generatore = Utils.num(document.getElementById('en-generatore').value, 0);
     const stagione   = document.getElementById('en-stagione').value;
 
     // Produzione solare in Nord Italia (ore equivalenti di picco)
@@ -167,8 +167,8 @@ const EnergiaModule = (() => {
     allDevices.forEach(d => {
       const checked = document.getElementById('dev-' + d.id)?.checked;
       if (!checked) return;
-      const watt = parseFloat(document.getElementById('watt-' + d.id)?.value) || d.watt;
-      const hDay = parseFloat(document.getElementById('hday-' + d.id)?.value) || d.hDay;
+      const watt = Utils.num(document.getElementById('watt-' + d.id)?.value, d.watt);
+      const hDay = Utils.num(document.getElementById('hday-' + d.id)?.value, d.hDay);
       const kwhDay = (watt * hDay) / 1000;
       consumoTotale += kwhDay;
       deviceResults.push({ ...d, watt, hDay, kwhDay });

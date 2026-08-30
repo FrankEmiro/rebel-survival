@@ -102,11 +102,11 @@ const CarburanteModule = (() => {
   ];
 
   function calculate() {
-    const consumo    = parseFloat(document.getElementById('ca-consumo').value) || 7;
-    const serbatoio  = parseFloat(document.getElementById('ca-serbatoio').value) || 50;
-    const kmSett     = parseFloat(document.getElementById('ca-km-sett').value) || 200;
-    const scorta     = parseFloat(document.getElementById('ca-scorta').value) || 0;
-    const settimane  = parseInt(document.getElementById('ca-settimane').value) || 4;
+    const consumo    = Utils.num(document.getElementById('ca-consumo').value, 7);
+    const serbatoio  = Utils.num(document.getElementById('ca-serbatoio').value, 50);
+    const kmSett     = Utils.num(document.getElementById('ca-km-sett').value, 200);
+    const scorta     = Utils.num(document.getElementById('ca-scorta').value, 0);
+    const settimane  = Utils.int(document.getElementById('ca-settimane').value, 4);
 
     const kmSerbatoio = +(serbatoio / consumo * 100).toFixed(0);
     const litriSett   = +(kmSett * consumo / 100).toFixed(1);
