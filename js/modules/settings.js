@@ -1224,6 +1224,9 @@ const SettingsModule = (() => {
           <button class="btn-reset-dim" onclick="SettingsModule.importData()" title="Ripristina da backup JSON">
             <i class="ph ph-upload-simple"></i> Importa
           </button>
+          <button class="btn-reset-dim" onclick="CondividiModule.open()" title="Condividi il piano via QR code">
+            <i class="ph ph-qr-code"></i> Condividi
+          </button>
           <button class="btn-reset-dim btn-reset-danger" onclick="SettingsModule.reset()">
             <i class="ph ph-arrow-counter-clockwise"></i> Azzera
           </button>

@@ -1,5 +1,5 @@
-const CACHE_NAME = 'kit-resilienza-v41';
-const CDN_CACHE  = 'kit-resilienza-cdn-v41';
+const CACHE_NAME = 'kit-resilienza-v42';
+const CDN_CACHE  = 'kit-resilienza-cdn-v42';
 
 // Asset locali — cache-first
 const LOCAL_ASSETS = [
@@ -19,6 +19,9 @@ const LOCAL_ASSETS = [
   '/js/modules/scenari.js',
   '/js/modules/kit.js',
   '/js/modules/lista-spesa.js',
+  '/js/modules/condividi.js',
+  '/js/vendor/qrcode/qrcode.js',
+  '/js/vendor/qrcode/qrcode_UTF8.js',
   '/js/data/guides.js',
   '/js/modules/guide.js',
   '/js/modules/settings.js',
