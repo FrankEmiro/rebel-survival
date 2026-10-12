@@ -731,9 +731,36 @@ const DashboardModule = (() => {
     render();
   }
 
+  /* ── Numeri utili: 112 grande, 118/115 e numeri personali (guasti, medico, famiglia) ── */
+  const _numeri = () => Storage.get('num_utili') || [];
+  function addNumero() {
+    const nome = (prompt('Nome del numero (es. Guasti luce, Medico, Mamma)') || '').trim();
+    if (!nome) return;
+    const num = (prompt('Numero di telefono per "' + nome + '"') || '').replace(/[^\d+]/g, '');
+    if (!num) return;
+    Storage.set('num_utili', [..._numeri(), { nome: nome.slice(0, 24), num }]);
+    render();
+  }
+  function delNumero(i) {
+    Storage.set('num_utili', _numeri().filter((_, j) => j !== i));
+    render();
+  }
+  const _esc = t => String(t).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+  function _callBlock() {
+    const mine = _numeri().map((n, i) => `<span class="emg-num"><a href="tel:${_esc(n.num)}"><i class="ph ph-phone"></i> ${_esc(n.nome)}</a><button aria-label="Rimuovi ${_esc(n.nome)}" onclick="DashboardModule.delNumero(${i})"><i class="ph ph-x"></i></button></span>`).join('');
+    return `<div class="emg-calls">
+      <a class="emg-call" href="tel:112"><i class="ph ph-phone-call"></i> Chiama 112</a>
+      <div class="emg-call-row">
+        <a href="tel:118"><i class="ph ph-first-aid"></i> 118 Ambulanza</a>
+        <a href="tel:115"><i class="ph ph-fire-extinguisher"></i> 115 Vigili del Fuoco</a>
+      </div>
+      <div class="emg-call-row emg-mine">${mine}<button class="emg-add" onclick="DashboardModule.addNumero()"><i class="ph ph-plus"></i> Aggiungi un tuo numero</button></div>
+    </div>`;
+  }
+
   function _buildEmergency(profilo, scenarioId) {
     const sc = scenarioId && scenarioId !== 'custom' ? (window.SCENARI_LIST || []).find(x => x.id === scenarioId) : null;
-    const call = `<a class="emg-call" href="tel:112"><i class="ph ph-phone-call"></i> Chiama 112</a>`;
+    const call = _callBlock();
 
     if (!sc || !sc.steps || !sc.steps.length) {
       return `<div class="emg">
@@ -1159,5 +1186,5 @@ const DashboardModule = (() => {
 
   function init() { render(); }
 
-  return { init, render, computeLevel, _nowToggle, _foldToggle, setMode, emgCheck, emgJump, emgNext, emgPrev, emgReset, toggleTask, toggleAllTasks, refreshOfflineCard, openGuide, goToTask, openScenarioPicker, _pickScenario, downloadGuidesPack, downloadMapPack };
+  return { init, render, computeLevel, _nowToggle, _foldToggle, setMode, addNumero, delNumero, emgCheck, emgJump, emgNext, emgPrev, emgReset, toggleTask, toggleAllTasks, refreshOfflineCard, openGuide, goToTask, openScenarioPicker, _pickScenario, downloadGuidesPack, downloadMapPack };
 })();

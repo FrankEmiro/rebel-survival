@@ -3469,3 +3469,12 @@ input, select, textarea { font-family: 'Nunito', sans-serif; font-size: 1rem; }
 .chk-item { display: flex; gap: 12px; align-items: flex-start; font-size: 1.05rem; line-height: 1.35; padding: 10px 0; border-bottom: 1px solid var(--border); cursor: pointer; }
 .chk-item input { width: 24px; height: 24px; flex: 0 0 auto; margin-top: 1px; accent-color: var(--success); }
 .chk-item input:checked + span { opacity: .5; text-decoration: line-through; }
+
+/* Emergenza: numeri utili */
+.emg-calls { display: flex; flex-direction: column; gap: 8px; }
+.emg-call-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.emg-call-row > a { flex: 1 1 140px; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 12px; border-radius: var(--radius-sm, 10px); border: 1px solid var(--border); background: var(--bg-card); color: var(--text-primary); font-weight: 600; text-decoration: none; }
+.emg-num { display: inline-flex; border: 1px solid var(--border); border-radius: 999px; overflow: hidden; background: var(--bg-card); }
+.emg-num a { padding: 8px 12px; color: var(--text-primary); text-decoration: none; font-weight: 600; font-size: .9rem; }
+.emg-num button, .emg-add { border: 0; background: none; color: var(--text-secondary); cursor: pointer; font-size: .85rem; padding: 8px 10px; }
+.emg-add { border: 1px dashed var(--border); border-radius: 999px; }

@@ -159,6 +159,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initOfflineDetection();
   registerSW();
   initDisclaimer();
+  // Scorciatoia "Emergenza" della PWA (icona sulla schermata del telefono): /?mode=emergenza
+  if (new URLSearchParams(location.search).get('mode') === 'emergenza') Storage.set('home_mode', 'emergenza');
   navigateTo('home');
   if (localStorage.getItem('disclaimer_accepted')) OnboardingModule.maybeStart();
 });

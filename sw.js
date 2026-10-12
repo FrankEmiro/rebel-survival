@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kit-resilienza-v53';
+const CACHE_NAME = 'kit-resilienza-v54';
 const CDN_CACHE  = 'kit-resilienza-cdn-v51';
 
 // Asset locali — cache-first
@@ -90,7 +90,7 @@ self.addEventListener('fetch', e => {
   } else {
     // Cache-first per asset locali
     e.respondWith(
-      caches.match(e.request).then(cached => cached || fetch(e.request))
+      caches.match(e.request, { ignoreSearch: e.request.mode === 'navigate' }).then(cached => cached || fetch(e.request))
     );
   }
 });
