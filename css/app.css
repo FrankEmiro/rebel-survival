@@ -3458,3 +3458,14 @@ input, select, textarea { font-family: 'Nunito', sans-serif; font-size: 1rem; }
 .emg-pick p, .emg-done p { color: var(--text-secondary); margin: 0 0 8px; }
 .emg-done .emg-actions { width: 100%; }
 @media (prefers-reduced-motion: reduce) { .emg-phase-new { animation: none; } }
+
+/* Emergenza: salto tra fasi e checklist */
+.emg-jump { display: flex; gap: 6px; overflow-x: auto; padding: 2px 0 8px; scrollbar-width: none; }
+.emg-jump::-webkit-scrollbar { display: none; }
+.emg-jump button { flex: 0 0 auto; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-secondary); border-radius: 999px; padding: 6px 12px; font-size: .78rem; font-weight: 600; white-space: nowrap; cursor: pointer; }
+.emg-jump button.active { background: var(--danger); border-color: var(--danger); color: #fff; }
+.emg-chk { gap: 14px; }
+.chk-phase { display: flex; flex-direction: column; gap: 8px; }
+.chk-item { display: flex; gap: 12px; align-items: flex-start; font-size: 1.05rem; line-height: 1.35; padding: 10px 0; border-bottom: 1px solid var(--border); cursor: pointer; }
+.chk-item input { width: 24px; height: 24px; flex: 0 0 auto; margin-top: 1px; accent-color: var(--success); }
+.chk-item input:checked + span { opacity: .5; text-decoration: line-through; }

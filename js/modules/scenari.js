@@ -596,10 +596,7 @@ const ScenariModule = (() => {
       },
       steps: [
         { fase: 'REGOLA DEI 3 (priorità assolute)', azioni: [
-          '3 minuti senza aria → priorità numero 1: vie aeree libere',
-          '3 ore in ambiente freddo → priorità: riparo e calore corporeo',
-          '3 giorni senza acqua → trova e purifica acqua prima del cibo',
-          '3 settimane senza cibo → il cibo è l\'ultima priorità in survival',
+          'Ordine delle priorità: 1) respirare e fermare ferite gravi · 2) riparo dal freddo · 3) acqua · 4) cibo (per ultimo)',
           'STOP — Siediti, Pensa, Osserva, Pianifica prima di agire',
         ]},
         { fase: 'RIPARO (protezione dal freddo)', azioni: [

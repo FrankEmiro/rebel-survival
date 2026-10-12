@@ -690,12 +690,28 @@ const DashboardModule = (() => {
   // Protocollo appiattito: ogni azione è un passo (con il nome della fase di appartenenza)
   // Senza veicolo si saltano i passi su carburante e catene
   const NEEDS_VEHICLE = /carburante|il pieno|Metti in moto l'auto|Catene a bordo/;
-  const _flatSteps = sc => {
+  const _phases = sc => {
     const veicolo = (SettingsModule.get().km_settimana || 0) > 0;
-    return sc.steps.flatMap(f => f.azioni
-      .filter(text => veicolo || !NEEDS_VEHICLE.test(text))
-      .map(text => ({ fase: f.fase, text })));
+    return sc.steps
+      .map(f => ({ fase: f.fase, azioni: f.azioni.filter(text => veicolo || !NEEDS_VEHICLE.test(text)) }))
+      .filter(f => f.azioni.length);
   };
+  const _flatSteps = sc => _phases(sc).flatMap(f => f.azioni.map(text => ({ fase: f.fase, text })));
+  // Situazioni lente (non da vivere minuto per minuto): checklist invece di un passo alla volta
+  const CHECKLIST = new Set(['razionamento', 'cibo', 'crisi-economica', 'blackout-mobile']);
+  const _chkKey = id => 'emg_chk_' + id;
+  const _chkGet = id => Storage.get(_chkKey(id)) || [];
+  function emgCheck(key) {
+    const id = SettingsModule.get().scenario_id;
+    const cur = _chkGet(id);
+    Storage.set(_chkKey(id), cur.includes(key) ? cur.filter(k => k !== key) : [...cur, key]);
+    render();
+  }
+  function emgJump(i) {
+    const id = SettingsModule.get().scenario_id;
+    Storage.set(_emgKey(id), i);
+    render();
+  }
   const _emgKey = id => 'emg_' + id;
   const _emgIdx = id => Storage.get(_emgKey(id)) || 0;
 
@@ -711,7 +727,7 @@ const DashboardModule = (() => {
   function emgPrev() { _emgMove(-1); }
   function emgReset() {
     const id = SettingsModule.get().scenario_id;
-    if (id) Storage.set(_emgKey(id), 0);
+    if (id) { Storage.set(_emgKey(id), 0); Storage.set(_chkKey(id), []); }
     render();
   }
 
@@ -736,6 +752,24 @@ const DashboardModule = (() => {
         <button class="banner-scenario-chip" onclick="DashboardModule.openScenarioPicker()"><span>${sc.icon || ''}</span> ${sc.titolo} <i class="ph ph-swap"></i></button>
       </div>`;
 
+    if (CHECKLIST.has(sc.id)) {
+      const chk = _chkGet(sc.id);
+      let n = 0;
+      const tot = steps.length;
+      const body = _phases(sc).map((f, fi) => `
+        <div class="chk-phase"><div class="emg-phase">${f.fase}</div>
+        ${f.azioni.map((a, ai) => { const k = fi + '-' + ai; n += chk.includes(k) ? 1 : 0;
+          return `<label class="chk-item"><input type="checkbox" ${chk.includes(k) ? 'checked' : ''} onchange="DashboardModule.emgCheck('${k}')"><span>${a}</span></label>`; }).join('')}
+        </div>`).join('');
+      return `<div class="emg">${head}
+        <div class="emg-card emg-chk">
+          <div class="emg-count">${n} di ${tot} fatti</div>
+          <div class="emg-bar"><div style="width:${Math.round(n / tot * 100)}%"></div></div>
+          ${body}
+          <button class="btn btn-outline btn-sm" onclick="DashboardModule.emgReset()"><i class="ph ph-arrow-counter-clockwise"></i> Azzera</button>
+        </div>${call}</div>`;
+    }
+
     if (idx >= steps.length) {
       return `<div class="emg">${head}
         <div class="emg-card emg-done">
@@ -752,7 +786,14 @@ const DashboardModule = (() => {
     const st = steps[idx];
     const pct = Math.round(idx / steps.length * 100);
     const newPhase = idx === 0 || steps[idx - 1].fase !== st.fase;
+    const phases = _phases(sc);
+    let start = 0;
+    const jump = phases.length > 1 ? `<div class="emg-jump">${phases.map(f => {
+      const i = start; start += f.azioni.length;
+      return `<button class="${f.fase === st.fase ? 'active' : ''}" onclick="DashboardModule.emgJump(${i})">${f.fase}</button>`;
+    }).join('')}</div>` : '';
     return `<div class="emg">${head}
+      ${jump}
       <div class="emg-card">
         <div class="emg-phase${newPhase ? ' emg-phase-new' : ''}">${st.fase}</div>
         <div class="emg-count">Passo ${idx + 1} di ${steps.length}</div>
@@ -792,7 +833,7 @@ const DashboardModule = (() => {
         <button class="btn btn-outline btn-sm mt-12" onclick="DashboardModule.openScenarioPicker()"><i class="ph ph-swap"></i> Scegli scenario</button>`;
     }
     return `<div class="now-phases">
-        ${sc.steps.map((f, i) => `
+        ${_phases(sc).map((f, i) => `
           <details class="now-phase"${nowOpen.has(i) ? ' open' : ''} ontoggle="DashboardModule._nowToggle(${i}, this.open)">
             <summary><span class="now-num">${i + 1}</span><span class="now-fase">${f.fase}</span><i class="ph ph-caret-down now-caret"></i></summary>
             <ul class="now-list">${f.azioni.map(a => `<li>${a}</li>`).join('')}</ul>
@@ -1118,5 +1159,5 @@ const DashboardModule = (() => {
 
   function init() { render(); }
 
-  return { init, render, computeLevel, _nowToggle, _foldToggle, setMode, emgNext, emgPrev, emgReset, toggleTask, toggleAllTasks, refreshOfflineCard, openGuide, goToTask, openScenarioPicker, _pickScenario, downloadGuidesPack, downloadMapPack };
+  return { init, render, computeLevel, _nowToggle, _foldToggle, setMode, emgCheck, emgJump, emgNext, emgPrev, emgReset, toggleTask, toggleAllTasks, refreshOfflineCard, openGuide, goToTask, openScenarioPicker, _pickScenario, downloadGuidesPack, downloadMapPack };
 })();
