@@ -950,7 +950,7 @@ const DashboardModule = (() => {
   ];
   const GENERIC_ID = /^(ac|ci|en|ca|co|mo|me|si|sv)\d/;
   // Fuori dal Focus: ac01/ci01 (30 giorni) già coperti dagli obiettivi di livello; ter03/ter04/bbs01/bbs03 sono
-  // istruzioni da seguire durante l'evento (stanno già in "Se succede ora"), non cose da preparare
+  // istruzioni da seguire durante l'evento (stanno già in "Se arriva l'emergenza"), non cose da preparare
   const FOCUS_SKIP = new Set(['ac01', 'ci01', 'ter03', 'ter04', 'bbs01', 'bbs03', 'acq01', 'acq02', 'acq04', 'gas01']);
 
   function _buildFocus(enriched, profilo) {
@@ -1158,7 +1158,7 @@ const DashboardModule = (() => {
       <!-- TASK OPERATIVE -->
       <div class="card">
         <div class="task-board-header">
-          <h3><i class="ph ph-list-checks"></i> Cosa fare ora</h3>
+          <h3><i class="ph ph-list-checks"></i> I tuoi prossimi passi</h3>
           <div class="task-board-controls">
             <div class="task-progress-wrap"${showAllTasks ? '' : ' hidden'}>
               <span class="task-progress-label">${completedVisible}/${visibleTasks.length}</span>
@@ -1171,7 +1171,7 @@ const DashboardModule = (() => {
         ${buildTaskBoard(current, required, activeIds, detected, done, profilo)}
       </div>
 
-      ${_fold('now', 'ph-siren', 'Se succede ora', scObj ? `${scObj.titolo} · ${nPhases} fasi` : 'scegli uno scenario', _nowBody(scObj))}
+      ${_fold('now', 'ph-siren', 'Se arriva l\'emergenza', scObj ? `${scObj.titolo} · ${nPhases} fasi` : 'scegli uno scenario', _nowBody(scObj))}
 
       ${_fold('res', 'ph-chart-bar', 'Le tue scorte', `Acqua ${fmtGg(aqGg)} gg · Cibo ${profilo.cibo_scorte_giorni || 0} gg`, `
         ${buildResources(current, profilo)}
