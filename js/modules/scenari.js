@@ -580,6 +580,108 @@ const ScenariModule = (() => {
       ]
     },
     {
+      id: 'conflitto',
+      titolo: 'Attacco Militare / Conflitto',
+      icon: '🪖',
+      desc: 'Allarme aereo, bombardamenti, guerra vicina',
+      severity: 4,
+      threats: ['acqua', 'cibo', 'blackout', 'comm', 'carburante', 'medico'],
+      required: { acqua:90, cibo:85, energia:75, calore:60, comm:90, mobilita:70 },
+      taskMap: {
+        acqua:      ['ac01','ac02','ac04'],
+        cibo:       ['ci01','ci02','ci04'],
+        blackout:   ['en01','en02','en04','si01'],
+        comm:       ['co01','co02','co03','co04','si02'],
+        carburante: ['mo01','mo02','mo03','mo04','mo05'],
+        medico:     ['me01','me02','me03'],
+      },
+      steps: [
+        { fase: 'ALLARME (sirene, IT-alert, radio)', azioni: [
+          'Vai subito al rifugio pubblico più vicino. Se non c\'è: scantinato, o la stanza più interna del piano più basso',
+          'Stai lontano da finestre, vetrate e pareti esterne',
+          'Porta lo zaino d\'emergenza, farmaci, documenti, acqua, telefono e radio',
+          'Spegni gas e luce se hai il tempo di farlo, ma non rimandare per questo',
+          'Non uscire per filmare o guardare: i pericoli sono vetri, crolli e un secondo colpo',
+        ]},
+        { fase: 'DURANTE GLI ATTACCHI', azioni: [
+          'Resta nel rifugio: sdraiati a terra, proteggi testa e collo con le braccia',
+          'Bocca leggermente aperta e orecchie coperte: attutisce lo spostamento d\'aria delle esplosioni',
+          'Se sei all\'aperto: raggiungi il riparo più vicino (muro, fossa, edificio solido) e sdraiati',
+          'Se sei in auto: fermati lontano da edifici e ponti, esci e ripara dietro un muro. Non restare nell\'abitacolo',
+          'Ascolta la radio a batterie per sapere quando il pericolo è finito',
+        ]},
+        { fase: 'DOPO L\'ATTACCO', azioni: [
+          'Aspetta il via libera ufficiale prima di uscire dal rifugio',
+          'Controlla ferite tue e di chi è con te: primo soccorso, poi 112/118 se la linea funziona',
+          'NON toccare oggetti sconosciuti o metallici a terra (ordigni inesplosi): allontanati e avvisa le autorità',
+          'Resta lontano da edifici danneggiati, fili a terra e fughe di gas',
+          'Chiudi gas ed elettricità se la casa è danneggiata',
+        ]},
+        { fase: 'SE DEVI LASCIARE LA ZONA', azioni: [
+          'Evacua solo se ordinato dalle autorità o se la tua zona è colpita',
+          'Evita strade principali, ponti, stazioni, caserme e impianti: sono obiettivi e si intasano',
+          'Avvisa un familiare fuori zona di dove vai',
+          'Porta contanti: i pagamenti elettronici possono non funzionare',
+        ]},
+        { fase: 'IN CASA, NEI GIORNI SUCCESSIVI', azioni: [
+          'Segui solo fonti ufficiali: Protezione Civile, IT-alert, radio nazionale. Non diffondere voci non verificate',
+          'Razione acqua e cibo: 3 L a persona al giorno, pasti piccoli e regolari',
+          'Tieni radio, torce e power bank carichi; usa la luce solo dove serve',
+          'Controlla i vicini più fragili e organizza turni di vigilanza e aiuto',
+          'Cura le ferite subito: in guerra gli ospedali possono essere lontani o sovraccarichi',
+        ]},
+      ]
+    },
+    {
+      id: 'nucleare',
+      titolo: 'Incidente Nucleare / Radiologico',
+      icon: '☢️',
+      desc: 'Esplosione nucleare o nube radioattiva',
+      severity: 4,
+      threats: ['acqua', 'cibo', 'blackout', 'comm', 'medico'],
+      required: { acqua:90, cibo:85, energia:70, calore:50, comm:90, mobilita:50 },
+      taskMap: {
+        acqua:    ['ac01','ac02','ac04'],
+        cibo:     ['ci01','ci02','ci04'],
+        blackout: ['en01','en02','en04'],
+        comm:     ['co01','co03','co04','si02'],
+        medico:   ['me01','me02','me03'],
+      },
+      steps: [
+        { fase: 'PRIMI SECONDI (lampo / allarme)', azioni: [
+          'NON guardare il lampo. Giraiti e distogli lo sguardo',
+          'Se sei all\'aperto: sdraiati subito dietro un riparo, copri testa e collo con le braccia. L\'onda d\'urto arriva dopo secondi o minuti',
+          'Resta giù finché l\'onda d\'urto non è passata (almeno 1-2 minuti)',
+        ]},
+        { fase: 'ENTRA E RESTA AL CHIUSO (primi 10-30 minuti)', azioni: [
+          'Entra nell\'edificio più vicino, meglio un seminterrato o una stanza interna lontana da finestre e tetto',
+          'Chiudi porte e finestre, spegni condizionatori e ventilazione',
+          'Resta dentro: l\'edificio ti protegge molto, ogni ora che passa il pericolo cala',
+          'Accendi la radio a batterie e sintonizzati sui canali ufficiali',
+          'Non uscire a cercare familiari o a guardare cosa è successo',
+        ]},
+        { fase: 'DECONTAMINAZIONE (se eri all\'aperto)', azioni: [
+          'Togli i vestiti esterni con cautela, senza scuoterli: elimina fino al 90% della contaminazione',
+          'Mettili in un sacchetto chiuso, lontano da persone e animali',
+          'Lavati con acqua e sapone, senza strofinare forte. Non usare balsamo né creme',
+          'Soffia il naso, lava occhi e orecchie. Metti vestiti puliti',
+          'Gli animali che erano fuori vanno lavati prima di farli entrare',
+        ]},
+        { fase: 'ACQUA E CIBO', azioni: [
+          'Usa solo acqua e cibo confezionati, o tenuti al chiuso in contenitori sigillati',
+          'Cibo e acqua lasciati all\'aperto possono essere contaminati: non usarli',
+          'Non prendere pastiglie di iodio se non lo dicono le autorità: proteggono solo la tiroide da un tipo di radiazione',
+          'Bevi e mangia a sufficienza: non serve sprecare scorte, ma non restare a digiuno',
+        ]},
+        { fase: 'QUANTO RESTARE AL CHIUSO', azioni: [
+          'Almeno 24 ore, a meno che le autorità non dicano diversamente',
+          'Esci solo su indicazione ufficiale (radio, IT-alert, Protezione Civile)',
+          'Se ordinano di evacuare: segui il percorso indicato, non improvvisare',
+          'Chiama il 112 solo per emergenze mediche vere: le linee saranno sovraccariche',
+        ]},
+      ]
+    },
+    {
       id: 'survival-natura',
       titolo: 'Survival in Natura',
       icon: '🌲',

@@ -1019,6 +1019,7 @@ const DashboardModule = (() => {
   function goToTask(taskId) {
     const t = ALL_TASKS.find(x => x.id === taskId) || SYNTH[taskId];
     if (!t) return;
+    if (typeof setBackTarget === 'function') setBackTarget('home');
     if (t.tab) {
       navigateTo('settings');
       setTimeout(() => {
@@ -1032,6 +1033,7 @@ const DashboardModule = (() => {
   }
 
   function openGuide(guideId) {
+    if (typeof setBackTarget === 'function') setBackTarget('home');
     if (typeof GuideModule !== 'undefined') {
       GuideModule.openGuide(guideId);
     } else {

@@ -3478,3 +3478,7 @@ input, select, textarea { font-family: 'Nunito', sans-serif; font-size: 1rem; }
 .emg-num a { padding: 8px 12px; color: var(--text-primary); text-decoration: none; font-weight: 600; font-size: .9rem; }
 .emg-num button, .emg-add { border: 0; background: none; color: var(--text-secondary); cursor: pointer; font-size: .85rem; padding: 8px 10px; }
 .emg-add { border: 1px dashed var(--border); border-radius: 999px; }
+
+/* Freccia Indietro (da guida/Piano verso la Home) */
+.back-btn { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-primary); border-radius: 999px; padding: 6px 12px; font-size: .85rem; font-weight: 600; cursor: pointer; margin-right: 10px; }
+.back-btn.hidden { display: none; }

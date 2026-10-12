@@ -18,6 +18,24 @@ const SECTION_TITLES = {
 // Sezione corrente
 let currentSection = 'home';
 
+// Freccia "Indietro": dopo aver aperto una guida o il Piano da un'azione della Home,
+// riporta lì (stessa posizione di scroll) invece di ripartire da zero
+let backTarget = null;
+function setBackTarget(section) {
+  backTarget = { section, y: window.scrollY };
+}
+function clearBackTarget() {
+  backTarget = null;
+  document.getElementById('back-btn').classList.add('hidden');
+}
+function goBack() {
+  if (!backTarget) return;
+  const { section, y } = backTarget;
+  clearBackTarget();
+  navigateTo(section);
+  setTimeout(() => window.scrollTo(0, y), 60);
+}
+
 function switchKitTab(tab) {
   document.querySelectorAll('.kit-itab').forEach(b => b.classList.toggle('active', b.dataset.kitTab === tab));
   document.getElementById('kit-root').classList.toggle('hidden', tab !== 'kit');
@@ -61,6 +79,7 @@ function navigateTo(section) {
   document.getElementById('page-title').textContent = SECTION_TITLES[section] || section;
 
   currentSection = section;
+  document.getElementById('back-btn').classList.toggle('hidden', !backTarget || backTarget.section === section);
 
   // Scroll to top
   window.scrollTo(0, 0);
@@ -108,6 +127,7 @@ function bindNavClicks() {
     el.addEventListener('click', e => {
       e.preventDefault();
       const target = el.dataset.section || el.dataset.nav;
+      clearBackTarget();
       if (target) navigateTo(target);
     });
   });
@@ -155,6 +175,7 @@ function initDisclaimer() {
 // App init
 document.addEventListener('DOMContentLoaded', () => {
   bindNavClicks();
+  document.getElementById('back-btn').addEventListener('click', goBack);
   addCalcBackButtons();
   initOfflineDetection();
   registerSW();

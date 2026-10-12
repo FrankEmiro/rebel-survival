@@ -1,5 +1,5 @@
 /* ============================================================
-   KNOWLEDGE BASE — 27 guide embedded, 100% offline
+   KNOWLEDGE BASE — 29 guide embedded, 100% offline
    Fonti: FM 21-76 (US Army) · FM 4-25.11 · FEMA Ready.gov
           WHO Water Guidelines · Protezione Civile · USDA
    ============================================================ */
@@ -1162,6 +1162,86 @@ const GUIDES_DATA = [
     ],
     relatedGuides: ['gobag-checklist', 'mappe-offline', 'comm-piano-famiglia'],
     tasks: ['mo02', 'mo03', 'mo04'],
+  },
+
+  {
+    id: 'conflitto-rifugio',
+    title: 'Conflitto Armato: Rifugio e Sicurezza',
+    icon: 'ph-shield-warning',
+    category: 'mobilita',
+    source: 'Protezione Civile · Croce Rossa · FEMA',
+    readTime: '3 min',
+    quickRef: [
+      'Al suono delle sirene vai subito al rifugio: non aspettare di vedere il pericolo',
+      'Luogo migliore: rifugio, seminterrato o stanza interna del piano più basso',
+      'Lontano da finestre e vetri: le schegge di vetro causano molte ferite',
+      'Tieni zaino pronto, radio a batterie e contanti: rete e carte possono cadere',
+      'Non toccare mai oggetti sconosciuti a terra: possono essere ordigni inesplosi',
+    ],
+    sections: [
+      {
+        heading: 'Scegliere il rifugio in casa',
+        content: 'Il posto più sicuro è sotto il livello della strada o, in assenza, la stanza più interna del piano più basso, con più muri tra te e l\'esterno. Evita ultimi piani, lati con grandi vetrate, cucine con bombole e garage con carburante. Tieni in quel posto: acqua, torce, radio, coperte, kit medico.',
+      },
+      {
+        heading: 'Cosa tenere sempre pronto',
+        steps: [
+          'Zaino d\'emergenza con documenti, farmaci, contanti, caricatore e power bank',
+          'Radio a batterie o a manovella con batterie di scorta',
+          'Acqua per 3 giorni (3 L a persona al giorno) e cibo che non richiede cottura',
+          'Kit di primo soccorso con bende compressive e guanti',
+          'Elenco stampato dei numeri utili e punto di ritrovo con la famiglia',
+        ],
+      },
+      {
+        heading: 'Dopo gli attacchi',
+        content: 'Aspetta il via libera ufficiale. Controlla ferite e crolli. Non toccare oggetti sconosciuti o metallici a terra: allontanati e avvisa le autorità. Tieniti lontano da edifici danneggiati, cavi a terra e fughe di gas. Segui solo fonti ufficiali e non diffondere notizie non verificate.',
+      },
+    ],
+    relatedGuides: ['gobag-checklist', 'evacuazione-piano', 'primo-soccorso'],
+    tasks: ['mo02', 'mo05', 'co01'],
+  },
+
+  {
+    id: 'nucleare-radiologico',
+    title: 'Incidente Nucleare o Radiologico',
+    icon: 'ph-radioactive',
+    category: 'medico',
+    source: 'Protezione Civile · FEMA Ready.gov · CDC',
+    readTime: '3 min',
+    quickRef: [
+      'Entra, resta dentro, ascolta: tre azioni che salvano più vite',
+      'Meglio un seminterrato o una stanza interna senza finestre',
+      'Togli i vestiti esterni e lavati: elimina fino al 90% della contaminazione',
+      'Acqua e cibo solo confezionati o tenuti al chiuso',
+      'Pastiglie di iodio solo se lo dicono le autorità: proteggono solo la tiroide',
+    ],
+    sections: [
+      {
+        heading: 'Se vedi un lampo intenso',
+        steps: [
+          'Non guardare la luce: giraiti e abbassati',
+          'Sdraiati dietro un riparo, proteggi testa e collo',
+          'Resta giù 1-2 minuti: l\'onda d\'urto arriva dopo',
+          'Poi entra subito nell\'edificio più vicino e resta lontano da finestre',
+        ],
+      },
+      {
+        heading: 'Restare al chiuso',
+        content: 'Chiudi porte e finestre, spegni ventilazione e condizionatori. Più muri e più massa ci sono tra te e l\'esterno, meglio è. Resta dentro almeno 24 ore, o finché le autorità non dicono di uscire. Tieni la radio accesa. Il pericolo maggiore è nelle prime ore e cala rapidamente.',
+      },
+      {
+        heading: 'Decontaminazione',
+        steps: [
+          'Togli i vestiti esterni senza scuoterli e mettili in un sacchetto chiuso',
+          'Lavati con acqua e sapone, senza strofinare forte, no balsamo',
+          'Lava occhi, naso e orecchie',
+          'Metti vestiti puliti: gli animali fuori vanno lavati prima di entrare',
+        ],
+      },
+    ],
+    relatedGuides: ['isolamento-stanza', 'comm-radio-canali', 'acqua-stoccaggio'],
+    tasks: ['ac01', 'ci01', 'co01'],
   },
 
   /* ══════════════════════ SICUREZZA / COMMUNITY ══════════════════════ */
