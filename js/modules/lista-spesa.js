@@ -482,7 +482,7 @@ const ListaSpesaModule = (() => {
       : (!hasData
           ? `<div class="alert alert-info mb-12">
               <i class="ph ph-info"></i>
-              <div>Lista base per 2-3 persone / 30 giorni. Seleziona uno <strong>scenario</strong> in Dimensioni per personalizzarla.
+              <div>Lista base per 2-3 persone / 30 giorni. Seleziona uno <strong>scenario</strong> in Piano per personalizzarla.
                 <button class="btn btn-outline btn-sm mt-8" onclick="navigateTo('settings')">
                   <i class="ph ph-warning-octagon"></i> Seleziona scenario
                 </button>

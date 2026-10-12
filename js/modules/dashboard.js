@@ -82,7 +82,7 @@ const DashboardModule = (() => {
   // Scenario → tasks mapping gestito in scenari.js tramite scenario.taskMap
   const ALL_TASKS = [
     // ACQUA
-    { id:'ac01', axis:'acqua',    scoreBonus:20, nav:'settings', tab:'acqua',    threats:['acqua'],               guide:'acqua-stoccaggio',            resolve: p=>(p.acqua_scorte_litri||0)>=30,                        text:'Accumula acqua: 5L/persona/giorno × 30 giorni in taniche' },
+    { id:'ac01', axis:'acqua',    scoreBonus:20, nav:'settings', tab:'acqua',    threats:['acqua'],               guide:'acqua-stoccaggio',            resolve: p=>(p.acqua_scorte_litri||0)>=30,                        text:'Accumula acqua: 3 L/persona/giorno × 30 giorni in taniche' },
     { id:'ac02', axis:'acqua',    scoreBonus:15, nav:'settings', tab:'acqua',    threats:['acqua'],               guide:'acqua-purificazione',         resolve: p=>!!p.ha_filtro,   field:'ha_filtro',                text:'Acquista filtro portatile (Sawyer / LifeStraw)' },
     { id:'ac03', axis:'acqua',    scoreBonus:10, nav:'settings', tab:'acqua',    threats:['acqua'],               guide:'acqua-raccolta-pioggia',      resolve: p=>!!p.ha_pioggia,  field:'ha_pioggia',               text:'Imposta sistema raccolta acqua piovana' },
     { id:'ac04', axis:'acqua',    scoreBonus: 6, nav:'settings', tab:'acqua',    threats:['acqua'],               guide:'acqua-purificazione',         resolve: null,                                                    text:'Scorta candeggina non profumata per purificazione (4 gocce/L)' },
@@ -211,8 +211,9 @@ const DashboardModule = (() => {
   ];
 
   /* ── VIEW MODE ── */
-  let taskView = 'minacce'; // 'minacce' | 'priorita' | 'focus'
-  function setView(mode) { taskView = mode; render(); }
+  // Home mostra il Focus (top 3); "Vedi tutte" espande la lista completa per minaccia
+  let showAllTasks = false;
+  function toggleAllTasks() { showAllTasks = !showAllTasks; render(); }
 
   /* ── OFFLINE PACKS ── */
   const MAP_PACK_PATHS = [
@@ -253,7 +254,7 @@ const DashboardModule = (() => {
     btn.innerHTML = '<i class="ph ph-spinner"></i> Download…';
     await _downloadBatch('kit-resilienza-guides', _guideImagePaths(), prog);
     Storage.set('offline-guides', 'done');
-    render();
+    refreshOfflineCard();
   }
 
   async function downloadMapPack() {
@@ -264,7 +265,13 @@ const DashboardModule = (() => {
     btn.innerHTML = '<i class="ph ph-spinner"></i> Download…';
     await _downloadBatch('kit-resilienza-map', MAP_PACK_PATHS, prog);
     Storage.set('offline-map', 'done');
-    render();
+    refreshOfflineCard();
+  }
+
+  // La card dei pacchetti offline vive nella sezione Guide (slot #offline-pack-slot)
+  function refreshOfflineCard() {
+    const slot = document.getElementById('offline-pack-slot');
+    if (slot) slot.innerHTML = _buildOfflineCard();
   }
 
   function _buildOfflineCard() {
@@ -328,7 +335,7 @@ const DashboardModule = (() => {
     const AXIS_LABEL = { acqua:'ACQUA', cibo:'CIBO', energia:'ENERGIA', calore:'CALORE', comm:'COMM', mobilita:'MOBILITÀ' };
     const toast = document.createElement('div');
     toast.className = 'score-toast';
-    toast.innerHTML = `<i class="ph ph-arrow-up"></i> +${bonus} ${AXIS_LABEL[axis] || axis}`;
+    toast.innerHTML = `<i class="ph ph-check"></i> Fatto · ${AXIS_LABEL[axis] || axis}`;
     document.body.appendChild(toast);
     requestAnimationFrame(() => toast.classList.add('score-toast-show'));
     setTimeout(() => { toast.classList.remove('score-toast-show'); setTimeout(() => toast.remove(), 300); }, 1800);
@@ -390,7 +397,7 @@ const DashboardModule = (() => {
   function computeBaseScores(p) {
     // ACQUA: da litri stoccati + fonti alternative
     const persone = (p.adulti || 2) + (p.bambini || 0) * 0.7 + (p.anziani || 0) * 0.9;
-    const litriGiorno = Math.max(1, persone * 3);
+    const litriGiorno = Math.max(1, persone * Utils.WATER_L_PPD);
     const acquaGiorni = (p.acqua_scorte_litri || 0) / litriGiorno;
     let acqua = scoreFromDays(acquaGiorni);
     if (p.ha_pozzo)   acqua = Math.min(100, acqua + 15);
@@ -474,6 +481,51 @@ const DashboardModule = (() => {
     return req;
   }
 
+  /* ── LIVELLO DI PREPARAZIONE ── */
+  // Il livello dipende solo da quanti giorni reggi con acqua E cibo (il più scarso dei due).
+  const LEVELS = [
+    { n: 0, label: 'Da iniziare',  days: 0  },
+    { n: 1, label: '72 ore',       days: 3  },
+    { n: 2, label: '2 settimane',  days: 14 },
+    { n: 3, label: '30 giorni',    days: 30 },
+  ];
+
+  // Persone "equivalenti adulto" e giorni d'acqua (una sola regola in tutta l'app: Utils.WATER_L_PPD)
+  const _persone = p => Math.max(1, (p.adulti || 0) + (p.bambini || 0) * 0.7 + (p.anziani || 0) * 0.9);
+  function _waterDays(p) {
+    let gg = (p.acqua_scorte_litri || 0) / (_persone(p) * Utils.WATER_L_PPD);
+    if (p.ha_pozzo || p.ha_fiume) gg = Math.max(gg, 14);
+    else if (p.ha_pioggia)        gg = Math.max(gg, 7);
+    return gg;
+  }
+
+  function computeLevel(p) {
+    const litriGiorno = _persone(p) * Utils.WATER_L_PPD;
+    const acquaGg = _waterDays(p);
+    const ciboGg = p.cibo_scorte_giorni || 0;
+    const days = Math.min(acquaGg, ciboGg);
+    const level = [...LEVELS].reverse().find(l => days >= l.days) || LEVELS[0];
+    const next = LEVELS[level.n + 1] || null;
+    let needAcqua = 0, needCibo = 0;
+    if (next) {
+      needAcqua = Math.max(0, Math.ceil(next.days * litriGiorno - (p.acqua_scorte_litri || 0)));
+      if (p.ha_pozzo || p.ha_fiume || (p.ha_pioggia && next.days <= 7)) needAcqua = 0;
+      needCibo = Math.max(0, Math.ceil(next.days - ciboGg));
+    }
+    const targetLitri = next ? Math.ceil(next.days * litriGiorno) : 0;
+    return { level, next, needAcqua, needCibo, targetLitri };
+  }
+
+  // Percorso base: ordine in cui un utente nuovo dovrebbe agire (acqua → cibo → medico → comunicare → luce → calore)
+  const PATH = ['ac01','ci01','me01','co01','en01','ac02','co03','mo02','en02','ca01','ca03','co02','me02','mo01','ci02','ci04','ac04','si01','en04','mo03','ca02'];
+  const pathIdx = id => { const i = PATH.indexOf(id); return i < 0 ? 99 : i; };
+  // Task da survivalista (sv*): visibili solo se lo scenario scelto le include
+  const isVisibleTask = (t, scenarioTasks, p) => {
+    if (t.id.startsWith('sv') && !(scenarioTasks && scenarioTasks.has(t.id))) return false;
+    if (['mo01', 'mo04'].includes(t.id) && !((p && p.km_settimana) > 0)) return false;   // carburante/percorsi: solo con veicolo
+    return true;
+  };
+
   /* ── AUTO-RILEVA MINACCE ── */
   function autoDetectThreats(profilo) {
     return THREATS.filter(t => t.check(profilo)).map(t => ({
@@ -482,116 +534,38 @@ const DashboardModule = (() => {
     }));
   }
 
-  /* ── RADAR SVG ── */
-  function buildRadar(current, required) {
-    const SIZE = 280, CX = 140, CY = 140, R = 100, LABEL_R = R + 28;
-    const N = AXES.length;
-
-    function polar(deg, r) {
-      const rad = ((deg - 90) * Math.PI) / 180;
-      return { x: CX + r * Math.cos(rad), y: CY + r * Math.sin(rad) };
-    }
-    function pts(scores) {
-      return AXES.map((ax, i) => {
-        const p = polar((i * 360) / N, R * (scores[ax.id] / 100));
-        return `${p.x.toFixed(1)},${p.y.toFixed(1)}`;
-      }).join(' ');
-    }
-
-    const rings = [0.2,0.4,0.6,0.8,1.0].map(s => {
-      const rpts = AXES.map((_,i) => { const p = polar((i*360)/N, R*s); return `${p.x.toFixed(1)},${p.y.toFixed(1)}`; }).join(' ');
-      return `<polygon points="${rpts}" fill="none" stroke="rgba(201,168,76,0.1)" stroke-width="1"/>`;
-    }).join('');
-
-    const axisLines = AXES.map((ax, i) => {
-      const p = polar((i*360)/N, R);
-      return `<line x1="${CX}" y1="${CY}" x2="${p.x.toFixed(1)}" y2="${p.y.toFixed(1)}" stroke="rgba(201,168,76,0.15)" stroke-width="1"/>
-              <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="2.5" fill="var(--bg-card)" stroke="rgba(201,168,76,0.35)" stroke-width="1"/>`;
-    }).join('');
-
-    const labels = AXES.map((ax, i) => {
-      const p = polar((i*360)/N, LABEL_R);
-      const score = current[ax.id] || 0;
-      const col = score >= 70 ? '#5fa832' : score >= 40 ? '#c8852a' : '#b53020';
-      return `<text x="${p.x.toFixed(1)}" y="${(p.y-5).toFixed(1)}" text-anchor="middle"
-                font-family="'JetBrains Mono',monospace" font-size="8" font-weight="600"
-                fill="rgba(220,215,192,0.65)" letter-spacing="0.06em">${ax.label}</text>
-              <text x="${p.x.toFixed(1)}" y="${(p.y+7).toFixed(1)}" text-anchor="middle"
-                font-family="'JetBrains Mono',monospace" font-size="10" font-weight="700"
-                fill="${col}">${score}</text>`;
-    }).join('');
-
-    const hasReq = Object.values(required).some(v => v > 0);
-    const reqPoly = hasReq ? `<polygon points="${pts(required)}" fill="rgba(181,48,32,0.08)"
-      stroke="#b53020" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.85"/>` : '';
-
-    const curPoly = `<polygon points="${pts(current)}" fill="rgba(201,168,76,0.18)"
-      stroke="#c9a84c" stroke-width="2" stroke-linejoin="round"/>`;
-
-    const curDots = AXES.map((ax, i) => {
-      const p = polar((i*360)/N, R * ((current[ax.id]||0)/100));
-      const col = (current[ax.id]||0) >= 70 ? '#5fa832' : (current[ax.id]||0) >= 40 ? '#c8852a' : '#b53020';
-      return `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="4" fill="${col}" stroke="var(--bg-card)" stroke-width="1.5"/>`;
-    }).join('');
-
-    const ringLabels = [20,40,60,80,100].map((v,i) => {
-      const p = polar(0, R * (v/100));
-      return `<text x="${(CX+4).toFixed(1)}" y="${p.y.toFixed(1)}" font-family="'JetBrains Mono',monospace"
-        font-size="7" fill="rgba(138,131,104,0.5)" dominant-baseline="middle">${v}</text>`;
-    }).join('');
-
-    const legend = `<g transform="translate(${CX-60},${SIZE-16})">
-      <line x1="0" y1="5" x2="14" y2="5" stroke="#c9a84c" stroke-width="2"/>
-      <circle cx="7" cy="5" r="3" fill="#c9a84c"/>
-      <text x="18" y="8" font-family="'JetBrains Mono',monospace" font-size="8" fill="rgba(220,215,192,0.55)">ATTUALE</text>
-      ${hasReq ? `<line x1="70" y1="5" x2="84" y2="5" stroke="#b53020" stroke-width="1.5" stroke-dasharray="4 3"/>
-        <text x="88" y="8" font-family="'JetBrains Mono',monospace" font-size="8" fill="rgba(181,48,32,0.75)">RICHIESTO</text>` : ''}
-    </g>`;
-
-    return `<svg viewBox="0 0 ${SIZE} ${SIZE}" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:${SIZE}px;display:block;margin:0 auto">
-      ${rings}${ringLabels}${axisLines}${reqPoly}${curPoly}${curDots}${labels}${legend}
-    </svg>`;
-  }
-
-  /* ── TIMELINE RISORSE ── */
-  function buildTimeline(current, profilo, activeIds, scenarioId) {
+  /* ── RISORSE: valori concreti (giorni, fonti, canali), non percentuali opache ── */
+  function buildResources(current, p) {
+    const aq = _waterDays(p), ci = p.cibo_scorte_giorni || 0;
+    const fmt = n => (n < 10 ? (Math.round(n * 10) / 10).toString().replace('.', ',') : String(Math.round(n)));
+    const fonti = [p.en_pannelli, p.en_batteria, p.en_generatore].filter(Boolean).length;
+    const risc = [p.risc_legna && 'legna', p.risc_pellet && 'pellet', p.risc_gpl && 'GPL'].filter(Boolean);
+    const canali = [p.has_radio, p.has_walkie, p.has_sat_phone, p.has_mesh].filter(Boolean).length;
+    const dayCls = d => d >= 14 ? 'good' : d >= 3 ? 'warn' : 'bad';
+    const pctCls = v => v >= 70 ? 'good' : v >= 35 ? 'warn' : 'bad';
     const rows = [
-      { id:'acqua',    label:'Acqua',   icon:'ph-drop',      pct:current.acqua,    val: profilo.acqua_scorte_litri ? profilo.acqua_scorte_litri+'L' : '—', nav:'acqua' },
-      { id:'cibo',     label:'Cibo',    icon:'ph-fork-knife', pct:current.cibo,     val: profilo.cibo_scorte_giorni ? profilo.cibo_scorte_giorni+'gg' : '—', nav:'cibo' },
-      { id:'energia',  label:'Energia', icon:'ph-lightning',  pct:current.energia,  val: current.energia+'%', nav:'energia' },
-      { id:'calore',   label:'Calore',  icon:'ph-flame',      pct:current.calore,   val: current.calore+'%', nav:'riscaldamento' },
-      { id:'comm',     label:'Comm.',   icon:'ph-radio',      pct:current.comm,     val: current.comm+'%', nav:'settings', tab:'comm' },
-      { id:'mobilita', label:'Mobilità',icon:'ph-car',        pct:current.mobilita, val: profilo.carburante_litri ? profilo.carburante_litri+'L' : '—', nav:'carburante' },
-    ];
-
-    const done = Storage.get('task-checks') || {};
-    const scenarioTasks = _scenarioTaskIds(scenarioId);
-
-    function bestTask(axisId) {
-      return ALL_TASKS
-        .filter(t => t.axis === axisId && t.threats.some(tid => (activeIds||[]).includes(tid)))
-        .filter(t => !scenarioTasks || scenarioTasks.has(t.id))
-        .filter(t => !(t.resolve ? t.resolve(profilo) : !!done[t.id]))
-        .sort((a, b) => b.scoreBonus - a.scoreBonus)[0];
-    }
+      { label:'Acqua',   icon:'ph-drop',       days:aq, val: fmt(aq) + ' gg',   sub: (p.acqua_scorte_litri || 0) + ' L', nav:'acqua' },
+      { label:'Cibo',    icon:'ph-fork-knife', days:ci, val: ci + ' gg',        sub: '', nav:'cibo' },
+      { label:'Energia', icon:'ph-lightning',  pct:current.energia, val: fonti ? fonti + (fonti > 1 ? ' fonti' : ' fonte') : 'Nessuna', nav:'energia' },
+      { label:'Calore',  icon:'ph-flame',      pct:current.calore,  val: risc.length ? risc.join(' + ') : 'Nessuno', nav:'riscaldamento' },
+      { label:'Comunic.',icon:'ph-radio',      pct:current.comm,    val: canali ? canali + (canali > 1 ? ' canali' : ' canale') : 'Nessuno', nav:'settings', tab:'comm' },
+      (p.km_settimana || 0) > 0 && { label:'Mobilità', icon:'ph-car', pct:current.mobilita, val: p.carburante_litri ? p.carburante_litri + ' L' : '—', nav:'carburante' },
+    ].filter(Boolean);
 
     return rows.map(r => {
-      const cls = r.pct >= 70 ? 'good' : r.pct >= 35 ? 'warn' : 'bad';
+      const isDays = r.days !== undefined;
+      const cls  = isDays ? dayCls(r.days) : pctCls(r.pct);
+      const fill = isDays ? Math.min(100, r.days / 30 * 100) : r.pct;
+      const ticks = isDays ? '<i class="res-tick" style="left:10%"></i><i class="res-tick" style="left:46.7%"></i>' : '';
       const onclick = r.tab
         ? `navigateTo('${r.nav}'); setTimeout(()=>SettingsModule._tab('${r.tab}'), 180)`
         : `navigateTo('${r.nav}')`;
-      const next = activeIds?.length ? bestTask(r.id) : null;
-      const nextHtml = next
-        ? `<div class="timeline-next" onclick="event.stopPropagation(); DashboardModule.goToTask('${next.id}')">
-             <i class="ph ph-arrow-elbow-right-down"></i>+${next.scoreBonus} pts · ${next.text.length > 52 ? next.text.slice(0,52)+'…' : next.text}
-           </div>` : '';
-      return `<div class="timeline-row" onclick="${onclick}" style="cursor:pointer" title="→ ${r.nav}">
-        <div class="timeline-label"><i class="ph ${r.icon}"></i><span>${r.label}</span></div>
-        <div class="timeline-bar"><div class="timeline-fill ${cls}" style="width:${r.pct}%"></div></div>
-        <div class="timeline-val">${r.val}</div>
-        ${nextHtml}
+      return `<div class="res-row" onclick="${onclick}">
+        <div class="res-label"><i class="ph ${r.icon}"></i><span>${r.label}</span></div>
+        <div class="res-bar ${cls}">${ticks}<div class="res-fill" style="width:${Math.max(fill, 2)}%"></div></div>
+        <div class="res-val ${cls}">${r.val}${r.sub ? `<small>${r.sub}</small>` : ''}</div>
       </div>`;
-    }).join('');
+    }).join('') + `<div class="res-legend"><i class="res-tick-demo"></i> tacche sulle barre di acqua e cibo: 72 ore · 2 settimane · 30 giorni</div>`;
   }
 
   /* ── TASK CARD (shared renderer) ── */
@@ -603,11 +577,11 @@ const DashboardModule = (() => {
   };
 
   function renderTaskCard(t) {
-    const um = URGENCY_META[t.urgency];
+    const um = t.rankLabel ? { label: t.rankLabel, icon: URGENCY_META[t.urgency].icon } : URGENCY_META[t.urgency];
 
     // Lato sinistro:
-    // · field  → checkbox che scrive nel profilo (bidirezionale con Dimensioni)
-    // · auto senza field → badge che guida a Dimensioni
+    // · field  → checkbox che scrive nel profilo (bidirezionale con Piano)
+    // · auto senza field → badge che guida a Piano
     // · manuale → checkbox normale (task-checks)
     const leftCtrl = (t.field || !t.isAutoTask)
       ? `<label class="task-checkbox-wrap" onclick="event.stopPropagation()">
@@ -616,16 +590,16 @@ const DashboardModule = (() => {
            <span class="task-cb"></span>
          </label>`
       : (t.completed
-          ? `<span class="task-auto-badge resolved" title="Valori in Dimensioni soddisfatti — risolto automaticamente">
+          ? `<span class="task-auto-badge resolved" title="Valori in Piano soddisfatti — risolto automaticamente">
                <i class="ph ph-check-circle"></i>
              </span>`
           : `<span class="task-auto-badge pending" onclick="DashboardModule.goToTask('${t.id}')"
-               title="Aggiorna i valori in Dimensioni per risolvere">
+               title="Aggiorna i valori in Piano per risolvere">
                <i class="ph ph-sliders"></i>
              </span>`);
 
     const navIcon  = t.tab ? 'ph-sliders' : (t.guide ? 'ph-arrow-right' : 'ph-arrow-right');
-    const navTitle = t.tab ? 'Aggiorna Dimensione' : 'Apri guida';
+    const navTitle = t.tab ? 'Aggiorna il Piano' : 'Apri guida';
 
     return `
       <div class="priority-task ${t.urgency} ${t.completed ? 'task-completed' : ''}${t.isAutoTask ? ' task-auto' : ''}">
@@ -637,9 +611,9 @@ const DashboardModule = (() => {
           </div>
           <div class="task-meta">
             <span class="task-urgency-badge ${t.urgency}"><i class="ph ${um.icon}"></i>${um.label}</span>
-            <span>+${t.scoreBonus} pts ${t.axis.toUpperCase()}</span>
+            <span>${(AXES.find(a => a.id === t.axis) || { label: t.axis.toUpperCase() }).label}</span>
             ${t.isAutoTask
-              ? `<span class="task-auto-label">${t.completed ? '· auto ✓' : '· aggiorna dim.'}</span>`
+              ? `<span class="task-auto-label">${t.completed ? '· già a posto ✓' : '· tocca e inserisci i tuoi dati'}</span>`
               : (t.completed ? '<span class="text-success">· ✓</span>' : '')}
           </div>
         </div>
@@ -663,6 +637,7 @@ const DashboardModule = (() => {
     const enriched = ALL_TASKS
       .filter(t => t.threats.some(tid => activeIds.includes(tid)))
       .filter(t => !scenarioTasks || scenarioTasks.has(t.id))
+      .filter(t => isVisibleTask(t, scenarioTasks, profilo))
       .map(t => {
         // Usa il più stringente tra scenario.required e threat.required per quell'asse
         const threatReqForAxis = t.threats
@@ -687,18 +662,54 @@ const DashboardModule = (() => {
           ? 'Nessuna minaccia attiva — configura le impostazioni per ricevere task operative'
           : 'Tutti i requisiti soddisfatti per le minacce attive — mantieni le scorte aggiornate'}</p>
         ${noThreats ? `<button class="btn btn-outline btn-sm mt-12" onclick="navigateTo('settings')">
-          <i class="ph ph-sliders"></i> Apri Dimensioni</button>` : ''}
+          <i class="ph ph-sliders"></i> Apri Piano</button>` : ''}
       </div>`;
     }
 
-    return taskView === 'focus'
-      ? _buildFocus(enriched)
-      : taskView === 'minacce'
-        ? _buildByThreat(enriched, detected, current, required, scenarioId)
-        : _buildByPriority(enriched);
+    const remaining = enriched.filter(t => !t.completed).length;
+    return showAllTasks
+      ? _buildByThreat(enriched, detected, current, required, scenarioId) + _allToggle(remaining, true)
+      : _buildFocus(enriched, profilo) + _allToggle(remaining, false);
   }
 
-  /* Vista: Per Minaccia */
+  /* ── SE SUCCEDE ORA: protocollo a fasi dello scenario scelto ── */
+  const nowOpen = new Set([0]);
+  function _nowToggle(i, open) { open ? nowOpen.add(i) : nowOpen.delete(i); }
+
+  function _buildNow(sc) {
+    if (!sc || !sc.steps || !sc.steps.length) {
+      return `<div class="card now-card now-empty">
+        <div class="now-head"><span class="now-badge"><i class="ph ph-siren"></i> Se succede ora</span></div>
+        <p class="now-desc">Scegli lo scenario che temi di più: qui troverai cosa fare, passo per passo, mentre accade.</p>
+        <button class="btn btn-outline btn-sm" onclick="DashboardModule.openScenarioPicker()">
+          <i class="ph ph-swap"></i> Scegli scenario
+        </button>
+      </div>`;
+    }
+    return `<div class="card now-card">
+      <div class="now-head">
+        <span class="now-badge"><i class="ph ph-siren"></i> Se succede ora</span>
+        <h3><span class="now-emoji">${sc.icon || ''}</span> ${sc.titolo}</h3>
+        ${sc.desc ? `<p class="now-desc">${sc.desc}</p>` : ''}
+      </div>
+      <div class="now-phases">
+        ${sc.steps.map((f, i) => `
+          <details class="now-phase"${nowOpen.has(i) ? ' open' : ''} ontoggle="DashboardModule._nowToggle(${i}, this.open)">
+            <summary><span class="now-num">${i + 1}</span><span class="now-fase">${f.fase}</span><i class="ph ph-caret-down now-caret"></i></summary>
+            <ul class="now-list">${f.azioni.map(a => `<li>${a}</li>`).join('')}</ul>
+          </details>`).join('')}
+      </div>
+    </div>`;
+  }
+
+  function _allToggle(remaining, open) {
+    return `<button class="btn btn-outline btn-sm btn-full mt-12" onclick="DashboardModule.toggleAllTasks()">
+      <i class="ph ${open ? 'ph-caret-up' : 'ph-list-bullets'}"></i>
+      ${open ? 'Mostra solo le 3 principali' : `Vedi tutte le task (${remaining} da fare)`}
+    </button>`;
+  }
+
+  /* Lista completa: raggruppata per minaccia */
   function _buildByThreat(enriched, detected, current, required, scenarioId) {
     const sc = scenarioId && scenarioId !== 'custom'
       ? (window.SCENARI_LIST || []).find(s => s.id === scenarioId) : null;
@@ -747,58 +758,63 @@ const DashboardModule = (() => {
     }).filter(Boolean).join('');
   }
 
-  /* Vista: Focus — top 3 task per impatto massimo */
-  function _buildFocus(enriched) {
-    const top = enriched
-      .filter(t => !t.completed && t.gap > 0)   // solo task con gap reale
-      .map(t => ({ ...t, impact: t.gap * t.scoreBonus }))
-      .sort((a, b) => b.impact - a.impact)
-      .slice(0, 3);
+  /* Focus — 3 azioni verso il PROSSIMO livello: prima acqua e cibo con cifre concrete, poi le task dello scenario */
+  const SYNTH = {};
+  const RANK = [
+    { urgency: 'critico',     label: 'PRIMA' },
+    { urgency: 'urgente',     label: 'POI'   },
+    { urgency: 'pianificato', label: 'DOPO'  },
+  ];
+  const GENERIC_ID = /^(ac|ci|en|ca|co|mo|me|si|sv)\d/;
+  // Fuori dal Focus: ac01/ci01 (30 giorni) già coperti dagli obiettivi di livello; ter03/ter04/bbs01/bbs03 sono
+  // istruzioni da seguire durante l'evento (stanno già in "Se succede ora"), non cose da preparare
+  const FOCUS_SKIP = new Set(['ac01', 'ci01', 'ter03', 'ter04', 'bbs01', 'bbs03']);
+
+  function _buildFocus(enriched, profilo) {
+    Object.keys(SYNTH).forEach(k => delete SYNTH[k]);
+    const lv = computeLevel(profilo);
+    const synth = [];
+    if (lv.next && lv.needAcqua > 0) {
+      synth.push({ id:'lv-acqua', axis:'acqua', tab:'acqua', nav:'settings', guide:'acqua-stoccaggio', threats:[], scoreBonus:0,
+        isAutoTask:true, completed:false, gap:100,
+        text:`Porta l'acqua a ${lv.targetLitri} L: ti mancano ${lv.needAcqua} L (circa ${Math.ceil(lv.needAcqua / 1.5)} bottiglie da 1,5 L)` });
+    }
+    if (lv.next && lv.needCibo > 0) {
+      synth.push({ id:'lv-cibo', axis:'cibo', tab:'cibo', nav:'settings', guide:'cibo-scorte-piano', threats:[], scoreBonus:0,
+        isAutoTask:true, completed:false, gap:100,
+        text:`Porta il cibo a ${lv.next.days} giorni: ti mancano ${lv.needCibo} giorni di scorte (riso, pasta, legumi, scatolette)` });
+    }
+    synth.forEach(t => { SYNTH[t.id] = t; });
+
+    // ac01/ci01 (30 giorni) sono già coperti dagli obiettivi di livello qui sopra
+    const rest = enriched
+      .filter(t => !t.completed && !FOCUS_SKIP.has(t.id))
+      .map(t => ({ ...t, impact: Math.max(0, t.gap) * t.scoreBonus }))
+      // prima le task specifiche dello scenario (es. kit 72h per il terremoto), poi il percorso base
+      .sort((a, b) => ((GENERIC_ID.test(a.id) ? pathIdx(a.id) : -1) - (GENERIC_ID.test(b.id) ? pathIdx(b.id) : -1)) || (b.impact - a.impact));
+
+    const top = [...synth, ...rest].slice(0, 3)
+      .map((t, i) => ({ ...t, urgency: RANK[i].urgency, rankLabel: RANK[i].label }));
 
     if (top.length === 0) return `<div class="tasks-empty">
       <i class="ph ph-check-circle" style="font-size:2rem;color:var(--success);display:block;margin-bottom:8px"></i>
-      <p>Nessun task critico per questo scenario — controlla <strong>Dimensioni</strong> per eventuali deficit non coperti.</p></div>`;
+      <p>Hai completato le azioni principali per questo scenario — controlla <strong>Piano</strong> per eventuali deficit non coperti.</p></div>`;
 
     return `<div class="focus-header">
         <i class="ph ph-crosshair"></i>
-        Le 3 azioni con il massimo impatto sui tuoi punteggi
+        ${lv.next ? `Per arrivare al livello ${lv.next.n} (${lv.next.label})` : 'Mantieni il livello massimo'} — in quest'ordine
       </div>
       <div class="focus-tasks">${top.map((t, i) => `
-        <div class="focus-rank">
+        <div class="focus-rank rank-${i + 1}">
           <span class="focus-num">${i + 1}</span>
           ${renderTaskCard(t)}
         </div>`).join('')}
       </div>`;
   }
 
-  /* Vista: Per Priorità (Kanban) */
-  function _buildByPriority(enriched) {
-    const sorted = [...enriched].sort((a, b) => (a.completed - b.completed) || (b.gap - a.gap));
-    const LEVELS = ['critico','urgente','pianificato'];
-    const LMETA  = {
-      critico:    { label:'CRITICO',     icon:'ph-warning-octagon' },
-      urgente:    { label:'URGENTE',     icon:'ph-warning'         },
-      pianificato:{ label:'PIANIFICATO', icon:'ph-clock'           },
-    };
-    return `<div class="priority-board">` +
-      LEVELS.map(level => {
-        const lt = sorted.filter(t => t.urgency === level);
-        const m  = LMETA[level];
-        return `<div class="priority-col">
-          <div class="priority-col-header ${level}">
-            <i class="ph ${m.icon}"></i><span>${m.label}</span>
-            <span class="priority-col-count">${lt.length}</span>
-          </div>
-          ${lt.length === 0
-            ? `<div class="priority-empty"><i class="ph ph-check"></i> Nessuna</div>`
-            : lt.map(renderTaskCard).join('')}
-        </div>`;
-      }).join('') + `</div>`;
-  }
-
-  /* ── NAVIGA A DIMENSIONI + tab corretto ── */
+  /* ── NAVIGA A PIANO + tab corretto ── */
   function goToTask(taskId) {
-    const t = ALL_TASKS.find(x => x.id === taskId);
+    const t = ALL_TASKS.find(x => x.id === taskId) || SYNTH[taskId];
     if (!t) return;
     if (t.tab) {
       navigateTo('settings');
@@ -825,7 +841,8 @@ const DashboardModule = (() => {
     casa:         'Casa indipendente',
     rurale:       'Casa rurale',
     isolata:      'Casa isolata',
-    tenda:        'Tenda',
+    ospite:       'Ospite / accoglienza',
+    tenda:        'Tenda / veicolo',
     rifugio:      'Rifugio improvvisato',
     nessun_riparo:'Senza riparo',
   };
@@ -834,6 +851,18 @@ const DashboardModule = (() => {
   function render() {
     const root = document.getElementById('dashboard-root');
     if (!root) return;
+
+    if (typeof OnboardingModule !== 'undefined' && !OnboardingModule.isDone()) {
+      root.innerHTML = `<div class="card ob-welcome">
+        <i class="ph ph-shield-check"></i>
+        <h2>Benvenuto in Kit Resilienza</h2>
+        <p>In un minuto ti dico a che <strong>livello di preparazione</strong> sei (72 ore, 2 settimane, 30 giorni) e quale azione fare per prima.</p>
+        <button class="btn btn-primary btn-full" onclick="OnboardingModule.open()">
+          <i class="ph ph-play"></i> Inizia (1 minuto)
+        </button>
+      </div>`;
+      return;
+    }
 
     const profilo = SettingsModule.get();
     const autoDetected = autoDetectThreats(profilo);
@@ -868,130 +897,58 @@ const DashboardModule = (() => {
     const required = computeRequiredScores(activeIds, scenarioId);
     const done     = Storage.get('task-checks') || {};
     const persone  = (profilo.adulti||0) + (profilo.bambini||0) + (profilo.anziani||0);
-    const avgScore = Math.round(Object.values(current).reduce((a,b)=>a+b,0) / 6);
 
     const scenarioTasks = _scenarioTaskIds(scenarioId);
     const visibleTasks = ALL_TASKS
       .filter(t => t.threats.some(tid => activeIds.includes(tid)))
-      .filter(t => !scenarioTasks || scenarioTasks.has(t.id));
+      .filter(t => !scenarioTasks || scenarioTasks.has(t.id))
+      .filter(t => isVisibleTask(t, scenarioTasks, profilo));
     const completedVisible = visibleTasks.filter(t => t.resolve ? t.resolve(profilo) : !!done[t.id]).length;
     const progressPct      = visibleTasks.length > 0 ? Math.round(completedVisible / visibleTasks.length * 100) : 0;
 
-    // Status banner
-    let bannerCls = 'ok', bannerIcon = 'ph-check-circle', bannerLabel = 'PRONTO';
-    if (detected.length > 0) {
-      const maxGap = Math.max(...AXES.map(ax => Math.max(0, (required[ax.id]||0) - (current[ax.id]||0))));
-      if (maxGap > 45) { bannerCls='danger';  bannerIcon='ph-warning-octagon'; bannerLabel='SITUAZIONE CRITICA'; }
-      else if (maxGap > 20) { bannerCls='warning'; bannerIcon='ph-warning';         bannerLabel='ATTENZIONE RICHIESTA'; }
-      else { bannerCls='ok'; bannerIcon='ph-check-circle'; bannerLabel='PREPARAZIONE ADEGUATA'; }
-    }
+    const scObj = scenarioId && scenarioId !== 'custom' ? (window.SCENARI_LIST || []).find(s => s.id === scenarioId) : null;
+    // Banner: livello di preparazione (acqua + cibo)
+    const lv = computeLevel(profilo);
+    const bannerCls  = ['danger', 'warning', 'warning', 'ok'][lv.level.n];
+    const bannerIcon = ['ph-warning-octagon', 'ph-warning', 'ph-warning', 'ph-check-circle'][lv.level.n];
+    const bannerLabel = lv.level.n === 0 ? 'DA INIZIARE' : `LIVELLO ${lv.level.n} DI 3`;
+    const nextHint = lv.next
+      ? `Per il livello ${lv.next.n} (${lv.next.label}): ${[
+          lv.needAcqua > 0 ? `+${lv.needAcqua} L di acqua` : '',
+          lv.needCibo > 0 ? `+${lv.needCibo} giorni di cibo` : '',
+        ].filter(Boolean).join(' e ') || 'completa le azioni qui sotto'}`
+      : 'Ottimo livello: mantieni scorte e rotazione.';
 
     root.innerHTML = `
-      ${_buildOfflineCard()}
-      <!-- STATUS -->
+      <!-- STATUS: livello + percorso 72h / 2 sett / 30gg -->
       <div class="status-banner ${bannerCls}">
         <i class="ph ${bannerIcon}"></i>
         <div class="status-banner-text">
           <strong>${bannerLabel}</strong>
-          ${detected.length > 0 ? `— ${detected.length} minaccia/e rilevata/e` : ' — nessuna minaccia rilevata'}
+          — ${lv.level.n === 0 ? 'meno di 72 ore di autonomia' : lv.level.label + ' di autonomia'}
+          <div class="banner-next">${nextHint}</div>
           <button class="banner-scenario-chip${scenarioName ? '' : ' banner-scenario-chip-empty'}" onclick="DashboardModule.openScenarioPicker()">
             <i class="ph ${scenarioName ? 'ph-warning-octagon' : 'ph-swap'}"></i>
-            ${scenarioName || 'Cambia scenario'}
+            ${scenarioName || 'Scegli uno scenario'}
           </button>
         </div>
-        <div class="status-banner-score">${avgScore}<span style="font-size:0.65rem;opacity:0.7">/100</span></div>
+        <div class="level-track" role="img" aria-label="Livello ${lv.level.n} di 3">
+          ${LEVELS.slice(1).map(l => `
+            <div class="lt-step ${lv.level.n >= l.n ? 'done' : lv.level.n + 1 === l.n ? 'next' : ''}">
+              <span class="lt-dot">${lv.level.n >= l.n ? '<i class="ph ph-check-bold"></i>' : l.n}</span>
+              <span class="lt-lab">${l.label}</span>
+            </div>`).join('<span class="lt-line"></span>')}
+        </div>
       </div>
 
-      <!-- PROFILO QUICK -->
-      <div class="profile-quick">
-        <div class="profile-chip" onclick="navigateTo('settings')" title="Modifica">
-          <i class="ph ph-users"></i>${persone > 0 ? persone+' persone' : 'Configura profilo →'}
-        </div>
-        ${profilo.tipo_abitazione ? `<div class="profile-chip">
-          <i class="ph ph-house-simple"></i>${TIPO_LABEL[profilo.tipo_abitazione] || profilo.tipo_abitazione}
-        </div>` : ''}
-        <div class="profile-chip">
-          <i class="ph ph-thermometer"></i>${profilo.temp_now != null ? profilo.temp_now+'°C ora' : '—'}
-          · min ${profilo.temp_min}° / max ${profilo.temp_max}°
-        </div>
-        <div class="profile-chip">
-          <i class="ph ph-drop"></i>${profilo.acqua_scorte_litri||0}L acqua
-        </div>
-        <div class="profile-chip">
-          <i class="ph ph-fork-knife"></i>${profilo.cibo_scorte_giorni||0}gg cibo
-        </div>
-        <button class="profile-chip profile-chip-btn" onclick="navigateTo('settings')">
-          <i class="ph ph-gear"></i> Modifica
-        </button>
-      </div>
-
-      <!-- MINACCE AUTO-RILEVATE -->
-      <div class="card">
-        <h3><i class="ph ph-target"></i> Minacce Rilevate Automaticamente</h3>
-        <p class="text-secondary text-sm mb-16">
-          Basate sulle impostazioni profilo — aggiorna le scorte per risolvere le minacce
-        </p>
-        ${detected.length === 0
-          ? `<div class="threats-ok"><i class="ph ph-shield-check"></i> Nessuna minaccia critica rilevata — continua ad aggiornare le scorte</div>`
-          : `<div class="threat-grid">
-              ${detected.map(t => {
-                const tDef = THREATS.find(x => x.id === t.id);
-                // Threat risolta se tutti gli assi sono sopra il più stringente tra threat.required e scenario.required
-                const satisfied = tDef
-                  ? Object.keys(tDef.required).every(k => {
-                      const eff = Math.max(tDef.required[k] || 0, required[k] || 0);
-                      return (current[k] || 0) >= eff;
-                    })
-                  : false;
-                return `<div class="threat-card ${satisfied ? 'threat-card-satisfied' : 'threat-card-active'}">
-                  <div class="threat-card-top">
-                    <i class="ph ${satisfied ? 'ph-shield-check' : t.icon}"></i>
-                    <span class="threat-card-label">${t.label}</span>
-                    ${satisfied ? '<span class="threat-card-ok">OK</span>' : ''}
-                  </div>
-                  <div class="threat-card-reason">${t.reason}</div>
-                </div>`;
-              }).join('')}
-            </div>`}
-      </div>
-
-      <!-- RADAR + TIMELINE -->
-      <div class="radar-timeline-grid">
-        <div class="card">
-          <h3><i class="ph ph-chart-polar"></i> Prontezza</h3>
-          <div class="radar-container">${buildRadar(current, required)}</div>
-          <div class="text-center text-xs text-secondary mt-8">
-            Score medio: <span class="text-accent font-mono">${avgScore}/100</span>
-          </div>
-        </div>
-        <div class="card">
-          <h3><i class="ph ph-chart-bar"></i> Risorse</h3>
-          ${buildTimeline(current, profilo, activeIds, scenarioId)}
-          <button class="btn btn-outline btn-sm btn-full mt-16" onclick="navigateTo('settings')">
-            <i class="ph ph-pencil"></i> Aggiorna scorte
-          </button>
-        </div>
-      </div>
+      <!-- SE SUCCEDE ORA -->
+      ${_buildNow(scObj)}
 
       <!-- TASK OPERATIVE -->
       <div class="card">
         <div class="task-board-header">
-          <h3><i class="ph ph-list-checks"></i> Task Operative</h3>
+          <h3><i class="ph ph-list-checks"></i> Cosa fare ora</h3>
           <div class="task-board-controls">
-            <div class="task-view-toggle">
-              <button class="tvt-btn${taskView === 'focus' ? ' active' : ''}"
-                onclick="DashboardModule.setView('focus')" title="Top 3 task per impatto massimo">
-                <i class="ph ph-crosshair"></i> Focus
-              </button>
-              <button class="tvt-btn${taskView === 'minacce' ? ' active' : ''}"
-                onclick="DashboardModule.setView('minacce')">
-                <i class="ph ph-target"></i> Minacce
-              </button>
-              <button class="tvt-btn${taskView === 'priorita' ? ' active' : ''}"
-                onclick="DashboardModule.setView('priorita')">
-                <i class="ph ph-kanban"></i> Priorità
-              </button>
-            </div>
             <div class="task-progress-wrap">
               <span class="task-progress-label">${completedVisible}/${visibleTasks.length}</span>
               <div class="task-progress-bar">
@@ -1001,6 +958,28 @@ const DashboardModule = (() => {
           </div>
         </div>
         ${buildTaskBoard(current, required, activeIds, detected, done, profilo)}
+      </div>
+
+      <!-- RISORSE -->
+      <div class="card">
+        <h3><i class="ph ph-chart-bar"></i> Le tue scorte</h3>
+        ${buildResources(current, profilo)}
+        <button class="btn btn-outline btn-sm btn-full mt-16" onclick="navigateTo('settings')">
+          <i class="ph ph-pencil"></i> Aggiorna scorte
+        </button>
+      </div>
+
+      <!-- PROFILO -->
+      <div class="profile-quick">
+        <button class="profile-chip profile-chip-btn" onclick="navigateTo('settings')">
+          <i class="ph ph-users"></i>${persone > 0 ? persone + (persone === 1 ? ' persona' : ' persone') : 'Configura profilo'}
+        </button>
+        ${profilo.tipo_abitazione ? `<div class="profile-chip">
+          <i class="ph ph-house-simple"></i>${TIPO_LABEL[profilo.tipo_abitazione] || profilo.tipo_abitazione}
+        </div>` : ''}
+        <button class="profile-chip profile-chip-btn" onclick="navigateTo('settings')">
+          <i class="ph ph-gear"></i> Modifica profilo
+        </button>
       </div>
     `;
   }
@@ -1022,5 +1001,5 @@ const DashboardModule = (() => {
 
   function init() { render(); }
 
-  return { init, render, toggleTask, setView, openGuide, goToTask, openScenarioPicker, _pickScenario, downloadGuidesPack, downloadMapPack };
+  return { init, render, computeLevel, _nowToggle, toggleTask, toggleAllTasks, refreshOfflineCard, openGuide, goToTask, openScenarioPicker, _pickScenario, downloadGuidesPack, downloadMapPack };
 })();

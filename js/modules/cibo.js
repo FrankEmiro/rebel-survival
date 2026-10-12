@@ -212,11 +212,18 @@ const CiboModule = (() => {
   }
 
   function init() {
-    if (initialized) return;
+    if (initialized) { prefill(); return; }
     const root = document.getElementById('cibo-root');
     if (!root) return;
     root.innerHTML = HTML;
     initialized = true;
+    prefill();
+  }
+
+  function prefill() {
+    const p = SettingsModule.get();
+    Utils.prefill({ 'cb-adulti': p.adulti, 'cb-anziani': p.anziani, 'cb-bambini': p.bambini });
+    calculate();
   }
 
   return { init, calculate, print };

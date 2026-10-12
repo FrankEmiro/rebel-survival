@@ -170,6 +170,7 @@ const GuideModule = (() => {
     initialized = true;
 
     root.innerHTML = `
+      <div id="offline-pack-slot"></div>
       <div class="alert alert-success mb-12">
         <i class="ph ph-wifi-slash"></i>
         <div><strong>${GUIDES_DATA.length} guide disponibili offline</strong> — nessuna connessione necessaria.</div>
@@ -227,6 +228,7 @@ const GuideModule = (() => {
       </div>
     `;
 
+    if (typeof DashboardModule !== 'undefined') DashboardModule.refreshOfflineCard();
     _renderList();
   }
 

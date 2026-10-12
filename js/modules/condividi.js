@@ -66,7 +66,7 @@ const CondividiModule = (() => {
       return `
         <div class="alert alert-warning">
           <span>⚠️</span>
-          <div>Il piano salvato è troppo grande (${bytes} byte) per un singolo QR code (limite ~${QR_MAX_BYTES} byte). Usa <strong>Esporta</strong> nelle Dimensioni per condividere il file JSON completo.</div>
+          <div>Il piano salvato è troppo grande (${bytes} byte) per un singolo QR code (limite ~${QR_MAX_BYTES} byte). Usa <strong>Esporta</strong> nelle Piano per condividere il file JSON completo.</div>
         </div>`;
     }
     return `

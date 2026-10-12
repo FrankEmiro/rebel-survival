@@ -50,11 +50,11 @@ const AcquaModule = (() => {
         <div class="two-col mb-16">
           <div class="mini-card">
             <div class="value" id="aq-res-min">—</div>
-            <div class="label">Litri MINIMI totali</div>
+            <div class="label">Litri minimi (bere e cucinare)</div>
           </div>
           <div class="mini-card">
             <div class="value" id="aq-res-rac">—</div>
-            <div class="label">Litri RACCOMANDATI totali</div>
+            <div class="label">Litri consigliati (con igiene)</div>
           </div>
         </div>
         <div class="result-row"><span class="result-label">Fabbisogno minimo/giorno</span><span class="result-value accent" id="aq-res-min-day">—</span></div>
@@ -86,8 +86,8 @@ const AcquaModule = (() => {
     const tetto    = Utils.num(document.getElementById('aq-tetto').value, 0);
 
     const climaMult = clima === 'caldo' ? 1.3 : clima === 'freddo' ? 0.85 : 1;
-    const minDay    = 2.5 * climaMult;   // L/persona/giorno minimo
-    const racDay    = 5   * climaMult;   // L/persona/giorno raccomandato
+    const minDay    = Utils.WATER_L_PPD * climaMult;   // bere + cucinare (stessa regola di Home e Piano)
+    const racDay    = 5   * climaMult;   // consigliato: include igiene di base
 
     const minDayTot = +(persone * minDay).toFixed(1);
     const racDayTot = +(persone * racDay).toFixed(1);
@@ -147,7 +147,7 @@ const AcquaModule = (() => {
   }
 
   function init() {
-    if (initialized) return;
+    if (initialized) { prefill(); return; }
     const root = document.getElementById('acqua-root');
     if (!root) return;
     root.innerHTML = HTML;
@@ -158,6 +158,18 @@ const AcquaModule = (() => {
     });
 
     initialized = true;
+    prefill();
+  }
+
+  function prefill() {
+    const p = SettingsModule.get();
+    Utils.prefill({
+      'aq-persone': SettingsModule.getTotalPeople(),
+      'aq-tetto': p.tetto_mq,
+      'aq-pioggia': p.ha_pioggia ? 'si' : 'no',
+    });
+    document.getElementById('aq-tetto-group').style.display = p.ha_pioggia ? 'block' : 'none';
+    calculate();
   }
 
   return { init, calculate };

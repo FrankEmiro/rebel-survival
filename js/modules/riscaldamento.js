@@ -199,11 +199,22 @@ const RiscaldamentoModule = (() => {
   }
 
   function init() {
-    if (initialized) return;
+    if (initialized) { prefill(); return; }
     const root = document.getElementById('riscaldamento-root');
     if (!root) return;
     root.innerHTML = HTML;
     initialized = true;
+    prefill();
+  }
+
+  function prefill() {
+    const p = SettingsModule.get();
+    const comb = p.risc_legna ? 'legna' : p.risc_pellet ? 'pellet' : p.risc_gpl ? 'gpl' : null;
+    Utils.prefill({
+      'ri-mq': p.mq, 'ri-isolamento': p.isolamento, 'ri-zona': p.ri_zona,
+      'ri-combustibile': comb, 'ri-scorta': p.combustibile_kg,
+    });
+    calculate();
   }
 
   return { init, calculate };

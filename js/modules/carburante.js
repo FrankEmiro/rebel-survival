@@ -150,11 +150,21 @@ const CarburanteModule = (() => {
   }
 
   function init() {
-    if (initialized) return;
+    if (initialized) { prefill(); return; }
     const root = document.getElementById('carburante-root');
     if (!root) return;
     root.innerHTML = HTML;
     initialized = true;
+    prefill();
+  }
+
+  function prefill() {
+    const p = SettingsModule.get();
+    Utils.prefill({
+      'ca-tipo': p.ca_tipo, 'ca-consumo': p.ca_consumo, 'ca-serbatoio': p.ca_serbatoio,
+      'ca-km-sett': p.km_settimana, 'ca-scorta': p.carburante_litri,
+    });
+    calculate();
   }
 
   return { init, calculate };

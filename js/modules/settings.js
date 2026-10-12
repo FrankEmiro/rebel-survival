@@ -47,7 +47,7 @@ const SettingsModule = (() => {
     { id: 'sicurezza',label: 'Sicurezza',icon: 'ph-shield-check' },
   ];
 
-  let activeTab = 'scenario';
+  let activeTab = 'profilo';
 
   /* ── GET ── */
   function get() { return { ...DEFAULTS, ...(Storage.get('profilo') || {}) }; }
@@ -59,6 +59,7 @@ const SettingsModule = (() => {
   /* ── TAB SWITCH ── */
   function _tab(id) {
     activeTab = id;
+    if (!PRIMARY_TABS.includes(id)) moreOpen = true;
     // Re-render tab bar so completeness pills update
     const bar = document.querySelector('.settings-tab-bar');
     if (bar) bar.outerHTML = _tabBar();
@@ -170,12 +171,10 @@ const SettingsModule = (() => {
 
   function _rAcqua(p) {
     const persone = (p.adulti || 2) + (p.bambini || 0) * 0.7 + (p.anziani || 0) * 0.9;
-    // OMS: 2L bere + 1L cottura + 5L igiene base = 8L/persona/giorno (minimo dignità)
-    // Sopravvivenza pura: 2L/giorno — mostriamo entrambi
-    const litriGiorno = persone * 8;
+    // Stessa regola di Home e task: Utils.WATER_L_PPD L/persona/giorno (bere + cucinare)
+    const litriGiorno = persone * Utils.WATER_L_PPD;
     const giorni = Math.round((p.acqua_scorte_litri || 0) / Math.max(1, litriGiorno));
-    const giorni2L = Math.round((p.acqua_scorte_litri || 0) / Math.max(1, persone * 2));
-    const sub = `autonomia (8L/p) · sopravv. ${giorni2L}gg`;
+    const sub = `autonomia (${Utils.WATER_L_PPD} L/persona/giorno)`;
     _badge('sr-acqua', giorni + 'gg', sub, giorni >= 30 ? 'good' : giorni >= 7 ? 'warn' : 'bad');
   }
   function _rCibo(p) {
@@ -509,18 +508,35 @@ const SettingsModule = (() => {
   }
 
   /* ── HTML BUILDERS ── */
+  const PRIMARY_TABS = ['profilo', 'acqua', 'cibo', 'energia', 'calore'];
+  let moreOpen = false;
+
+  function _tabBtn(t) {
+    const comp = _tabCompleteness(t.id);
+    const pillHtml = comp
+      ? `<span class="stab-pill ${comp.pct >= 100 ? 'stab-pill-done' : comp.pct >= 50 ? 'stab-pill-mid' : 'stab-pill-low'}">${comp.filled}/${comp.total}</span>`
+      : '';
+    return `<button class="stab-btn${t.id === activeTab ? ' active' : ''}" data-tab="${t.id}"
+      onclick="SettingsModule._tab('${t.id}')">
+      <i class="ph ${t.icon}"></i><span>${t.label}</span>${pillHtml}
+    </button>`;
+  }
+
+  function _toggleMore() {
+    moreOpen = !moreOpen;
+    const bar = document.querySelector('.settings-tab-bar');
+    if (bar) bar.outerHTML = _tabBar();
+  }
+
   function _tabBar() {
+    const primary = TABS.filter(t => PRIMARY_TABS.includes(t.id));
+    const more = TABS.filter(t => !PRIMARY_TABS.includes(t.id));
     return `<div class="settings-tab-bar">
-      ${TABS.map(t => {
-        const comp = _tabCompleteness(t.id);
-        const pillHtml = comp
-          ? `<span class="stab-pill ${comp.pct >= 100 ? 'stab-pill-done' : comp.pct >= 50 ? 'stab-pill-mid' : 'stab-pill-low'}">${comp.filled}/${comp.total}</span>`
-          : '';
-        return `<button class="stab-btn${t.id === activeTab ? ' active' : ''}" data-tab="${t.id}"
-          onclick="SettingsModule._tab('${t.id}')">
-          <i class="ph ${t.icon}"></i><span>${t.label}</span>${pillHtml}
-        </button>`;
-      }).join('')}
+      ${primary.map(_tabBtn).join('')}
+      <button class="stab-btn stab-more${moreOpen ? ' active' : ''}" onclick="SettingsModule._toggleMore()">
+        <i class="ph ph-dots-three-circle"></i><span>Altro</span>
+      </button>
+      ${moreOpen ? more.map(_tabBtn).join('') : ''}
     </div>`;
   }
 
@@ -559,6 +575,7 @@ const SettingsModule = (() => {
           <option value="casa" selected>Casa indipendente</option>
           <option value="rurale">Casa rurale / campagna</option>
           <option value="isolata">Isolata / fuori rete</option>
+          <option value="ospite">Ospite / centro accoglienza</option>
           <optgroup label="── Emergenza ──">
             <option value="tenda">Tenda / accampamento</option>
             <option value="rifugio">Rifugio improvvisato</option>
@@ -616,8 +633,7 @@ const SettingsModule = (() => {
       </div>
     </div>
 
-    <div class="card">
-      <h3><i class="ph ph-thermometer"></i> Clima Locale</h3>
+    <details class="card adv-card"><summary><i class="ph ph-thermometer"></i> Clima Locale <span class="adv-tag">opzionale</span></summary>
       <p class="text-secondary text-sm mb-16">Usato per calcolare riscaldamento, scoring e auto-rilevamento minacce.</p>
       <div class="temp-now-row">
         <div class="temp-now-label"><i class="ph ph-thermometer-hot"></i><span>Temperatura <strong>ORA</strong></span></div>
@@ -643,7 +659,7 @@ const SettingsModule = (() => {
         </div>
       </div>
       <div id="s-climate-vis" class="climate-vis mt-16"></div>
-    </div>
+    </details>
   `; }
 
   function _htmlAcqua() { return `
@@ -748,8 +764,7 @@ const SettingsModule = (() => {
         </div>
       </div>
     </div>
-    <div class="card">
-      <h3><i class="ph ph-calendar"></i> Stagione Attuale</h3>
+    <details class="card adv-card"><summary><i class="ph ph-calendar"></i> Stagione Attuale <span class="adv-tag">opzionale</span></summary>
       <select id="s-en-stagione">
         <option value="estate">Estate (max produzione solare)</option>
         <option value="primavera" selected>Primavera / Autunno</option>
@@ -759,7 +774,7 @@ const SettingsModule = (() => {
       <button class="btn btn-outline btn-sm btn-full mt-12" onclick="navigateTo('energia')">
         <i class="ph ph-calculator"></i> Calcolatore autonomia dettagliato →
       </button>
-    </div>
+    </details>
   `; }
 
   function _htmlCalore() { return `
@@ -783,8 +798,7 @@ const SettingsModule = (() => {
         <span class="form-hint">Legna, pellet o GPL in kg equivalenti</span>
       </div>
     </div>
-    <div class="card">
-      <h3><i class="ph ph-map-pin"></i> Zona Climatica</h3>
+    <details class="card adv-card"><summary><i class="ph ph-map-pin"></i> Zona Climatica <span class="adv-tag">opzionale</span></summary>
       <select id="s-ri-zona">
         <option value="a">A – Siracusa, Lampedusa (GG 600)</option>
         <option value="b">B – Palermo, Napoli (GG 900)</option>
@@ -796,7 +810,7 @@ const SettingsModule = (() => {
       <button class="btn btn-outline btn-sm btn-full mt-12" onclick="navigateTo('riscaldamento')">
         <i class="ph ph-calculator"></i> Calcolatore combustibile dettagliato →
       </button>
-    </div>
+    </details>
   `; }
 
   function _htmlComm() { return `
@@ -1153,6 +1167,7 @@ const SettingsModule = (() => {
     if (!confirm('Azzerare tutte le dimensioni e i task manuali? I dati salvati verranno eliminati.')) return;
     Storage.set('profilo', {});
     Storage.set('task-checks', {});
+    Storage.remove('onboarded');
     init();
     if (typeof DashboardModule !== 'undefined') DashboardModule.render();
   }
@@ -1216,25 +1231,31 @@ const SettingsModule = (() => {
 
     root.innerHTML = `
       <div class="settings-intro">
-        <p class="text-secondary text-sm">Ogni modifica si salva automaticamente e aggiorna il Dashboard in tempo reale.</p>
-        <div class="settings-intro-actions">
-          <button class="btn-reset-dim" onclick="SettingsModule.exportData()" title="Scarica backup JSON">
-            <i class="ph ph-download-simple"></i> Esporta
-          </button>
-          <button class="btn-reset-dim" onclick="SettingsModule.importData()" title="Ripristina da backup JSON">
-            <i class="ph ph-upload-simple"></i> Importa
-          </button>
-          <button class="btn-reset-dim" onclick="CondividiModule.open()" title="Condividi il piano via QR code">
-            <i class="ph ph-qr-code"></i> Condividi
-          </button>
-          <button class="btn-reset-dim btn-reset-danger" onclick="SettingsModule.reset()">
-            <i class="ph ph-arrow-counter-clockwise"></i> Azzera
-          </button>
-        </div>
+        <p class="text-secondary text-sm">Compila solo ciò che hai: ogni modifica si salva da sola e aggiorna la Home.</p>
+        <details class="settings-backup">
+          <summary><i class="ph ph-gear"></i> Backup e opzioni</summary>
+          <div class="settings-intro-actions">
+            <button class="btn-reset-dim" onclick="SettingsModule.exportData()" title="Scarica backup JSON">
+              <i class="ph ph-download-simple"></i> Esporta
+            </button>
+            <button class="btn-reset-dim" onclick="SettingsModule.importData()" title="Ripristina da backup JSON">
+              <i class="ph ph-upload-simple"></i> Importa
+            </button>
+            <button class="btn-reset-dim" onclick="CondividiModule.open()" title="Condividi il piano via QR code">
+              <i class="ph ph-qr-code"></i> Condividi
+            </button>
+            <button class="btn-reset-dim" onclick="OnboardingModule.open()" title="Rifai le 4 domande iniziali">
+              <i class="ph ph-play"></i> Rifai setup
+            </button>
+            <button class="btn-reset-dim btn-reset-danger" onclick="SettingsModule.reset()">
+              <i class="ph ph-arrow-counter-clockwise"></i> Azzera
+            </button>
+          </div>
+        </details>
       </div>
       ${_tabBar()}
-      <div class="stab-panel" id="stab-scenario"></div>
-      <div class="stab-panel hidden" id="stab-profilo">${_htmlProfilo()}</div>
+      <div class="stab-panel hidden" id="stab-scenario"></div>
+      <div class="stab-panel" id="stab-profilo">${_htmlProfilo()}</div>
       <div class="stab-panel hidden" id="stab-acqua">${_htmlAcqua()}</div>
       <div class="stab-panel hidden" id="stab-cibo">${_htmlCibo()}</div>
       <div class="stab-panel hidden" id="stab-energia">${_htmlEnergia()}</div>
@@ -1261,5 +1282,5 @@ const SettingsModule = (() => {
     _renderScenarioTab();
   }
 
-  return { init, save, reset, exportData, importData, setField, get, getTotalPeople, _onTipoChange, _onTempChange, _autoSave, _tab, selectScenario, _toggleScCheck, _resetScCheck, toggleCustomThreat };
+  return { init, save, reset, exportData, importData, setField, get, getTotalPeople, _onTipoChange, _onTempChange, _autoSave, _tab, _toggleMore, selectScenario, _toggleScCheck, _resetScCheck, toggleCustomThreat };
 })();

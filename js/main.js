@@ -9,11 +9,10 @@ const SECTION_TITLES = {
   energia: 'Energia',
   riscaldamento: 'Riscaldamento',
   carburante: 'Carburante',
-  budget: 'Budget',
   kit: 'Kit & Lista Spesa',
   guide: 'Guide Offline',
-  settings: 'Dimensioni',
-  strumenti: 'Strumenti di Campo',
+  settings: 'Piano',
+  strumenti: 'Emergenza',
 };
 
 // Sezione corrente
@@ -70,6 +69,24 @@ function navigateTo(section) {
   initSection(section);
 }
 
+// Calcolatori di dettaglio: raggiungibili solo dal Piano → mostra "← Piano"
+const CALC_SECTIONS = ['acqua', 'cibo', 'energia', 'riscaldamento', 'carburante'];
+
+function addCalcBackButtons() {
+  CALC_SECTIONS.forEach(id => {
+    const header = document.querySelector('#section-' + id + ' .section-header');
+    if (!header || header.querySelector('.calc-back')) return;
+    const btn = document.createElement('button');
+    btn.className = 'btn btn-outline btn-sm calc-back';
+    btn.innerHTML = '<i class="ph ph-arrow-left"></i> Piano';
+    btn.addEventListener('click', () => {
+      navigateTo('settings');
+      setTimeout(() => SettingsModule._tab(id === 'riscaldamento' ? 'calore' : id === 'carburante' ? 'mobilita' : id), 0);
+    });
+    header.prepend(btn);
+  });
+}
+
 function initSection(section) {
   switch (section) {
     case 'home':        DashboardModule.init(); break;
@@ -78,7 +95,6 @@ function initSection(section) {
     case 'energia':     EnergiaModule.init(); break;
     case 'riscaldamento': RiscaldamentoModule.init(); break;
     case 'carburante':  CarburanteModule.init(); break;
-    case 'budget':      BudgetModule.init(); break;
     case 'kit':         KitModule.init(); switchKitTab('kit'); break;
     case 'guide':       GuideModule.init(); break;
     case 'settings':    SettingsModule.init(); break;
@@ -128,6 +144,7 @@ function initDisclaimer() {
   btn.addEventListener('click', () => {
     overlay.classList.add('hidden');
     localStorage.setItem('disclaimer_accepted', '1');
+    OnboardingModule.maybeStart();
   });
 
   if (!localStorage.getItem('disclaimer_accepted')) {
@@ -138,8 +155,10 @@ function initDisclaimer() {
 // App init
 document.addEventListener('DOMContentLoaded', () => {
   bindNavClicks();
+  addCalcBackButtons();
   initOfflineDetection();
   registerSW();
   initDisclaimer();
   navigateTo('home');
+  if (localStorage.getItem('disclaimer_accepted')) OnboardingModule.maybeStart();
 });

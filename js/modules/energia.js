@@ -233,7 +233,7 @@ const EnergiaModule = (() => {
   }
 
   function init() {
-    if (initialized) return;
+    if (initialized) { prefill(); return; }
     const root = document.getElementById('energia-root');
     if (!root) return;
     root.innerHTML = HTML;
@@ -241,6 +241,16 @@ const EnergiaModule = (() => {
     DISPOSITIVI.forEach(d => { selectedDevices[d.id] = d.priorita <= 7; });
     renderDevices();
     initialized = true;
+    prefill();
+  }
+
+  function prefill() {
+    const p = SettingsModule.get();
+    Utils.prefill({
+      'en-pannelli': p.pannelli_wp, 'en-batteria': p.batteria_kwh,
+      'en-generatore': p.generatore_w, 'en-stagione': p.en_stagione,
+    });
+    calculate();
   }
 
   return { init, calculate, addCustom, toggleDevice };
