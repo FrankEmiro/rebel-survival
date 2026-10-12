@@ -5,6 +5,7 @@ const SettingsModule = (() => {
 
   const DEFAULTS = {
     adulti: 2, bambini: 0, anziani: 0,
+    ha_animali: false, mobilita_ridotta: false, ha_neonato: false,
     tipo_abitazione: 'casa', mq: 80, isolamento: 'medio',
     riparo_materiale: 'tenda_da_campeggio', riparo_mq: 6,
     temp_now: 18, temp_min: 0, temp_max: 32, pioggia_mm: 700,
@@ -85,6 +86,9 @@ const SettingsModule = (() => {
       adulti: Math.round(n('s-adulti', 2)),
       bambini: Math.round(n('s-bambini', 0)),
       anziani: Math.round(n('s-anziani', 0)),
+      ha_animali: c('s-ha-animali'),
+      mobilita_ridotta: c('s-mobilita-ridotta'),
+      ha_neonato: c('s-ha-neonato'),
       tipo_abitazione: tipo,
       mq: ext ? 0 : Math.round(n('s-mq', 80)),
       isolamento: ext ? 'scarso' : s('s-isolamento', 'medio'),
@@ -564,6 +568,12 @@ const SettingsModule = (() => {
           <input type="number" id="s-anziani" min="0" max="10" value="0">
         </div>
       </div>
+      <label class="check-option"><input type="checkbox" id="s-ha-neonato">
+        <span><i class="ph ph-baby"></i> C'è un neonato (sotto 1 anno)</span></label>
+      <label class="check-option"><input type="checkbox" id="s-mobilita-ridotta">
+        <span><i class="ph ph-wheelchair"></i> Qualcuno fa fatica a muoversi o a usare le scale</span></label>
+      <label class="check-option"><input type="checkbox" id="s-ha-animali">
+        <span><i class="ph ph-paw-print"></i> Ho animali domestici</span></label>
     </div>
 
     <div class="card">
@@ -1072,6 +1082,7 @@ const SettingsModule = (() => {
     sc('s-has-internet', p.has_internet ?? true);
     sv('s-tipo-internet', p.tipo_internet || 'fibra');
     sc('s-has-radio',    p.has_radio);
+    sc('s-ha-neonato', p.ha_neonato); sc('s-mobilita-ridotta', p.mobilita_ridotta); sc('s-ha-animali', p.ha_animali);
     sc('s-has-walkie',   p.has_walkie);
     sc('s-has-sat-phone', p.has_sat_phone);
     sc('s-has-mesh',     p.has_mesh);
@@ -1123,6 +1134,9 @@ const SettingsModule = (() => {
     risc_pellet:            's-risc-pellet',
     risc_gpl:               's-risc-gpl',
     has_radio:              's-has-radio',
+    ha_animali:             's-ha-animali',
+    mobilita_ridotta:       's-mobilita-ridotta',
+    ha_neonato:             's-ha-neonato',
     has_walkie:             's-has-walkie',
     has_sat_phone:          's-has-sat-phone',
     has_mesh:               's-has-mesh',

@@ -53,6 +53,7 @@ const OnboardingModule = (() => {
     const p = SettingsModule.get();
     data = {
       adulti: p.adulti || 2, bambini: p.bambini || 0, anziani: p.anziani || 0,
+      ha_neonato: !!p.ha_neonato, mobilita_ridotta: !!p.mobilita_ridotta, ha_animali: !!p.ha_animali,
       shelter_key: p.riparo_materiale === 'veicolo' ? 'auto' : (p.tipo_abitazione || 'casa'),
       show_all_scenari: false, clima_key: null,
       scenario_id: p.scenario_id || null,
@@ -100,7 +101,16 @@ const OnboardingModule = (() => {
           <p class="ob-sub">Servono per calcolare quanta acqua e cibo ti servono.</p>
           ${_stepper('adulti', 'Adulti', '', 1)}
           ${_stepper('bambini', 'Bambini', 'sotto i 14 anni', 0)}
-          ${_stepper('anziani', 'Anziani', 'over 65', 0)}`;
+          ${_stepper('anziani', 'Anziani', 'over 65', 0)}
+          <label class="check-option ob-check"><input type="checkbox" ${data.ha_neonato ? 'checked' : ''}
+            onchange="OnboardingModule._set('ha_neonato', this.checked, true)">
+            <span><i class="ph ph-baby"></i> C'è un neonato (sotto 1 anno)</span></label>
+          <label class="check-option ob-check"><input type="checkbox" ${data.mobilita_ridotta ? 'checked' : ''}
+            onchange="OnboardingModule._set('mobilita_ridotta', this.checked, true)">
+            <span><i class="ph ph-wheelchair"></i> Qualcuno fa fatica a muoversi o a usare le scale</span></label>
+          <label class="check-option ob-check"><input type="checkbox" ${data.ha_animali ? 'checked' : ''}
+            onchange="OnboardingModule._set('ha_animali', this.checked, true)">
+            <span><i class="ph ph-paw-print"></i> Ho animali domestici</span></label>`;
       case 'casa':
         return `<h2>Dove ti trovi?</h2>
           <p class="ob-sub">Cambia i consigli su riparo, calore e scorte.</p>

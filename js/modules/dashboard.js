@@ -690,11 +690,28 @@ const DashboardModule = (() => {
   // Protocollo appiattito: ogni azione è un passo (con il nome della fase di appartenenza)
   // Senza veicolo si saltano i passi su carburante e catene
   const NEEDS_VEHICLE = /carburante|il pieno|Metti in moto l'auto|Catene a bordo/;
+  // Passi in più per chi ha neonati, persone con difficoltà di movimento o animali (sono ovunque dopo la prima fase)
+  const _extraPhase = p => {
+    const azioni = [];
+    if (p.mobilita_ridotta) azioni.push(
+      'Chi fa fatica a muoversi: non lasciarlo solo e non usare l\'ascensore. Quando chiami il 112 dillo subito',
+      'Scegli un percorso senza scale e chiedi aiuto a un vicino prima che serva');
+    if (p.ha_neonato) azioni.push(
+      'Neonato: tieni a portata latte, biberon, pannolini e una coperta. Usa solo acqua bollita per il latte');
+    if (p.ha_animali) azioni.push(
+      'Animali: tienili con te, con guinzaglio o trasportino. Non lasciarli liberi né da soli in casa');
+    return azioni.length ? { fase: 'PER LA TUA SITUAZIONE', azioni } : null;
+  };
   const _phases = sc => {
-    const veicolo = (SettingsModule.get().km_settimana || 0) > 0;
-    return sc.steps
+    const p = SettingsModule.get();
+    const veicolo = (p.km_settimana || 0) > 0;
+    const base = sc.steps
       .map(f => ({ fase: f.fase, azioni: f.azioni.filter(text => veicolo || !NEEDS_VEHICLE.test(text)) }))
       .filter(f => f.azioni.length);
+    const extra = _extraPhase(p);
+    if (extra && !CHECKLIST.has(sc.id) && sc.id !== 'survival-natura') base.splice(1, 0, extra);
+    else if (extra && CHECKLIST.has(sc.id)) base.push(extra);
+    return base;
   };
   const _flatSteps = sc => _phases(sc).flatMap(f => f.azioni.map(text => ({ fase: f.fase, text })));
   // Situazioni lente (non da vivere minuto per minuto): checklist invece di un passo alla volta
@@ -952,6 +969,13 @@ const DashboardModule = (() => {
         isAutoTask:true, completed:false, gap:100,
         text:'Individua una fonte d\'acqua e impara a renderla potabile (bollitura 1 minuto)' });
     }
+    const cura = [];
+    if (profilo.ha_neonato) cura.push({ id:'lv-neonato', axis:'cibo', guide:'cibo-scorte-piano',
+      text:'Scorta per il neonato: latte, biberon, pannolini e acqua per 7 giorni' });
+    if (profilo.mobilita_ridotta) cura.push({ id:'lv-mobilita', axis:'mobilita', guide:'evacuazione-piano',
+      text:'Accordati con un vicino o un parente su chi aiuta a uscire chi fa fatica a muoversi, e tieni libere le vie d\'uscita' });
+    if (profilo.ha_animali) cura.push({ id:'lv-animali', axis:'cibo', guide:'gobag-checklist',
+      text:'Animali: cibo e acqua per 7 giorni, guinzaglio o trasportino, documenti e farmaci' });
     if (!outdoor && tipo !== 'ospite' && lv.next && lv.needAcqua > 0) {
       synth.push({ id:'lv-acqua', axis:'acqua', tab:'acqua', nav:'settings', guide:'acqua-stoccaggio', threats:[], scoreBonus:0,
         isAutoTask:true, completed:false, gap:100,
@@ -962,6 +986,7 @@ const DashboardModule = (() => {
         isAutoTask:true, completed:false, gap:100,
         text:`Porta il cibo a ${lv.next.days} giorni: ti mancano ${lv.needCibo} giorni di scorte (riso, pasta, legumi, scatolette)` });
     }
+    cura.forEach(t => synth.push({ ...t, nav:'guide', tab:null, threats:[], scoreBonus:0, isAutoTask:true, completed:false, gap:100 }));
     synth.forEach(t => { SYNTH[t.id] = t; });
 
     // ac01/ci01 (30 giorni) sono già coperti dagli obiettivi di livello qui sopra
@@ -1159,6 +1184,9 @@ const DashboardModule = (() => {
         <button class="profile-chip profile-chip-btn" onclick="navigateTo('settings')">
           <i class="ph ph-users"></i>${persone > 0 ? persone + (persone === 1 ? ' persona' : ' persone') : 'Configura profilo'}
         </button>
+        ${profilo.ha_neonato ? '<div class="profile-chip"><i class="ph ph-baby"></i>Neonato</div>' : ''}
+        ${profilo.mobilita_ridotta ? '<div class="profile-chip"><i class="ph ph-wheelchair"></i>Mobilità ridotta</div>' : ''}
+        ${profilo.ha_animali ? '<div class="profile-chip"><i class="ph ph-paw-print"></i>Animali</div>' : ''}
         ${profilo.tipo_abitazione ? `<div class="profile-chip">
           <i class="ph ph-house-simple"></i>${TIPO_LABEL[profilo.tipo_abitazione] || profilo.tipo_abitazione}
         </div>` : ''}
