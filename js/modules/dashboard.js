@@ -171,8 +171,8 @@ const DashboardModule = (() => {
     // ── ACQUA CONTAMINATA ─────────────────────────────────────────────────────
     { id:'acq01', axis:'acqua',    scoreBonus:18, nav:'guide', tab:null, threats:['acqua'],                guide:'acqua-purificazione',       resolve: null, text:'Non usare acqua corrente: solo imbottigliata o filtrata fino a deroga revocata' },
     { id:'acq02', axis:'acqua',    scoreBonus:20, nav:'guide', tab:null, threats:['acqua'],                guide:'acqua-stoccaggio',          resolve: null, text:'Riempi SUBITO vasche, secchi e ogni contenitore disponibile — l\'acquedotto può cedere ulteriormente' },
-    { id:'acq03', axis:'acqua',    scoreBonus:15, nav:'guide', tab:null, threats:['acqua'],                guide:'acqua-purificazione',       resolve: null, text:'Protocollo purificazione attivo: 1 min ebollizione o 4 gocce candeggina/L + 30 min attesa' },
-    { id:'acq04', axis:'acqua',    scoreBonus:10, nav:'guide', tab:null, threats:['acqua'],                guide:'acqua-purificazione',       resolve: null, text:'Raziona: 2.5L/persona/giorno per bere · 1L igiene · acqua sporca per WC e pulizie' },
+    { id:'acq03', axis:'acqua',    scoreBonus:15, nav:'guide', tab:null, threats:['acqua'],                guide:'acqua-purificazione',       resolve: null, text:'Protocollo purificazione attivo: 1 min ebollizione o 2 gocce candeggina/L + 30 min attesa' },
+    { id:'acq04', axis:'acqua',    scoreBonus:10, nav:'guide', tab:null, threats:['acqua'],                guide:'acqua-purificazione',       resolve: null, text:'Raziona: 3L/persona/giorno tra bere e cucinare · poca acqua per igiene · acqua sporca per WC e pulizie' },
     // ── BLACKOUT BREVE ─────────────────────────────────────────────────────────
     { id:'bbs01', axis:'cibo',    scoreBonus:10, nav:'guide', tab:null, threats:['blackout'],             guide:'cibo-conservazione',          resolve: null, text:'NON aprire frigo/congelatore: mantiene freddo 4–6h — pianifica i pasti da ora' },
     { id:'bbs02', axis:'comm',    scoreBonus:12, nav:'guide', tab:null, threats:['blackout','comm'],      guide:'energia-blackout-protocollo', resolve: null, text:'Carica ADESSO tutti i dispositivi e power bank — spegni elettrodomestici non essenziali' },
@@ -688,7 +688,14 @@ const DashboardModule = (() => {
   }
 
   // Protocollo appiattito: ogni azione è un passo (con il nome della fase di appartenenza)
-  const _flatSteps = sc => sc.steps.flatMap(f => f.azioni.map(text => ({ fase: f.fase, text })));
+  // Senza veicolo si saltano i passi su carburante e catene
+  const NEEDS_VEHICLE = /carburante|il pieno|Metti in moto l'auto|Catene a bordo/;
+  const _flatSteps = sc => {
+    const veicolo = (SettingsModule.get().km_settimana || 0) > 0;
+    return sc.steps.flatMap(f => f.azioni
+      .filter(text => veicolo || !NEEDS_VEHICLE.test(text))
+      .map(text => ({ fase: f.fase, text })));
+  };
   const _emgKey = id => 'emg_' + id;
   const _emgIdx = id => Storage.get(_emgKey(id)) || 0;
 
@@ -754,7 +761,7 @@ const DashboardModule = (() => {
       </div>
       <div class="emg-actions">
         <button class="btn btn-outline emg-prev" ${idx === 0 ? 'disabled' : ''} onclick="DashboardModule.emgPrev()" aria-label="Passo precedente"><i class="ph ph-arrow-left"></i></button>
-        <button class="btn btn-primary emg-next" onclick="DashboardModule.emgNext()">Fatto, avanti <i class="ph ph-arrow-right"></i></button>
+        <button class="btn btn-primary emg-next" onclick="DashboardModule.emgNext()">${/^(NON|Non|EVITA|ODORE|Mai)\b/.test(st.text) ? 'Ok, capito' : 'Fatto, avanti'} <i class="ph ph-arrow-right"></i></button>
       </div>
       ${call}
     </div>`;
@@ -796,7 +803,7 @@ const DashboardModule = (() => {
   function _allToggle(remaining, open) {
     return `<button class="btn btn-outline btn-sm btn-full mt-12" onclick="DashboardModule.toggleAllTasks()">
       <i class="ph ${open ? 'ph-caret-up' : 'ph-list-bullets'}"></i>
-      ${open ? 'Mostra solo le 3 principali' : `Vedi tutte le task (${remaining} da fare)`}
+      ${open ? 'Mostra solo le 3 principali' : 'Vedi tutte le azioni'}
     </button>`;
   }
 
@@ -859,18 +866,30 @@ const DashboardModule = (() => {
   const GENERIC_ID = /^(ac|ci|en|ca|co|mo|me|si|sv)\d/;
   // Fuori dal Focus: ac01/ci01 (30 giorni) già coperti dagli obiettivi di livello; ter03/ter04/bbs01/bbs03 sono
   // istruzioni da seguire durante l'evento (stanno già in "Se succede ora"), non cose da preparare
-  const FOCUS_SKIP = new Set(['ac01', 'ci01', 'ter03', 'ter04', 'bbs01', 'bbs03']);
+  const FOCUS_SKIP = new Set(['ac01', 'ci01', 'ter03', 'ter04', 'bbs01', 'bbs03', 'acq01', 'acq02', 'acq04', 'gas01']);
 
   function _buildFocus(enriched, profilo) {
     Object.keys(SYNTH).forEach(k => delete SYNTH[k]);
     const lv = computeLevel(profilo);
     const synth = [];
-    if (lv.next && lv.needAcqua > 0) {
+    const tipo = profilo.tipo_abitazione;
+    const outdoor = ['tenda', 'rifugio', 'nessun_riparo'].includes(tipo);
+    if (tipo === 'ospite') {
+      // In accoglienza non si fanno scorte: servono poche cose sempre con sé
+      synth.push({ id:'lv-ospite', axis:'comm', nav:'guide', tab:null, guide:'gobag-checklist', threats:[], scoreBonus:0,
+        isAutoTask:true, completed:false, gap:100,
+        text:'Tieni sempre con te: documenti, farmaci, caricabatterie, una bottiglia d\'acqua e un po\' di contanti' });
+    } else if (outdoor) {
+      synth.push({ id:'lv-fonte', axis:'acqua', nav:'guide', tab:null, guide:'survival-acqua-natura', threats:[], scoreBonus:0,
+        isAutoTask:true, completed:false, gap:100,
+        text:'Individua una fonte d\'acqua e impara a renderla potabile (bollitura 1 minuto)' });
+    }
+    if (!outdoor && tipo !== 'ospite' && lv.next && lv.needAcqua > 0) {
       synth.push({ id:'lv-acqua', axis:'acqua', tab:'acqua', nav:'settings', guide:'acqua-stoccaggio', threats:[], scoreBonus:0,
         isAutoTask:true, completed:false, gap:100,
         text:`Porta l'acqua a ${lv.targetLitri} L: ti mancano ${lv.needAcqua} L (circa ${Math.ceil(lv.needAcqua / 1.5)} bottiglie da 1,5 L)` });
     }
-    if (lv.next && lv.needCibo > 0) {
+    if (!outdoor && tipo !== 'ospite' && lv.next && lv.needCibo > 0) {
       synth.push({ id:'lv-cibo', axis:'cibo', tab:'cibo', nav:'settings', guide:'cibo-scorte-piano', threats:[], scoreBonus:0,
         isAutoTask:true, completed:false, gap:100,
         text:`Porta il cibo a ${lv.next.days} giorni: ti mancano ${lv.needCibo} giorni di scorte (riso, pasta, legumi, scatolette)` });
@@ -1048,7 +1067,7 @@ const DashboardModule = (() => {
         <div class="task-board-header">
           <h3><i class="ph ph-list-checks"></i> Cosa fare ora</h3>
           <div class="task-board-controls">
-            <div class="task-progress-wrap">
+            <div class="task-progress-wrap"${showAllTasks ? '' : ' hidden'}>
               <span class="task-progress-label">${completedVisible}/${visibleTasks.length}</span>
               <div class="task-progress-bar">
                 <div class="task-progress-fill" style="width:${progressPct}%"></div>

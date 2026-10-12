@@ -134,7 +134,7 @@ const AcquaModule = (() => {
         <div>Combina sempre almeno due metodi per sicurezza massima.</div>
       </div>
       <div class="result-row"><span class="result-label">🔥 Bollitura</span><span class="result-value text-sm">1 min a 100°C (3 min sopra 2.000m)</span></div>
-      <div class="result-row"><span class="result-label">🧴 Candeggina (5-6%)</span><span class="result-value text-sm">8 gocce/L acqua torbida · 4 gocce/L limpida · attendi 30 min</span></div>
+      <div class="result-row"><span class="result-label">🧴 Candeggina (5-6%)</span><span class="result-value text-sm">4 gocce/L acqua torbida · 2 gocce/L limpida · attendi 30 min</span></div>
       <div class="result-row"><span class="result-label">🔵 Pastiglie Cloro</span><span class="result-value text-sm">1 pastiglia/L · attendi 30 min</span></div>
       <div class="result-row"><span class="result-label">🌊 Filtro a sabbia/ghiaia</span><span class="result-value text-sm">Prima filtra sedimenti, poi disinfezione chimica</span></div>
       <div class="result-row"><span class="result-label">☀️ Solarizzazione (SODIS)</span><span class="result-value text-sm">Bottiglia PET trasparente al sole per 6h (cielo sereno)</span></div>

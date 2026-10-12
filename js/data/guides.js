@@ -15,7 +15,7 @@ const GUIDES_DATA = [
     readTime: '4 min',
     quickRef: [
       'Bollitura: 1 min a 100°C — il metodo più sicuro in assoluto',
-      'Candeggina 5–6%: 4 gocce/L limpida · 8 gocce/L torbida → attendi 30 min',
+      'Candeggina 5–6%: 2 gocce/L limpida · 4 gocce/L torbida → attendi 30 min',
       'Filtro Sawyer/LifeStraw: 99.99% batteri e protozoi (NON virus)',
       'SODIS: bottiglia PET al sole 6h cielo sereno · 2 giorni nuvoloso',
       'Filtra sempre i sedimenti PRIMA della disinfezione chimica',
@@ -40,8 +40,8 @@ const GUIDES_DATA = [
         heading: 'Metodo 2 — Candeggina domestica',
         steps: [
           'Usa SOLO candeggina non profumata con 5–6% di cloro attivo',
-          'Acqua limpida: 4 gocce per litro',
-          'Acqua torbida: 8 gocce per litro',
+          'Acqua limpida: 2 gocce per litro',
+          'Acqua torbida: 4 gocce per litro (filtra prima)',
           'Mescola bene e attendi 30 minuti prima di bere',
           'Dopo 30 min devi sentire un lieve odore di cloro — se no, ripeti il trattamento',
           'Acqua fredda o molto dura: raddoppia la dose e aumenta il tempo a 60 min',
@@ -97,7 +97,7 @@ const GUIDES_DATA = [
     sections: [
       {
         heading: 'Quanto stoccare',
-        content: 'Il calcolo base è 2,5L/giorno per bere + 2,5L per cottura e igiene minima = 5L/persona/giorno. Per climi caldi, lavori fisici o bambini piccoli: 8–10L/giorno. Bambini sotto i 2 anni e donne in allattamento: +1L/giorno. Con questo calcolo: famiglia di 4 persone × 30 giorni = 600 litri. Inizia con 7 giorni (140L per 4 persone) e costruisci gradualmente.',
+        content: 'Il calcolo base è 3L/giorno tra bere e cucinare (minimo vitale), fino a 5L/persona/giorno con igiene minima. Per climi caldi, lavori fisici o bambini piccoli: 8–10L/giorno. Bambini sotto i 2 anni e donne in allattamento: +1L/giorno. Con questo calcolo: famiglia di 4 persone × 30 giorni = 600 litri. Inizia con 7 giorni (140L per 4 persone) e costruisci gradualmente.',
       },
       {
         heading: 'Contenitori — quale scegliere',
@@ -106,7 +106,7 @@ const GUIDES_DATA = [
           'Bidoni da 60L o cisterne IBC da 1.000L: per stoccaggio definitivo garage/cantina',
           'Bottiglie PET originali sigillate: vanno bene, facile reperibilità e rotazione',
           'EVITA: contenitori trasparenti (favoriscono alghe), vecchi contenitori chimici (anche se lavati), sacchi non alimentari',
-          'Tratta l\'acqua del rubinetto con 8 gocce di candeggina per 40 litri prima di stoccarla',
+          'Tratta l\'acqua del rubinetto con 2 gocce di candeggina per litro prima di stoccarla',
           'Etichetta ogni contenitore con data di riempimento',
         ],
       },

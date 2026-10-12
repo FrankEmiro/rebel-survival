@@ -264,7 +264,7 @@ const ListaSpesaModule = (() => {
         items: [
           { nome:'Bottiglie acqua 1,5L', qty: Math.ceil(litriRac / 1.5) + ' bottiglie', note:'Scorta rotazione mensile' },
           { nome:'Taniche HDPE 10L alimentari', qty: Math.ceil(litriRac / 10) + ' pz', note:'Stoccaggio lungo termine' },
-          { nome:'Candeggina non profumata', qty:'3 bottiglie', note:'8 gocce/L per purificazione' },
+          { nome:'Candeggina non profumata', qty:'3 bottiglie', note:'2 gocce/L per purificazione (4 se torbida)' },
           { nome:'Filtro portatile (Sawyer Squeeze)', qty:'1 pz', note:'Filtra qualsiasi fonte' },
           { nome:'Pastiglie purificazione', qty:'2 confezioni', note:'Backup filtro' },
         ],

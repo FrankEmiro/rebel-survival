@@ -78,7 +78,7 @@ const ScenariModule = (() => {
           'Rilevatore CO sempre attivo se usi combustibili',
           'Non usare candele incustodite',
           'Mantieni estintore a portata',
-          'Attenzione all\'iperventilazione da generatore',
+          'Generatore: avvelenamento da monossido (CO) — mal di testa, nausea, sonnolenza = esci subito all\'aria aperta e chiama il 112',
         ]},
       ]
     },
@@ -95,14 +95,14 @@ const ScenariModule = (() => {
       },
       steps: [
         { fase: 'IMMEDIATO', azioni: [
-          'Chiudi rubinetto gas principale',
-          'Verifica se interruzione è locale o diffusa (chiama fornitore)',
-          'NON accendere fiamme o interruttori se senti odore di gas',
-          'Arieggia i locali in caso di sospetta perdita',
+          'ODORE DI GAS? NON toccare interruttori, NON accendere fiamme, NON usare il telefono in casa',
+          'Se senti odore di gas: apri le finestre, esci all\'aperto e chiama il 115 (Vigili del Fuoco) da fuori',
+          'Se non senti odore: chiudi il rubinetto gas principale',
+          'Verifica se interruzione è locale o diffusa (chiama il numero del tuo distributore)',
         ]},
         { fase: 'RISCALDAMENTO ALTERNATIVO', azioni: [
           'Attiva stufa a pellet/legna se disponibile',
-          'Stufa portatile a GPL: solo in ambienti ventilati',
+          'Stufa a GPL/gas: solo in ambienti ventilati e mai accesa mentre dormi (monossido di carbonio)',
           'Concentra le persone in una stanza sola e riscalda quella',
           'Usa coperte termiche, abbigliamento a strati',
           'Isola porte e finestre con tessuti/nastro',
@@ -110,8 +110,8 @@ const ScenariModule = (() => {
         { fase: 'ACQUA CALDA & CUCINA', azioni: [
           'Fornello da campeggio o a GPL per cucinare',
           'Acqua calda: riscalda pentole sul fornello alternativo',
-          'Riduci frequenza docce: usa acqua tiepida sparagnina',
-          'Termosifoni a propano portatili come soluzione temporanea',
+          'Riduci le docce: lavati con poca acqua tiepida',
+          'Non usare mai barbecue o braciere in casa',
         ]},
       ]
     },
@@ -144,7 +144,7 @@ const ScenariModule = (() => {
         { fase: 'OTTIMIZZAZIONE', azioni: [
           'Disconnetti stand-by di tutti gli apparecchi',
           'LED invece di qualsiasi altra lampada',
-          'Frigorifero a temperatura massima (5°C) per efficienza',
+          'Frigorifero regolato a 5°C: più freddo non serve e consuma di più',
           'Cucina a pressione: dimezza i tempi e il gas',
         ]},
       ]
@@ -202,7 +202,7 @@ const ScenariModule = (() => {
           'Identifica fonti alternative: pozzo, torrente, raccolta pioggia',
         ]},
         { fase: 'RAZIONAMENTO', azioni: [
-          'Minimo vitale: 2.5L/persona/giorno per bere',
+          'Minimo vitale: 3 L/persona/giorno tra bere e cucinare',
           'Usa acqua sporca per WC e pulizie',
           'Igiene personale: minima quantità (1L/giorno per igiene)',
           'Usare salviettine umidificate per risparmio',
@@ -233,7 +233,7 @@ const ScenariModule = (() => {
       },
       steps: [
         { fase: 'PRIMI 10 MINUTI', azioni: [
-          'Prendi il bag out bag già preparato',
+          'Prendi lo zaino d\'emergenza, se ce l\'hai già pronto',
           'Documenti: passaporto, carta identità, tessera sanitaria',
           'Farmaci salvavita (propri e familiari)',
           'Telefono carico + powerbank',
@@ -252,8 +252,8 @@ const ScenariModule = (() => {
           'Avvisa un familiare fuori zona della tua destinazione',
           'Vai al punto di raccolta designato oppure da parenti/amici',
           'Segui indicazioni protezione civile: non improvvisare',
-          'Porta con te animali domestici',
-          'Chiudi gas e elettricità prima di uscire',
+          'Se hai animali domestici, portali con te',
+          'Chiudi gas e corrente se hai ancora 1-2 minuti',
         ]},
       ]
     },
@@ -295,7 +295,7 @@ const ScenariModule = (() => {
           'Sintonizza radio per aggiornamenti ufficiali',
           'Avvisa familiari della tua situazione',
           'Non usare telefono se non strettamente necessario (linee intasate)',
-          'Verifica struttura con occhio critico: crepe, inclinazioni, perdite gas',
+          'Da fuori, guarda l\'edificio: crepe, pezzi pericolanti. Non rientrare a controllare',
         ]},
         { fase: 'SICUREZZA CONTINUA', azioni: [
           'Prepara acqua (la rete idrica può essere contaminata)',
@@ -333,7 +333,7 @@ const ScenariModule = (() => {
           'NON attraversare a piedi correnti d\'acqua (anche 30cm sono pericolosi)',
           'NON mettere in moto l\'auto se la strada è allagata',
           'Sali ai piani superiori — non al tetto (rischio trappola)',
-          'Stacca la corrente dal quadro elettrico se l\'acqua si avvicina',
+          'Stacca la corrente dal quadro PRIMA che l\'acqua arrivi — mai con i piedi nell\'acqua',
           'Segnala la tua posizione con luce e rumore se sei bloccato',
         ]},
         { fase: 'DOPO L\'ALLUVIONE', azioni: [
@@ -361,7 +361,7 @@ const ScenariModule = (() => {
       },
       steps: [
         { fase: 'PROTEZIONE PERSONALE', azioni: [
-          'Bevi almeno 2L di acqua al giorno — non aspettare la sete',
+          'Bevi spesso, almeno 2-3 L al giorno — non aspettare la sete',
           'Rimani al chiuso nelle ore più calde (11:00–17:00)',
           'Chiudi tapparelle e tende dal lato soleggiato — riapri di notte',
           'Indossa abbigliamento leggero, chiaro, traspirante',
@@ -380,7 +380,7 @@ const ScenariModule = (() => {
           'Bambini e neonati: mai lasciati in auto, mai esposizione diretta al sole',
           'Persone con patologie cardiache/renali: contatta il medico per piano',
           'Segni di colpo di calore: confusione, pelle secca e rossa, T° > 40°C — EMERGENZA',
-          'Colpo di calore: raffredda subito con acqua fredda, chiama 118',
+          'Colpo di calore: chiama subito il 118, nel frattempo raffredda con acqua fredda e all\'ombra',
         ]},
         { fase: 'RAZIONAMENTO ENERGETICO', azioni: [
           'Evita elettrodomestici ad alto consumo nelle fasce di picco (14-17)',
@@ -417,14 +417,14 @@ const ScenariModule = (() => {
           'NON usare generatori o barbecue al chiuso (CO)',
           'Scalda una stanza sola: chiudi le altre, riduce dispersione del calore',
           'Abbigliamento a strati: protezione testa e estremità',
-          'Sciogli neve sul tetto se supera 30cm (rischio crollo)',
+          'Se sul tetto c\'è più di 30 cm di neve: falla togliere (rischio crollo). Non salirci da solo',
           'Controlla periodicamente tubature esposte: lascia scorrere l\'acqua a filo',
         ]},
         { fase: 'GESTIONE STRADE E USCITE', azioni: [
-          'Catene a bordo obbligatorie — montale prima di partire',
-          'Non avviare l\'auto in garage chiuso — esalanda',
-          'Libera scarichi fumi e canne fumarie dalla neve',
-          'Segnala con nastro colorato o bandiere eventuali buche pericolose',
+          'Catene a bordo obbligatorie — montale prima di partire in salita',
+          'Non tenere l\'auto accesa in garage chiuso — gas di scarico tossici',
+          'Libera dalla neve il tubo di scarico dell\'auto e le canne fumarie',
+          'Segnala con nastro colorato eventuali pericoli sul tragitto',
           'Se bloccato in auto: resta nel veicolo, motore 10min/ora per riscaldare',
         ]},
       ]
@@ -563,7 +563,7 @@ const ScenariModule = (() => {
           'Usa walkie-talkie PMR446 per comunicare nel raggio di 2-5km',
           'Recati fisicamente al punto di ritrovo prestabilito con la famiglia',
           'Lascia note fisiche: post-it visibili su porte di casa',
-          'Riattiva contatti su reti mesh locale se disponibili (Meshtastic)',
+          'Se la conosci: usa una rete radio locale tra telefoni (es. Meshtastic)',
         ]},
         { fase: 'INFORMAZIONE & AGGIORNAMENTI', azioni: [
           'Radio a pile/manovella: RAI Radio 1 per emergenze nazionali',
@@ -629,8 +629,8 @@ const ScenariModule = (() => {
         { fase: 'CIBO', azioni: [
           'Il corpo sopravvive 3 settimane senza cibo — non rischiare per piante sconosciute',
           'Regola universale: se non sei al 100% sicuro, NON mangiarlo',
-          'Sicuri in Italia: more, lamponi, more di rovo, mirtilli, castagne, ghiande bollite',
-          'Proteine sicure: lumache (bollite 5 min), insetti (grilli, larve — no pelosi o colorati)',
+          'Sicuri in Italia: more, lamponi, more di rovo, mirtilli, castagne, ghiande (solo dopo molti cambi d\'acqua di bollitura)',
+          'Proteine: insetti (grilli, larve) ben cotti — mai quelli pelosi o colorati. Evita lumache e funghi se non sei esperto',
           'Trappole: laccio semplice su sentiero di piccoli animali',
           'Pesca: amo e filo da pesca nel kit di sopravvivenza — essenziale',
         ]},
@@ -640,7 +640,7 @@ const ScenariModule = (() => {
           'SOS: 3 fuochi in triangolo equilatero (segnale internazionale)',
           'Fischietto: 3 fischi corti = distress, molto più efficace della voce',
           'Colori vivaci su spazio aperto visibile dall\'alto',
-          'Numero emergenze: 118 (sanità), 112 (unico europeo), 115 (VVF), 117 (soccorso alpino)',
+          'Numero emergenze: 112 (numero unico europeo), 118 (sanità e soccorso alpino), 115 (Vigili del Fuoco)',
         ]},
         { fase: 'ORIENTAMENTO SENZA STRUMENTI', azioni: [
           'Sole: sorge a EST, tramonta a OVEST — a mezzogiorno è a SUD (emisfero nord)',
