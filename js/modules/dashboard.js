@@ -672,34 +672,125 @@ const DashboardModule = (() => {
       : _buildFocus(enriched, profilo) + _allToggle(remaining, false);
   }
 
-  /* ── SE SUCCEDE ORA: protocollo a fasi dello scenario scelto ── */
+  /* ── MODALITÀ: "Preparati" (calma) vs "Emergenza" (un passo alla volta) ── */
+  const getMode = () => Storage.get('home_mode') || 'prepara';
+  function setMode(m) { Storage.set('home_mode', m); render(); window.scrollTo(0, 0); }
+
+  function _modeSwitch(mode) {
+    return `<div class="mode-switch" role="tablist">
+      <button role="tab" aria-selected="${mode === 'prepara'}" class="${mode === 'prepara' ? 'active' : ''}" onclick="DashboardModule.setMode('prepara')">
+        <i class="ph ph-shield-check"></i> Preparati
+      </button>
+      <button role="tab" aria-selected="${mode === 'emergenza'}" class="mode-emg ${mode === 'emergenza' ? 'active' : ''}" onclick="DashboardModule.setMode('emergenza')">
+        <i class="ph ph-siren"></i> Emergenza
+      </button>
+    </div>`;
+  }
+
+  // Protocollo appiattito: ogni azione è un passo (con il nome della fase di appartenenza)
+  const _flatSteps = sc => sc.steps.flatMap(f => f.azioni.map(text => ({ fase: f.fase, text })));
+  const _emgKey = id => 'emg_' + id;
+  const _emgIdx = id => Storage.get(_emgKey(id)) || 0;
+
+  function _emgMove(delta) {
+    const id = SettingsModule.get().scenario_id;
+    const sc = (window.SCENARI_LIST || []).find(x => x.id === id);
+    if (!sc || !sc.steps) return;
+    const total = _flatSteps(sc).length;
+    Storage.set(_emgKey(id), Math.max(0, Math.min(total, _emgIdx(id) + delta)));
+    render();
+  }
+  function emgNext() { _emgMove(1); }
+  function emgPrev() { _emgMove(-1); }
+  function emgReset() {
+    const id = SettingsModule.get().scenario_id;
+    if (id) Storage.set(_emgKey(id), 0);
+    render();
+  }
+
+  function _buildEmergency(profilo, scenarioId) {
+    const sc = scenarioId && scenarioId !== 'custom' ? (window.SCENARI_LIST || []).find(x => x.id === scenarioId) : null;
+    const call = `<a class="emg-call" href="tel:112"><i class="ph ph-phone-call"></i> Chiama 112</a>`;
+
+    if (!sc || !sc.steps || !sc.steps.length) {
+      return `<div class="emg">
+        <div class="emg-card emg-pick">
+          <i class="ph ph-question"></i>
+          <h2>Cosa sta succedendo?</h2>
+          <p>Scegli la situazione e ti guido un passo alla volta.</p>
+          <button class="btn btn-primary btn-full" onclick="DashboardModule.openScenarioPicker()"><i class="ph ph-list-bullets"></i> Scegli la situazione</button>
+        </div>${call}</div>`;
+    }
+
+    const steps = _flatSteps(sc);
+    const idx = Math.min(_emgIdx(sc.id), steps.length);
+    const head = `<div class="emg-top">
+        <span class="now-badge"><i class="ph ph-siren"></i> Emergenza</span>
+        <button class="banner-scenario-chip" onclick="DashboardModule.openScenarioPicker()"><span>${sc.icon || ''}</span> ${sc.titolo} <i class="ph ph-swap"></i></button>
+      </div>`;
+
+    if (idx >= steps.length) {
+      return `<div class="emg">${head}
+        <div class="emg-card emg-done">
+          <i class="ph ph-check-circle"></i>
+          <h2>Protocollo completato</h2>
+          <p>Se la situazione continua, ripeti i passi o segui le istruzioni delle autorità.</p>
+          <div class="emg-actions">
+            <button class="btn btn-outline" onclick="DashboardModule.emgReset()"><i class="ph ph-arrow-counter-clockwise"></i> Ricomincia</button>
+            <button class="btn btn-primary" onclick="DashboardModule.setMode('prepara')">Torna a prepararti</button>
+          </div>
+        </div>${call}</div>`;
+    }
+
+    const st = steps[idx];
+    const pct = Math.round(idx / steps.length * 100);
+    const newPhase = idx === 0 || steps[idx - 1].fase !== st.fase;
+    return `<div class="emg">${head}
+      <div class="emg-card">
+        <div class="emg-phase${newPhase ? ' emg-phase-new' : ''}">${st.fase}</div>
+        <div class="emg-count">Passo ${idx + 1} di ${steps.length}</div>
+        <div class="emg-text">${st.text}</div>
+        <div class="emg-bar"><div style="width:${pct}%"></div></div>
+      </div>
+      <div class="emg-actions">
+        <button class="btn btn-outline emg-prev" ${idx === 0 ? 'disabled' : ''} onclick="DashboardModule.emgPrev()" aria-label="Passo precedente"><i class="ph ph-arrow-left"></i></button>
+        <button class="btn btn-primary emg-next" onclick="DashboardModule.emgNext()">Fatto, avanti <i class="ph ph-arrow-right"></i></button>
+      </div>
+      ${call}
+    </div>`;
+  }
+
+  /* ── Sezioni a scomparsa (Preparati): tutto chiuso tranne le 3 azioni ── */
+  const foldOpen = new Set();
+  function _foldToggle(key, open) { open ? foldOpen.add(key) : foldOpen.delete(key); }
+  function _fold(key, icon, title, sub, body) {
+    return `<details class="card fold"${foldOpen.has(key) ? ' open' : ''} ontoggle="DashboardModule._foldToggle('${key}', this.open)">
+      <summary>
+        <i class="ph ${icon} fold-icon"></i>
+        <span class="fold-title">${title}</span>
+        <span class="fold-sub">${sub}</span>
+        <i class="ph ph-caret-down fold-caret"></i>
+      </summary>
+      <div class="fold-body">${body}</div>
+    </details>`;
+  }
+
+  /* ── Se succede ora: protocollo completo a fasi (lettura, da calmi) ── */
   const nowOpen = new Set([0]);
   function _nowToggle(i, open) { open ? nowOpen.add(i) : nowOpen.delete(i); }
 
-  function _buildNow(sc) {
+  function _nowBody(sc) {
     if (!sc || !sc.steps || !sc.steps.length) {
-      return `<div class="card now-card now-empty">
-        <div class="now-head"><span class="now-badge"><i class="ph ph-siren"></i> Se succede ora</span></div>
-        <p class="now-desc">Scegli lo scenario che temi di più: qui troverai cosa fare, passo per passo, mentre accade.</p>
-        <button class="btn btn-outline btn-sm" onclick="DashboardModule.openScenarioPicker()">
-          <i class="ph ph-swap"></i> Scegli scenario
-        </button>
-      </div>`;
+      return `<p class="now-desc">Scegli lo scenario che temi di più: qui leggi cosa fare, fase per fase. Quando succede davvero, usa la modalità <strong>Emergenza</strong>.</p>
+        <button class="btn btn-outline btn-sm mt-12" onclick="DashboardModule.openScenarioPicker()"><i class="ph ph-swap"></i> Scegli scenario</button>`;
     }
-    return `<div class="card now-card">
-      <div class="now-head">
-        <span class="now-badge"><i class="ph ph-siren"></i> Se succede ora</span>
-        <h3><span class="now-emoji">${sc.icon || ''}</span> ${sc.titolo}</h3>
-        ${sc.desc ? `<p class="now-desc">${sc.desc}</p>` : ''}
-      </div>
-      <div class="now-phases">
+    return `<div class="now-phases">
         ${sc.steps.map((f, i) => `
           <details class="now-phase"${nowOpen.has(i) ? ' open' : ''} ontoggle="DashboardModule._nowToggle(${i}, this.open)">
             <summary><span class="now-num">${i + 1}</span><span class="now-fase">${f.fase}</span><i class="ph ph-caret-down now-caret"></i></summary>
             <ul class="now-list">${f.azioni.map(a => `<li>${a}</li>`).join('')}</ul>
           </details>`).join('')}
-      </div>
-    </div>`;
+      </div>`;
   }
 
   function _allToggle(remaining, open) {
@@ -864,6 +955,12 @@ const DashboardModule = (() => {
       return;
     }
 
+    const mode = getMode();
+    if (mode === 'emergenza') {
+      root.innerHTML = _modeSwitch(mode) + _buildEmergency(SettingsModule.get(), SettingsModule.get().scenario_id);
+      return;
+    }
+
     const profilo = SettingsModule.get();
     const autoDetected = autoDetectThreats(profilo);
     const autoIds = autoDetected.map(t => t.id);
@@ -919,7 +1016,12 @@ const DashboardModule = (() => {
         ].filter(Boolean).join(' e ') || 'completa le azioni qui sotto'}`
       : 'Ottimo livello: mantieni scorte e rotazione.';
 
+    const aqGg = _waterDays(profilo);
+    const fmtGg = n => (n < 10 ? (Math.round(n * 10) / 10).toString().replace('.', ',') : String(Math.round(n)));
+    const nPhases = scObj && scObj.steps ? scObj.steps.length : 0;
+
     root.innerHTML = `
+      ${_modeSwitch(mode)}
       <!-- STATUS: livello + percorso 72h / 2 sett / 30gg -->
       <div class="status-banner ${bannerCls}">
         <i class="ph ${bannerIcon}"></i>
@@ -941,9 +1043,6 @@ const DashboardModule = (() => {
         </div>
       </div>
 
-      <!-- SE SUCCEDE ORA -->
-      ${_buildNow(scObj)}
-
       <!-- TASK OPERATIVE -->
       <div class="card">
         <div class="task-board-header">
@@ -960,14 +1059,13 @@ const DashboardModule = (() => {
         ${buildTaskBoard(current, required, activeIds, detected, done, profilo)}
       </div>
 
-      <!-- RISORSE -->
-      <div class="card">
-        <h3><i class="ph ph-chart-bar"></i> Le tue scorte</h3>
+      ${_fold('now', 'ph-siren', 'Se succede ora', scObj ? `${scObj.titolo} · ${nPhases} fasi` : 'scegli uno scenario', _nowBody(scObj))}
+
+      ${_fold('res', 'ph-chart-bar', 'Le tue scorte', `Acqua ${fmtGg(aqGg)} gg · Cibo ${profilo.cibo_scorte_giorni || 0} gg`, `
         ${buildResources(current, profilo)}
         <button class="btn btn-outline btn-sm btn-full mt-16" onclick="navigateTo('settings')">
           <i class="ph ph-pencil"></i> Aggiorna scorte
-        </button>
-      </div>
+        </button>`)}
 
       <!-- PROFILO -->
       <div class="profile-quick">
@@ -1001,5 +1099,5 @@ const DashboardModule = (() => {
 
   function init() { render(); }
 
-  return { init, render, computeLevel, _nowToggle, toggleTask, toggleAllTasks, refreshOfflineCard, openGuide, goToTask, openScenarioPicker, _pickScenario, downloadGuidesPack, downloadMapPack };
+  return { init, render, computeLevel, _nowToggle, _foldToggle, setMode, emgNext, emgPrev, emgReset, toggleTask, toggleAllTasks, refreshOfflineCard, openGuide, goToTask, openScenarioPicker, _pickScenario, downloadGuidesPack, downloadMapPack };
 })();
