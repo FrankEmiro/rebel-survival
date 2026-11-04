@@ -3708,3 +3708,26 @@ input, select, textarea { font-family: 'Nunito', sans-serif; font-size: 1rem; }
 .st-sos-btn::after { border-color: rgba(181,48,32,.35); }
 .st-big-btn i, .st-sos-btn i { font-size: 2.2rem; }
 .st-big-btn.st-big-btn-on { background: radial-gradient(circle, rgba(232,212,138,.35), rgba(201,168,76,.08) 70%); color: var(--accent-light); box-shadow: 0 0 34px rgba(232,212,138,.45); }
+
+/* ── Avviso iniziale: su schermi bassi il testo scorre e il pulsante resta sempre visibile ── */
+#disclaimer-overlay {
+  padding: max(12px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom));
+  overscroll-behavior: contain;
+}
+#disclaimer-overlay .disclaimer-modal {
+  display: flex; flex-direction: column;
+  max-height: calc(100vh - 24px);
+  max-height: calc(100dvh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+  padding: 20px 18px 16px;
+}
+#disclaimer-overlay .disclaimer-header { flex-shrink: 0; margin-bottom: 12px; }
+#disclaimer-overlay .disclaimer-body {
+  flex: 1 1 auto; min-height: 0;
+  overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain;
+  padding-right: 4px;
+}
+#disclaimer-overlay .disclaimer-btn { flex-shrink: 0; margin-top: 12px; min-height: 48px; }
+/* Domande iniziali: altezza dello schermo realmente visibile (barra del browser inclusa) */
+.ob-modal { max-height: calc(100dvh - 24px); min-height: min(560px, calc(100dvh - 24px)); }
+.ob-modal > * { flex-shrink: 0; }
+.ob-actions { bottom: -24px; margin-bottom: -24px; padding-bottom: 24px; background: var(--bg-secondary); }
