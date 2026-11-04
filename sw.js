@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kit-resilienza-v67';
+const CACHE_NAME = 'kit-resilienza-v68';
 const CDN_CACHE  = 'kit-resilienza-cdn-v51';
 
 // Asset locali — cache-first

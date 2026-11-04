@@ -102,14 +102,14 @@ const OnboardingModule = (() => {
           ${_stepper('adulti', 'Adulti', '14–65 anni', 1)}
           ${_stepper('bambini', 'Bambini', 'sotto i 14 anni', 0)}
           ${_stepper('anziani', 'Anziani', 'oltre 65 anni', 0)}
-          <label class="check-option ob-check"><input type="checkbox" ${data.ha_neonato ? 'checked' : ''}
-            onchange="OnboardingModule._set('ha_neonato', this.checked, true)">
+          <label class="check-option ob-check${data.ha_neonato ? ' checked' : ''}"><input type="checkbox" ${data.ha_neonato ? 'checked' : ''}
+            onchange="this.closest('.check-option').classList.toggle('checked', this.checked); OnboardingModule._set('ha_neonato', this.checked, true)">
             <span><i class="ph ph-baby"></i> C'è un neonato (sotto 1 anno)</span></label>
-          <label class="check-option ob-check"><input type="checkbox" ${data.mobilita_ridotta ? 'checked' : ''}
-            onchange="OnboardingModule._set('mobilita_ridotta', this.checked, true)">
+          <label class="check-option ob-check${data.mobilita_ridotta ? ' checked' : ''}"><input type="checkbox" ${data.mobilita_ridotta ? 'checked' : ''}
+            onchange="this.closest('.check-option').classList.toggle('checked', this.checked); OnboardingModule._set('mobilita_ridotta', this.checked, true)">
             <span><i class="ph ph-wheelchair"></i> Qualcuno fa fatica a muoversi o a usare le scale</span></label>
-          <label class="check-option ob-check"><input type="checkbox" ${data.ha_animali ? 'checked' : ''}
-            onchange="OnboardingModule._set('ha_animali', this.checked, true)">
+          <label class="check-option ob-check${data.ha_animali ? ' checked' : ''}"><input type="checkbox" ${data.ha_animali ? 'checked' : ''}
+            onchange="this.closest('.check-option').classList.toggle('checked', this.checked); OnboardingModule._set('ha_animali', this.checked, true)">
             <span><i class="ph ph-paw-print"></i> Ho animali domestici</span></label>`;
       case 'casa':
         return `<h2>Dove ti trovi?</h2>
@@ -167,14 +167,14 @@ const OnboardingModule = (() => {
             <input type="number" class="ob-num" min="0" max="365" inputmode="numeric" value="${data.cibo_scorte_giorni}"
               oninput="OnboardingModule._num('cibo_scorte_giorni', this.value)">
           </div>
-          <label class="check-option ob-check"><input type="checkbox" ${data.has_radio ? 'checked' : ''}
-            onchange="OnboardingModule._set('has_radio', this.checked, true)">
+          <label class="check-option ob-check${data.has_radio ? ' checked' : ''}"><input type="checkbox" ${data.has_radio ? 'checked' : ''}
+            onchange="this.closest('.check-option').classList.toggle('checked', this.checked); OnboardingModule._set('has_radio', this.checked, true)">
             <span><i class="ph ph-radio"></i> Ho una radio a batterie o a manovella</span></label>
-          <label class="check-option ob-check"><input type="checkbox" ${data.ha_auto ? 'checked' : ''}
-            onchange="OnboardingModule._set('ha_auto', this.checked, true)">
+          <label class="check-option ob-check${data.ha_auto ? ' checked' : ''}"><input type="checkbox" ${data.ha_auto ? 'checked' : ''}
+            onchange="this.closest('.check-option').classList.toggle('checked', this.checked); OnboardingModule._set('ha_auto', this.checked, true)">
             <span><i class="ph ph-car"></i> Uso un'auto o un mezzo (serve il carburante)</span></label>
-          <label class="check-option ob-check"><input type="checkbox" ${data.has_kit_medico ? 'checked' : ''}
-            onchange="OnboardingModule._set('has_kit_medico', this.checked, true)">
+          <label class="check-option ob-check${data.has_kit_medico ? ' checked' : ''}"><input type="checkbox" ${data.has_kit_medico ? 'checked' : ''}
+            onchange="this.closest('.check-option').classList.toggle('checked', this.checked); OnboardingModule._set('has_kit_medico', this.checked, true)">
             <span><i class="ph ph-first-aid"></i> Ho un kit di primo soccorso completo</span></label>`;
     }
     return '';
