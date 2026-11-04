@@ -1,5 +1,5 @@
 /* ============================================================
-   Settings Module — 7 tab, auto-save, live result per tab
+   Settings Module (Profilo) — sezioni a gruppi, auto-save, stato per sezione
    ============================================================ */
 const SettingsModule = (() => {
 
@@ -35,20 +35,26 @@ const SettingsModule = (() => {
     comm_contatti_stampati: false,
   };
 
+  // Sezioni del Profilo, raggruppate. Una sola sezione aperta alla volta.
   const TABS = [
-    { id: 'scenario', label: 'Scenario', icon: 'ph-warning-octagon' },
-    { id: 'profilo',  label: 'Profilo',  icon: 'ph-users'       },
-    { id: 'acqua',    label: 'Acqua',    icon: 'ph-drop'         },
-    { id: 'cibo',     label: 'Cibo',     icon: 'ph-fork-knife'   },
-    { id: 'energia',  label: 'Energia',  icon: 'ph-lightning'    },
-    { id: 'calore',   label: 'Calore',   icon: 'ph-flame'        },
-    { id: 'comm',     label: 'Comm.',    icon: 'ph-radio'        },
-    { id: 'mobilita', label: 'Mobilità', icon: 'ph-car'          },
-    { id: 'medico',   label: 'Medico',   icon: 'ph-first-aid'    },
-    { id: 'sicurezza',label: 'Sicurezza',icon: 'ph-shield-check' },
+    { id: 'profilo',  group: 'about', label: 'Famiglia e casa',     desc: 'Chi siete e dove vivete',            icon: 'ph-users'          },
+    { id: 'scenario', group: 'about', label: 'Situazione',          desc: 'Per cosa vuoi prepararti',           icon: 'ph-warning-octagon' },
+    { id: 'acqua',    group: 'have',  label: 'Acqua',               desc: 'Scorte e fonti',                     icon: 'ph-drop'           },
+    { id: 'cibo',     group: 'have',  label: 'Cibo',                desc: 'Giorni di scorte',                   icon: 'ph-fork-knife'     },
+    { id: 'energia',  group: 'have',  label: 'Energia',             desc: 'Pannelli, batterie, generatore',     icon: 'ph-lightning'      },
+    { id: 'calore',   group: 'have',  label: 'Riscaldamento',       desc: 'Stufe e combustibile',               icon: 'ph-flame'          },
+    { id: 'mobilita', group: 'have',  label: 'Auto e spostamenti',  desc: 'Carburante e zaino pronto',          icon: 'ph-car'            },
+    { id: 'comm',     group: 'ready', label: 'Comunicazioni',       desc: 'Radio, internet, contatti',          icon: 'ph-radio'          },
+    { id: 'medico',   group: 'ready', label: 'Salute',              desc: 'Kit medico, farmaci, corsi',         icon: 'ph-first-aid'      },
+    { id: 'sicurezza',group: 'ready', label: 'Sicurezza in casa',   desc: 'Estintore, rilevatore CO, vicini',   icon: 'ph-shield-check'   },
+  ];
+  const GROUPS = [
+    { id: 'about', label: 'Chi siete' },
+    { id: 'have',  label: 'Cosa avete già' },
+    { id: 'ready', label: 'Come siete preparati' },
   ];
 
-  let activeTab = 'profilo';
+  let activeTab = null;
 
   /* ── GET ── */
   function get() { return { ...DEFAULTS, ...(Storage.get('profilo') || {}) }; }
@@ -57,18 +63,20 @@ const SettingsModule = (() => {
     return (p.adulti || 0) + (p.bambini || 0) + (p.anziani || 0);
   }
 
-  /* ── TAB SWITCH ── */
-  function _tab(id) {
-    activeTab = id;
-    if (!PRIMARY_TABS.includes(id)) moreOpen = true;
-    // Re-render tab bar so completeness pills update
-    const bar = document.querySelector('.settings-tab-bar');
-    if (bar) bar.outerHTML = _tabBar();
-    document.querySelectorAll('.stab-btn').forEach(b =>
-      b.classList.toggle('active', b.dataset.tab === id));
-    document.querySelectorAll('.stab-panel').forEach(p =>
-      p.classList.toggle('hidden', p.id !== 'stab-' + id));
-    if (id === 'scenario') _renderScenarioTab();
+  /* ── SECTION SWITCH ── */
+  // _tab(id)        → apre la sezione (usato da Home e calcolatori)
+  // _tab(id, true)  → tocco sulla riga: apre o chiude
+  function _tab(id, fromRow) {
+    activeTab = (fromRow && activeTab === id) ? null : id;
+    document.querySelectorAll('.pf-sec').forEach(sec => {
+      const open = sec.dataset.tab === activeTab;
+      sec.classList.toggle('open', open);
+      sec.querySelector('.pf-row')?.setAttribute('aria-expanded', open ? 'true' : 'false');
+      sec.querySelector('.stab-panel')?.classList.toggle('hidden', !open);
+    });
+    if (activeTab === 'scenario') _renderScenarioTab();
+    const row = activeTab && document.querySelector(`.pf-sec[data-tab="${activeTab}"]`);
+    if (row) row.scrollIntoView({ block: 'start', behavior: fromRow ? 'smooth' : 'auto' });
   }
 
   /* ── COLLECT ALL FORM VALUES ── */
@@ -164,22 +172,39 @@ const SettingsModule = (() => {
   function _updateTabResults(p) {
     if (!p) p = _collect();
     _rAcqua(p); _rCibo(p); _rEnergia(p); _rCalore(p); _rComm(p); _rMobilita(p);
-    _rMedico(p); _rSicurezza(p);
+    _rMedico(p); _rSicurezza(p); _rProfilo(p); _rScenario(p);
+  }
+
+  const TIPO_LABEL = {
+    appartamento: 'Appartamento', casa: 'Casa indipendente', rurale: 'Casa rurale',
+    isolata: 'Casa isolata', ospite: 'Ospite', tenda: 'Tenda', rifugio: 'Rifugio', nessun_riparo: 'Senza riparo',
+  };
+  function _rProfilo(p) {
+    const n = (p.adulti || 0) + (p.bambini || 0) + (p.anziani || 0);
+    _badge('sr-profilo', `${n} ${n === 1 ? 'persona' : 'persone'}`, TIPO_LABEL[p.tipo_abitazione] || '', 'neutral');
+  }
+  function _rScenario(p) {
+    const id = p.scenario_id;
+    const sc = (window.SCENARI_LIST || []).find(s => s.id === id);
+    const label = id === 'custom' ? 'Personalizzata' : (sc?.titolo || '');
+    _badge('sr-scenario', label || 'Da scegliere', '', label ? 'neutral' : 'warn');
   }
 
   function _badge(id, val, sub, cls) {
     const el = document.getElementById(id);
     if (!el) return;
-    el.innerHTML = `<span class="sr-val ${cls}">${val}</span><span class="sr-sub">${sub}</span>`;
+    el.innerHTML = `<span class="sr-val ${cls}">${val}</span>`;
+    el.title = sub || '';
   }
 
+  function _gg(n) { return n === 1 ? '1 giorno' : n + ' giorni'; }
   function _rAcqua(p) {
     const persone = (p.adulti || 2) + (p.bambini || 0) * 0.7 + (p.anziani || 0) * 0.9;
     // Stessa regola di Home e task: Utils.WATER_L_PPD L/persona/giorno (bere + cucinare)
     const litriGiorno = persone * Utils.WATER_L_PPD;
     const giorni = Math.round((p.acqua_scorte_litri || 0) / Math.max(1, litriGiorno));
     const sub = `autonomia (${Utils.WATER_L_PPD} L/persona/giorno)`;
-    _badge('sr-acqua', giorni + 'gg', sub, giorni >= 30 ? 'good' : giorni >= 7 ? 'warn' : 'bad');
+    _badge('sr-acqua', _gg(giorni), sub, giorni >= 30 ? 'good' : giorni >= 7 ? 'warn' : 'bad');
   }
   function _rCibo(p) {
     const g = p.cibo_scorte_giorni || 0;
@@ -187,11 +212,11 @@ const SettingsModule = (() => {
     const kcalMap = { sedentario: 1800, normale: 2200, fisico: 3500 };
     const kcalGiorno = (kcalMap[p.cibo_attivita] || 2200) * persone;
     const sub = `autonomia · ${Math.round(kcalGiorno)} kcal/giorno fam.`;
-    _badge('sr-cibo', g + 'gg', sub, g >= 30 ? 'good' : g >= 7 ? 'warn' : 'bad');
+    _badge('sr-cibo', _gg(g), sub, g >= 30 ? 'good' : g >= 7 ? 'warn' : 'bad');
   }
   function _rEnergia(p) {
     const fonti = [p.en_pannelli && 'Solare', p.en_batteria && 'Batteria', p.en_generatore && 'Gen.'].filter(Boolean);
-    _badge('sr-energia', fonti.length > 0 ? fonti.length + ' fonte/i' : 'Nessuna', 'energia alternativa',
+    _badge('sr-energia', fonti.length > 0 ? fonti.join(', ') : 'Nessuna', 'energia alternativa',
       fonti.length >= 2 ? 'good' : fonti.length === 1 ? 'warn' : 'bad');
   }
   function _rCalore(p) {
@@ -227,7 +252,7 @@ const SettingsModule = (() => {
     ].filter(Boolean);
     const internet = p.has_internet ? ` +internet` : '';
     _badge('sr-comm',
-      canali.length > 0 ? canali.length + ' canale/i' : 'Nessuno',
+      canali.length > 0 ? canali.join(', ') : 'Nessun canale',
       'emergenza' + internet,
       canali.length >= 2 ? 'good' : canali.length === 1 ? 'warn' : 'bad');
   }
@@ -238,7 +263,7 @@ const SettingsModule = (() => {
     const sett = litSett > 0
       ? Math.round((p.carburante_litri || 0) / litSett)
       : (p.carburante_litri > 0 ? 8 : 0);
-    _badge('sr-mobilita', sett + 'sett', 'autonomia carburante',
+    _badge('sr-mobilita', sett === 1 ? '1 settimana' : sett + ' settimane', 'autonomia carburante',
       sett >= 4 ? 'good' : sett >= 1 ? 'warn' : 'bad');
   }
   function _rMedico(p) {
@@ -249,7 +274,7 @@ const SettingsModule = (() => {
       p.has_manuale_ps       && 'Manuale',
     ].filter(Boolean);
     _badge('sr-medico',
-      items.length > 0 ? items.length + '/4 elem.' : 'Nessuno',
+      items.length + ' su 4',
       'preparazione medica',
       items.length >= 3 ? 'good' : items.length >= 1 ? 'warn' : 'bad');
   }
@@ -262,7 +287,7 @@ const SettingsModule = (() => {
       p.has_rete_vicinato        && 'Vicinato',
     ].filter(Boolean);
     _badge('sr-sicurezza',
-      items.length > 0 ? items.length + '/5 elem.' : 'Nessuno',
+      items.length + ' su 5',
       'sicurezza attiva',
       items.length >= 4 ? 'good' : items.length >= 2 ? 'warn' : 'bad');
   }
@@ -343,6 +368,7 @@ const SettingsModule = (() => {
     const panel = document.getElementById('stab-scenario');
     if (!panel) return;
     const p = get();
+    _rScenario(p);
     const activeId = p.scenario_id || null;
     const list = window.SCENARI_LIST || [];
     const activeSc = list.find(s => s.id === activeId);
@@ -512,43 +538,30 @@ const SettingsModule = (() => {
   }
 
   /* ── HTML BUILDERS ── */
-  const PRIMARY_TABS = ['profilo', 'acqua', 'cibo', 'energia', 'calore'];
-  let moreOpen = false;
-
-  function _tabBtn(t) {
-    const comp = _tabCompleteness(t.id);
-    const pillHtml = comp
-      ? `<span class="stab-pill ${comp.pct >= 100 ? 'stab-pill-done' : comp.pct >= 50 ? 'stab-pill-mid' : 'stab-pill-low'}">${comp.filled}/${comp.total}</span>`
-      : '';
-    return `<button class="stab-btn${t.id === activeTab ? ' active' : ''}" data-tab="${t.id}"
-      onclick="SettingsModule._tab('${t.id}')">
-      <i class="ph ${t.icon}"></i><span>${t.label}</span>${pillHtml}
-    </button>`;
-  }
-
-  function _toggleMore() {
-    moreOpen = !moreOpen;
-    const bar = document.querySelector('.settings-tab-bar');
-    if (bar) bar.outerHTML = _tabBar();
-  }
-
-  function _tabBar() {
-    const primary = TABS.filter(t => PRIMARY_TABS.includes(t.id));
-    const more = TABS.filter(t => !PRIMARY_TABS.includes(t.id));
-    return `<div class="settings-tab-bar">
-      ${primary.map(_tabBtn).join('')}
-      <button class="stab-btn stab-more${moreOpen ? ' active' : ''}" onclick="SettingsModule._toggleMore()">
-        <i class="ph ph-dots-three-circle"></i><span>Altro</span>
+  function _section(t, inner) {
+    const open = t.id === activeTab;
+    return `<div class="pf-sec${open ? ' open' : ''}" data-tab="${t.id}">
+      <button class="pf-row" aria-expanded="${open}" aria-controls="stab-${t.id}" onclick="SettingsModule._tab('${t.id}', true)">
+        <span class="pf-ico"><i class="ph ${t.icon}"></i></span>
+        <span class="pf-txt"><span class="pf-title">${t.label}</span><span class="pf-desc">${t.desc}</span></span>
+        <span class="pf-status" id="sr-${t.id}"></span>
+        <i class="ph ph-caret-down pf-caret"></i>
       </button>
-      ${moreOpen ? more.map(_tabBtn).join('') : ''}
+      <div class="stab-panel${open ? '' : ' hidden'}" id="stab-${t.id}">${inner}</div>
     </div>`;
   }
 
-  function _tabHead(icon, title, srId) {
-    return `<div class="stab-header">
-      <div class="stab-title"><i class="ph ${icon}"></i>${title}</div>
-      <div class="stab-result" id="${srId}"><span class="sr-val bad">—</span><span class="sr-sub">aggiorna dati</span></div>
-    </div>`;
+  function _sectionsHtml() {
+    const builders = {
+      profilo: _htmlProfilo, scenario: () => '', acqua: _htmlAcqua, cibo: _htmlCibo,
+      energia: _htmlEnergia, calore: _htmlCalore, mobilita: _htmlMobilita,
+      comm: _htmlComm, medico: _htmlMedico, sicurezza: _htmlSicurezza,
+    };
+    return GROUPS.map(g => `
+      <div class="pf-group">
+        <h2 class="pf-group-title">${g.label}</h2>
+        ${TABS.filter(t => t.group === g.id).map(t => _section(t, builders[t.id]())).join('')}
+      </div>`).join('');
   }
 
   function _htmlProfilo() { return `
@@ -673,7 +686,6 @@ const SettingsModule = (() => {
   `; }
 
   function _htmlAcqua() { return `
-    ${_tabHead('ph-drop','Acqua','sr-acqua')}
     <div class="card">
       <h3><i class="ph ph-package"></i> Scorte Stoccate</h3>
       <div class="big-input-group">
@@ -711,7 +723,6 @@ const SettingsModule = (() => {
   `; }
 
   function _htmlCibo() { return `
-    ${_tabHead('ph-fork-knife','Cibo','sr-cibo')}
     <div class="card">
       <h3><i class="ph ph-package"></i> Scorte Alimentari</h3>
       <div class="big-input-group">
@@ -745,7 +756,6 @@ const SettingsModule = (() => {
   `; }
 
   function _htmlEnergia() { return `
-    ${_tabHead('ph-lightning','Energia','sr-energia')}
     <div class="card">
       <h3><i class="ph ph-sun"></i> Fonti Disponibili</h3>
       <div class="checkbox-grid">
@@ -788,7 +798,6 @@ const SettingsModule = (() => {
   `; }
 
   function _htmlCalore() { return `
-    ${_tabHead('ph-flame','Calore','sr-calore')}
     <div class="card">
       <h3><i class="ph ph-flame"></i> Riscaldamento Alternativo</h3>
       <div class="checkbox-grid">
@@ -824,7 +833,6 @@ const SettingsModule = (() => {
   `; }
 
   function _htmlComm() { return `
-    ${_tabHead('ph-radio','Comunicazioni','sr-comm')}
     <div class="card">
       <h3><i class="ph ph-wifi"></i> Connettività Internet</h3>
       <div class="checkbox-grid" style="margin-bottom:12px">
@@ -879,7 +887,6 @@ const SettingsModule = (() => {
   `; }
 
   function _htmlMobilita() { return `
-    ${_tabHead('ph-car','Mobilità','sr-mobilita')}
     <div class="card">
       <h3><i class="ph ph-gas-pump"></i> Carburante Disponibile</h3>
       <div class="big-input-group">
@@ -929,12 +936,11 @@ const SettingsModule = (() => {
         <label class="check-option"><input type="checkbox" id="s-has-gobag">
           <span><i class="ph ph-backpack"></i> Go-bag pronto (72h)<br><small>Documenti, contanti, cambio, farmaci, acqua, cibo</small></span></label>
       </div>
-      <div class="form-hint mt-8">Kit medico e farmaci → tab <strong>Medico</strong> · Radio e walkie → tab <strong>Comm.</strong></div>
+      <div class="form-hint mt-8">Kit medico e farmaci → sezione <strong>Salute</strong> · Radio e walkie → sezione <strong>Comunicazioni</strong></div>
     </div>
   `; }
 
   function _htmlMedico() { return `
-    ${_tabHead('ph-first-aid','Medico','sr-medico')}
     <div class="card">
       <h3><i class="ph ph-first-aid"></i> Kit e Scorte Mediche</h3>
       <div class="checkbox-grid">
@@ -978,7 +984,6 @@ const SettingsModule = (() => {
   `; }
 
   function _htmlSicurezza() { return `
-    ${_tabHead('ph-shield-check','Sicurezza','sr-sicurezza')}
     <div class="card">
       <h3><i class="ph ph-fire-extinguisher"></i> Sicurezza Domestica</h3>
       <div class="checkbox-grid">
@@ -1244,40 +1249,18 @@ const SettingsModule = (() => {
     if (!root) return;
 
     root.innerHTML = `
-      <div class="settings-intro">
-        <p class="text-secondary text-sm">Compila solo ciò che hai: ogni modifica si salva da sola e aggiorna la Home.</p>
-        <details class="settings-backup">
-          <summary><i class="ph ph-gear"></i> Backup e opzioni</summary>
-          <div class="settings-intro-actions">
-            <button class="btn-reset-dim" onclick="SettingsModule.exportData()" title="Scarica backup JSON">
-              <i class="ph ph-download-simple"></i> Esporta
-            </button>
-            <button class="btn-reset-dim" onclick="SettingsModule.importData()" title="Ripristina da backup JSON">
-              <i class="ph ph-upload-simple"></i> Importa
-            </button>
-            <button class="btn-reset-dim" onclick="CondividiModule.open()" title="Condividi il piano via QR code">
-              <i class="ph ph-qr-code"></i> Condividi
-            </button>
-            <button class="btn-reset-dim" onclick="OnboardingModule.open()" title="Rifai le 4 domande iniziali">
-              <i class="ph ph-play"></i> Rifai setup
-            </button>
-            <button class="btn-reset-dim btn-reset-danger" onclick="SettingsModule.reset()">
-              <i class="ph ph-arrow-counter-clockwise"></i> Azzera
-            </button>
-          </div>
-        </details>
+      ${_sectionsHtml()}
+      <div class="pf-group">
+        <h2 class="pf-group-title">I tuoi dati</h2>
+        <p class="pf-note"><i class="ph ph-lock-simple"></i> Restano solo su questo dispositivo.</p>
+        <div class="pf-actions">
+          <button class="pf-action" onclick="SettingsModule.exportData()"><i class="ph ph-download-simple"></i> Salva un backup</button>
+          <button class="pf-action" onclick="SettingsModule.importData()"><i class="ph ph-upload-simple"></i> Ripristina un backup</button>
+          <button class="pf-action" onclick="CondividiModule.open()"><i class="ph ph-qr-code"></i> Condividi con un familiare</button>
+          <button class="pf-action" onclick="OnboardingModule.open()"><i class="ph ph-play"></i> Rifai le domande iniziali</button>
+          <button class="pf-action pf-action-danger" onclick="SettingsModule.reset()"><i class="ph ph-arrow-counter-clockwise"></i> Cancella tutti i dati</button>
+        </div>
       </div>
-      ${_tabBar()}
-      <div class="stab-panel hidden" id="stab-scenario"></div>
-      <div class="stab-panel" id="stab-profilo">${_htmlProfilo()}</div>
-      <div class="stab-panel hidden" id="stab-acqua">${_htmlAcqua()}</div>
-      <div class="stab-panel hidden" id="stab-cibo">${_htmlCibo()}</div>
-      <div class="stab-panel hidden" id="stab-energia">${_htmlEnergia()}</div>
-      <div class="stab-panel hidden" id="stab-calore">${_htmlCalore()}</div>
-      <div class="stab-panel hidden" id="stab-comm">${_htmlComm()}</div>
-      <div class="stab-panel hidden" id="stab-mobilita">${_htmlMobilita()}</div>
-      <div class="stab-panel hidden" id="stab-medico">${_htmlMedico()}</div>
-      <div class="stab-panel hidden" id="stab-sicurezza">${_htmlSicurezza()}</div>
       <p id="s-save-msg" class="text-center text-secondary text-sm mt-12 hidden">
         <i class="ph ph-check-circle"></i> Profilo aggiornato — Home aggiornata
       </p>
@@ -1297,5 +1280,5 @@ const SettingsModule = (() => {
     _renderScenarioTab();
   }
 
-  return { init, save, reset, exportData, importData, setField, get, getTotalPeople, _onTipoChange, _onTempChange, _autoSave, _tab, _toggleMore, selectScenario, _toggleScCheck, _resetScCheck, toggleCustomThreat };
+  return { init, save, reset, exportData, importData, setField, get, getTotalPeople, _onTipoChange, _onTempChange, _autoSave, _tab, selectScenario, _toggleScCheck, _resetScCheck, toggleCustomThreat };
 })();

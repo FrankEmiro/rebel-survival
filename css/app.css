@@ -3541,3 +3541,50 @@ input, select, textarea { font-family: 'Nunito', sans-serif; font-size: 1rem; }
 
 /* Profilo: link legali */
 .legal-footer a.legal-link { text-decoration: none; }
+
+/* ── Profilo: sezioni a gruppi (una aperta alla volta) ── */
+.pf-group { margin-bottom: 22px; }
+.pf-group-title {
+  font-family: 'Rajdhani', sans-serif; font-size: 0.78rem; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-secondary);
+  margin: 0 0 8px 2px;
+}
+.pf-sec {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius); margin-bottom: 8px; overflow: hidden;
+  scroll-margin-top: calc(var(--topbar-h) + 12px);
+}
+.pf-sec.open { border-color: var(--border-accent); }
+.pf-row {
+  display: flex; align-items: center; gap: 12px; width: 100%;
+  min-height: 60px; padding: 10px 14px; background: none; border: none;
+  color: var(--text-primary); text-align: left; cursor: pointer; font: inherit;
+}
+.pf-row:hover { background: var(--bg-card-hover); }
+.pf-row:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.pf-ico {
+  flex-shrink: 0; width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--accent-muted); color: var(--accent); font-size: 1.15rem;
+}
+.pf-txt { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.pf-title { font-weight: 600; font-size: 0.95rem; }
+.pf-desc { font-size: 0.78rem; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pf-status { flex-shrink: 0; text-align: right; }
+.pf-status .sr-val { font-size: 0.8rem; font-weight: 600; }
+.pf-status .sr-val.neutral { color: var(--text-secondary); }
+.pf-caret { flex-shrink: 0; color: var(--text-secondary); transition: transform 0.2s; }
+.pf-sec.open .pf-caret { transform: rotate(180deg); color: var(--accent); }
+.pf-sec > .stab-panel { padding: 4px 12px 12px; border-top: 1px solid var(--border); }
+.pf-sec > .stab-panel .card { background: var(--bg-secondary); margin-top: 10px; }
+.pf-note { font-size: 0.82rem; color: var(--text-secondary); margin: 0 0 10px 2px; }
+.pf-actions { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; }
+.pf-action {
+  display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 10px 14px;
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
+  color: var(--text-primary); font: inherit; font-size: 0.9rem; text-align: left; cursor: pointer;
+}
+.pf-action i { font-size: 1.1rem; color: var(--accent); }
+.pf-action:hover { background: var(--bg-card-hover); }
+.pf-action-danger, .pf-action-danger i { color: var(--danger); }
+@media (max-width: 420px) { .pf-desc { display: none; } }
