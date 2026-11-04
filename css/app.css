@@ -3506,3 +3506,38 @@ input, select, textarea { font-family: 'Nunito', sans-serif; font-size: 1rem; }
 .sidebar-legal { padding: 16px 20px; font-size: 0.75rem; color: var(--text-secondary); }
 .sidebar-legal a, .home-legal a, .disclaimer-footer-note a { color: var(--text-secondary); text-decoration: underline; }
 .home-legal { text-align: center; font-size: 0.78rem; color: var(--text-secondary); margin: 18px 0 8px; }
+
+/* ============================================================
+   Navigazione semplificata: Home · Scorte · Emergenza · Guide · Profilo
+   ============================================================ */
+.nav-emg-item { margin-top: 14px; }
+.nav-link-emg { color: #f0a597; border: 1px solid rgba(181,48,32,0.55); background: var(--danger-bg); }
+.nav-link-emg:hover { background: rgba(181,48,32,0.22); color: #fff; }
+.nav-link-emg.active { background: var(--danger); color: #fff; border-color: var(--danger); }
+.nav-link-emg.active i, .nav-link-emg i { color: inherit; }
+
+.bottom-nav-item.bottom-nav-emg { color: #f0a597; }
+.bottom-nav-item.bottom-nav-emg .bottom-nav-icon {
+  background: var(--danger); color: #fff; border-radius: 50%;
+  width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;
+}
+.bottom-nav-item.bottom-nav-emg.active { color: #fff; border-top-color: var(--danger); }
+
+/* Sezione Emergenza */
+.emg-call-top { background: var(--danger); color: #fff; border-color: var(--danger); min-height: 60px;
+  font-size: 1.25rem; margin-bottom: 14px; box-shadow: 0 4px 18px rgba(181,48,32,0.35); }
+.emg-call-top:active { transform: scale(0.99); }
+.st-section-title { display: flex; align-items: center; gap: 8px; margin: 26px 0 12px;
+  font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; letter-spacing: .06em; text-transform: uppercase; color: var(--text-secondary); }
+.emg-more { margin-top: 6px; }
+.emg-more summary { cursor: pointer; font-size: 0.85rem; color: var(--text-secondary); padding: 6px 0; }
+.emg-num-form { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; padding: 12px;
+  border: 1px solid var(--border-accent); border-radius: var(--radius); background: var(--bg-card); }
+.emg-num-form input { padding: 10px 12px; border-radius: var(--radius); border: 1px solid var(--border);
+  background: var(--bg-primary); color: var(--text-primary); }
+.emg-num-form input:focus { outline: none; border-color: var(--accent); }
+.emg-num-err { color: #e8887a; font-size: 0.8rem; min-height: 1em; }
+.emg-num-actions { display: flex; gap: 8px; justify-content: flex-end; }
+
+/* Profilo: link legali */
+.legal-footer a.legal-link { text-decoration: none; }

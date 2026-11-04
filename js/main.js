@@ -3,15 +3,15 @@
    ============================================================ */
 
 const SECTION_TITLES = {
-  home: 'Dashboard',
+  home: 'Home',
   acqua: 'Acqua',
   cibo: 'Cibo',
   energia: 'Energia',
   riscaldamento: 'Riscaldamento',
   carburante: 'Carburante',
-  kit: 'Kit & Lista Spesa',
-  guide: 'Guide Offline',
-  settings: 'Piano',
+  kit: 'Scorte',
+  guide: 'Guide',
+  settings: 'Profilo',
   strumenti: 'Emergenza',
 };
 
@@ -97,7 +97,7 @@ function addCalcBackButtons() {
     if (!header || header.querySelector('.calc-back')) return;
     const btn = document.createElement('button');
     btn.className = 'btn btn-outline btn-sm calc-back';
-    btn.innerHTML = '<i class="ph ph-arrow-left"></i> Piano';
+    btn.innerHTML = '<i class="ph ph-arrow-left"></i> Profilo';
     btn.addEventListener('click', () => {
       navigateTo('settings');
       setTimeout(() => SettingsModule._tab(id === 'riscaldamento' ? 'calore' : id === 'carburante' ? 'mobilita' : id), 0);
@@ -117,7 +117,7 @@ function initSection(section) {
     case 'kit':         KitModule.init(); switchKitTab('kit'); break;
     case 'guide':       GuideModule.init(); break;
     case 'settings':    SettingsModule.init(); break;
-    case 'strumenti':   StrumentiModule.init(); break;
+    case 'strumenti':   DashboardModule.renderEmergency(); StrumentiModule.init(); break;
   }
 }
 
@@ -181,7 +181,6 @@ document.addEventListener('DOMContentLoaded', () => {
   registerSW();
   initDisclaimer();
   // Scorciatoia "Emergenza" della PWA (icona sulla schermata del telefono): /?mode=emergenza
-  if (new URLSearchParams(location.search).get('mode') === 'emergenza') Storage.set('home_mode', 'emergenza');
-  navigateTo('home');
+  navigateTo(new URLSearchParams(location.search).get('mode') === 'emergenza' ? 'strumenti' : 'home');
   if (localStorage.getItem('disclaimer_accepted')) OnboardingModule.maybeStart();
 });

@@ -821,6 +821,25 @@ const StrumentiModule = (() => {
     root.innerHTML = `
       <div class="st-grid">
 
+        <!-- TORCIA -->
+        <div class="st-card st-card-center">
+          <div class="st-card-hdr"><span><i class="ph ph-flashlight"></i> Torcia</span></div>
+          <button class="st-big-btn" id="st-torch-btn" onclick="StrumentiModule.toggleTorch()">
+            <i class="ph ph-flashlight" id="st-torch-ico"></i>
+            <span id="st-torch-lbl">OFF</span>
+          </button>
+          <p class="st-status" id="st-torch-status"></p>
+        </div>
+
+        <!-- SOS -->
+        <div class="st-card st-card-center">
+          <div class="st-card-hdr"><span><i class="ph ph-siren"></i> SOS</span></div>
+          <button class="st-sos-btn" id="st-sos-btn" onclick="StrumentiModule.toggleSOS()">
+            <i class="ph ph-siren"></i><span>INVIA SOS</span>
+          </button>
+          <p class="st-status">Morse: vibrazione + lampeggio + audio</p>
+        </div>
+
         <!-- BUSSOLA -->
         <div class="st-card">
           <div class="st-card-hdr">
@@ -856,69 +875,6 @@ const StrumentiModule = (() => {
           </div>
         </div>
 
-        <!-- TORCIA -->
-        <div class="st-card st-card-center">
-          <div class="st-card-hdr"><span><i class="ph ph-flashlight"></i> Torcia</span></div>
-          <button class="st-big-btn" id="st-torch-btn" onclick="StrumentiModule.toggleTorch()">
-            <i class="ph ph-flashlight" id="st-torch-ico"></i>
-            <span id="st-torch-lbl">OFF</span>
-          </button>
-          <p class="st-status" id="st-torch-status"></p>
-        </div>
-
-        <!-- BATTERIA -->
-        <div class="st-card">
-          <div class="st-card-hdr"><span><i class="ph ph-battery-full"></i> Batteria</span></div>
-          <div id="st-battery-content"><p class="st-idle-msg">Caricamento...</p></div>
-        </div>
-
-        <!-- RETE -->
-        <div class="st-card">
-          <div class="st-card-hdr"><span><i class="ph ph-wifi"></i> Rete</span></div>
-          <div id="st-network-content"></div>
-        </div>
-
-        <!-- SOS -->
-        <div class="st-card st-card-center">
-          <div class="st-card-hdr"><span><i class="ph ph-siren"></i> SOS</span></div>
-          <button class="st-sos-btn" id="st-sos-btn" onclick="StrumentiModule.toggleSOS()">
-            <i class="ph ph-siren"></i><span>INVIA SOS</span>
-          </button>
-          <p class="st-status">Morse: vibrazione + lampeggio + audio</p>
-        </div>
-
-        <!-- NUMERI EMERGENZA -->
-        <div class="st-card">
-          <div class="st-card-hdr"><span><i class="ph ph-phone-call"></i> Numeri Emergenza</span></div>
-          <div class="st-emerg-grid">
-            <a class="st-emerg-num" href="tel:112">
-              <span class="st-emerg-code">112</span>
-              <span class="st-emerg-label">Emergenza Europea</span>
-            </a>
-            <a class="st-emerg-num" href="tel:118">
-              <span class="st-emerg-code">118</span>
-              <span class="st-emerg-label">Soccorso Sanitario</span>
-            </a>
-            <a class="st-emerg-num" href="tel:115">
-              <span class="st-emerg-code">115</span>
-              <span class="st-emerg-label">Vigili del Fuoco</span>
-            </a>
-            <a class="st-emerg-num" href="tel:113">
-              <span class="st-emerg-code">113</span>
-              <span class="st-emerg-label">Polizia di Stato</span>
-            </a>
-            <a class="st-emerg-num" href="tel:1515">
-              <span class="st-emerg-code">1515</span>
-              <span class="st-emerg-label">Emergenza Ambientale</span>
-            </a>
-            <a class="st-emerg-num" href="tel:1530">
-              <span class="st-emerg-code">1530</span>
-              <span class="st-emerg-label">Guardia Costiera</span>
-            </a>
-          </div>
-          <p class="st-status" style="text-align:center;margin-top:8px">Tocca un numero per chiamare</p>
-        </div>
-
         <!-- MAPPA -->
         <div class="st-card st-card-full">
           <div class="st-card-hdr">
@@ -933,6 +889,18 @@ const StrumentiModule = (() => {
             Tile © <a href="https://openstreetmap.org" target="_blank" rel="noopener" style="color:var(--text-dim)">OpenStreetMap</a> contributors · Regioni © ISTAT CC BY
           </p>
           <div id="st-tiles-pack"></div>
+        </div>
+
+        <!-- BATTERIA -->
+        <div class="st-card">
+          <div class="st-card-hdr"><span><i class="ph ph-battery-full"></i> Batteria</span></div>
+          <div id="st-battery-content"><p class="st-idle-msg">Caricamento...</p></div>
+        </div>
+
+        <!-- RETE -->
+        <div class="st-card">
+          <div class="st-card-hdr"><span><i class="ph ph-wifi"></i> Rete</span></div>
+          <div id="st-network-content"></div>
         </div>
 
       </div>`;

@@ -120,7 +120,7 @@ const ListaSpesaModule = (() => {
   const SCENARIO_SECTIONS = {
     pandemia: [{
       id: 'protezione-sanitaria',
-      titolo: '🦠 Protezione Sanitaria',
+      titolo: 'Protezione Sanitaria',
       priority: true,
       extra: true,
       items: [
@@ -135,7 +135,7 @@ const ListaSpesaModule = (() => {
     }],
     evacuazione: [{
       id: 'gobag',
-      titolo: '🎒 Go-Bag (72h)',
+      titolo: 'Go-Bag (72h)',
       priority: true,
       extra: true,
       items: [
@@ -153,7 +153,7 @@ const ListaSpesaModule = (() => {
     }],
     terremoto: [{
       id: 'kit-sisma',
-      titolo: '🏚️ Kit Post-Sisma',
+      titolo: 'Kit Post-Sisma',
       priority: true,
       extra: true,
       items: [
@@ -168,7 +168,7 @@ const ListaSpesaModule = (() => {
     }],
     alluvione: [{
       id: 'kit-alluvione',
-      titolo: '🌊 Kit Alluvione',
+      titolo: 'Kit Alluvione',
       priority: true,
       extra: true,
       items: [
@@ -182,7 +182,7 @@ const ListaSpesaModule = (() => {
     }],
     'incendio-zona': [{
       id: 'kit-incendio',
-      titolo: '🔥 Protezione Incendio',
+      titolo: 'Protezione Incendio',
       priority: true,
       extra: true,
       items: [
@@ -195,7 +195,7 @@ const ListaSpesaModule = (() => {
     }],
     'tempesta-invernale': [{
       id: 'kit-gelo',
-      titolo: '❄️ Kit Gelo / Neve',
+      titolo: 'Kit Gelo / Neve',
       priority: true,
       extra: true,
       items: [
@@ -209,7 +209,7 @@ const ListaSpesaModule = (() => {
     }],
     'survival-natura': [{
       id: 'kit-survival',
-      titolo: '🌲 Kit Survival in Natura',
+      titolo: 'Kit Survival in Natura',
       priority: true,
       extra: true,
       items: [
@@ -237,7 +237,7 @@ const ListaSpesaModule = (() => {
     }],
     'blackout-lungo': [{
       id: 'kit-blackout-avanzato',
-      titolo: '⚡ Kit Blackout Avanzato',
+      titolo: 'Kit Blackout Avanzato',
       priority: true,
       extra: true,
       items: [
@@ -254,16 +254,17 @@ const ListaSpesaModule = (() => {
   /* ── Sezioni base sempre presenti ── */
   function _buildBaseSezioni(profilo) {
     const acquaData = Storage.get('acqua-result');
-    const persone = (profilo.adulti || 2) + (profilo.bambini || 0) + (profilo.anziani || 0);
-    const litriRac = acquaData?.litriRac || Math.max(30, persone * 5 * 30);
+    // Stessa regola della Home: 3 L a persona al giorno (bambini 0,7 · anziani 0,9), per 30 giorni.
+    // Se l'utente ha usato il calcolatore Acqua, vale il suo risultato.
+    const persPes = Math.max(1, (profilo.adulti ?? 2) + (profilo.bambini || 0) * 0.7 + (profilo.anziani || 0) * 0.9);
+    const litriRac = acquaData?.litriRac || Math.ceil(persPes * Utils.WATER_L_PPD * 30);
 
     return [
       {
         id: 'acqua',
-        titolo: '💧 Acqua',
+        titolo: 'Acqua',
         items: [
-          { nome:'Bottiglie acqua 1,5L', qty: Math.ceil(litriRac / 1.5) + ' bottiglie', note:'Scorta rotazione mensile' },
-          { nome:'Taniche HDPE 10L alimentari', qty: Math.ceil(litriRac / 10) + ' pz', note:'Stoccaggio lungo termine' },
+          { nome:'Acqua: ' + litriRac + ' litri in tutto', qty: Math.ceil(litriRac / 1.5) + ' bottiglie da 1,5 L', note:'Oppure ' + Math.ceil(litriRac / 10) + ' taniche alimentari da 10 L · ruota le scorte' },
           { nome:'Candeggina non profumata', qty:'3 bottiglie', note:'2 gocce/L per purificazione (4 se torbida)' },
           { nome:'Filtro portatile (Sawyer Squeeze)', qty:'1 pz', note:'Filtra qualsiasi fonte' },
           { nome:'Pastiglie purificazione', qty:'2 confezioni', note:'Backup filtro' },
@@ -271,7 +272,7 @@ const ListaSpesaModule = (() => {
       },
       {
         id: 'alimentare',
-        titolo: '🥫 Alimentare',
+        titolo: 'Alimentare',
         items: [
           { nome:'Pasta di semola',             qty:'10 kg',  note:'Durata 3 anni' },
           { nome:'Riso bianco',                 qty:'5 kg',   note:'Durata 5 anni' },
@@ -293,7 +294,7 @@ const ListaSpesaModule = (() => {
       },
       {
         id: 'illuminazione',
-        titolo: '💡 Illuminazione',
+        titolo: 'Illuminazione',
         items: [
           { nome:'Torce LED ricaricabili',               qty:'3 pz',              note:'1 per persona' },
           { nome:'Torcia frontale LED',                  qty:'1/persona',         note:'Mani libere' },
@@ -306,7 +307,7 @@ const ListaSpesaModule = (() => {
       },
       {
         id: 'energia',
-        titolo: '🔋 Energia',
+        titolo: 'Energia',
         items: [
           { nome:'Power bank 20.000mAh',           qty:'2 pz', note:'Ricarica telefoni' },
           { nome:'Pannello solare portatile 100W', qty:'1 pz', note:'Ricarica batterie e power bank' },
@@ -316,7 +317,7 @@ const ListaSpesaModule = (() => {
       },
       {
         id: 'comunicazione',
-        titolo: '📡 Comunicazione',
+        titolo: 'Comunicazione',
         items: [
           { nome:'Radio FM/AM a pile o manovella', qty:'1 pz',     note:'Info emergenza senza internet' },
           { nome:'Walkie-talkie PMR446 (coppia)',  qty:'1 coppia', note:'Canale 8: emergenza locale' },
@@ -325,7 +326,7 @@ const ListaSpesaModule = (() => {
       },
       {
         id: 'salute',
-        titolo: '🩺 Primo Soccorso & Salute',
+        titolo: 'Primo Soccorso & Salute',
         items: [
           { nome:'Kit primo soccorso completo',   qty:'1 pz',          note:'Garze, bende, laccio emostatico, forbici, cerotti' },
           { nome:'Paracetamolo 500mg',            qty:'3 confezioni',  note:'' },
@@ -338,7 +339,7 @@ const ListaSpesaModule = (() => {
       },
       {
         id: 'riscaldamento',
-        titolo: '🔥 Riscaldamento & Cucina',
+        titolo: 'Riscaldamento & Cucina',
         items: [
           { nome:'Coperte termiche di emergenza',  qty:'4 pz',  note:'Riflettono 90% del calore corporeo' },
           { nome:'Fornello da campeggio a gas',    qty:'1 pz',  note:'' },
@@ -348,7 +349,7 @@ const ListaSpesaModule = (() => {
       },
       {
         id: 'igiene',
-        titolo: '🧼 Igiene',
+        titolo: 'Igiene',
         items: [
           { nome:'Sapone solido',              qty:'10 pz',             note:'Durata lunga, non scade' },
           { nome:'Salviettine umidificate',    qty:'10 confezioni',     note:'Igiene senza acqua' },
@@ -359,7 +360,7 @@ const ListaSpesaModule = (() => {
       },
       {
         id: 'mobilita',
-        titolo: '🚗 Mobilità',
+        titolo: 'Mobilità',
         items: [
           { nome:'Tanica carburante omologata 20L',         qty:'1 pz',    note:'Verifica materiale: PE (benzina) vs acciaio (diesel)' },
           { nome:'Trattamento conservante carburante (STA-BIL)', qty:'1 flacone', note:'Mantiene carburante fino a 12 mesi' },
@@ -369,7 +370,7 @@ const ListaSpesaModule = (() => {
       },
       {
         id: 'documenti',
-        titolo: '📄 Documenti & Finanza',
+        titolo: 'Documenti & Finanza',
         items: [
           { nome:'Busta impermeabile per documenti', qty:'1 pz',   note:'' },
           { nome:'Contanti in tagli piccoli',        qty:'€500+',  note:'Bancomat e POS inutili senza elettricità' },
@@ -395,6 +396,15 @@ const ListaSpesaModule = (() => {
 
     // Sezioni base
     const sezioni = _buildBaseSezioni(profilo);
+    // Le quantità di cibo erano pensate per 2-3 persone: le adatto alle persone del profilo
+    const persone = Math.max(1, (profilo.adulti ?? 2) + (profilo.bambini || 0) + (profilo.anziani || 0));
+    const fattore = persone / 2.5;
+    const scala = q => {
+      const m = /^(\d+(?:[.,]\d+)?)\s+(.*)$/.exec(q || '');
+      if (!m || /\/|persona/.test(q)) return q;
+      return Math.max(1, Math.ceil(parseFloat(m[1].replace(',', '.')) * fattore)) + ' ' + m[2];
+    };
+    sezioni.filter(x => x.id === 'alimentare').forEach(x => x.items.forEach(it => { it.qty = scala(it.qty); }));
 
     // Marca priorità in base alle threat attive
     const priorityIds = new Set();
@@ -471,9 +481,8 @@ const ListaSpesaModule = (() => {
     const scenarioBanner = scenarioName
       ? `<div class="alert alert-warning mb-12">
           <i class="ph ph-warning-octagon"></i>
-          <div><strong>Lista calibrata su: ${scenarioName}</strong>
-            ${activeThreats.length ? ` — minacce: ${activeThreats.map(t => t.toUpperCase()).join(', ')}` : ''}
-            <br><span style="font-size:0.8rem;opacity:0.8">Le sezioni in evidenza sono priorità per questo scenario. Le voci con ★ sono specifiche per lo scenario.</span>
+          <div><strong>Lista adatta a: ${scenarioName}</strong>
+            <br><span style="font-size:0.8rem;opacity:0.8">In cima trovi le voci più importanti per questo scenario. Le voci con ★ servono solo per questo scenario.</span>
           </div>
           <button class="btn btn-outline btn-sm" onclick="navigateTo('settings')" style="margin-left:auto;white-space:nowrap;flex-shrink:0">
             <i class="ph ph-sliders"></i> Cambia
@@ -482,7 +491,7 @@ const ListaSpesaModule = (() => {
       : (!hasData
           ? `<div class="alert alert-info mb-12">
               <i class="ph ph-info"></i>
-              <div>Lista base per 2-3 persone / 30 giorni. Seleziona uno <strong>scenario</strong> in Piano per personalizzarla.
+              <div>Lista per 30 giorni, calcolata sulle persone del tuo Profilo. Scegli uno <strong>scenario</strong> per aggiungere le voci specifiche.
                 <button class="btn btn-outline btn-sm mt-8" onclick="navigateTo('settings')">
                   <i class="ph ph-warning-octagon"></i> Seleziona scenario
                 </button>

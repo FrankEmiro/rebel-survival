@@ -99,9 +99,9 @@ const OnboardingModule = (() => {
       case 'persone':
         return `<h2>Quante persone siete?</h2>
           <p class="ob-sub">Servono per calcolare quanta acqua e cibo ti servono.</p>
-          ${_stepper('adulti', 'Adulti', '', 1)}
+          ${_stepper('adulti', 'Adulti', '14–65 anni', 1)}
           ${_stepper('bambini', 'Bambini', 'sotto i 14 anni', 0)}
-          ${_stepper('anziani', 'Anziani', 'over 65', 0)}
+          ${_stepper('anziani', 'Anziani', 'oltre 65 anni', 0)}
           <label class="check-option ob-check"><input type="checkbox" ${data.ha_neonato ? 'checked' : ''}
             onchange="OnboardingModule._set('ha_neonato', this.checked, true)">
             <span><i class="ph ph-baby"></i> C'è un neonato (sotto 1 anno)</span></label>

@@ -95,7 +95,7 @@ const GuideModule = (() => {
           ${cautionBox}
           <!-- Quick Ref box — always first -->
           <div class="guide-quickref">
-            <div class="guide-qr-label"><i class="ph ph-lightning-fill"></i> QUICK REFERENCE — leggi in 30 secondi</div>
+            <div class="guide-qr-label"><i class="ph ph-lightning-fill"></i> In breve — leggi in 30 secondi</div>
             <ul class="guide-qr-list">${quickRefItems}</ul>
           </div>
 

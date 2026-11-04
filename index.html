@@ -32,7 +32,7 @@
       <button id="back-btn" class="back-btn hidden" aria-label="Torna indietro"><i class="ph ph-arrow-left"></i> Indietro</button>
       <div class="topbar-logo">
         <i class="ph ph-lightning-fill logo-bolt"></i>
-        <span id="page-title">Dashboard</span>
+        <span id="page-title">Home</span>
       </div>
     </div>
     <div id="topbar-right">
@@ -48,31 +48,25 @@
       <i class="ph ph-lightning-fill"></i>
       <div>
         <div class="logo-text">Kit Resilienza</div>
-        <div class="logo-sub">PREPAREDNESS TOOLKIT</div>
+        <div class="logo-sub">Preparati alle emergenze</div>
       </div>
     </div>
 
     <ul class="nav-list">
       <li><a href="#" class="nav-link active" data-section="home">
-        <i class="ph ph-house-simple"></i> Dashboard
+        <i class="ph ph-house-simple"></i> Home
+      </a></li>
+      <li><a href="#" class="nav-link" data-section="kit">
+        <i class="ph ph-package"></i> Scorte
+      </a></li>
+      <li><a href="#" class="nav-link" data-section="guide">
+        <i class="ph ph-books"></i> Guide
       </a></li>
       <li><a href="#" class="nav-link" data-section="settings">
-        <i class="ph ph-sliders"></i> Piano
+        <i class="ph ph-user-circle"></i> Profilo
       </a></li>
-
-      <li class="nav-group-label">— Pianificazione</li>
-      <li><a href="#" class="nav-link" data-section="kit">
-        <i class="ph ph-backpack"></i> Kit & Lista Spesa
-      </a></li>
-
-      <li class="nav-group-label">— Guide</li>
-      <li><a href="#" class="nav-link" data-section="guide">
-        <i class="ph ph-books"></i> Guide Offline
-      </a></li>
-
-      <li class="nav-group-label">— Strumenti</li>
-      <li><a href="#" class="nav-link" data-section="strumenti">
-        <i class="ph ph-compass"></i> Emergenza
+      <li class="nav-emg-item"><a href="#" class="nav-link nav-link-emg" data-section="strumenti">
+        <i class="ph ph-siren"></i> Emergenza
       </a></li>
     </ul>
     <div class="sidebar-legal">
@@ -136,15 +130,15 @@
     <!-- ===== KIT EMERGENZA + LISTA SPESA ===== -->
     <section id="section-kit" class="section">
       <div class="section-header">
-        <h1><i class="ph ph-backpack"></i> Kit & Lista Spesa</h1>
-        <p class="subtitle">Checklist kit emergenza e lista acquisti per scenario</p>
+        <h1><i class="ph ph-package"></i> Scorte</h1>
+        <p class="subtitle">Spunta quello che hai già. La lista della spesa è calcolata per la tua famiglia.</p>
       </div>
       <div class="kit-inner-tabs">
         <button class="kit-itab active" data-kit-tab="kit">
-          <i class="ph ph-backpack"></i> Kit Emergenza
+          <i class="ph ph-check-square"></i> Cosa ho
         </button>
         <button class="kit-itab" data-kit-tab="lista-spesa">
-          <i class="ph ph-shopping-cart-simple"></i> Lista Spesa
+          <i class="ph ph-shopping-cart-simple"></i> Cosa comprare
         </button>
       </div>
       <div id="kit-root"></div>
@@ -153,18 +147,16 @@
 
     <!-- ===== STRUMENTI DI CAMPO ===== -->
     <section id="section-strumenti" class="section">
-      <div class="section-header">
-        <h1><i class="ph ph-compass"></i> Emergenza</h1>
-        <p class="subtitle">Bussola, GPS, torcia, batteria, rete e segnale SOS</p>
-      </div>
+      <div id="emg-root"></div>
+      <h2 class="st-section-title"><i class="ph ph-toolbox"></i> Strumenti</h2>
       <div id="strumenti-root"></div>
     </section>
 
     <!-- ===== GUIDE ===== -->
     <section id="section-guide" class="section">
       <div class="section-header">
-        <h1><i class="ph ph-books"></i> Guide Offline</h1>
-        <p class="subtitle">Tutto il necessario — disponibile senza connessione</p>
+        <h1><i class="ph ph-books"></i> Guide</h1>
+        <p class="subtitle">Funzionano anche senza connessione</p>
       </div>
       <div id="guide-root"></div>
     </section>
@@ -172,8 +164,8 @@
     <!-- ===== DIMENSIONI (ex Impostazioni) ===== -->
     <section id="section-settings" class="section">
       <div class="section-header">
-        <h1><i class="ph ph-sliders"></i> Piano</h1>
-        <p class="subtitle">Inserisci i tuoi dati reali — ogni modifica aggiorna la Home</p>
+        <h1><i class="ph ph-user-circle"></i> Profilo</h1>
+        <p class="subtitle">I tuoi dati: ogni modifica si salva da sola e aggiorna la Home</p>
       </div>
       <div id="settings-root"></div>
     </section>
@@ -186,21 +178,21 @@
       <i class="ph ph-house-simple bottom-nav-icon"></i>
       <span class="bottom-nav-label">Home</span>
     </a>
-    <a href="#" class="bottom-nav-item" data-section="settings">
-      <i class="ph ph-sliders bottom-nav-icon"></i>
-      <span class="bottom-nav-label">Piano</span>
-    </a>
     <a href="#" class="bottom-nav-item" data-section="kit">
-      <i class="ph ph-backpack bottom-nav-icon"></i>
-      <span class="bottom-nav-label">Kit</span>
+      <i class="ph ph-package bottom-nav-icon"></i>
+      <span class="bottom-nav-label">Scorte</span>
+    </a>
+    <a href="#" class="bottom-nav-item bottom-nav-emg" data-section="strumenti">
+      <i class="ph ph-siren bottom-nav-icon"></i>
+      <span class="bottom-nav-label">Emergenza</span>
     </a>
     <a href="#" class="bottom-nav-item" data-section="guide">
       <i class="ph ph-books bottom-nav-icon"></i>
       <span class="bottom-nav-label">Guide</span>
     </a>
-    <a href="#" class="bottom-nav-item" data-section="strumenti">
-      <i class="ph ph-compass bottom-nav-icon"></i>
-      <span class="bottom-nav-label">Strumenti</span>
+    <a href="#" class="bottom-nav-item" data-section="settings">
+      <i class="ph ph-user-circle bottom-nav-icon"></i>
+      <span class="bottom-nav-label">Profilo</span>
     </a>
   </nav>
 

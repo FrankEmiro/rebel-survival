@@ -356,7 +356,7 @@ const SettingsModule = (() => {
         <i class="ph ph-warning-octagon"></i>
         <div>${activeId
           ? `<strong>Scenario attivo: ${activeLabel}</strong> — Le minacce e le task sono calibrate su questo scenario.`
-          : 'Seleziona lo <strong>scenario attuale</strong>: determina le minacce prioritarie e le task nel Dashboard.'
+          : 'Seleziona lo <strong>scenario attuale</strong>: determina i rischi prioritari e le azioni nella Home.'
         }</div>
       </div>
 
@@ -556,15 +556,15 @@ const SettingsModule = (() => {
       <h3><i class="ph ph-users"></i> Composizione Famiglia</h3>
       <div class="form-row">
         <div class="form-group">
-          <label>Adulti (18–65)</label>
+          <label>Adulti (14–65 anni)</label>
           <input type="number" id="s-adulti" min="0" max="20" value="2">
         </div>
         <div class="form-group">
-          <label>Bambini (&lt;12 anni)</label>
+          <label>Bambini (sotto i 14 anni)</label>
           <input type="number" id="s-bambini" min="0" max="10" value="0">
         </div>
         <div class="form-group">
-          <label>Anziani / Fragili</label>
+          <label>Anziani (oltre 65 anni)</label>
           <input type="number" id="s-anziani" min="0" max="10" value="0">
         </div>
       </div>
@@ -1279,13 +1279,14 @@ const SettingsModule = (() => {
       <div class="stab-panel hidden" id="stab-medico">${_htmlMedico()}</div>
       <div class="stab-panel hidden" id="stab-sicurezza">${_htmlSicurezza()}</div>
       <p id="s-save-msg" class="text-center text-secondary text-sm mt-12 hidden">
-        <i class="ph ph-check-circle"></i> Profilo aggiornato — Dashboard sincronizzato
+        <i class="ph ph-check-circle"></i> Profilo aggiornato — Home aggiornata
       </p>
       <div class="legal-footer">
         <button class="legal-link" onclick="showDisclaimer()">
-          <i class="ph ph-shield-warning"></i> Note legali
+          <i class="ph ph-shield-warning"></i> Avviso importante
         </button>
-        <span class="legal-version">v1.0 — uso personale</span>
+        <a class="legal-link" href="/legal/privacy.html">Privacy</a>
+        <a class="legal-link" href="/legal/condizioni.html">Condizioni d'uso</a>
       </div>
     `;
 

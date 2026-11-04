@@ -388,7 +388,7 @@ const DashboardModule = (() => {
     if (typeof Storage !== 'undefined') Storage.set('profilo', p);
     if (typeof SettingsModule !== 'undefined') SettingsModule._syncFromStorage?.();
     openScenarioPicker();
-    render();
+    _refresh();
   }
 
   /* ── SCORING DA PROFILO ── */
@@ -596,16 +596,16 @@ const DashboardModule = (() => {
            <span class="task-cb"></span>
          </label>`
       : (t.completed
-          ? `<span class="task-auto-badge resolved" title="Valori in Piano soddisfatti — risolto automaticamente">
+          ? `<span class="task-auto-badge resolved" title="Dati del Profilo a posto: risolto automaticamente">
                <i class="ph ph-check-circle"></i>
              </span>`
           : `<span class="task-auto-badge pending" onclick="DashboardModule.goToTask('${t.id}')"
-               title="Aggiorna i valori in Piano per risolvere">
+               title="Aggiorna i dati nel Profilo per risolvere">
                <i class="ph ph-sliders"></i>
              </span>`);
 
     const navIcon  = t.tab ? 'ph-sliders' : (t.guide ? 'ph-arrow-right' : 'ph-arrow-right');
-    const navTitle = t.tab ? 'Aggiorna il Piano' : 'Apri guida';
+    const navTitle = t.tab ? 'Aggiorna il Profilo' : 'Apri guida';
 
     return `
       <div class="priority-task ${t.urgency} ${t.completed ? 'task-completed' : ''}${t.isAutoTask ? ' task-auto' : ''}">
@@ -668,7 +668,7 @@ const DashboardModule = (() => {
           ? 'Nessuna minaccia attiva — configura le impostazioni per ricevere task operative'
           : 'Tutti i requisiti soddisfatti per le minacce attive — mantieni le scorte aggiornate'}</p>
         ${noThreats ? `<button class="btn btn-outline btn-sm mt-12" onclick="navigateTo('settings')">
-          <i class="ph ph-sliders"></i> Apri Piano</button>` : ''}
+          <i class="ph ph-user-circle"></i> Apri Profilo</button>` : ''}
       </div>`;
     }
 
@@ -679,18 +679,21 @@ const DashboardModule = (() => {
   }
 
   /* ── MODALITÀ: "Preparati" (calma) vs "Emergenza" (un passo alla volta) ── */
-  const getMode = () => Storage.get('home_mode') || 'prepara';
-  function setMode(m) { Storage.set('home_mode', m); render(); window.scrollTo(0, 0); }
+  // Compatibilità: vecchi link "setMode('emergenza')" aprono la sezione Emergenza
+  function setMode(m) { navigateTo(m === 'emergenza' ? 'strumenti' : 'home'); }
 
-  function _modeSwitch(mode) {
-    return `<div class="mode-switch" role="tablist">
-      <button role="tab" aria-selected="${mode === 'prepara'}" class="${mode === 'prepara' ? 'active' : ''}" onclick="DashboardModule.setMode('prepara')">
-        <i class="ph ph-shield-check"></i> Preparati
-      </button>
-      <button role="tab" aria-selected="${mode === 'emergenza'}" class="mode-emg ${mode === 'emergenza' ? 'active' : ''}" onclick="DashboardModule.setMode('emergenza')">
-        <i class="ph ph-siren"></i> Emergenza
-      </button>
-    </div>`;
+  /* ── Sezione Emergenza: 112, passi guidati dello scenario, numeri ── */
+  function renderEmergency() {
+    const root = document.getElementById('emg-root');
+    if (!root) return;
+    // 112 sempre in cima: è la prima cosa da poter fare
+    root.innerHTML = `<a class="emg-call emg-call-top" href="tel:112"><i class="ph ph-phone-call"></i> Chiama 112</a>`
+      + _buildEmergency(SettingsModule.get(), SettingsModule.get().scenario_id);
+  }
+  // Ridisegna ciò che è visibile (Home e/o Emergenza)
+  function _refresh() {
+    if (document.getElementById('section-strumenti')?.classList.contains('active')) renderEmergency();
+    if (document.getElementById('section-home')?.classList.contains('active')) render();
   }
 
   // Protocollo appiattito: ogni azione è un passo (con il nome della fase di appartenenza)
@@ -728,12 +731,12 @@ const DashboardModule = (() => {
     const id = SettingsModule.get().scenario_id;
     const cur = _chkGet(id);
     Storage.set(_chkKey(id), cur.includes(key) ? cur.filter(k => k !== key) : [...cur, key]);
-    render();
+    renderEmergency();
   }
   function emgJump(i) {
     const id = SettingsModule.get().scenario_id;
     Storage.set(_emgKey(id), i);
-    render();
+    renderEmergency();
   }
   const _emgKey = id => 'emg_' + id;
   const _emgIdx = id => Storage.get(_emgKey(id)) || 0;
@@ -744,40 +747,61 @@ const DashboardModule = (() => {
     if (!sc || !sc.steps) return;
     const total = _flatSteps(sc).length;
     Storage.set(_emgKey(id), Math.max(0, Math.min(total, _emgIdx(id) + delta)));
-    render();
+    renderEmergency();
   }
   function emgNext() { _emgMove(1); }
   function emgPrev() { _emgMove(-1); }
   function emgReset() {
     const id = SettingsModule.get().scenario_id;
     if (id) { Storage.set(_emgKey(id), 0); Storage.set(_chkKey(id), []); }
-    render();
+    renderEmergency();
   }
 
   /* ── Numeri utili: 112 grande, 118/115 e numeri personali (guasti, medico, famiglia) ── */
   const _numeri = () => Storage.get('num_utili') || [];
-  function addNumero() {
-    const nome = (prompt('Nome del numero (es. Guasti luce, Medico, Mamma)') || '').trim();
-    if (!nome) return;
-    const num = (prompt('Numero di telefono per "' + nome + '"') || '').replace(/[^\d+]/g, '');
-    if (!num) return;
+  let numFormOpen = false;
+  function addNumero() { numFormOpen = !numFormOpen; renderEmergency(); if (numFormOpen) document.getElementById('emg-num-nome')?.focus(); }
+  function saveNumero(ev) {
+    if (ev) ev.preventDefault();
+    const nome = (document.getElementById('emg-num-nome')?.value || '').trim();
+    const num = (document.getElementById('emg-num-tel')?.value || '').replace(/[^\d+]/g, '');
+    const err = document.getElementById('emg-num-err');
+    if (!nome || num.length < 3) { if (err) err.textContent = 'Scrivi un nome e un numero di telefono.'; return false; }
     Storage.set('num_utili', [..._numeri(), { nome: nome.slice(0, 24), num }]);
-    render();
+    numFormOpen = false;
+    renderEmergency();
+    return false;
   }
   function delNumero(i) {
     Storage.set('num_utili', _numeri().filter((_, j) => j !== i));
-    render();
+    renderEmergency();
   }
   const _esc = t => String(t).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
   function _callBlock() {
     const mine = _numeri().map((n, i) => `<span class="emg-num"><a href="tel:${_esc(n.num)}"><i class="ph ph-phone"></i> ${_esc(n.nome)}</a><button aria-label="Rimuovi ${_esc(n.nome)}" onclick="DashboardModule.delNumero(${i})"><i class="ph ph-x"></i></button></span>`).join('');
+    const form = numFormOpen ? `<form class="emg-num-form" onsubmit="return DashboardModule.saveNumero(event)">
+        <input id="emg-num-nome" type="text" maxlength="24" placeholder="Nome (es. Medico, Mamma, Guasti luce)" autocomplete="off">
+        <input id="emg-num-tel" type="tel" inputmode="tel" placeholder="Numero di telefono" autocomplete="off">
+        <div class="emg-num-err" id="emg-num-err"></div>
+        <div class="emg-num-actions">
+          <button type="button" class="btn btn-outline btn-sm" onclick="DashboardModule.addNumero()">Annulla</button>
+          <button type="submit" class="btn btn-primary btn-sm"><i class="ph ph-check"></i> Salva</button>
+        </div>
+      </form>` : `<button class="emg-add" onclick="DashboardModule.addNumero()"><i class="ph ph-plus"></i> Aggiungi un tuo numero</button>`;
     return `<div class="emg-calls">
-      <a class="emg-call" href="tel:112"><i class="ph ph-phone-call"></i> Chiama 112</a>
       <div class="emg-call-row">
         <a href="tel:118"><i class="ph ph-first-aid"></i> 118 Ambulanza</a>
         <a href="tel:115"><i class="ph ph-fire-extinguisher"></i> 115 Vigili del Fuoco</a>
       </div>
-      <div class="emg-call-row emg-mine">${mine}<button class="emg-add" onclick="DashboardModule.addNumero()"><i class="ph ph-plus"></i> Aggiungi un tuo numero</button></div>
+      <details class="emg-more"><summary>Altri numeri</summary>
+        <div class="emg-call-row">
+          <a href="tel:113"><i class="ph ph-police-car"></i> 113 Polizia</a>
+          <a href="tel:1530"><i class="ph ph-boat"></i> 1530 Guardia Costiera</a>
+          <a href="tel:1515"><i class="ph ph-tree"></i> 1515 Emergenza ambientale</a>
+        </div>
+      </details>
+      <div class="emg-call-row emg-mine">${mine}</div>
+      ${form}
     </div>`;
   }
 
@@ -798,7 +822,6 @@ const DashboardModule = (() => {
     const steps = _flatSteps(sc);
     const idx = Math.min(_emgIdx(sc.id), steps.length);
     const head = `<div class="emg-top">
-        <span class="now-badge"><i class="ph ph-siren"></i> Emergenza</span>
         <button class="banner-scenario-chip" onclick="DashboardModule.openScenarioPicker()"><span>${sc.icon || ''}</span> ${sc.titolo} <i class="ph ph-swap"></i></button>
       </div>`;
 
@@ -828,7 +851,7 @@ const DashboardModule = (() => {
           <p>Se la situazione continua, ripeti i passi o segui le istruzioni delle autorità.</p>
           <div class="emg-actions">
             <button class="btn btn-outline" onclick="DashboardModule.emgReset()"><i class="ph ph-arrow-counter-clockwise"></i> Ricomincia</button>
-            <button class="btn btn-primary" onclick="DashboardModule.setMode('prepara')">Torna a prepararti</button>
+            <button class="btn btn-primary" onclick="navigateTo('home')">Torna alla Home</button>
           </div>
         </div>${call}</div>`;
     }
@@ -879,7 +902,7 @@ const DashboardModule = (() => {
 
   function _nowBody(sc) {
     if (!sc || !sc.steps || !sc.steps.length) {
-      return `<p class="now-desc">Scegli lo scenario che temi di più: qui leggi cosa fare, fase per fase. Quando succede davvero, usa la modalità <strong>Emergenza</strong>.</p>
+      return `<p class="now-desc">Scegli lo scenario che temi di più: qui leggi cosa fare, fase per fase. Quando succede davvero, tocca <strong>Emergenza</strong> nel menu.</p>
         <button class="btn btn-outline btn-sm mt-12" onclick="DashboardModule.openScenarioPicker()"><i class="ph ph-swap"></i> Scegli scenario</button>`;
     }
     return `<div class="now-phases">
@@ -1007,7 +1030,7 @@ const DashboardModule = (() => {
 
     if (top.length === 0) return `<div class="tasks-empty">
       <i class="ph ph-check-circle" style="font-size:2rem;color:var(--success);display:block;margin-bottom:8px"></i>
-      <p>Hai completato le azioni principali per questo scenario — controlla <strong>Piano</strong> per eventuali deficit non coperti.</p></div>`;
+      <p>Hai completato le azioni principali per questo scenario — controlla il <strong>Profilo</strong> per eventuali mancanze.</p></div>`;
 
     return `<div class="focus-header">
         <i class="ph ph-crosshair"></i>
@@ -1075,11 +1098,6 @@ const DashboardModule = (() => {
       return;
     }
 
-    const mode = getMode();
-    if (mode === 'emergenza') {
-      root.innerHTML = _modeSwitch(mode) + _buildEmergency(SettingsModule.get(), SettingsModule.get().scenario_id);
-      return;
-    }
 
     const profilo = SettingsModule.get();
     const autoDetected = autoDetectThreats(profilo);
@@ -1141,7 +1159,6 @@ const DashboardModule = (() => {
     const nPhases = scObj && scObj.steps ? scObj.steps.length : 0;
 
     root.innerHTML = `
-      ${_modeSwitch(mode)}
       <!-- STATUS: livello + percorso 72h / 2 sett / 30gg -->
       <div class="status-banner ${bannerCls}">
         <i class="ph ${bannerIcon}"></i>
@@ -1225,5 +1242,5 @@ const DashboardModule = (() => {
 
   function init() { render(); }
 
-  return { init, render, computeLevel, _nowToggle, _foldToggle, setMode, addNumero, delNumero, emgCheck, emgJump, emgNext, emgPrev, emgReset, toggleTask, toggleAllTasks, refreshOfflineCard, openGuide, goToTask, openScenarioPicker, _pickScenario, downloadGuidesPack, downloadMapPack };
+  return { init, render, renderEmergency, computeLevel, _nowToggle, _foldToggle, setMode, addNumero, saveNumero, delNumero, emgCheck, emgJump, emgNext, emgPrev, emgReset, toggleTask, toggleAllTasks, refreshOfflineCard, openGuide, goToTask, openScenarioPicker, _pickScenario, downloadGuidesPack, downloadMapPack };
 })();

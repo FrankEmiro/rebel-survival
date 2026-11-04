@@ -7,7 +7,7 @@ const KitModule = (() => {
 
   const KIT = {
     casa: {
-      label: '🏠 Casa',
+      label: '<i class="ph ph-house-simple"></i> Casa',
       categorie: [
         { nome: 'Acqua & Idratazione', items: [
           { id: 'c1',  nome: 'Acqua in bottiglia (min. 3L/persona)',       note: '72h minimo' },
@@ -74,7 +74,7 @@ const KitModule = (() => {
       ]
     },
     auto: {
-      label: '🚗 Auto',
+      label: '<i class="ph ph-car-profile"></i> Auto',
       categorie: [
         { nome: 'Emergenza Stradale', items: [
           { id: 'a1',  nome: 'Triangolo di emergenza + gilet rifrangente', note: 'Obbligatorio per legge' },
@@ -100,7 +100,7 @@ const KitModule = (() => {
       ]
     },
     gobag: {
-      label: '🎒 Go-Bag',
+      label: '<i class="ph ph-backpack"></i> Zaino d\'emergenza',
       categorie: [
         { nome: 'Il Go-Bag (72h)', items: [
           { id: 'g0',  nome: 'Zaino resistente 40-60L impermeabile',       note: 'Base del go-bag' },
@@ -155,16 +155,22 @@ const KitModule = (() => {
     return total;
   }
 
+  // Voci della checklist che corrispondono a un dato del Profilo: spuntarle aggiorna anche la Home
+  const PROFILE_LINK = { c3: 'ha_filtro', c16: 'has_radio', c20: 'has_kit_medico' };
+  const _profilo = () => (typeof SettingsModule !== 'undefined' ? SettingsModule.get() : {});
+  const _isChecked = (id, saved, p) => !!(saved[id] || (PROFILE_LINK[id] && p[PROFILE_LINK[id]]));
+
   function renderTab(tab) {
     activeTab = tab;
     const saved = Storage.get('kit-checks') || {};
+    const prof = _profilo();
     const kitData = KIT[tab];
 
     let totalTab = 0, checkedTab = 0;
     kitData.categorie.forEach(cat => {
       cat.items.forEach(item => {
         totalTab++;
-        if (saved[item.id]) checkedTab++;
+        if (_isChecked(item.id, saved, prof)) checkedTab++;
       });
     });
     const pct = totalTab > 0 ? Math.round((checkedTab / totalTab) * 100) : 0;
@@ -185,7 +191,7 @@ const KitModule = (() => {
           <h3>${cat.nome}</h3>
           <ul class="checklist">
             ${cat.items.map(item => {
-              const checked = saved[item.id];
+              const checked = _isChecked(item.id, saved, prof);
               return `
                 <li class="checklist-item ${checked ? 'checked' : ''}"
                   onclick="KitModule.toggleItem('${item.id}', this)">
@@ -201,27 +207,36 @@ const KitModule = (() => {
         </div>
       `).join('')}
       <div class="flex gap-8 mt-8">
-        <button class="btn btn-outline btn-sm" onclick="KitModule.print()">🖨 Stampa</button>
-        <button class="btn btn-outline btn-sm" onclick="KitModule.resetTab()">🔄 Reset</button>
+        <button class="btn btn-outline btn-sm" onclick="KitModule.print()"><i class="ph ph-printer"></i> Stampa</button>
+        <button class="btn btn-outline btn-sm" onclick="KitModule.resetTab()"><i class="ph ph-arrow-counter-clockwise"></i> Azzera</button>
       </div>
     `;
   }
 
   function toggleItem(id, el) {
     const saved = Storage.get('kit-checks') || {};
-    saved[id] = !saved[id];
+    const val = !_isChecked(id, saved, _profilo());
+    saved[id] = val;
     Storage.set('kit-checks', saved);
-    el.classList.toggle('checked', saved[id]);
-    el.querySelector('input').checked = saved[id];
+    if (PROFILE_LINK[id]) {
+      const p = _profilo();
+      p[PROFILE_LINK[id]] = val;
+      Storage.set('profilo', p);
+      SettingsModule._syncFromStorage?.();
+    }
+    el.classList.toggle('checked', val);
+    el.querySelector('input').checked = val;
+    renderTab(activeTab);
     updateTabBadges();
   }
 
   function updateTabBadges() {
     const saved = Storage.get('kit-checks') || {};
+    const prof = _profilo();
     Object.entries(KIT).forEach(([tabId, tabData]) => {
       let total = 0, checked = 0;
       tabData.categorie.forEach(cat => {
-        cat.items.forEach(item => { total++; if (saved[item.id]) checked++; });
+        cat.items.forEach(item => { total++; if (_isChecked(item.id, saved, prof)) checked++; });
       });
       const badge = document.getElementById('kit-badge-' + tabId);
       if (badge) badge.textContent = `${checked}/${total}`;
@@ -231,10 +246,16 @@ const KitModule = (() => {
   function resetTab() {
     const saved = Storage.get('kit-checks') || {};
     const tabData = KIT[activeTab];
+    const p = _profilo();
+    let profChanged = false;
     tabData.categorie.forEach(cat => {
-      cat.items.forEach(item => { delete saved[item.id]; });
+      cat.items.forEach(item => {
+        delete saved[item.id];
+        if (PROFILE_LINK[item.id] && p[PROFILE_LINK[item.id]]) { p[PROFILE_LINK[item.id]] = false; profChanged = true; }
+      });
     });
     Storage.set('kit-checks', saved);
+    if (profChanged) { Storage.set('profilo', p); SettingsModule._syncFromStorage?.(); }
     renderTab(activeTab);
     updateTabBadges();
   }
@@ -242,7 +263,8 @@ const KitModule = (() => {
   function print() { window.print(); }
 
   function init() {
-    if (initialized) return;
+    // Già costruita: ridisegna (i dati del Profilo potrebbero essere cambiati)
+    if (initialized) { renderTab(activeTab); updateTabBadges(); return; }
     const root = document.getElementById('kit-root');
     if (!root) return;
     initialized = true;
