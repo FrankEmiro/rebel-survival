@@ -361,13 +361,13 @@ const DashboardModule = (() => {
       <div class="sp-backdrop" onclick="DashboardModule.openScenarioPicker()"></div>
       <div class="sp-drawer">
         <div class="sp-header">
-          <span>Cambia Scenario</span>
+          <span>Per cosa vuoi prepararti?</span>
           <button class="sp-close" onclick="DashboardModule.openScenarioPicker()"><i class="ph ph-x"></i></button>
         </div>
         <div class="sp-list">
           <div class="sp-item${!current ? ' sp-active' : ''}" onclick="DashboardModule._pickScenario(null)">
             <span class="sp-icon"><i class="ph ph-magnifying-glass"></i></span>
-            <div class="sp-info"><strong>Auto-rilevamento</strong><span>Minacce da profilo</span></div>
+            <div class="sp-info"><strong>Nessuna in particolare</strong><span>Le azioni si basano sul tuo profilo</span></div>
             ${!current ? '<i class="ph ph-check sp-check"></i>' : ''}
           </div>
           ${scenarios.map(s => `
@@ -900,20 +900,6 @@ const DashboardModule = (() => {
   const nowOpen = new Set([0]);
   function _nowToggle(i, open) { open ? nowOpen.add(i) : nowOpen.delete(i); }
 
-  function _nowBody(sc) {
-    if (!sc || !sc.steps || !sc.steps.length) {
-      return `<p class="now-desc">Scegli lo scenario che temi di più: qui leggi cosa fare, fase per fase. Quando succede davvero, tocca <strong>Emergenza</strong> nel menu.</p>
-        <button class="btn btn-outline btn-sm mt-12" onclick="DashboardModule.openScenarioPicker()"><i class="ph ph-swap"></i> Scegli scenario</button>`;
-    }
-    return `<div class="now-phases">
-        ${_phases(sc).map((f, i) => `
-          <details class="now-phase"${nowOpen.has(i) ? ' open' : ''} ontoggle="DashboardModule._nowToggle(${i}, this.open)">
-            <summary><span class="now-num">${i + 1}</span><span class="now-fase">${f.fase}</span><i class="ph ph-caret-down now-caret"></i></summary>
-            <ul class="now-list">${f.azioni.map(a => `<li>${a}</li>`).join('')}</ul>
-          </details>`).join('')}
-      </div>`;
-  }
-
   function _allToggle(remaining, open) {
     return `<button class="btn btn-outline btn-sm btn-full mt-12" onclick="DashboardModule.toggleAllTasks()">
       <i class="ph ${open ? 'ph-caret-up' : 'ph-list-bullets'}"></i>
@@ -979,7 +965,7 @@ const DashboardModule = (() => {
   ];
   const GENERIC_ID = /^(ac|ci|en|ca|co|mo|me|si|sv)\d/;
   // Fuori dal Focus: ac01/ci01 (30 giorni) già coperti dagli obiettivi di livello; ter03/ter04/bbs01/bbs03 sono
-  // istruzioni da seguire durante l'evento (stanno già in "Se arriva l'emergenza"), non cose da preparare
+  // istruzioni da seguire durante l'evento (stanno nella pagina Emergenza), non cose da preparare
   const FOCUS_SKIP = new Set(['ac01', 'ci01', 'ter03', 'ter04', 'bbs01', 'bbs03', 'acq01', 'acq02', 'acq04', 'gas01']);
 
   function _buildFocus(enriched, profilo) {
@@ -1107,7 +1093,7 @@ const DashboardModule = (() => {
     // Auto-detect rimane attivo solo se nessuno scenario è selezionato.
     const scenarioId = profilo.scenario_id;
     const scenarioName = !scenarioId ? null
-      : scenarioId === 'custom' ? 'Scenario Personalizzato'
+      : scenarioId === 'custom' ? 'Situazione personalizzata'
       : (window.SCENARI_LIST?.find(s => s.id === scenarioId)?.titolo || scenarioId);
     const scenarioIds = !scenarioId ? []
       : scenarioId === 'custom' ? (profilo.custom_threats || [])
@@ -1156,9 +1142,28 @@ const DashboardModule = (() => {
 
     const aqGg = _waterDays(profilo);
     const fmtGg = n => (n < 10 ? (Math.round(n * 10) / 10).toString().replace('.', ',') : String(Math.round(n)));
-    const nPhases = scObj && scObj.steps ? scObj.steps.length : 0;
 
     root.innerHTML = `
+      <!-- EMERGENZA: accesso diretto alla pagina Emergenza -->
+      <button class="home-emg" onclick="navigateTo('strumenti')">
+        <span class="home-emg-ico"><i class="ph ph-siren"></i></span>
+        <span class="home-emg-txt">
+          <strong>Sta succedendo adesso?</strong>
+          <span>Apri Emergenza: chiama il 112${scObj ? `, passi per ${scObj.titolo}` : ''}, torcia e SOS</span>
+        </span>
+        <i class="ph ph-caret-right home-emg-go"></i>
+      </button>
+
+      <!-- SCENARIO: per cosa ti stai preparando (sempre visibile, si cambia con un tocco) -->
+      <button class="home-sc${scenarioName ? '' : ' home-sc-empty'}" onclick="DashboardModule.openScenarioPicker()">
+        <span class="home-sc-ico">${scObj?.icon ? scObj.icon : `<i class="ph ${scenarioName ? 'ph-sliders' : 'ph-question'}"></i>`}</span>
+        <span class="home-sc-txt">
+          <span class="home-sc-lab">Ti stai preparando per</span>
+          <strong>${scenarioName || 'Nessuna situazione scelta'}</strong>
+        </span>
+        <span class="home-sc-btn">${scenarioName ? 'Cambia' : 'Scegli'}</span>
+      </button>
+
       <!-- STATUS: livello + percorso 72h / 2 sett / 30gg -->
       <div class="status-banner ${bannerCls}">
         <i class="ph ${bannerIcon}"></i>
@@ -1166,10 +1171,6 @@ const DashboardModule = (() => {
           <strong>${bannerLabel}</strong>
           — ${lv.level.n === 0 ? 'meno di 72 ore di autonomia' : lv.level.label + ' di autonomia'}
           <div class="banner-next">${nextHint}</div>
-          <button class="banner-scenario-chip${scenarioName ? '' : ' banner-scenario-chip-empty'}" onclick="DashboardModule.openScenarioPicker()">
-            <i class="ph ${scenarioName ? 'ph-warning-octagon' : 'ph-swap'}"></i>
-            ${scenarioName || 'Scegli uno scenario'}
-          </button>
         </div>
         <div class="level-track" role="img" aria-label="Livello ${lv.level.n} di 3">
           ${LEVELS.slice(1).map(l => `
@@ -1195,8 +1196,6 @@ const DashboardModule = (() => {
         </div>
         ${buildTaskBoard(current, required, activeIds, detected, done, profilo)}
       </div>
-
-      ${_fold('now', 'ph-siren', 'Se arriva l\'emergenza', scObj ? `${scObj.titolo} · ${nPhases} fasi` : 'scegli uno scenario', _nowBody(scObj))}
 
       ${_fold('res', 'ph-chart-bar', 'Le tue scorte', `Acqua ${fmtGg(aqGg)} gg · Cibo ${profilo.cibo_scorte_giorni || 0} gg`, `
         ${buildResources(current, profilo)}
