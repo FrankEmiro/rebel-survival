@@ -3669,3 +3669,42 @@ input, select, textarea { font-family: 'Nunito', sans-serif; font-size: 1rem; }
 .st-batt-info i { vertical-align: -2px; }
 .st-net-status { font-size: 1.05rem; letter-spacing: .04em; }
 @media (max-width: 560px) { .st-phone-grid { grid-template-columns: 1fr; } }
+
+/* ── Bussola professionale (quadrante SVG rotante) ── */
+.st-compass-wrap { flex-direction: column; gap: 10px; }
+.compass-readout { display: flex; align-items: baseline; gap: 10px; justify-content: center; }
+.compass-deg-val { font-size: 2.2rem; font-variant-numeric: tabular-nums; min-width: 4.2ch; text-align: right; }
+.compass-card-val { font-size: 1.3rem; color: var(--text-primary); min-width: 3ch; margin-top: 0; }
+.compass-dialbox { width: 220px; max-width: 100%; aspect-ratio: 1; }
+.cd-svg { width: 100%; height: 100%; display: block; overflow: visible; }
+.cd-bezel { fill: #0f130c; stroke: var(--border-accent); stroke-width: 2; }
+.cd-face { fill: #141a10; stroke: rgba(201,168,76,.18); stroke-width: 1; }
+.cd-dial { transform-origin: 100px 100px; transition: transform .25s ease-out; }
+.cd-tick { stroke: rgba(220,215,192,.35); stroke-width: 1; }
+.cd-tick-l { stroke: var(--text-primary); stroke-width: 2; }
+.cd-num { fill: var(--text-secondary); font: 600 9px 'JetBrains Mono', monospace; text-anchor: middle; dominant-baseline: central; }
+.cd-card { fill: var(--text-primary); font: 700 17px 'Rajdhani', sans-serif; text-anchor: middle; dominant-baseline: central; }
+.cd-north { fill: var(--danger); }
+.cd-north-mark { fill: var(--danger); }
+.cd-lubber { stroke: var(--accent); stroke-width: 3; stroke-linecap: round; }
+.cd-center { fill: var(--accent); }
+.cd-cross { stroke: rgba(201,168,76,.35); stroke-width: 1; }
+
+/* ── Posizione GPS ── */
+.gps-coords { background: var(--bg-primary); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px; display: flex; flex-direction: column; gap: 6px; }
+.gps-coord { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.gps-k { font-size: 0.7rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .08em; }
+.gps-v { font-size: 1.15rem; color: var(--accent); font-variant-numeric: tabular-nums; }
+.gps-dms { font-size: 0.72rem; color: var(--text-secondary); text-align: center; border-top: 1px dashed var(--border); padding-top: 6px; }
+.gps-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
+.gps-stat { display: flex; flex-direction: column; gap: 3px; padding: 8px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 0.85rem; }
+
+/* ── Torcia e SOS: pulsanti a anello ── */
+.st-big-btn, .st-sos-btn { position: relative; }
+.st-big-btn::after, .st-sos-btn::after {
+  content: ''; position: absolute; inset: -8px; border-radius: 50%;
+  border: 1px dashed rgba(201,168,76,.25); pointer-events: none;
+}
+.st-sos-btn::after { border-color: rgba(181,48,32,.35); }
+.st-big-btn i, .st-sos-btn i { font-size: 2.2rem; }
+.st-big-btn.st-big-btn-on { background: radial-gradient(circle, rgba(232,212,138,.35), rgba(201,168,76,.08) 70%); color: var(--accent-light); box-shadow: 0 0 34px rgba(232,212,138,.45); }

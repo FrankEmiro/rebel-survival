@@ -96,6 +96,10 @@ const StrumentiModule = (() => {
     compassHeading = null;
     _compassDeg = 0;
     _compassAbsDetected = false;
+    const dial = document.getElementById('compass-dial');
+    if (dial) dial.style.transform = 'rotate(0deg)';
+    const degEl = document.getElementById('compass-deg'); if (degEl) degEl.textContent = '—°';
+    const cardEl = document.getElementById('compass-card'); if (cardEl) cardEl.textContent = '—';
     const btn = document.getElementById('st-compass-toggle');
     if (btn) btn.textContent = 'Attiva';
     _compassStatus('Bussola ferma');
@@ -113,6 +117,8 @@ const StrumentiModule = (() => {
     if (delta < -180) delta += 360;
     _compassDeg += delta;
 
+    const dial = document.getElementById('compass-dial');
+    if (dial) dial.style.transform = `rotate(${-_compassDeg}deg)`;
     if (needle) needle.style.transform = `translate(-50%, -50%) rotate(${_compassDeg}deg)`;
     if (degEl)  degEl.textContent  = compassHeading + '°';
     if (cardEl) cardEl.textContent = deg2card(compassHeading);
@@ -123,6 +129,41 @@ const StrumentiModule = (() => {
   function _compassStatus(msg) {
     const el = document.getElementById('compass-status');
     if (el) el.textContent = msg;
+  }
+
+  /* ── QUADRANTE BUSSOLA (SVG) ── */
+  // Quadrante che ruota: tacche ogni 5°, numeri ogni 30°, lettere cardinali.
+  // La linea fissa in alto indica la direzione verso cui punta il telefono.
+  function _dialSvg() {
+    const C = 100, R = 92;
+    let ticks = '';
+    for (let d = 0; d < 360; d += 5) {
+      const long = d % 30 === 0, mid = d % 10 === 0;
+      const len = long ? 12 : mid ? 8 : 5;
+      const a = (d - 90) * Math.PI / 180;
+      const x1 = C + R * Math.cos(a), y1 = C + R * Math.sin(a);
+      const x2 = C + (R - len) * Math.cos(a), y2 = C + (R - len) * Math.sin(a);
+      ticks += `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" class="cd-tick${long ? ' cd-tick-l' : ''}"/>`;
+    }
+    const labels = [[0,'N'],[30,'30'],[60,'60'],[90,'E'],[120,'120'],[150,'150'],[180,'S'],[210,'210'],[240,'240'],[270,'O'],[300,'300'],[330,'330']]
+      .map(([d, t]) => {
+        const card = isNaN(t);
+        const r = card ? 62 : 66;
+        const a = (d - 90) * Math.PI / 180;
+        const x = C + r * Math.cos(a), y = C + r * Math.sin(a);
+        return `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" transform="rotate(${d} ${x.toFixed(1)} ${y.toFixed(1)})" class="${card ? 'cd-card' + (t === 'N' ? ' cd-north' : '') : 'cd-num'}">${t}</text>`;
+      }).join('');
+    return `<svg viewBox="0 0 200 200" class="cd-svg" aria-hidden="true">
+      <circle cx="100" cy="100" r="97" class="cd-bezel"/>
+      <g id="compass-dial" class="cd-dial">
+        <circle cx="100" cy="100" r="92" class="cd-face"/>
+        ${ticks}${labels}
+        <polygon points="100,22 95,34 105,34" class="cd-north-mark"/>
+      </g>
+      <line x1="100" y1="2" x2="100" y2="22" class="cd-lubber"/>
+      <circle cx="100" cy="100" r="3" class="cd-center"/>
+      <line x1="100" y1="88" x2="100" y2="112" class="cd-cross"/><line x1="88" y1="100" x2="112" y2="100" class="cd-cross"/>
+    </svg>`;
   }
 
   /* ── HEADING ICON (GPS marker con cono direzionale) ── */
@@ -278,14 +319,16 @@ const StrumentiModule = (() => {
     const acc    = accM != null ? `${accM} m ${accTier}` : '—';
 
     _gpsContent(`
-      <div class="st-gps-grid">
-        <div class="st-gps-row"><span class="st-gps-lbl">LAT</span><span class="mono">${lat}°</span></div>
-        <div class="st-gps-row"><span class="st-gps-lbl">LON</span><span class="mono">${lon}°</span></div>
-        <div class="st-gps-row"><span class="st-gps-lbl">ALT</span><span class="mono">${alt}</span></div>
-        <div class="st-gps-row"><span class="st-gps-lbl">ACC</span><span class="mono">${acc}</span></div>
-        <div class="st-gps-row"><span class="st-gps-lbl">VEL</span><span class="mono">${spd}</span></div>
+      <div class="gps-coords">
+        <div class="gps-coord"><span class="gps-k">Latitudine</span><span class="gps-v mono">${lat}°</span></div>
+        <div class="gps-coord"><span class="gps-k">Longitudine</span><span class="gps-v mono">${lon}°</span></div>
+        <div class="gps-dms mono">${dd2dms(p.latitude, true)} · ${dd2dms(p.longitude, false)}</div>
       </div>
-      <div class="st-gps-dms">${dd2dms(p.latitude, true)} · ${dd2dms(p.longitude, false)}</div>
+      <div class="gps-stats">
+        <div class="gps-stat"><span class="gps-k">Precisione</span><span class="mono">${acc}</span></div>
+        <div class="gps-stat"><span class="gps-k">Altitudine</span><span class="mono">${alt}</span></div>
+        <div class="gps-stat"><span class="gps-k">Velocità</span><span class="mono">${spd}</span></div>
+      </div>
       <button class="btn btn-outline btn-sm btn-full mt-8" onclick="StrumentiModule.copyCoords()">
         <i class="ph ph-copy"></i> Copia coordinate
       </button>`);
@@ -891,19 +934,11 @@ const StrumentiModule = (() => {
             <button class="st-toggle" id="st-compass-toggle" onclick="StrumentiModule.toggleCompass()">Attiva</button>
           </div>
           <div class="st-compass-wrap">
-            <div class="compass-rose">
-              <span class="cr-n">N</span><span class="cr-e">E</span>
-              <span class="cr-s">S</span><span class="cr-o">O</span>
-              <div class="compass-ring"></div>
-              <div class="compass-needle" id="compass-needle">
-                <div class="needle-n"></div>
-                <div class="needle-s"></div>
-              </div>
-            </div>
             <div class="compass-readout">
               <div class="compass-deg-val" id="compass-deg">—°</div>
               <div class="compass-card-val" id="compass-card">—</div>
             </div>
+            <div class="compass-dialbox">${_dialSvg()}</div>
           </div>
           <p class="st-status" id="compass-status">Premi Attiva e tieni il telefono in piano</p>
         </div>
