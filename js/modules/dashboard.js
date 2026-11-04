@@ -688,6 +688,7 @@ const DashboardModule = (() => {
     if (!root) return;
     // 112 sempre in cima: è la prima cosa da poter fare
     root.innerHTML = `<a class="emg-call emg-call-top" href="tel:112"><i class="ph ph-phone-call"></i> Chiama 112</a>`
+      + (typeof StrumentiModule !== 'undefined' ? StrumentiModule.quickHtml() : '')
       + _buildEmergency(SettingsModule.get(), SettingsModule.get().scenario_id);
   }
   // Ridisegna ciò che è visibile (Home e/o Emergenza)

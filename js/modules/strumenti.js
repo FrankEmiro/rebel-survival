@@ -350,6 +350,8 @@ const StrumentiModule = (() => {
         torchStream = null; torchTrack = null;
         const s = document.getElementById('st-torch-status');
         if (s) s.textContent = 'Torcia non supportata su questo dispositivo';
+        const q = document.getElementById('qt-torch-sub');
+        if (q) q.textContent = 'Non supportata';
         return;
       }
     }
@@ -360,9 +362,10 @@ const StrumentiModule = (() => {
     const btn = document.getElementById('st-torch-btn');
     const ico = document.getElementById('st-torch-ico');
     if (btn) btn.classList.toggle('st-big-btn-on', torchOn);
-    if (ico) ico.className = `ph ph-flashlight${torchOn ? '-fill' : ''}`;
+    if (ico) ico.className = `ph ${torchOn ? 'ph-lightbulb' : 'ph-flashlight'}`;
     const lbl = document.getElementById('st-torch-lbl');
-    if (lbl) lbl.textContent = torchOn ? 'ON' : 'OFF';
+    if (lbl) lbl.textContent = torchOn ? 'Accesa' : 'Spenta';
+    _quickUI();
   }
 
   /* ── BATTERIA ── */
@@ -401,7 +404,7 @@ const StrumentiModule = (() => {
           <span class="st-batt-pct mono">${pct}%</span>
         </div>
         <div class="st-batt-info">
-          <span class="${cls}">${charging ? '⚡ In carica' : '🔋 In uso'}</span>
+          <span class="${cls}"><i class="ph ${charging ? 'ph-battery-charging' : 'ph-battery-full'}"></i> ${charging ? 'In carica' : 'In uso'}</span>
           ${timeStr ? `<span class="text-secondary text-sm">${timeStr}</span>` : ''}
         </div>
       </div>`;
@@ -419,13 +422,13 @@ const StrumentiModule = (() => {
 
     el.innerHTML = `
       <div class="st-net-status ${cls}">
-        <i class="ph ph-${online ? 'wifi' : 'wifi-slash'}"></i>
-        <span>${online ? 'ONLINE' : 'OFFLINE'}</span>
+        <i class="ph ph-${online ? 'wifi-high' : 'wifi-slash'}"></i>
+        <span>${online ? 'Connesso' : 'Senza rete'}</span>
       </div>
       <div class="st-net-detail">
-        <span class="st-gps-lbl">TIPO</span><span class="mono">${type}</span>
+        <span class="st-gps-lbl">Tipo</span><span class="mono">${type}</span>
       </div>
-      ${down ? `<div class="st-net-detail"><span class="st-gps-lbl">VEL</span><span class="mono">${down}</span></div>` : ''}`;
+      ${down ? `<div class="st-net-detail"><span class="st-gps-lbl">Velocità</span><span class="mono">${down}</span></div>` : ''}`;
   }
 
   /* ── SOS MORSE ── */
@@ -511,8 +514,49 @@ const StrumentiModule = (() => {
     if (!btn) return;
     btn.classList.toggle('st-sos-active', sosActive);
     btn.innerHTML = sosActive
-      ? '<i class="ph ph-stop-circle-fill"></i><span>STOP SOS</span>'
-      : '<i class="ph ph-siren"></i><span>INVIA SOS</span>';
+      ? '<i class="ph ph-stop-circle"></i><span>Ferma</span>'
+      : '<i class="ph ph-siren"></i><span>Avvia</span>';
+    _quickUI();
+  }
+
+  /* ── ACCESSO RAPIDO (in cima alla pagina Emergenza) ── */
+  const QUICK = [
+    { id: 'torch',   icon: 'ph-flashlight',  label: 'Torcia',      act: 'StrumentiModule.toggleTorch()' },
+    { id: 'sos',     icon: 'ph-siren',       label: 'Segnale SOS', act: 'StrumentiModule.toggleSOS()' },
+    { id: 'compass', icon: 'ph-compass',     label: 'Bussola',     act: "StrumentiModule.goTo('compass')" },
+    { id: 'gps',     icon: 'ph-map-pin',     label: 'Posizione',   act: "StrumentiModule.goTo('gps')" },
+    { id: 'map',     icon: 'ph-map-trifold', label: 'Mappa',       act: "StrumentiModule.goTo('map')" },
+    { id: 'phone',   icon: 'ph-device-mobile', label: 'Telefono',  act: "StrumentiModule.goTo('phone')" },
+  ];
+  function quickHtml() {
+    return `<div class="st-quick" role="group" aria-label="Strumenti rapidi">
+      ${QUICK.map(q => {
+        const on = (q.id === 'torch' && torchOn) || (q.id === 'sos' && sosActive);
+        const sub = on ? (q.id === 'torch' ? 'Accesa' : 'In corso') : '';
+        return `<button class="st-quick-btn${on ? ' on' : ''}" id="qt-${q.id}" onclick="${q.act}"${q.id === 'torch' || q.id === 'sos' ? ` aria-pressed="${on}"` : ''}>
+        <i class="ph ${q.icon}"></i><span class="st-quick-lab">${q.label}</span><span class="st-quick-sub" id="qt-${q.id}-sub">${sub}</span>
+      </button>`; }).join('')}
+    </div>`;
+  }
+  function _quickUI() {
+    const set = (id, on, sub) => {
+      const b = document.getElementById('qt-' + id);
+      if (!b) return;
+      b.classList.toggle('on', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      const s = document.getElementById('qt-' + id + '-sub');
+      if (s) s.textContent = sub;
+    };
+    set('torch', torchOn, torchOn ? 'Accesa' : '');
+    set('sos', sosActive, sosActive ? 'In corso' : '');
+  }
+  // Porta alla scheda dello strumento; bussola e posizione si attivano subito
+  function goTo(id) {
+    const card = document.getElementById('st-card-' + id);
+    if (!card) return;
+    card.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    if (id === 'compass' && !compassListener) toggleCompass();
+    if (id === 'gps' && gpsWatchId === null) toggleGPS();
   }
 
   /* ── WAKE LOCK ── */
@@ -822,28 +866,28 @@ const StrumentiModule = (() => {
       <div class="st-grid">
 
         <!-- TORCIA -->
-        <div class="st-card st-card-center">
-          <div class="st-card-hdr"><span><i class="ph ph-flashlight"></i> Torcia</span></div>
-          <button class="st-big-btn" id="st-torch-btn" onclick="StrumentiModule.toggleTorch()">
-            <i class="ph ph-flashlight" id="st-torch-ico"></i>
-            <span id="st-torch-lbl">OFF</span>
+        <div class="st-card st-card-center" id="st-card-torch">
+          <div class="st-card-hdr"><span><span class="st-hdr-ico"><i class="ph ph-flashlight"></i></span> Torcia</span></div>
+          <button class="st-big-btn${torchOn ? ' st-big-btn-on' : ''}" id="st-torch-btn" onclick="StrumentiModule.toggleTorch()" aria-label="Accendi o spegni la torcia">
+            <i class="ph ${torchOn ? 'ph-lightbulb' : 'ph-flashlight'}" id="st-torch-ico"></i>
+            <span id="st-torch-lbl">${torchOn ? 'Accesa' : 'Spenta'}</span>
           </button>
-          <p class="st-status" id="st-torch-status"></p>
+          <p class="st-status" id="st-torch-status">Usa il flash della fotocamera</p>
         </div>
 
-        <!-- SOS -->
-        <div class="st-card st-card-center">
-          <div class="st-card-hdr"><span><i class="ph ph-siren"></i> SOS</span></div>
-          <button class="st-sos-btn" id="st-sos-btn" onclick="StrumentiModule.toggleSOS()">
-            <i class="ph ph-siren"></i><span>INVIA SOS</span>
+        <!-- SEGNALE SOS -->
+        <div class="st-card st-card-center" id="st-card-sos">
+          <div class="st-card-hdr"><span><span class="st-hdr-ico st-hdr-ico-danger"><i class="ph ph-siren"></i></span> Segnale SOS</span></div>
+          <button class="st-sos-btn${sosActive ? ' st-sos-active' : ''}" id="st-sos-btn" onclick="StrumentiModule.toggleSOS()" aria-label="Avvia o ferma il segnale SOS">
+            ${sosActive ? '<i class="ph ph-stop-circle"></i><span>Ferma</span>' : '<i class="ph ph-siren"></i><span>Avvia</span>'}
           </button>
-          <p class="st-status">Morse: vibrazione + lampeggio + audio</p>
+          <p class="st-status">Lampeggio dello schermo, suono e vibrazione in codice Morse. Non invia messaggi né chiamate.</p>
         </div>
 
         <!-- BUSSOLA -->
-        <div class="st-card">
+        <div class="st-card" id="st-card-compass">
           <div class="st-card-hdr">
-            <span><i class="ph ph-compass"></i> Bussola</span>
+            <span><span class="st-hdr-ico"><i class="ph ph-compass"></i></span> Bussola</span>
             <button class="st-toggle" id="st-compass-toggle" onclick="StrumentiModule.toggleCompass()">Attiva</button>
           </div>
           <div class="st-compass-wrap">
@@ -861,25 +905,25 @@ const StrumentiModule = (() => {
               <div class="compass-card-val" id="compass-card">—</div>
             </div>
           </div>
-          <p class="st-status" id="compass-status">Premi Attiva e punta il telefono</p>
+          <p class="st-status" id="compass-status">Premi Attiva e tieni il telefono in piano</p>
         </div>
 
-        <!-- GPS -->
-        <div class="st-card">
+        <!-- POSIZIONE -->
+        <div class="st-card" id="st-card-gps">
           <div class="st-card-hdr">
-            <span><i class="ph ph-map-pin"></i> GPS</span>
+            <span><span class="st-hdr-ico"><i class="ph ph-map-pin"></i></span> Posizione</span>
             <button class="st-toggle" id="st-gps-toggle" onclick="StrumentiModule.toggleGPS()">Attiva</button>
           </div>
           <div id="st-gps-content">
-            <p class="st-idle-msg">Premi Attiva per acquisire la posizione</p>
+            <p class="st-idle-msg">Premi Attiva per leggere le coordinate: servono per dire ai soccorsi dove sei</p>
           </div>
         </div>
 
         <!-- MAPPA -->
-        <div class="st-card st-card-full">
+        <div class="st-card st-card-full" id="st-card-map">
           <div class="st-card-hdr">
-            <span><i class="ph ph-map-trifold"></i> Mappa Italia</span>
-            <span class="st-map-hint" id="st-map-hint">Dot arancio = posizione GPS · Attiva GPS per centrare</span>
+            <span><span class="st-hdr-ico"><i class="ph ph-map-trifold"></i></span> Mappa</span>
+            <span class="st-map-hint" id="st-map-hint">Il punto arancione è la tua posizione</span>
           </div>
           <div class="st-map-wrap">
             <div id="st-map"></div>
@@ -891,20 +935,18 @@ const StrumentiModule = (() => {
           <div id="st-tiles-pack"></div>
         </div>
 
-        <!-- BATTERIA -->
-        <div class="st-card">
-          <div class="st-card-hdr"><span><i class="ph ph-battery-full"></i> Batteria</span></div>
-          <div id="st-battery-content"><p class="st-idle-msg">Caricamento...</p></div>
-        </div>
-
-        <!-- RETE -->
-        <div class="st-card">
-          <div class="st-card-hdr"><span><i class="ph ph-wifi"></i> Rete</span></div>
-          <div id="st-network-content"></div>
+        <!-- STATO DEL TELEFONO -->
+        <div class="st-card st-card-full" id="st-card-phone">
+          <div class="st-card-hdr"><span><span class="st-hdr-ico"><i class="ph ph-device-mobile"></i></span> Stato del telefono</span></div>
+          <div class="st-phone-grid">
+            <div><div class="st-sub-lbl">Batteria</div><div id="st-battery-content"><p class="st-idle-msg">Caricamento...</p></div></div>
+            <div><div class="st-sub-lbl">Rete</div><div id="st-network-content"></div></div>
+          </div>
         </div>
 
       </div>`;
 
+    _quickUI();
     _networkUI();
     initBattery();
     _renderTilesPack();
@@ -931,7 +973,7 @@ const StrumentiModule = (() => {
   }
 
   return {
-    init, destroy, toggleCompass, toggleGPS, toggleTorch, toggleSOS, copyCoords,
+    init, destroy, quickHtml, goTo, toggleCompass, toggleGPS, toggleTorch, toggleSOS, copyCoords,
     _saveHomeLocation, _tilesRadiusChange, _downloadTilesPack, _deleteTilesPack,
   };
 
