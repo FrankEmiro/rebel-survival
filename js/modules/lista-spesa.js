@@ -218,7 +218,7 @@ const ListaSpesaModule = (() => {
         { nome:'Fischietto di emergenza (Fox 40)', qty:'1/persona', note:'3 fischi = distress; udibile fino a 1 km' },
         { nome:'Specchio di segnalazione', qty:'1 pz', note:'Visibile fino a 15 km dall\'alto in cielo sereno' },
         { nome:'Coltello fisso con lama 10-15 cm (full tang)', qty:'1 pz', note:'Tool più versatile in survival — affilalo prima' },
-        { nome:'Paracord 550 (30 metri)', qty:'1 rotolo', note:'Costruzione riparo, trappole, lacci, medicazioni' },
+        { nome:'Paracord 550 (30 metri)', qty:'1 rotolo', note:'Costruzione riparo, legature, medicazioni' },
         { nome:'Telo mylar di emergenza (bivacchetto)', qty:'2 pz', note:'Riparo, segnalazione, raccolta acqua piovana' },
         { nome:'Filtro acqua portatile Sawyer Mini', qty:'1 pz', note:'Filtra 100.000L senza cartucce da sostituire' },
         { nome:'Pastiglie Micropur (purificazione acqua)', qty:'1 confezione', note:'Backup quando non puoi bollire' },

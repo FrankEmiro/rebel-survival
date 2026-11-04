@@ -180,10 +180,14 @@ const OnboardingModule = (() => {
     return '';
   }
 
-  function _render() {
+  function _render(keepScroll) {
     const el = document.getElementById('onboarding-overlay');
     if (!el) return;
+    // Scegliendo un'opzione non si torna in cima alla lista (l'utente perdeva il punto)
+    const prevScroll = keepScroll ? (el.querySelector('.ob-modal')?.scrollTop || 0) : 0;
     const last = step === STEPS.length - 1;
+    // Clima: obbligatorio scegliere, altrimenti i calcoli del calore restano senza dato
+    const blocked = STEPS[step] === 'clima' && !data.clima_key;
     el.innerHTML = `
       <div class="disclaimer-modal ob-modal">
         <div class="ob-progress">${STEPS.map((_, i) =>
@@ -192,11 +196,13 @@ const OnboardingModule = (() => {
         ${_body()}
         <div class="ob-actions">
           ${step > 0 ? `<button type="button" class="btn btn-outline" onclick="OnboardingModule._back()">Indietro</button>` : `<button type="button" class="btn btn-outline" onclick="OnboardingModule.skip()">Più tardi</button>`}
-          <button type="button" class="disclaimer-btn ob-next" onclick="OnboardingModule._next()">
+          <button type="button" class="disclaimer-btn ob-next" onclick="OnboardingModule._next()"${blocked ? ' disabled title="Scegli un\'opzione per continuare"' : ''}>
             ${last ? '<i class="ph ph-check-circle"></i> Vedi il mio livello' : 'Avanti <i class="ph ph-arrow-right"></i>'}
           </button>
         </div>
       </div>`;
+    const modal = el.querySelector('.ob-modal');
+    if (modal) modal.scrollTop = prevScroll;
   }
 
   function _bump(key, delta, min) {
@@ -209,12 +215,14 @@ const OnboardingModule = (() => {
 
   function _set(key, val, silent) {
     data[key] = val;
-    if (!silent) _render();
+    // "Altri scenari" allunga la lista: lì si riparte dall'alto; le altre scelte mantengono la posizione
+    if (!silent) _render(key !== 'show_all_scenari');
   }
 
   function _back() { if (step > 0) { step--; _render(); } }
 
   function _next() {
+    if (STEPS[step] === 'clima' && !data.clima_key) return;
     if (step < STEPS.length - 1) { step++; _render(); return; }
     _finish();
   }

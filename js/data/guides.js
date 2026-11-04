@@ -906,7 +906,7 @@ const GUIDES_DATA = [
           'Scrivi i numeri di: tutti i membri della famiglia, nonni, zii, amici stretti',
           'Aggiungi: medico di famiglia, farmacia di fiducia, vicino di casa fidato',
           'Numeri di emergenza: 112 (emergenze), 115 (vigili del fuoco), 118 (soccorso medico), 1515 (emergenze ambientali)',
-          'Numeri utili: Enel guasti (800.900.860), gestore acqua locale, comune/protezione civile locale',
+          'Numeri utili: numero guasti del distributore di elettricità (è scritto in bolletta), gestore acqua locale, comune/protezione civile locale',
           'Contatto fuori zona: nome, due numeri di telefono, indirizzo',
           'Plastifica la lista o mettila in busta impermeabile — una copia per ogni membro della famiglia',
         ],
@@ -936,7 +936,7 @@ const GUIDES_DATA = [
     readTime: '3 min',
     quickRef: [
       'PMR446: libero da licenza in tutta Europa, 8 canali (o 16 digitali), max 0.5W',
-      'Canale 8: canale d\'emergenza convenzionale — usato da Protezione Civile volontari',
+      'Canale 8: usato per abitudine come canale di chiamata d\'emergenza tra utenti — non è un canale ufficiale della Protezione Civile',
       'Portata reale: 0.5–2 km in città, 2–5 km in pianura aperta, 500m in edifici',
       'Codici CTCSS/DCS (sub-toni): filtrano le interferenze — usa lo stesso codice in famiglia',
       'Batterie: preferisci AA ricaricabili (NiMH 2500mAh) — ricaricabili con pannello solare',
@@ -1172,7 +1172,7 @@ const GUIDES_DATA = [
     source: 'Protezione Civile · Croce Rossa · FEMA',
     readTime: '3 min',
     quickRef: [
-      'Al suono delle sirene vai subito al rifugio: non aspettare di vedere il pericolo',
+      'Al segnale d\'allarme (IT-alert, radio, autorità) vai subito al riparo: non aspettare di vedere il pericolo',
       'Luogo migliore: rifugio, seminterrato o stanza interna del piano più basso',
       'Lontano da finestre e vetri: le schegge di vetro causano molte ferite',
       'Tieni zaino pronto, radio a batterie e contanti: rete e carte possono cadere',
@@ -1220,7 +1220,7 @@ const GUIDES_DATA = [
       {
         heading: 'Se vedi un lampo intenso',
         steps: [
-          'Non guardare la luce: giraiti e abbassati',
+          'Non guardare la luce: girati e abbassati',
           'Sdraiati dietro un riparo, proteggi testa e collo',
           'Resta giù 1-2 minuti: l\'onda d\'urto arriva dopo',
           'Poi entra subito nell\'edificio più vicino e resta lontano da finestre',
@@ -1474,7 +1474,7 @@ const GUIDES_DATA = [
           'Avvolgi 3–4 volte attorno a entrambi i pali alternando verticale/orizzontale',
           'Aggiungi 2–3 giri di "frapping" (attorno alle avvolgiture tra i pali) per stringere',
           'Chiudi con clove hitch sull\'altro palo',
-          'Uso: costruire ripari, barelle improvvisate, sistemi di sostegno, trappole',
+          'Uso: costruire ripari, barelle improvvisate, sistemi di sostegno',
           'Legatura diagonale: identica ma per pali a X — le avvolgiture seguono la diagonale tra i pali',
         ],
       },
@@ -1745,43 +1745,17 @@ const GUIDES_DATA = [
 
   {
     id: 'survival-trappole',
-    title: 'Trappole e Caccia di Sussistenza',
+    title: 'Pesca e Selvaggina di Sussistenza',
     icon: 'ph-target',
     category: 'cibo',
     source: 'FM 21-76 · SAS Survival Handbook · Woodcraft and Indian Lore (Seton)',
     readTime: '6 min',
     quickRef: [
-      'In Italia: caccia e trappole illegali in condizioni normali — in sopravvivenza reale è legittima difesa della vita',
-      'Metti almeno 10 trappole: solo 1–2 avranno successo ogni notte',
-      'Posiziona dove VEDI segni di passaggio: escrementi, peli, piste, tane — non a caso',
+      'In Italia caccia e pesca sono regolate dalla legge e le trappole (lacci, cappi) sono vietate: questa guida non spiega come costruirle',
       'Pesca supera sempre la caccia in efficienza calorica per sforzo',
       'Non mangiare uccelli o mammiferi dall\'aspetto malato o trovati già morti',
     ],
     sections: [
-      {
-        heading: 'Loop Snare (cappio semplice)',
-        steps: [
-          'Materiale: filo metallico sottile (30–50cm) o paracord — il metallo è più efficace',
-          'Crea un anello scorsoio: piega un\'estremità a gancio, fai passare l\'altra — scorre liberamente',
-          'Dimensione del cappio: diametro uguale al pugno chiuso per lepri/conigli; palmo aperto per volpi',
-          'Altezza: per lepri/conigli 7–10cm da terra — al livello del collo dell\'animale',
-          'Posiziona su pista battuta ben evidente (erba schiacciata, pelo sugli arbusti)',
-          'Fissa con un palo a terra o a un ramo — deve reggere lo strappo dell\'animale',
-          'Mimetizza con foglie e terra — non toccare con le mani nude (usa guanti o strofina col fango)',
-        ],
-      },
-      {
-        heading: 'Trappola a bilancino (Spring Snare)',
-        steps: [
-          'Serve: ramo flessibile (verde, non secco), palo verticale con tacca, cappio, grilletto',
-          'Piantare il palo verticale con tacca a V sulla sommità vicino alla pista',
-          'Il ramo flessibile è legato in tensione al palo tramite un grilletto a L incastrato nella tacca',
-          'Il cappio è collegato al grilletto — quando l\'animale lo tocca, il grilletto si sgancia',
-          'Il ramo rimbalza verso l\'alto sollevando l\'animale e stringendo il cappio',
-          'Usare per: lepri, conigli, fagiani — non per animali grandi',
-          'Controlla ogni 6–8 ore: un animale intrappolato attira predatori e si danneggia',
-        ],
-      },
       {
         heading: 'Pesca di sussistenza',
         steps: [
@@ -1790,7 +1764,6 @@ const GUIDES_DATA = [
           'ESCA: vermi sotto pietre umide, grilli, locuste, piccoli pesci come esca per quelli grandi',
           'TECNICA: in un ruscello, cerca buche profonde sotto le cascatelle — i pesci stazionano in acque calme',
           'GORBIA: piega rami flessibili a imbuto nel senso della corrente — il pesce entra e non esce',
-          'INTONTIMENTO: in pozze piccole isolate, schiaccia frutto di noce verde nell\'acqua — intontisce i pesci (illegale ma efficace in sopravvivenza)',
           'PULIZIA: eviscera immediatamente, cuoci completamente — i pesci d\'acqua dolce possono avere parassiti',
         ],
       },
@@ -1828,9 +1801,9 @@ const GUIDES_DATA = [
       {
         heading: 'Emorragia — controllo rapido',
         steps: [
-          'PRESSIONE DIRETTA: preme forte con entrambe le mani per minimo 5 minuti senza guardare',
+          'PRESSIONE DIRETTA: premi forte con entrambe le mani per minimo 5 minuti senza guardare',
           'Se ancora sanguina: aggiungi altra garza sopra (non rimuovere la prima) — pressione continua',
-          'LACCIO EMOSTATICO (arti): applica 5–7cm sopra la ferita, stringi fino a cessazione del sanguinamento, segna l\'ora — massimo 2h prima di allentare 1 minuto ogni ora',
+          'LACCIO EMOSTATICO (arti): applica 5–7cm sopra la ferita, stringi fino a cessazione del sanguinamento, segna l\'ora — non allentarlo e non toglierlo: lo fa solo il personale sanitario',
           'GARZA EMOSTATICA (ferite profonde/inguine/ascella): comprimi la garza nella ferita con forza — Combat Gauze o QuikClot',
           'FERITE AL TORACE: sigilla con cerotto a 3 lati (uno aperto per permettere l\'uscita dell\'aria, non l\'entrata)',
           'SHOCK: sdraia il paziente, solleva le gambe 30cm, mantieni caldo, non dare da bere',
@@ -2121,4 +2094,40 @@ const GUIDE_SOURCE_URLS = {
   'survival-primo-soccorso-campo': 'https://www.cri.it/',
   'survival-conservazione-cibo':   'https://nchfp.uga.edu/',
   'survival-segnalazione':         'https://www.cnsas.it/',
+};
+
+/* ── Guide da usare con cautela ──
+   Indicazioni NON ancora verificate su una fonte ufficiale (sanitaria o italiana).
+   'salute'  = salute, acqua da bere, cibo, farmaci, primo soccorso
+   'pratica' = pratiche con rischio fisico non verificate su fonti ufficiali italiane
+   Quando una guida viene verificata riga per riga su una fonte ufficiale, toglila da qui. */
+const GUIDE_CAUTION = {
+  'acqua-purificazione':           'salute',
+  'acqua-raccolta-pioggia':        'salute',
+  'acqua-fonti-alternative':       'salute',
+  'cibo-conservazione':            'salute',
+  'energia-generatore':            'salute',
+  'riscaldamento-alternativo':     'salute',
+  'ipotermia-prevenzione':         'salute',
+  'kit-medico':                    'salute',
+  'primo-soccorso':                'salute',
+  'farmaci-scorta':                'salute',
+  'nucleare-radiologico':          'salute',
+  'survival-acqua-natura':         'salute',
+  'survival-piante':               'salute',
+  'survival-trappole':             'salute',
+  'survival-primo-soccorso-campo': 'salute',
+  'survival-conservazione-cibo':   'salute',
+  'cibo-cottura-campo':            'pratica',
+  'isolamento-stanza':             'pratica',
+  'comm-pmr446':                   'pratica',
+  'comm-radio-canali':             'pratica',
+  'conflitto-rifugio':             'pratica',
+  'survival-fuoco':                'pratica',
+  'survival-riparo':               'pratica',
+};
+
+const GUIDE_CAUTION_TEXT = {
+  salute:  'Guida a rischio: contiene indicazioni su salute, acqua, cibo o farmaci non ancora verificate da una fonte sanitaria ufficiale. Se applicate male possono essere pericolose. Usala con cautela, solo come orientamento. In caso di dubbio chiama il 112 o il tuo medico e segui le autorità sanitarie.',
+  pratica: 'Guida non verificata: le indicazioni non sono ancora state controllate su fonti ufficiali italiane e alcune pratiche possono essere pericolose. Usala con cautela, solo come orientamento, e segui sempre le istruzioni delle autorità.',
 };

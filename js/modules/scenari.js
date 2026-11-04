@@ -8,7 +8,7 @@ const ScenariModule = (() => {
     {
       id: 'blackout-breve',
       titolo: 'Blackout Breve',
-      icon: '⚡',
+      icon: '<i class=\"ph ph-lightning\"></i>',
       desc: 'Interruzione elettricità < 24 ore',
       severity: 1,
       threats: ['blackout'],
@@ -40,7 +40,7 @@ const ScenariModule = (() => {
     {
       id: 'blackout-lungo',
       titolo: 'Blackout Prolungato',
-      icon: '🔴',
+      icon: '<i class=\"ph ph-lightning-slash\"></i>',
       desc: 'Interruzione elettricità > 24 ore',
       severity: 2,
       threats: ['blackout', 'cibo', 'comm'],
@@ -85,7 +85,7 @@ const ScenariModule = (() => {
     {
       id: 'gas',
       titolo: 'Interruzione Gas',
-      icon: '🔥',
+      icon: '<i class=\"ph ph-flame\"></i>',
       desc: 'Stop fornitura gas metano',
       severity: 2,
       threats: ['gas'],
@@ -118,7 +118,7 @@ const ScenariModule = (() => {
     {
       id: 'razionamento',
       titolo: 'Razionamento Energetico',
-      icon: '⏱',
+      icon: '<i class=\"ph ph-timer\"></i>',
       desc: 'Fasce orarie limitate (es. 6h/giorno)',
       severity: 2,
       threats: ['blackout', 'cibo'],
@@ -152,7 +152,7 @@ const ScenariModule = (() => {
     {
       id: 'cibo',
       titolo: 'Interruzione Forniture Alimentari',
-      icon: '🥫',
+      icon: '<i class=\"ph ph-basket\"></i>',
       desc: 'Scaffali vuoti, prezzi alle stelle',
       severity: 2,
       threats: ['cibo'],
@@ -185,7 +185,7 @@ const ScenariModule = (() => {
     {
       id: 'acqua',
       titolo: 'Emergenza Acqua',
-      icon: '💧',
+      icon: '<i class=\"ph ph-drop\"></i>',
       desc: 'Acquedotto interrotto o non potabile',
       severity: 3,
       threats: ['acqua', 'cibo'],
@@ -220,7 +220,7 @@ const ScenariModule = (() => {
     {
       id: 'evacuazione',
       titolo: 'Evacuazione Rapida',
-      icon: '🚗',
+      icon: '<i class=\"ph ph-car-profile\"></i>',
       desc: 'Devi lasciare casa in 30-60 minuti',
       severity: 3,
       threats: ['carburante', 'acqua', 'cibo', 'comm'],
@@ -260,7 +260,7 @@ const ScenariModule = (() => {
     {
       id: 'terremoto',
       titolo: 'Terremoto',
-      icon: '🏚️',
+      icon: '<i class=\"ph ph-house-line\"></i>',
       desc: 'Sisma significativo — danni strutturali possibili',
       severity: 3,
       threats: ['blackout', 'acqua', 'cibo', 'freddo', 'comm', 'carburante'],
@@ -308,7 +308,7 @@ const ScenariModule = (() => {
     {
       id: 'alluvione',
       titolo: 'Alluvione',
-      icon: '🌊',
+      icon: '<i class=\"ph ph-waves\"></i>',
       desc: 'Esondazione o rischio allagamento zona',
       severity: 3,
       threats: ['acqua', 'cibo', 'comm', 'carburante'],
@@ -349,7 +349,7 @@ const ScenariModule = (() => {
     {
       id: 'caldo',
       titolo: 'Ondata di Caldo',
-      icon: '☀️',
+      icon: '<i class=\"ph ph-thermometer-hot\"></i>',
       desc: 'Temperature estreme (> 38°C) per più giorni',
       severity: 2,
       threats: ['acqua', 'blackout', 'medico'],
@@ -392,7 +392,7 @@ const ScenariModule = (() => {
     {
       id: 'tempesta-invernale',
       titolo: 'Tempesta Invernale',
-      icon: '❄️',
+      icon: '<i class=\"ph ph-snowflake\"></i>',
       desc: 'Gelo estremo, neve abbondante, strade bloccate',
       severity: 2,
       threats: ['acqua', 'blackout', 'freddo', 'carburante'],
@@ -432,7 +432,7 @@ const ScenariModule = (() => {
     {
       id: 'pandemia',
       titolo: 'Pandemia / Quarantena',
-      icon: '🦠',
+      icon: '<i class=\"ph ph-virus\"></i>',
       desc: 'Lockdown, isolamento obbligatorio, ospedali saturi',
       severity: 2,
       threats: ['cibo', 'acqua', 'medico', 'comm'],
@@ -471,7 +471,7 @@ const ScenariModule = (() => {
     {
       id: 'crisi-economica',
       titolo: 'Crisi Economica',
-      icon: '📉',
+      icon: '<i class=\"ph ph-trend-down\"></i>',
       desc: 'Inflazione severa, prezzi alle stelle, forniture instabili',
       severity: 1,
       threats: ['cibo', 'carburante'],
@@ -506,7 +506,7 @@ const ScenariModule = (() => {
     {
       id: 'incendio-zona',
       titolo: 'Incendio Zona',
-      icon: '🔥',
+      icon: '<i class=\"ph ph-fire\"></i>',
       desc: 'Incendio boschivo o industriale nelle vicinanze',
       severity: 3,
       threats: ['acqua', 'comm', 'carburante'],
@@ -548,8 +548,8 @@ const ScenariModule = (() => {
     },
     {
       id: 'blackout-mobile',
-      titolo: 'Black-out Rete Mobile',
-      icon: '📵',
+      titolo: 'Blackout Rete Mobile',
+      icon: '<i class=\"ph ph-cell-signal-slash\"></i>',
       desc: 'Telefonia e internet assenti per ore/giorni',
       severity: 1,
       threats: ['comm'],
@@ -582,7 +582,7 @@ const ScenariModule = (() => {
     {
       id: 'conflitto',
       titolo: 'Attacco Militare / Conflitto',
-      icon: '🪖',
+      icon: '<i class=\"ph ph-shield-warning\"></i>',
       desc: 'Allarme aereo, bombardamenti, guerra vicina',
       severity: 4,
       threats: ['acqua', 'cibo', 'blackout', 'comm', 'carburante', 'medico'],
@@ -596,7 +596,7 @@ const ScenariModule = (() => {
         medico:     ['me01','me02','me03'],
       },
       steps: [
-        { fase: 'ALLARME (sirene, IT-alert, radio)', azioni: [
+        { fase: 'ALLARME (IT-alert, radio, autorità)', azioni: [
           'Vai subito al rifugio pubblico più vicino. Se non c\'è: scantinato, o la stanza più interna del piano più basso',
           'Stai lontano da finestre, vetrate e pareti esterne',
           'Porta lo zaino d\'emergenza, farmaci, documenti, acqua, telefono e radio',
@@ -635,7 +635,7 @@ const ScenariModule = (() => {
     {
       id: 'nucleare',
       titolo: 'Incidente Nucleare / Radiologico',
-      icon: '☢️',
+      icon: '<i class=\"ph ph-radioactive\"></i>',
       desc: 'Esplosione nucleare o nube radioattiva',
       severity: 4,
       threats: ['acqua', 'cibo', 'blackout', 'comm', 'medico'],
@@ -684,7 +684,7 @@ const ScenariModule = (() => {
     {
       id: 'survival-natura',
       titolo: 'Survival in Natura',
-      icon: '🌲',
+      icon: '<i class=\"ph ph-tree-evergreen\"></i>',
       desc: 'Disperso o isolato in ambiente naturale',
       severity: 3,
       threats: ['acqua', 'cibo', 'freddo', 'comm', 'medico'],
@@ -730,7 +730,6 @@ const ScenariModule = (() => {
           'Regola universale: se non sei al 100% sicuro, NON mangiarlo',
           'Sicuri in Italia: more, lamponi, more di rovo, mirtilli, castagne, ghiande (solo dopo molti cambi d\'acqua di bollitura)',
           'Proteine: insetti (grilli, larve) ben cotti — mai quelli pelosi o colorati. Evita lumache e funghi se non sei esperto',
-          'Trappole: laccio semplice su sentiero di piccoli animali',
           'Pesca: amo e filo da pesca nel kit di sopravvivenza — essenziale',
         ]},
         { fase: 'SEGNALAZIONE & SALVATAGGIO', azioni: [

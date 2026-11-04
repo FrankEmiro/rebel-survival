@@ -82,12 +82,12 @@ const DashboardModule = (() => {
   // Scenario → tasks mapping gestito in scenari.js tramite scenario.taskMap
   const ALL_TASKS = [
     // ACQUA
-    { id:'ac01', axis:'acqua',    scoreBonus:20, nav:'settings', tab:'acqua',    threats:['acqua'],               guide:'acqua-stoccaggio',            resolve: p=>(p.acqua_scorte_litri||0)>=30,                        text:'Accumula acqua: 3 L/persona/giorno × 30 giorni in taniche' },
+    { id:'ac01', axis:'acqua',    scoreBonus:20, nav:'settings', tab:'acqua',    threats:['acqua'],               guide:'acqua-stoccaggio',            resolve: p=>(p.acqua_scorte_litri||0)>=_persone(p)*Utils.WATER_L_PPD*30,                        text:'Accumula acqua: 3 L/persona/giorno × 30 giorni in taniche' },
     { id:'ac02', axis:'acqua',    scoreBonus:15, nav:'settings', tab:'acqua',    threats:['acqua'],               guide:'acqua-purificazione',         resolve: p=>!!p.ha_filtro,   field:'ha_filtro',                text:'Acquista filtro portatile (Sawyer / LifeStraw)' },
     { id:'ac03', axis:'acqua',    scoreBonus:10, nav:'settings', tab:'acqua',    threats:['acqua'],               guide:'acqua-raccolta-pioggia',      resolve: p=>!!p.ha_pioggia,  field:'ha_pioggia',               text:'Imposta sistema raccolta acqua piovana' },
     { id:'ac04', axis:'acqua',    scoreBonus: 6, nav:'settings', tab:'acqua',    threats:['acqua'],               guide:'acqua-purificazione',         resolve: null,                                                    text:'Scorta candeggina non profumata per purificazione (4 gocce/L)' },
     // CIBO
-    { id:'ci01', axis:'cibo',     scoreBonus:25, nav:'settings', tab:'cibo',     threats:['cibo'],                guide:'cibo-scorte-piano',           resolve: p=>(p.cibo_scorte_giorni||0)>=14,                        text:'Scorte alimentari 30+ giorni' },
+    { id:'ci01', axis:'cibo',     scoreBonus:25, nav:'settings', tab:'cibo',     threats:['cibo'],                guide:'cibo-scorte-piano',           resolve: p=>(p.cibo_scorte_giorni||0)>=30,                        text:'Scorte alimentari 30+ giorni' },
     { id:'ci02', axis:'cibo',     scoreBonus:10, nav:'settings', tab:'cibo',     threats:['cibo'],                guide:'cibo-cottura-campo',          resolve: null,                                                    text:'Fornello da campo + cartucce gas (min 3 per 30gg)' },
     { id:'ci03', axis:'cibo',     scoreBonus: 8, nav:'guide',    tab:null,       threats:['cibo'],                guide:'orto-emergenza',              resolve: null,                                                    text:'Avvia orto emergenza (ravanelli 25gg, lattuga 45gg)' },
     { id:'ci04', axis:'cibo',     scoreBonus: 5, nav:'settings', tab:'cibo',     threats:['cibo'],                guide:'cibo-conservazione',          resolve: null,                                                    text:'Apriscatole manuale + set utensili da campo' },
@@ -205,7 +205,7 @@ const DashboardModule = (() => {
     { id:'sv10', axis:'mobilita', scoreBonus:12, nav:'guide',    tab:null,       threats:['comm'],   guide:'survival-navigazione',           resolve: null,                                          text:'Coltello survival full tang (lama 10-15cm) sempre con te' },
     { id:'sv11', axis:'mobilita', scoreBonus:15, nav:'settings', tab:'medico',   threats:['medico'], guide:'survival-primo-soccorso-campo',  resolve: p=>!!p.has_kit_medico, field:'has_kit_medico', text:'IFAK avanzato: garze emostatiche, laccio CAT, chest seal' },
     { id:'sv12', axis:'comm',     scoreBonus: 8, nav:'guide',    tab:null,       threats:['comm'],   guide:'survival-navigazione',           resolve: null,                                          text:'Studia orientamento senza strumenti: sole, stelle, acqua' },
-    { id:'sv13', axis:'cibo',     scoreBonus:15, nav:'guide',    tab:null,       threats:['cibo'],   guide:'survival-trappole',              resolve: null,                                          text:'Studia loop snare e spring snare + tieni filo metallico nel kit' },
+    { id:'sv13', axis:'cibo',     scoreBonus:15, nav:'guide',    tab:null,       threats:['cibo'],   guide:'survival-trappole',              resolve: null,                                          text:'Kit pesca di base nella go-bag + leggi la guida su pesca e selvaggina' },
     { id:'sv14', axis:'calore',   scoreBonus:12, nav:'guide',    tab:null,       threats:['freddo'], guide:'survival-nodi',                  resolve: null,                                          text:'Impara 5 nodi fondamentali: bowline, reef, clove hitch, prusik, lashing' },
     { id:'sv15', axis:'cibo',     scoreBonus:10, nav:'guide',    tab:null,       threats:['cibo'],   guide:'survival-conservazione-cibo',    resolve: null,                                          text:'Tecniche conservazione senza energia: essiccatura, salatura, fermentazione' },
   ];
@@ -360,7 +360,7 @@ const DashboardModule = (() => {
         </div>
         <div class="sp-list">
           <div class="sp-item${!current ? ' sp-active' : ''}" onclick="DashboardModule._pickScenario(null)">
-            <span class="sp-icon">🔍</span>
+            <span class="sp-icon"><i class="ph ph-magnifying-glass"></i></span>
             <div class="sp-info"><strong>Auto-rilevamento</strong><span>Minacce da profilo</span></div>
             ${!current ? '<i class="ph ph-check sp-check"></i>' : ''}
           </div>
@@ -613,7 +613,7 @@ const DashboardModule = (() => {
             <span class="task-urgency-badge ${t.urgency}"><i class="ph ${um.icon}"></i>${um.label}</span>
             <span>${(AXES.find(a => a.id === t.axis) || { label: t.axis.toUpperCase() }).label}</span>
             ${t.isAutoTask
-              ? `<span class="task-auto-label">${t.completed ? '· già a posto ✓' : '· tocca e inserisci i tuoi dati'}</span>`
+              ? `<span class="task-auto-label">${t.completed ? '· già a posto ✓' : (Storage.get('onboarded') ? '· tocca per aggiornare i tuoi dati' : '· tocca e inserisci i tuoi dati')}</span>`
               : (t.completed ? '<span class="text-success">· ✓</span>' : '')}
           </div>
         </div>

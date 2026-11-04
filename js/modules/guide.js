@@ -68,6 +68,14 @@ const GuideModule = (() => {
       </button>`;
     }).join('');
 
+    const caution = (typeof GUIDE_CAUTION !== 'undefined') ? GUIDE_CAUTION[g.id] : null;
+    const cautionBadge = caution
+      ? `<span class="guide-caution-badge"><i class="ph ph-warning"></i> Cautela</span>` : '';
+    const cautionBox = caution
+      ? `<div class="guide-caution" role="alert"><i class="ph ph-warning-octagon"></i>
+           <div><strong>Attenzione — da usare con cautela</strong><p>${GUIDE_CAUTION_TEXT[caution]}</p></div>
+         </div>` : '';
+
     return `
       <div class="guide-card2${isOpen ? ' open' : ''}" id="guide2-${g.id}">
         <div class="guide-card2-header" onclick="GuideModule._toggleCard('${g.id}')">
@@ -77,12 +85,14 @@ const GuideModule = (() => {
             <div class="guide-card2-sub">
               <span class="guide-source">${g.source}</span>
               <span class="guide-readtime"><i class="ph ph-clock"></i> ${g.readTime}</span>
+              ${cautionBadge}
             </div>
           </div>
           <i class="ph ph-caret-down guide-card2-chevron"></i>
         </div>
 
         <div class="guide-card2-body">
+          ${cautionBox}
           <!-- Quick Ref box — always first -->
           <div class="guide-quickref">
             <div class="guide-qr-label"><i class="ph ph-lightning-fill"></i> QUICK REFERENCE — leggi in 30 secondi</div>

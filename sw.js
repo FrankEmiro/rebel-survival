@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kit-resilienza-v57';
+const CACHE_NAME = 'kit-resilienza-v58';
 const CDN_CACHE  = 'kit-resilienza-cdn-v51';
 
 // Asset locali — cache-first
@@ -55,7 +55,11 @@ const PACK_CACHES = ['kit-resilienza-guides', 'kit-resilienza-map', 'kit-resilie
 
 self.addEventListener('install', e => {
   e.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(LOCAL_ASSETS))
+    // cache: 'reload' = scarica dal server, non dalla cache HTTP del browser.
+    // nginx serve JS/CSS con "immutable 1y": senza questo, al cambio di versione
+    // il service worker rimetterebbe in cache i file VECCHI.
+    caches.open(CACHE_NAME).then(cache =>
+      cache.addAll(LOCAL_ASSETS.map(u => new Request(u, { cache: 'reload' }))))
   );
   self.skipWaiting();
 });
