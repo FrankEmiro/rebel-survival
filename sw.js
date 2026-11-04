@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kit-resilienza-v59';
+const CACHE_NAME = 'kit-resilienza-v60';
 const CDN_CACHE  = 'kit-resilienza-cdn-v51';
 
 // Asset locali — cache-first
@@ -6,6 +6,22 @@ const LOCAL_ASSETS = [
   '/',
   '/index.html',
   '/css/app.css',
+  '/css/fonts.css',
+  '/legal/legal.css',
+  '/legal/privacy.html',
+  '/legal/condizioni.html',
+  '/fonts/jetbrains-mono-latin-1.woff2',
+  '/fonts/jetbrains-mono-latin-ext-0.woff2',
+  '/fonts/nunito-latin-3.woff2',
+  '/fonts/nunito-latin-ext-2.woff2',
+  '/fonts/rajdhani-latin-11.woff2',
+  '/fonts/rajdhani-latin-5.woff2',
+  '/fonts/rajdhani-latin-7.woff2',
+  '/fonts/rajdhani-latin-9.woff2',
+  '/fonts/rajdhani-latin-ext-10.woff2',
+  '/fonts/rajdhani-latin-ext-4.woff2',
+  '/fonts/rajdhani-latin-ext-6.woff2',
+  '/fonts/rajdhani-latin-ext-8.woff2',
   '/css/print.css',
   '/js/main.js',
   '/js/utils.js',
@@ -45,7 +61,7 @@ const LOCAL_ASSETS = [
 ];
 
 // CDN esterni — network-first con fallback cache
-const CDN_HOSTS = ['fonts.googleapis.com', 'fonts.gstatic.com', 'unpkg.com', 'tile.openstreetmap.org'];
+const CDN_HOSTS = ['tile.openstreetmap.org'];
 
 // Cache dei "pacchetti offline" scaricati manualmente dall'utente (immagini guide,
 // confini comunali/province, tile mappa area locale) — NON vanno cancellate ad ogni

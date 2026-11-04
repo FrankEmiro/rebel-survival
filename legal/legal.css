@@ -1,0 +1,11 @@
+/* Pagine legali: stile semplice, leggibile anche offline */
+body { margin: 0; background: #131810; color: #e8e2cc; font-family: 'Nunito', sans-serif; line-height: 1.6; }
+main { max-width: 760px; margin: 0 auto; padding: 24px 18px 60px; }
+h1, h2 { font-family: 'Rajdhani', sans-serif; color: #c9a84c; }
+h1 { font-size: 1.8rem; margin-bottom: 4px; }
+h2 { font-size: 1.25rem; margin-top: 28px; }
+a { color: #c9a84c; }
+.meta { color: #8a8368; font-size: 0.85rem; }
+.todo { background: rgba(192,57,43,0.15); border: 1px dashed #e74c3c; color: #f5b7b1; padding: 1px 6px; border-radius: 4px; }
+.back { display: inline-block; margin-bottom: 18px; text-decoration: none; }
+ul { padding-left: 20px; }

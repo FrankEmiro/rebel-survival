@@ -12,10 +12,8 @@
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="icons/icon-2-192.png">
 
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Nunito:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <!-- Fonts (locali: nessuna richiesta a Google) -->
+  <link rel="stylesheet" href="css/fonts.css">
 
   <!-- Phosphor Icons (locale — offline-ready) -->
   <link rel="stylesheet" href="js/vendor/phosphor/style.css">
@@ -77,6 +75,9 @@
         <i class="ph ph-compass"></i> Emergenza
       </a></li>
     </ul>
+    <div class="sidebar-legal">
+      <a href="/legal/privacy.html">Privacy</a> · <a href="/legal/condizioni.html">Condizioni d'uso</a>
+    </div>
   </nav>
 
   <!-- MAIN CONTENT -->
@@ -220,10 +221,11 @@
           <li>I calcoli e le stime forniti sono <strong>approssimativi</strong> e non tengono conto di tutte le variabili individuali.</li>
           <li>Le informazioni <strong>non sostituiscono</strong> le indicazioni ufficiali della Protezione Civile, delle autorità sanitarie o di altri enti competenti.</li>
           <li>In caso di <strong>emergenza reale</strong>, segui sempre le istruzioni delle autorità e chiama i numeri di emergenza (112, 115, 118).</li>
-          <li>L'autore <strong>non si assume alcuna responsabilità</strong> per decisioni prese sulla base dei dati calcolati da questa app.</li>
-          <li>Tutti i dati inseriti rimangono <strong>solo sul tuo dispositivo</strong> e non vengono trasmessi a nessun server.</li>
+          <li>Le guide con l'etichetta <strong>«Cautela»</strong> contengono indicazioni non ancora verificate da una fonte sanitaria o ufficiale: usale con prudenza.</li>
+          <li>Nei limiti consentiti dalla legge, l'autore <strong>non risponde</strong> di decisioni prese sulla base dei dati calcolati da questa app.</li>
+          <li>I dati che inserisci rimangono <strong>solo sul tuo dispositivo</strong> e non ci vengono inviati. Se usi la mappa, le immagini vengono scaricate da OpenStreetMap.</li>
         </ul>
-        <p class="disclaimer-footer-note">Usando l'app dichiari di aver letto e compreso questo avviso.</p>
+        <p class="disclaimer-footer-note">Usando l'app dichiari di aver letto e compreso questo avviso, le <a href="/legal/condizioni.html">condizioni d'uso</a> e l'<a href="/legal/privacy.html">informativa privacy</a>.</p>
       </div>
       <button id="disclaimer-accept" class="disclaimer-btn">
         <i class="ph ph-check-circle"></i> Ho capito, continua

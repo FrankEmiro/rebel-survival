@@ -2,3 +2,5 @@ icons/generate-icons.html
 .git
 .gitignore
 *.md
+.claude
+.DS_Store

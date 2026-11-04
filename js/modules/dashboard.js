@@ -1202,6 +1202,9 @@ const DashboardModule = (() => {
           <i class="ph ph-gear"></i> Modifica profilo
         </button>
       </div>
+      <div class="home-legal">
+        <a href="/legal/privacy.html">Privacy</a> · <a href="/legal/condizioni.html">Condizioni d'uso</a>
+      </div>
     `;
   }
 
