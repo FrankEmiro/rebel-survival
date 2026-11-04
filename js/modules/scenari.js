@@ -580,6 +580,43 @@ const ScenariModule = (() => {
       ]
     },
     {
+      id: 'cyberattacco',
+      titolo: 'Cyberattacco su Larga Scala',
+      icon: '<i class=\"ph ph-shield-slash\"></i>',
+      desc: 'Banche, pagamenti e servizi online bloccati o compromessi',
+      severity: 3,
+      threats: ['comm', 'blackout'],
+      required: { acqua:40, cibo:45, energia:55, calore:35, comm:90, mobilita:30 },
+      taskMap: {
+        comm:     ['cy01','cy02','cy03','cy04','co01','co03','co04'],
+        blackout: ['en01','en04'],
+      },
+      // Fonti: Ready.gov (FEMA) "Cybersecurity"; Polizia Postale per le denunce
+      steps: [
+        { fase: 'SUBITO', azioni: [
+          'Informati solo da fonti ufficiali: radio, TV, IT-alert, siti istituzionali. Non diffondere voci non verificate',
+          'Diffida di email, SMS e messaggi che chiedono dati, password o pagamenti: nel dubbio, non cliccare',
+          'Controlla i movimenti di carte e conti: cerca spese che non riconosci',
+          'Se noti attività sospette sui tuoi account, cambia subito le password',
+        ]},
+        { fase: 'SE UN TUO DISPOSITIVO È COLPITO', azioni: [
+          'Spegnilo o scollegalo da internet',
+          'Fallo controllare e pulire da un tecnico',
+          'Avvisa datore di lavoro o scuola se è un dispositivo o account di lavoro o di studio',
+        ]},
+        { fase: 'SE SI FERMANO ANCHE LUCE, TELEFONO O PAGAMENTI', azioni: [
+          'Segui i passi degli scenari Blackout e Blackout Rete Mobile',
+          'Usa la radio a batterie per gli aggiornamenti',
+          'Usa i contanti: i pagamenti elettronici possono non funzionare',
+        ]},
+        { fase: 'DOPO', azioni: [
+          'Contatta banca e società delle carte: fai bloccare i conti coinvolti',
+          'Denuncia alla Polizia Postale (commissariatodips.it) o a un ufficio di polizia',
+          'Avvisa gli altri enti coinvolti in base a cosa è stato rubato (per esempio documenti d\'identità)',
+        ]},
+      ]
+    },
+    {
       id: 'conflitto',
       titolo: 'Attacco Militare / Conflitto',
       icon: '<i class=\"ph ph-shield-warning\"></i>',

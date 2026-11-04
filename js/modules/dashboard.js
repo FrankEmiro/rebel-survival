@@ -192,6 +192,12 @@ const DashboardModule = (() => {
     { id:'bmo02', axis:'comm',    scoreBonus:15, nav:'guide', tab:null, threats:['comm'],                 guide:'comm-piano-famiglia',         resolve: null, text:'Recati al punto di ritrovo fisico prestabilito — lascia nota cartacea sulla porta di casa' },
     { id:'bmo03', axis:'comm',    scoreBonus:12, nav:'guide', tab:null, threats:['comm'],                 guide:'comm-pmr446',                 resolve: null, text:'Walkie-talkie PMR446 canale 8: check ogni 4h con familiari nel raggio di 2–5km' },
 
+    // ── CYBERATTACCO (fonte: Ready.gov / FEMA) ────────────────────────────────
+    { id:'cy01', axis:'comm',    scoreBonus:15, nav:'guide', tab:null, threats:['comm'],                 guide:'cyberattacco',                resolve: null, text:'Aggiorna sistema e app di telefono e computer; attiva la verifica in due passaggi' },
+    { id:'cy02', axis:'comm',    scoreBonus:12, nav:'guide', tab:null, threats:['comm'],                 guide:'cyberattacco',                resolve: null, text:'Password robuste e diverse per ogni account, con un gestore di password' },
+    { id:'cy03', axis:'comm',    scoreBonus:12, nav:'guide', tab:null, threats:['comm'],                 guide:'cyberattacco',                resolve: null, text:'Backup regolare di file e foto importanti su un supporto protetto' },
+    { id:'cy04', axis:'comm',    scoreBonus:10, nav:'guide', tab:null, threats:['comm'],                 guide:'cyberattacco',                resolve: null, text:'Tieni stampati i numeri della banca per bloccare carte e conti' },
+
     // ── SURVIVAL IN NATURA ────────────────────────────────────────────────────
     { id:'sv01', axis:'acqua',    scoreBonus:20, nav:'settings', tab:'acqua',    threats:['acqua'],  guide:'acqua-purificazione',            resolve: p=>!!p.ha_filtro,      field:'ha_filtro',      text:'Filtro Sawyer Mini + pastiglie Micropur nel kit' },
     { id:'sv02', axis:'acqua',    scoreBonus:10, nav:'guide',    tab:null,       threats:['acqua'],  guide:'survival-acqua-natura',          resolve: null,                                          text:'Studia distillazione solare e raccolta rugiada' },

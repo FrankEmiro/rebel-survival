@@ -1203,6 +1203,55 @@ const GUIDES_DATA = [
   },
 
   {
+    id: 'cyberattacco',
+    title: 'Cyberattacco su Larga Scala',
+    icon: 'ph-shield-slash',
+    category: 'comm',
+    source: 'Ready.gov (FEMA) · Polizia Postale',
+    readTime: '3 min',
+    quickRef: [
+      'Prima: aggiorna telefono, computer e app; password diverse e verifica in due passaggi',
+      'Fai backup regolari di file e foto importanti su un supporto protetto',
+      'Diffida di email, SMS e messaggi che chiedono dati o password: nel dubbio, non cliccare',
+      'Controlla movimenti di carte e conti: se vedi spese che non riconosci, avvisa subito la banca',
+      'Se luce, telefono o internet si fermano, segui anche gli scenari Blackout',
+    ],
+    sections: [
+      {
+        heading: 'Prepararsi prima',
+        steps: [
+          'Limita le informazioni personali che condividi online e controlla le impostazioni di privacy',
+          'Tieni aggiornati sistema operativo e app di telefono e computer',
+          'Usa password robuste e diverse per ogni account, un gestore di password e la verifica in due passaggi',
+          'Non condividere PIN e password',
+          'Proteggi la rete Wi-Fi di casa e usa antivirus e firewall',
+          'Fai backup regolari dei file importanti su un supporto protetto (cifrato)',
+        ],
+      },
+      {
+        heading: 'Durante l\'attacco',
+        steps: [
+          'Controlla gli estratti conto di carte e conti: cerca spese che non riconosci',
+          'Diffida di email o messaggi che chiedono informazioni private',
+          'Se noti attività sospette, cambia subito le password dei tuoi account',
+          'Se un dispositivo sembra colpito: spegnilo o scollegalo da internet e fallo controllare da un tecnico',
+          'Avvisa il datore di lavoro o la scuola se sono coinvolti dispositivi o account di lavoro o di studio',
+        ],
+      },
+      {
+        heading: 'Dopo l\'attacco',
+        steps: [
+          'Contatta banca e società delle carte: fai bloccare i conti coinvolti e chiudere quelli aperti a tua insaputa',
+          'Denuncia alla Polizia Postale (sito commissariatodips.it) o a un ufficio di polizia',
+          'Avvisa gli altri enti coinvolti in base a cosa è stato rubato (per esempio documenti d\'identità)',
+        ],
+      },
+    ],
+    relatedGuides: ['comm-piano-famiglia', 'energia-blackout-protocollo', 'comm-radio-canali'],
+    tasks: ['cy01', 'cy02', 'cy03', 'cy04'],
+  },
+
+  {
     id: 'nucleare-radiologico',
     title: 'Incidente Nucleare o Radiologico',
     icon: 'ph-radioactive',
@@ -2075,6 +2124,7 @@ const GUIDE_SOURCE_URLS = {
   'comm-piano-famiglia':        'https://www.ready.gov/make-a-plan',
   'comm-pmr446':                'https://www.etsi.org/',
   'comm-radio-canali':          'https://www.protezionecivile.gov.it/',
+  'cyberattacco':               'https://www.ready.gov/cybersecurity',
 
   // Pianificazione
   'gobag-checklist':            'https://www.ready.gov/kit',
