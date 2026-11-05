@@ -4,22 +4,22 @@
   "description": "Strumenti pratici per gestire emergenze energetiche e alimentari",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0d1117",
+  "background_color": "#131810",
   "theme_color": "#c9a84c",
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "icons/icon-2-192.png",
+      "src": "icons/icon-rs-192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "icons/icon-2-512.png",
+      "src": "icons/icon-rs-512.png",
       "sizes": "512x512",
       "type": "image/png"
     },
     {
-      "src": "icons/icon-2-512.png",
+      "src": "icons/icon-rs-maskable-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
@@ -33,7 +33,7 @@
       "url": "/?mode=emergenza",
       "icons": [
         {
-          "src": "icons/icon-2-192.png",
+          "src": "icons/icon-rs-192.png",
           "sizes": "192x192",
           "type": "image/png"
         }
