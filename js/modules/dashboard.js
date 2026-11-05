@@ -1076,7 +1076,7 @@ const DashboardModule = (() => {
     if (typeof OnboardingModule !== 'undefined' && !OnboardingModule.isDone()) {
       root.innerHTML = `<div class="card ob-welcome">
         <i class="ph ph-shield-check"></i>
-        <h2>Benvenuto in Kit Resilienza</h2>
+        <h2>Benvenuto in Rebel Survival</h2>
         <p>In un minuto ti dico a che <strong>livello di preparazione</strong> sei (72 ore, 2 settimane, 30 giorni) e quale azione fare per prima.</p>
         <button class="btn btn-primary btn-full" onclick="OnboardingModule.open()">
           <i class="ph ph-play"></i> Inizia (1 minuto)

@@ -314,7 +314,7 @@ const GuideModule = (() => {
     const section = document.getElementById('section-guide');
     section.classList.add('print-target');
     const prevTitle = document.title;
-    document.title = 'Kit-Resilienza-Guide-Offline';
+    document.title = 'Rebel-Survival-Guide-Offline';
 
     setTimeout(() => {
       window.print();

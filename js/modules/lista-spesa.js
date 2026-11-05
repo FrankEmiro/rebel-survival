@@ -552,8 +552,8 @@ const ListaSpesaModule = (() => {
     const { scenarioName } = generateList();
     const prevTitle = document.title;
     document.title = scenarioName
-      ? `Kit-Resilienza-Spesa-${scenarioName.replace(/\s+/g, '-')}`
-      : 'Kit-Resilienza-Lista-Spesa';
+      ? `Rebel-Survival-Spesa-${scenarioName.replace(/\s+/g, '-')}`
+      : 'Rebel-Survival-Lista-Spesa';
     const section = document.getElementById('section-lista-spesa');
     section.classList.add('print-target');
     setTimeout(() => {
