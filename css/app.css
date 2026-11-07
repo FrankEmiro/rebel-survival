@@ -3738,3 +3738,48 @@ input, select, textarea { font-family: 'Nunito', sans-serif; font-size: 1rem; }
   border-color: var(--accent);
 }
 .sidebar-logo-img { width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0; }
+
+/* ── Assistente (Chiedi) ── */
+.as-entry { display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px 14px; margin-bottom: 14px;
+  background: var(--bg-card); border: 1px solid var(--border-accent); border-radius: var(--radius-lg);
+  color: var(--text-primary); font: inherit; text-align: left; cursor: pointer; }
+.as-entry:hover { background: var(--bg-card-hover); }
+.as-entry > i:first-child { font-size: 1.5rem; color: var(--accent); }
+.as-entry span { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+.as-entry small { color: var(--text-secondary); font-size: 0.8rem; }
+.as-entry > i:last-child { color: var(--text-secondary); }
+.as-warn { display: flex; align-items: center; gap: 8px; padding: 10px 12px; margin-bottom: 12px; border-radius: var(--radius);
+  background: var(--danger-bg); border: 1px solid var(--danger); font-size: 0.88rem; }
+.as-warn a { color: #f0d2cc; font-weight: 700; }
+.as-thread { display: flex; flex-direction: column; gap: 12px; min-height: 120px; }
+.as-empty p { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5; }
+.as-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.as-chip { padding: 8px 12px; border-radius: 999px; background: var(--bg-card); border: 1px solid var(--border-accent);
+  color: var(--text-primary); font: inherit; font-size: 0.85rem; cursor: pointer; text-align: left; }
+.as-chip:hover { background: var(--accent-muted); }
+.as-q { align-self: flex-end; max-width: 85%; }
+.as-q span { display: inline-block; padding: 10px 14px; border-radius: 14px 14px 4px 14px; background: var(--accent); color: var(--bg-primary); font-weight: 600; }
+.as-a { align-self: stretch; scroll-margin-top: calc(var(--topbar-h) + 12px); }
+.as-lead { color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 8px; }
+.as-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 12px 14px; margin-bottom: 8px; }
+.as-src { font-size: 0.78rem; color: var(--accent); margin-bottom: 6px; font-weight: 600; }
+.as-src span { color: var(--text-secondary); font-weight: 400; }
+.as-card p, .as-list li { font-size: 0.9rem; line-height: 1.5; color: var(--text-primary); }
+.as-list { padding-left: 18px; display: flex; flex-direction: column; gap: 4px; }
+.as-caution { font-size: 0.78rem; color: var(--warning); background: var(--warning-bg); border-radius: var(--radius-sm); padding: 6px 8px; margin-bottom: 8px; }
+.as-open { margin-top: 10px; background: none; border: 1px solid var(--border-accent); color: var(--accent); border-radius: var(--radius);
+  padding: 6px 10px; font: inherit; font-size: 0.82rem; cursor: pointer; }
+.as-form { position: sticky; bottom: calc(var(--bottom-nav-h) + 8px); display: flex; gap: 8px; margin-top: 14px;
+  padding: 8px; background: var(--bg-secondary); border: 1px solid var(--border-accent); border-radius: 14px; z-index: 5; }
+@media (min-width: 900px) { .as-form { bottom: 12px; } }
+.as-form input { flex: 1; min-width: 0; background: var(--bg-input); border: 1px solid var(--border); border-radius: 10px;
+  color: var(--text-primary); padding: 12px; font: inherit; font-size: 1rem; }
+.as-send { width: 48px; border: none; border-radius: 10px; background: var(--accent); color: var(--bg-primary); font-size: 1.3rem; cursor: pointer; }
+.as-foot { margin-top: 8px; text-align: right; }
+.as-link { background: none; border: none; color: var(--text-secondary); text-decoration: underline; font: inherit; font-size: 0.82rem; cursor: pointer; padding: 0; }
+.as-ai { display: flex; gap: 10px; align-items: flex-start; margin-top: 18px; padding: 10px 12px; border: 1px dashed var(--border);
+  border-radius: var(--radius); font-size: 0.8rem; color: var(--text-secondary); }
+.as-ai:empty { display: none; }
+.as-ai i { font-size: 1.2rem; color: var(--accent); }
+.as-ai div { display: flex; flex-direction: column; gap: 2px; }
+.as-ai strong { color: var(--text-primary); }

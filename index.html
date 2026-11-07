@@ -153,12 +153,26 @@
       <div id="strumenti-root"></div>
     </section>
 
+    <!-- ===== ASSISTENTE ===== -->
+    <section id="section-assistente" class="section">
+      <div class="section-header">
+        <h1><i class="ph ph-chats-circle"></i> Chiedi</h1>
+        <p class="subtitle">Risposte prese dalle guide dell'app, anche senza internet</p>
+      </div>
+      <div id="assistente-root"></div>
+    </section>
+
     <!-- ===== GUIDE ===== -->
     <section id="section-guide" class="section">
       <div class="section-header">
         <h1><i class="ph ph-books"></i> Guide</h1>
         <p class="subtitle">Funzionano anche senza connessione</p>
       </div>
+      <button class="as-entry" onclick="navigateTo('assistente')">
+        <i class="ph ph-chats-circle"></i>
+        <span><strong>Fai una domanda</strong><small>Es. «come rendo potabile l'acqua?» — rispondo con le guide</small></span>
+        <i class="ph ph-caret-right"></i>
+      </button>
       <div id="guide-root"></div>
     </section>
 
@@ -247,6 +261,7 @@
   <script src="js/data/guides.js"></script>
   <script src="js/modules/guide.js"></script>
   <script src="js/modules/strumenti.js"></script>
+  <script src="js/modules/assistente.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

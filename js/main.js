@@ -13,6 +13,7 @@ const SECTION_TITLES = {
   guide: 'Guide',
   settings: 'Profilo',
   strumenti: 'Emergenza',
+  assistente: 'Chiedi',
 };
 
 // Sezione corrente
@@ -116,6 +117,7 @@ function initSection(section) {
     case 'carburante':  CarburanteModule.init(); break;
     case 'kit':         KitModule.init(); switchKitTab('kit'); break;
     case 'guide':       GuideModule.init(); break;
+    case 'assistente':  AssistenteModule.init(); break;
     case 'settings':    SettingsModule.init(); break;
     case 'strumenti':   DashboardModule.renderEmergency(); StrumentiModule.init(); break;
   }

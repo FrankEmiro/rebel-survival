@@ -1165,6 +1165,12 @@ const DashboardModule = (() => {
         <span class="home-sc-btn">${scenarioName ? 'Cambia' : 'Scegli'}</span>
       </button>
 
+      <button class="as-entry as-entry-home" onclick="navigateTo('assistente')">
+        <i class="ph ph-chats-circle"></i>
+        <span><strong>Hai un dubbio? Chiedi</strong><small>Rispondo con le guide dell'app, anche offline</small></span>
+        <i class="ph ph-caret-right"></i>
+      </button>
+
       <!-- STATUS: livello + percorso 72h / 2 sett / 30gg -->
       <div class="status-banner ${bannerCls}">
         <i class="ph ${bannerIcon}"></i>
