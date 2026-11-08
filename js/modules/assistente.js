@@ -242,10 +242,12 @@ const AssistenteModule = (() => {
         if (a) {
           c.webgpu = true; c.f16 = a.features.has('shader-f16');
           c.sbuf = a.limits.maxStorageBufferBindingSize;
+          c.wgs = a.limits.maxComputeWorkgroupStorageSize;
         }
       } catch (e) { /* nessuna GPU utilizzabile */ }
-      // WebLLM richiede almeno 128 MB per buffer sulla GPU (limite "maxStorageBufferBindingSize")
-      const gpuOk = c.sbuf == null || c.sbuf >= 134217728;
+      // WebLLM richiede sulla GPU: buffer da almeno 128 MB e 32 KB di memoria per gruppo di calcolo
+      // (molte GPU Android si fermano a 16 KB: lì il modello non può partire)
+      const gpuOk = (c.sbuf == null || c.sbuf >= 134217728) && (c.wgs == null || c.wgs >= 32768);
       c.ok = c.webgpu && gpuOk && (c.memGB == null || c.memGB >= 4);
       c.why = !c.webgpu ? 'il browser non ha WebGPU'
         : !gpuOk ? 'la scheda grafica del telefono non supporta modelli di questa dimensione'
@@ -294,7 +296,7 @@ const AssistenteModule = (() => {
       if (/maxStorageBufferBindingSize|maxComputeWorkgroupStorageSize|maxBufferSize/.test(m)) return 'la scheda grafica del telefono non supporta questo modello';
       if (!navigator.onLine && !cfg().installed) return 'serve internet per il primo download';
       if ((e && e.name === 'QuotaExceededError') || /QuotaExceeded/i.test(m)) return `spazio insufficiente: servono circa ${_gb(AI_MIN_FREE_MB)} liberi`;
-      return 'errore nel caricamento del modello (' + m.slice(0, 120) + ')';
+      return 'errore nel caricamento del modello (' + m.slice(0, 200) + ')';
     }
     const _gb = mb => (mb >= 1024 ? (mb / 1024).toFixed(1).replace('.', ',') + ' GB' : Math.max(0, Math.round(mb)) + ' MB');
 
@@ -386,7 +388,7 @@ const AssistenteModule = (() => {
       const rows = [
         'Browser: ' + (navigator.userAgent.match(/(Chrome|Firefox|SamsungBrowser|Version)\/[\d.]+/g) || ['?']).join(' '),
         'WebGPU: ' + (c.webgpu ? 'sì' : 'no') + ' · f16: ' + (c.f16 ? 'sì' : 'no'),
-        'Buffer GPU max: ' + (c.sbuf ? Math.round(c.sbuf / 1048576) + ' MB' : '?'),
+        'Buffer GPU max: ' + (c.sbuf ? Math.round(c.sbuf / 1048576) + ' MB' : '?') + ' · memoria gruppo: ' + (c.wgs ? Math.round(c.wgs / 1024) + ' KB (servono 32)' : '?'),
         'RAM indicata: ' + (c.memGB != null ? c.memGB + ' GB' : '?'),
         'Spazio concesso dal browser: ' + (diag.freeMB != null ? _gb(diag.freeMB) : '?'),
         diag.err ? 'Errore: ' + diag.err : '',
