@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kit-resilienza-v80';
+const CACHE_NAME = 'kit-resilienza-v81';
 const CDN_CACHE  = 'kit-resilienza-cdn-v51';
 
 // Asset locali — cache-first
@@ -100,6 +100,11 @@ self.addEventListener('activate', e => {
     )
   );
   self.clients.claim();
+});
+
+// l'app chiede quale versione l'ha servita (per capire se serve ricaricare)
+self.addEventListener('message', e => {
+  if (e.data === 'version' && e.ports && e.ports[0]) e.ports[0].postMessage(CACHE_NAME);
 });
 
 self.addEventListener('fetch', e => {

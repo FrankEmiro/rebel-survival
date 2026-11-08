@@ -160,23 +160,38 @@ function registerSW() {
    dell'utente (localStorage, pacchetti offline, modello AI) non vengono toccati. */
 const AppUpdate = (() => {
   let reloading = false, taps = 0;
+  const startedAt = Date.now();
   const reloadOnce = () => { if (!reloading) { reloading = true; location.reload(); } };
   const say = t => { const el = document.getElementById('app-upd-msg'); if (el) el.textContent = t; };
+  const num = name => { const m = /^kit-resilienza-v(\d+)$/.exec(name || ''); return m ? +m[1] : 0; };
 
-  async function version() {
-    try {
-      const v = (await caches.keys()).map(k => /^kit-resilienza-v(\d+)$/.exec(k)).filter(Boolean).map(m => +m[1]).sort((a, b) => b - a)[0];
-      return v ? 'v' + v : '—';
-    } catch (e) { return '—'; }
+  // versione più nuova scaricata nel telefono (può essere più nuova di quella in uso)
+  async function latest() {
+    try { return Math.max(0, ...(await caches.keys()).map(num)); } catch (e) { return 0; }
+  }
+  // versione che ha servito QUESTA pagina: la si chiede al service worker all'avvio
+  const running = new Promise(resolve => {
+    const ctl = navigator.serviceWorker && navigator.serviceWorker.controller;
+    if (!ctl) return resolve(0);
+    const ch = new MessageChannel();
+    ch.port1.onmessage = e => resolve(num(e.data));
+    setTimeout(() => resolve(0), 3000);   // service worker vecchio, che non risponde
+    ctl.postMessage('version', [ch.port2]);
+  });
+  async function stale() {
+    const [r, l] = await Promise.all([running, latest()]);
+    return l > 0 && (r === 0 || l > r);
   }
 
-  // nuova versione installata in background mentre l'app è aperta
-  function watch(reg) {
-    if (!reg || !navigator.serviceWorker.controller) return;
-    reg.addEventListener('updatefound', () => {
-      const nw = reg.installing;
-      if (!nw) return;
-      nw.addEventListener('statechange', () => { if (nw.state === 'activated' && !reloading) _toast(); });
+  // nuova versione installata in background mentre l'app è aperta:
+  // se l'app è stata appena aperta ed è sulla Home, ricarica da sola;
+  // altrimenti (es. pagina Emergenza aperta) mostra solo l'avviso «Ricarica».
+  function watch() {
+    if (!navigator.serviceWorker.controller) return;   // primo avvio: niente da aggiornare
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (reloading) return;
+      if (Date.now() - startedAt < 20000 && currentSection === 'home') reloadOnce();
+      else _toast();
     });
   }
   function _toast() {
@@ -196,7 +211,11 @@ const AppUpdate = (() => {
       if (!reg) { await navigator.serviceWorker.register('/sw.js'); return say('Fatto. Chiudi e riapri l\'app.'); }
       await reg.update();
       const nw = reg.installing || reg.waiting;
-      if (!nw) return say('Hai già l\'ultima versione.');
+      if (!nw) {
+        // già scaricata in background ma la pagina usa ancora i file vecchi: ricarica
+        if (await stale()) { say('Applico la nuova versione…'); return reloadOnce(); }
+        return say('Hai già l\'ultima versione.');
+      }
       say('Scarico la nuova versione…');
       navigator.serviceWorker.addEventListener('controllerchange', reloadOnce);
       nw.addEventListener('statechange', () => {
@@ -220,7 +239,11 @@ const AppUpdate = (() => {
   }
   async function render() {
     const v = document.getElementById('app-ver');
-    if (v) v.textContent = await version();
+    if (v) {
+      const [r, l] = await Promise.all([running, latest()]);
+      v.textContent = r ? 'v' + r : (l ? 'v' + l : '—');
+      if (await stale()) say(`È pronta la v${l}: tocca «Cerca aggiornamenti» per applicarla.`);
+    }
     const box = document.getElementById('app-lab-box'), cb = document.getElementById('app-lab');
     if (cb) cb.checked = labOn();
     if (box && labOn()) box.classList.remove('hidden');

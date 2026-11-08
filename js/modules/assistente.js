@@ -203,7 +203,106 @@ const AssistenteModule = (() => {
   const AI_MODELS = { f16: 'Llama-3.2-1B-Instruct-q4f16_1-MLC', f32: 'Llama-3.2-1B-Instruct-q4f32_1-MLC' };
   const WLLAMA_LIB = 'https://cdn.jsdelivr.net/npm/@wllama/wllama@3.8.1/esm/index.js';
   const WLLAMA_WASM = 'https://cdn.jsdelivr.net/npm/@wllama/wllama@3.8.1/esm/wasm/wllama.wasm';
-  const CPU_MODEL_URL = 'https://huggingface.co/unsloth/Qwen3-0.6B-GGUF/resolve/main/Qwen3-0.6B-Q4_K_M.gguf';
+  // versione del file fissata (commit Hugging Face): i pezzi scaricati in momenti diversi sono dello stesso file
+  const CPU_MODEL_URL = 'https://huggingface.co/unsloth/Qwen3-0.6B-GGUF/resolve/50968a4468ef4233ed78cd7c3de230dd1d61a56b/Qwen3-0.6B-Q4_K_M.gguf';
+  const CPU_MODEL_URL_OLD = 'https://huggingface.co/unsloth/Qwen3-0.6B-GGUF/resolve/main/Qwen3-0.6B-Q4_K_M.gguf';
+
+  /* Download del modello CPU a pezzi da 8 MB salvati nel telefono (OPFS).
+     Se la connessione cade, riprova da sola; se l'app si chiude, alla ripresa
+     riparte dal primo pezzo mancante invece che da zero. */
+  const Chunks = (() => {
+    const DIR = 'rs-ai-qwen3-0.6b-q4km', SIZE = 8 * 1048576, IDLE_MS = 60000, TRIES = 6;
+    const name = i => 'p' + String(i).padStart(4, '0');
+    const supported = () => !!(navigator.storage && navigator.storage.getDirectory)
+      && typeof FileSystemFileHandle !== 'undefined' && 'createWritable' in FileSystemFileHandle.prototype;
+    const dir = async create => (await navigator.storage.getDirectory()).getDirectoryHandle(DIR, { create });
+    const wait = ms => new Promise(r => setTimeout(r, ms));
+    const online = () => navigator.onLine ? null : new Promise(r => window.addEventListener('online', r, { once: true }));
+
+    async function readMeta(d) {
+      try { return JSON.parse(await (await (await d.getFileHandle('meta.json')).getFile()).text()); } catch (e) { return null; }
+    }
+    async function writeFile(d, n, blob) {
+      const w = await (await d.getFileHandle(n, { create: true })).createWritable();
+      await w.write(blob); await w.close();   // il file diventa visibile intero solo alla chiusura
+    }
+    async function sizeOf(d, n) {
+      try { return (await (await d.getFileHandle(n)).getFile()).size; } catch (e) { return -1; }
+    }
+    const span = (meta, i) => [i * SIZE, Math.min(meta.total, (i + 1) * SIZE) - 1];
+
+    // un pezzo, con timeout se non arrivano dati per 60 s
+    async function fetchPart(start, end, onBytes) {
+      const ac = new AbortController();
+      let timer = setTimeout(() => ac.abort(), IDLE_MS);
+      try {
+        const res = await fetch(CPU_MODEL_URL, { headers: { Range: `bytes=${start}-${end}` }, signal: ac.signal, cache: 'no-store' });
+        if (res.status !== 206) throw new Error('il server non accetta il download a pezzi (HTTP ' + res.status + ')');
+        const rd = res.body.getReader(), parts = [];
+        let got = 0;
+        for (;;) {
+          const { done, value } = await rd.read();
+          if (done) break;
+          clearTimeout(timer); timer = setTimeout(() => ac.abort(), IDLE_MS);
+          parts.push(value); got += value.length; onBytes(got);
+        }
+        if (got !== end - start + 1) throw new Error('pezzo incompleto');
+        return new Blob(parts);
+      } finally { clearTimeout(timer); }
+    }
+
+    async function download(onPct) {
+      const d = await dir(true);
+      let meta = await readMeta(d);
+      if (!meta || meta.url !== CPU_MODEL_URL) {
+        const res = await fetch(CPU_MODEL_URL, { headers: { Range: 'bytes=0-0' }, cache: 'no-store' });
+        const total = +((res.headers.get('Content-Range') || '').split('/')[1] || 0);
+        if (res.status !== 206 || !total) throw new Error('dimensione del modello non disponibile');
+        meta = { url: CPU_MODEL_URL, total, n: Math.ceil(total / SIZE) };
+        await writeFile(d, 'meta.json', new Blob([JSON.stringify(meta)]));
+      }
+      const missing = [];
+      let have = 0;
+      for (let i = 0; i < meta.n; i++) {
+        const [s, e] = span(meta, i);
+        if (await sizeOf(d, name(i)) === e - s + 1) have += e - s + 1; else missing.push(i);
+      }
+      onPct(have / meta.total * 100);
+      for (const i of missing) {
+        const [s, e] = span(meta, i);
+        for (let t = 1; ; t++) {
+          try {
+            await online();
+            const blob = await fetchPart(s, e, got => onPct((have + got) / meta.total * 100));
+            await writeFile(d, name(i), blob);
+            have += blob.size;
+            break;
+          } catch (err) {
+            if (err && err.name === 'QuotaExceededError') throw err;
+            if (t >= TRIES) throw new Error('download interrotto (connessione assente o troppo lenta): tocca Riprendi, i pezzi già scaricati restano');
+            await wait(3000 * t);
+          }
+        }
+      }
+    }
+
+    // il modello intero come un unico Blob (i pezzi in ordine), o null se manca qualcosa
+    async function blob() {
+      try {
+        const d = await dir(false), meta = await readMeta(d);
+        if (!meta || meta.url !== CPU_MODEL_URL) return null;
+        const files = [];
+        for (let i = 0; i < meta.n; i++) files.push(await (await d.getFileHandle(name(i))).getFile());
+        const b = new Blob(files);
+        return b.size === meta.total ? b : null;
+      } catch (e) { return null; }
+    }
+
+    async function remove() {
+      try { await (await navigator.storage.getDirectory()).removeEntry(DIR, { recursive: true }); } catch (e) { /* già vuota */ }
+    }
+    return { supported, download, blob, remove };
+  })();
   // peso reale dei download (verificato su Hugging Face) e spazio libero richiesto
   const BACKENDS = {
     gpu: { label: 'Llama 3.2 1B', engine: 'scheda grafica', mb: 700, freeMB: 1000, note: ' Built with Llama.' },
@@ -328,10 +427,24 @@ const AssistenteModule = (() => {
       }
       const W = await import(WLLAMA_LIB);
       const w = new W.Wllama({ default: WLLAMA_WASM }, { allowOffline: true, suppressNativeLog: true, logger: W.LoggerWithoutDebug });
-      await w.loadModelFromUrl(CPU_MODEL_URL, {
-        n_ctx: 2048,
-        progressCallback: ({ loaded, total }) => { if (total) onPct(loaded / total * 100); },
-      });
+      if (Chunks.supported()) {
+        let b = await Chunks.blob();
+        if (!b) {
+          // libera l'eventuale download parziale fatto dalle versioni precedenti (non riprendibile)
+          try { await w.cacheManager.delete(CPU_MODEL_URL_OLD); } catch (x) { /* niente da liberare */ }
+          await Chunks.download(onPct);
+          b = await Chunks.blob();
+          if (!b) throw new Error('modello incompleto dopo il download');
+        }
+        onPct(100);
+        await w.loadModel([b], { n_ctx: 2048 });
+      } else {
+        // browser senza scrittura su file (es. alcuni iPhone): download unico, non riprendibile
+        await w.loadModelFromUrl(CPU_MODEL_URL, {
+          n_ctx: 2048,
+          progressCallback: ({ loaded, total }) => { if (total) onPct(loaded / total * 100); },
+        });
+      }
       return {
         async gen(messages, onTok, isStop) {
           const ac = new AbortController();
@@ -396,8 +509,10 @@ const AssistenteModule = (() => {
       try {
         if (engine) { await engine.unload(); engine = null; }
         if (be === 'cpu') {
+          await Chunks.remove();
           const W = await import(WLLAMA_LIB);
-          await new W.Wllama({ default: WLLAMA_WASM }).cacheManager.delete(CPU_MODEL_URL);
+          const cm = new W.Wllama({ default: WLLAMA_WASM }).cacheManager;
+          for (const u of [CPU_MODEL_URL, CPU_MODEL_URL_OLD]) { try { await cm.delete(u); } catch (x) { /* assente */ } }
         } else {
           lib = lib || await import(AI_LIB);
           await lib.deleteModelAllInfoInCache(conf.model || (await capability()).model);
