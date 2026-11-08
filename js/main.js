@@ -71,9 +71,12 @@ function navigateTo(section) {
     l.classList.toggle('active', l.dataset.section === section);
   });
 
-  // Update bottom nav
+  // Update bottom nav: le sezioni senza pulsante proprio accendono quello da cui si arriva
+  // (Chiedi si apre dalla Home), così non resta in evidenza solo il tasto rosso Emergenza
+  const BOTTOM_NAV_PARENT = { assistente: 'home' };
+  const navSection = BOTTOM_NAV_PARENT[section] || section;
   document.querySelectorAll('.bottom-nav-item').forEach(l => {
-    l.classList.toggle('active', l.dataset.section === section);
+    l.classList.toggle('active', l.dataset.section === navSection);
   });
 
   // Update topbar title

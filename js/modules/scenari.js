@@ -346,6 +346,105 @@ const ScenariModule = (() => {
         ]},
       ]
     },
+    // Fonte: Dipartimento della Protezione Civile, campagna «Io non rischio» — guides/pc/maremoto.pdf e multirischio.pdf
+    {
+      id: 'maremoto',
+      titolo: 'Maremoto',
+      icon: '<i class=\"ph ph-wave-sine\"></i>',
+      desc: 'Onde di maremoto su una zona costiera',
+      severity: 3,
+      threats: ['acqua', 'cibo', 'comm', 'medico'],
+      required: { acqua:85, cibo:70, energia:60, calore:40, comm:75, mobilita:70 },
+      taskMap: {
+        acqua:  ['ac01','ac02','ac04'],
+        cibo:   ['ci01','ci02','ci04'],
+        comm:   ['co01','co02','co03','co04','si02'],
+        medico: ['me01','me02','me03','mo02'],
+      },
+      steps: [
+        { fase: 'PRIMA (se vivi, lavori o soggiorni sulla costa)', azioni: [
+          'Nel Mediterraneo le onde arrivano in poco tempo: le autorità potrebbero non fare in tempo a dare l\'allerta. Impara a riconoscere i segnali',
+          'Informati sul Piano di protezione civile del Comune: zone pericolose, vie e tempi di evacuazione, segnaletica, aree di attesa',
+          'Fai un piano con la famiglia per raggiungere vie di fuga e aree di attesa',
+          'Verifica che scuola e luogo di lavoro abbiano un piano di evacuazione',
+          'Tieni in casa scorte di acqua e cibo e un kit con documenti, pronto soccorso, torcia e radio a pile',
+        ]},
+        { fase: 'I SEGNALI DI UN MAREMOTO', azioni: [
+          'Un forte terremoto che hai sentito o di cui hai avuto notizia',
+          'Un ritiro improvviso e insolito del mare, un rapido innalzamento del livello del mare o una grande onda estesa su tutto l\'orizzonte',
+          'Un rumore cupo e crescente dal mare, come quello di un treno o di un aereo a bassa quota',
+        ]},
+        { fase: 'DURANTE', azioni: [
+          'Se ricevi un\'allerta o noti anche uno solo di questi segnali: allontanati e raggiungi subito l\'area più elevata vicina (una collina o i piani alti di un edificio)',
+          'Avverti del pericolo le persone intorno a te',
+          'Corri seguendo la via di fuga più rapida. Non usare l\'auto: può diventare una trappola',
+          'In barca: se hai notizia di un terremoto sulla costa o in mare, vai al largo. Se sei in porto, lascia la barca e mettiti al sicuro in un posto elevato',
+        ]},
+        { fase: 'DOPO', azioni: [
+          'Resta nel posto elevato che hai raggiunto e convinci chi vuole tornare verso la costa a non farlo: dopo la prima onda possono arrivarne altre più pericolose',
+          'Controlla come stanno le persone intorno a te e, se puoi, presta i primi soccorsi',
+          'Segui le indicazioni delle autorità per sapere quando lasciare il posto e cosa fare. Usa il telefono solo se serve davvero',
+          'Non rientrare in casa prima di essere autorizzato',
+          'Non bere acqua del rubinetto e non mangiare cibi venuti a contatto con l\'acqua del maremoto',
+        ]},
+      ]
+    },
+    // Fonte: Dipartimento della Protezione Civile, campagna «Io non rischio» — guides/pc/vulcano.pdf e multirischio.pdf
+    // (Campi Flegrei, Vesuvio, isola di Vulcano). Per Stromboli valgono regole proprie: vedi multirischio.pdf.
+    {
+      id: 'vulcano',
+      titolo: 'Eruzione vulcanica',
+      icon: '<i class=\"ph ph-mountains\"></i>',
+      desc: 'Allarme o eruzione di un vulcano attivo',
+      severity: 3,
+      threats: ['acqua', 'cibo', 'comm', 'carburante', 'medico'],
+      required: { acqua:80, cibo:70, energia:60, calore:40, comm:75, mobilita:80 },
+      taskMap: {
+        acqua:      ['ac01','ac02','ac04'],
+        cibo:       ['ci01','ci02','ci04'],
+        comm:       ['co01','co02','co03','co04','si02'],
+        carburante: ['mo01','mo02'],
+        medico:     ['me01','me02'],
+      },
+      steps: [
+        { fase: 'FIN DA SUBITO (se vivi vicino a un vulcano attivo)', azioni: [
+          'Verifica se la zona in cui vivi, lavori o soggiorni è in zona rossa o gialla',
+          'Informati sul Piano di protezione civile del Comune: vie di allontanamento e area di attesa',
+          'Se tu o un familiare avete bisogno di assistenza (disabilità, anziani), segnalalo al Comune',
+          'Segui lo stato del vulcano sui siti dell\'INGV e sui canali istituzionali',
+          'Non è detto che dopo l\'allarme segua davvero un\'eruzione',
+        ]},
+        { fase: 'GAS VULCANICI', azioni: [
+          'Alcuni gas vulcanici, come l\'anidride carbonica, non hanno odore né colore e possono essere pericolosi',
+          'Evita cantine, garage e locali interrati, dove i gas si possono accumulare. Non usarli per dormire',
+          'Arieggia spesso i locali, soprattutto quelli chiusi da tempo o interrati',
+          'Stai lontano dalle zone di emissione di gas, soprattutto di notte e quando non c\'è vento o c\'è nebbia',
+        ]},
+        { fase: 'PREALLARME', azioni: [
+          'Zona rossa: se decidi di allontanarti già in questa fase, informa il tuo Comune',
+          'Zona gialla: tieni in casa mascherine protettive e occhiali antipolvere per la cenere',
+          'Se hai malattie respiratorie o cardiovascolari, chiedi al medico come proteggerti',
+        ]},
+        { fase: 'ALLARME (arriva il messaggio IT-alert)', azioni: [
+          'Zona rossa: all\'ordine di allontanamento torna a casa e prepara la valigia con le cose essenziali (documenti, medicine)',
+          'Se te ne vai da solo, usa solo le vie di allontanamento del piano e gli orari stabiliti',
+          'Se scegli il trasporto assistito, raggiungi l\'area di attesa assegnata dal piano comunale. Puoi portare il tuo animale domestico',
+          'Zona gialla: preparati a un possibile allontanamento temporaneo',
+        ]},
+        { fase: 'DURANTE (ricaduta di cenere)', azioni: [
+          'Se la tua zona non è stata evacuata, resta in casa con le finestre chiuse',
+          'Se devi uscire, indossa mascherina protettiva e occhiali antipolvere',
+          'Se sei all\'aperto, proteggi bocca, naso e occhi e cerca riparo in un edificio',
+          'Guidare su strade coperte di cenere è molto pericoloso. Evita moto e motorini',
+          'Prima di bere acqua del rubinetto verifica che il Comune non lo vieti. Lava bene i cibi venuti a contatto con la cenere',
+        ]},
+        { fase: 'DOPO', azioni: [
+          'Segui le indicazioni delle autorità e dei volontari di protezione civile',
+          'Non è possibile sapere subito se e quando si potrà tornare a casa',
+          'Vicino al mare, un\'eruzione o una grande frana possono causare un maremoto: vedi lo scenario Maremoto',
+        ]},
+      ]
+    },
     {
       id: 'caldo',
       titolo: 'Ondata di Caldo',
@@ -566,7 +665,7 @@ const ScenariModule = (() => {
           'Se la conosci: usa una rete radio locale tra telefoni (es. Meshtastic)',
         ]},
         { fase: 'INFORMAZIONE & AGGIORNAMENTI', azioni: [
-          'Radio a pile/manovella: RAI Radio 1 per emergenze nazionali',
+          'Radio a pile/manovella: RAI Radio 1 e radio locali per le notizie',
           'TV con antenna: i canali RAI trasmettono senza internet',
           'Controlla bacheca del comune o punti di raccolta locali',
           'Evita di diffondere voci non verificate',

@@ -589,8 +589,8 @@ const DashboardModule = (() => {
   const SC_TONE = {
     'blackout-breve':'amber', 'blackout-lungo':'amber', 'blackout-mobile':'amber', 'cyberattacco':'amber',
     'gas':'red', 'caldo':'red', 'incendio-zona':'red', 'conflitto':'red',
-    'alluvione':'blue', 'acqua':'blue', 'tempesta-invernale':'blue',
-    'terremoto':'earth', 'evacuazione':'earth', 'nucleare':'violet', 'pandemia':'violet',
+    'alluvione':'blue', 'acqua':'blue', 'tempesta-invernale':'blue', 'maremoto':'blue',
+    'terremoto':'earth', 'evacuazione':'earth', 'vulcano':'earth', 'nucleare':'violet', 'pandemia':'violet',
   };
 
   /* ── TASK CARD (shared renderer) ── */

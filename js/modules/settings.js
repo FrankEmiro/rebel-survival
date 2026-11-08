@@ -982,7 +982,7 @@ const SettingsModule = (() => {
         <label class="check-option"><input type="checkbox" id="s-has-luci-emergenza">
           <span><i class="ph ph-flashlight"></i> Luci di emergenza / torce disponibili<br><small>Una per stanza + prese di emergenza ricaricabili</small></span></label>
         <label class="check-option"><input type="checkbox" id="s-has-gen-sicuro">
-          <span><i class="ph ph-engine"></i> Generatore posizionato correttamente<br><small>All'esterno, a 5m da porte e finestre</small></span></label>
+          <span><i class="ph ph-engine"></i> Generatore posizionato correttamente<br><small>All'aperto, ad almeno 6 m da finestre, porte e garage</small></span></label>
       </div>
     </div>
     <div class="card">

@@ -49,6 +49,7 @@ const AssistenteModule = (() => {
     guerra: 'conflitto', bombardamento: 'conflitto', allarme: 'allerta',
     hacker: 'cyberattacco', informatico: 'cyberattacco', bancomat: 'contanti pagamenti',
     inondazione: 'alluvione', allagamento: 'alluvione', fuoco: 'incendio',
+    tsunami: 'maremoto', eruzione: 'vulcano', cenere: 'vulcano', lava: 'vulcano',
     zaino: 'kit', borsa: 'kit', medicine: 'farmaci', medicinali: 'farmaci',
     telefono: 'comunicazione', walkie: 'pmr', ricetrasmittente: 'pmr',
   };
@@ -61,17 +62,20 @@ const AssistenteModule = (() => {
     if (w.length > 4) w = w.replace(/[aeio]$/, '');
     return w.slice(0, 7);
   }
-  function tokens(s) {
+  // una parola della domanda = un gruppo (la parola + i suoi sinonimi)
+  function tokenGroups(s) {
     const out = [];
     for (let w of norm(s).split(/[^a-z0-9]+/)) {
       if (!w || w.length < 2 || STOP.has(w)) continue;
       const pre = SYN[w] ? null : Object.keys(SYN).find(k => k.length >= 6 && w.startsWith(k));
       const syn = SYN[w] || (pre && SYN[pre]);
-      out.push(stem(w));
-      if (syn) syn.split(' ').forEach(x => out.push(stem(x)));
+      const g = [stem(w)];
+      if (syn) syn.split(' ').forEach(x => g.push(stem(x)));
+      out.push(g);
     }
     return out;
   }
+  function tokens(s) { return tokenGroups(s).flat(); }
 
   /* ── INDICE ── */
   function _build() {
@@ -102,24 +106,26 @@ const AssistenteModule = (() => {
   // BM25
   function search(q, k = 3) {
     if (!index) _build();
-    const qt = [...new Set(tokens(q))];
+    const groups = tokenGroups(q);
+    const qt = [...new Set(groups.flat())];
     if (!qt.length) return [];
     const N = index.chunks.length, k1 = 1.2, b = 0.5;
     const scored = index.chunks.map(c => {
-      let s = 0, hit = 0;
+      let s = 0;
+      // parole della domanda trovate (una parola vale una volta anche se trovata col sinonimo)
+      const hit = groups.filter(g => g.some(t => c.toks.includes(t))).length;
       qt.forEach(t => {
         const tf = c.toks.reduce((n, x) => n + (x === t), 0);
         if (!tf) return;
-        hit++;
         const df = index.df.get(t) || 0;
         const idf = Math.log(1 + (N - df + 0.5) / (df + 0.5));
         s += idf * (tf * (k1 + 1)) / (tf + k1 * (1 - b + b * c.toks.length / index.avgLen));
       });
       // i piani degli scenari pesano un po' meno delle guide (più generici)
-      return { c, hit, s: s * (0.6 + 0.4 * hit / qt.length) * (c.kind === 'scenario' ? 0.85 : 1) * (1 + 0.4 * qt.filter(t => c.ttoks.has(t)).length) };
+      return { c, hit, s: s * (0.6 + 0.4 * hit / groups.length) * (c.kind === 'scenario' ? 0.85 : 1) * (1 + 0.4 * qt.filter(t => c.ttoks.has(t)).length) };
     })
       // con 3+ parole utili ne devono comparire almeno 2 (evita risposte fuori tema)
-      .filter(x => x.s > 0 && (qt.length < 3 || x.hit >= 2)).sort((a, b) => b.s - a.s);
+      .filter(x => x.s > 0 && (groups.length < 3 || x.hit >= 2)).sort((a, b) => b.s - a.s);
     if (!scored.length) return [];
     const top = scored[0].s, seen = new Set(), res = [];
     for (const x of scored) {
