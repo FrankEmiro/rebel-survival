@@ -3888,3 +3888,24 @@ input, select, textarea { font-family: 'Nunito', sans-serif; font-size: 1rem; }
 .home-dot.warn { background: var(--warning); }
 .home-dot.bad  { background: var(--danger); box-shadow: 0 0 0 2px rgba(181,48,32,0.3); }
 @media (min-width: 900px) { .home-tiles { grid-template-columns: repeat(5, 1fr); } }
+
+/* ── «La tua situazione» in cima ai calcolatori (v82) ── */
+.sit-card { border: 1px solid var(--border-accent); background: linear-gradient(180deg, rgba(201,168,76,0.08), var(--bg-card) 60%); }
+.sit-head { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; }
+.sit-head > i { font-size: 1.6rem; color: var(--accent); flex-shrink: 0; margin-top: 2px; }
+.sit-head > div { flex: 1; min-width: 0; }
+.sit-head h3 { margin: 0 0 2px; }
+.sit-head span { font-size: 0.8rem; color: var(--text-secondary); }
+.sit-head .sit-saved { flex-shrink: 0; font-size: 0.78rem; color: var(--success); font-weight: 700; }
+.sit-people { display: flex; align-items: center; gap: 6px; margin: 4px 0 0; font-size: 0.85rem; color: var(--text-secondary); }
+.sit-people strong { color: var(--text-primary); }
+.sit-status { margin-top: 12px; border-top: 1px solid var(--border); padding-top: 10px; display: flex; flex-direction: column; gap: 6px; }
+.sit-status:empty { display: none; }
+.sit-line { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; font-size: 0.9rem; }
+.sit-line span { color: var(--text-secondary); }
+.sit-line strong { font-family: 'Rajdhani', sans-serif; font-size: 1.15rem; color: var(--text-primary); white-space: nowrap; }
+.sit-line.bad strong { color: #e0624f; }
+.sit-line.good strong { color: var(--success); }
+.sit-checks { display: flex; flex-wrap: wrap; gap: 8px; }
+.sit-check { display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px; border: 1px solid var(--border); border-radius: 999px; background: var(--bg-input); cursor: pointer; font-size: 0.88rem; }
+.sit-check:has(input:checked) { border-color: var(--accent); background: var(--accent-muted); }

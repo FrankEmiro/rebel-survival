@@ -5,15 +5,32 @@ const AcquaModule = (() => {
   let initialized = false;
 
   const HTML = `
-    <div class="card">
-      <h3>Parametri</h3>
+    ${Utils.sitCard(`
       <div class="form-row">
         <div class="form-group">
-          <label>Persone</label>
-          <input type="number" id="aq-persone" value="3" min="1" max="20">
+          <label>Acqua che hai in casa (litri)</label>
+          <input type="number" id="aq-scorta" data-pkey="acqua_scorte_litri" data-ptype="num" value="0" min="0" max="100000">
         </div>
         <div class="form-group">
-          <label>Giorni di autonomia</label>
+          <label>Raccogli acqua piovana?</label>
+          <select id="aq-pioggia" data-pkey="ha_pioggia" data-ptype="yesno">
+            <option value="no">No</option>
+            <option value="si">Sì</option>
+          </select>
+        </div>
+        <div class="form-group" id="aq-tetto-group" style="display:none">
+          <label>Superficie tetto (m²)</label>
+          <input type="number" id="aq-tetto" data-pkey="tetto_mq" data-ptype="num" value="80" min="10" max="500">
+          <span class="form-hint">Area di raccolta disponibile</span>
+        </div>
+      </div>
+      <p class="sit-people" id="aq-persone-txt"></p>`, 'aq-sit')}
+
+    <div class="card mt-16">
+      <h3>Calcola quanto te ne serve</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Giorni da coprire</label>
           <input type="number" id="aq-giorni" value="30" min="1" max="365">
         </div>
         <div class="form-group">
@@ -25,23 +42,6 @@ const AcquaModule = (() => {
           </select>
         </div>
       </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Raccolta acqua piovana?</label>
-          <select id="aq-pioggia">
-            <option value="no">No</option>
-            <option value="si">Sì</option>
-          </select>
-        </div>
-        <div class="form-group" id="aq-tetto-group" style="display:none">
-          <label>Superficie tetto (m²)</label>
-          <input type="number" id="aq-tetto" value="80" min="10" max="500">
-          <span class="form-hint">Area di raccolta disponibile</span>
-        </div>
-      </div>
-      <button class="btn btn-primary btn-full mt-16" onclick="AcquaModule.calculate()">
-        💧 Calcola Fabbisogno
-      </button>
     </div>
 
     <div id="aq-results" class="hidden">
@@ -79,7 +79,8 @@ const AcquaModule = (() => {
   `;
 
   function calculate() {
-    const persone  = Utils.int(document.getElementById('aq-persone').value, 3);
+    const persone  = Math.max(1, SettingsModule.getTotalPeople());
+    const scorta   = Utils.num(document.getElementById('aq-scorta').value, 0);
     const giorni   = Utils.int(document.getElementById('aq-giorni').value, 30);
     const clima    = document.getElementById('aq-clima').value;
     const pioggia  = document.getElementById('aq-pioggia').value === 'si';
@@ -114,9 +115,19 @@ const AcquaModule = (() => {
     document.getElementById('aq-res-min-day').textContent = minDayTot + ' L/giorno';
     document.getElementById('aq-res-rac-day').textContent = racDayTot + ' L/giorno';
 
+    document.getElementById('aq-tetto-group').style.display = pioggia ? 'block' : 'none';
+    document.getElementById('aq-persone-txt').innerHTML =
+      `<i class="ph ph-users"></i> Calcolo per <strong>${persone} ${persone === 1 ? 'persona' : 'persone'}</strong> (lo cambi in Profilo › Famiglia e casa)`;
+    const p = SettingsModule.get();
+    const gg = typeof DashboardModule !== 'undefined' && DashboardModule.waterDays ? DashboardModule.waterDays(p) : 0;
+    const manca = Math.max(0, minTot - scorta);
+    document.getElementById('aq-sit').innerHTML = `
+      <div class="sit-line"><span>Con quello che hai copri circa</span><strong>${gg < 10 ? (Math.round(gg * 10) / 10).toString().replace('.', ',') : Math.round(gg)} giorni</strong></div>
+      <div class="sit-line ${manca > 0 ? 'bad' : 'good'}"><span>Per ${giorni} giorni (minimo) ${manca > 0 ? 'ti mancano' : ''}</span><strong>${manca > 0 ? manca + ' L' : 'sei coperto ✓'}</strong></div>`;
+
+    document.getElementById('aq-pioggia-row').style.display = pioggia ? 'flex' : 'none';
+    document.getElementById('aq-autonomia-row').style.display = pioggia ? 'flex' : 'none';
     if (pioggia) {
-      document.getElementById('aq-pioggia-row').style.display = 'flex';
-      document.getElementById('aq-autonomia-row').style.display = 'flex';
       document.getElementById('aq-res-pioggia').textContent = pioggiaDayL + ' L/giorno';
       document.getElementById('aq-res-autonomia').textContent = autonomiaPioggia;
     }
@@ -151,24 +162,14 @@ const AcquaModule = (() => {
     const root = document.getElementById('acqua-root');
     if (!root) return;
     root.innerHTML = HTML;
-
-    // Toggle tetto input
-    document.getElementById('aq-pioggia').addEventListener('change', function() {
-      document.getElementById('aq-tetto-group').style.display = this.value === 'si' ? 'block' : 'none';
-    });
+    Utils.bindProfile(root, calculate);
 
     initialized = true;
     prefill();
   }
 
   function prefill() {
-    const p = SettingsModule.get();
-    Utils.prefill({
-      'aq-persone': SettingsModule.getTotalPeople(),
-      'aq-tetto': p.tetto_mq,
-      'aq-pioggia': p.ha_pioggia ? 'si' : 'no',
-    });
-    document.getElementById('aq-tetto-group').style.display = p.ha_pioggia ? 'block' : 'none';
+    Utils.fillProfile(document.getElementById('acqua-root'));
     calculate();
   }
 

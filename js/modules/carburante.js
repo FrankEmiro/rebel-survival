@@ -5,12 +5,11 @@ const CarburanteModule = (() => {
   let initialized = false;
 
   const HTML = `
-    <div class="card">
-      <h3>Il Tuo Veicolo</h3>
+    ${Utils.sitCard(`
       <div class="form-row">
         <div class="form-group">
           <label>Tipo carburante</label>
-          <select id="ca-tipo">
+          <select id="ca-tipo" data-pkey="ca_tipo">
             <option value="benzina">Benzina</option>
             <option value="diesel" selected>Diesel</option>
             <option value="gpl">GPL</option>
@@ -19,31 +18,32 @@ const CarburanteModule = (() => {
         </div>
         <div class="form-group">
           <label>Consumo (L/100km o kWh/100km)</label>
-          <input type="number" id="ca-consumo" value="7" min="2" max="25" step="0.5">
+          <input type="number" id="ca-consumo" data-pkey="ca_consumo" data-ptype="num" value="7" min="2" max="25" step="0.5">
         </div>
         <div class="form-group">
           <label>Serbatoio (L o kWh)</label>
-          <input type="number" id="ca-serbatoio" value="50" min="10" max="200">
+          <input type="number" id="ca-serbatoio" data-pkey="ca_serbatoio" data-ptype="num" value="50" min="10" max="200">
         </div>
       </div>
       <div class="form-row">
         <div class="form-group">
           <label>Km percorsi / settimana (abituali)</label>
-          <input type="number" id="ca-km-sett" value="200" min="0" max="2000">
+          <input type="number" id="ca-km-sett" data-pkey="km_settimana" data-ptype="num" value="200" min="0" max="2000">
         </div>
         <div class="form-group">
-          <label>Scorta extra disponibile (L)</label>
-          <input type="number" id="ca-scorta" value="0" min="0" max="100">
+          <label>Scorta extra che hai (L)</label>
+          <input type="number" id="ca-scorta" data-pkey="carburante_litri" data-ptype="num" value="0" min="0" max="100">
           <span class="form-hint">Max legale uso privato: 10L (taniche omologate)</span>
         </div>
-        <div class="form-group">
-          <label>Settimane da coprire</label>
-          <input type="number" id="ca-settimane" value="4" min="1" max="52">
-        </div>
       </div>
-      <button class="btn btn-primary btn-full mt-16" onclick="CarburanteModule.calculate()">
-        ⛽ Calcola Autonomia
-      </button>
+    `)}
+
+    <div class="card mt-16">
+      <h3>Calcola la tua autonomia</h3>
+      <div class="form-group">
+        <label>Settimane da coprire</label>
+        <input type="number" id="ca-settimane" value="4" min="1" max="52">
+      </div>
     </div>
 
     <div id="ca-results" class="hidden">
@@ -154,16 +154,13 @@ const CarburanteModule = (() => {
     const root = document.getElementById('carburante-root');
     if (!root) return;
     root.innerHTML = HTML;
+    Utils.bindProfile(root, calculate);
     initialized = true;
     prefill();
   }
 
   function prefill() {
-    const p = SettingsModule.get();
-    Utils.prefill({
-      'ca-tipo': p.ca_tipo, 'ca-consumo': p.ca_consumo, 'ca-serbatoio': p.ca_serbatoio,
-      'ca-km-sett': p.km_settimana, 'ca-scorta': p.carburante_litri,
-    });
+    Utils.fillProfile(document.getElementById('carburante-root'));
     calculate();
   }
 

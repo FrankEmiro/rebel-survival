@@ -568,7 +568,7 @@ const DashboardModule = (() => {
   function buildTiles(current, p, persone) {
     const tiles = buildResources(current, p).map(r => ({
       ...r,
-      onclick: r.tab ? `navigateTo('${r.nav}'); setTimeout(()=>SettingsModule._tab('${r.tab}'), 180)` : `navigateTo('${r.nav}')`,
+      onclick: "setBackTarget('home'); " + (r.tab ? `navigateTo('${r.nav}'); setTimeout(()=>SettingsModule._tab('${r.tab}'), 180)` : `navigateTo('${r.nav}')`),
     }));
     tiles.push(
       { label: 'Scorte',  icon: 'ph-backpack',  val: 'Zaino e spesa', onclick: "navigateTo('kit')" },
@@ -1245,5 +1245,5 @@ const DashboardModule = (() => {
 
   function init() { render(); }
 
-  return { init, render, renderEmergency, computeLevel, _nowToggle, _foldToggle, setMode, addNumero, saveNumero, delNumero, emgCheck, emgJump, emgNext, emgPrev, emgReset, toggleTask, toggleAllTasks, refreshOfflineCard, openGuide, goToTask, openScenarioPicker, _pickScenario, downloadGuidesPack, downloadMapPack };
+  return { init, render, renderEmergency, computeLevel, waterDays: _waterDays, _nowToggle, _foldToggle, setMode, addNumero, saveNumero, delNumero, emgCheck, emgJump, emgNext, emgPrev, emgReset, toggleTask, toggleAllTasks, refreshOfflineCard, openGuide, goToTask, openScenarioPicker, _pickScenario, downloadGuidesPack, downloadMapPack };
 })();

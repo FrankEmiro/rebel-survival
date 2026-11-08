@@ -20,34 +20,33 @@ const EnergiaModule = (() => {
   ];
 
   const HTML = `
-    <div class="card">
-      <h3>Fonti Energetiche Disponibili</h3>
+    ${Utils.sitCard(`
       <div class="form-row">
         <div class="form-group">
-          <label>Pannelli Solari (Wp totali)</label>
-          <input type="number" id="en-pannelli" value="0" min="0" max="20000" step="100">
+          <label>Pannelli solari che hai (Wp totali)</label>
+          <input type="number" id="en-pannelli" data-pkey="pannelli_wp" data-ptype="num" value="0" min="0" max="20000" step="100">
           <span class="form-hint">Es: 2 pannelli da 400W = 800</span>
         </div>
         <div class="form-group">
-          <label>Batteria (kWh)</label>
-          <input type="number" id="en-batteria" value="0" min="0" max="100" step="0.5">
+          <label>Batteria che hai (kWh)</label>
+          <input type="number" id="en-batteria" data-pkey="batteria_kwh" data-ptype="num" value="0" min="0" max="100" step="0.5">
           <span class="form-hint">Capacità utile (LiFePO4 ~90%)</span>
         </div>
         <div class="form-group">
-          <label>Generatore (Watt)</label>
-          <input type="number" id="en-generatore" value="0" min="0" max="10000" step="100">
+          <label>Generatore che hai (Watt)</label>
+          <input type="number" id="en-generatore" data-pkey="generatore_w" data-ptype="num" value="0" min="0" max="10000" step="100">
           <span class="form-hint">Potenza nominale</span>
         </div>
       </div>
       <div class="form-group">
         <label>Stagione (influenza produzione solare)</label>
-        <select id="en-stagione">
+        <select id="en-stagione" data-pkey="en_stagione">
           <option value="estate">Estate (max produzione)</option>
           <option value="primavera" selected>Primavera/Autunno</option>
           <option value="inverno">Inverno (min produzione)</option>
         </select>
       </div>
-    </div>
+    `)}
 
     <div class="card mt-16">
       <h3>Dispositivi da Alimentare</h3>
@@ -68,9 +67,6 @@ const EnergiaModule = (() => {
         </div>
       </div>
       <button class="btn btn-outline btn-sm" onclick="EnergiaModule.addCustom()">+ Aggiungi</button>
-      <button class="btn btn-primary btn-full mt-16" onclick="EnergiaModule.calculate()">
-        🔋 Calcola Autonomia
-      </button>
     </div>
 
     <div id="en-results" class="hidden">
@@ -237,6 +233,12 @@ const EnergiaModule = (() => {
     const root = document.getElementById('energia-root');
     if (!root) return;
     root.innerHTML = HTML;
+    // se scrivi una potenza, nel Profilo la fonte risulta "presente" (0 = non ce l'hai)
+    Utils.bindProfile(root, calculate, {
+      pannelli_wp:  (p, v) => { p.en_pannelli = v > 0; },
+      batteria_kwh: (p, v) => { p.en_batteria = v > 0; },
+      generatore_w: (p, v) => { p.en_generatore = v > 0; },
+    });
     // Default tutti selezionati tranne quelli non essenziali
     DISPOSITIVI.forEach(d => { selectedDevices[d.id] = d.priorita <= 7; });
     renderDevices();
@@ -245,11 +247,7 @@ const EnergiaModule = (() => {
   }
 
   function prefill() {
-    const p = SettingsModule.get();
-    Utils.prefill({
-      'en-pannelli': p.pannelli_wp, 'en-batteria': p.batteria_kwh,
-      'en-generatore': p.generatore_w, 'en-stagione': p.en_stagione,
-    });
+    Utils.fillProfile(document.getElementById('energia-root'));
     calculate();
   }
 

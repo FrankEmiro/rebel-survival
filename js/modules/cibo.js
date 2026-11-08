@@ -56,25 +56,21 @@ const CiboModule = (() => {
   ];
 
   const HTML = `
-    <div class="card">
-      <h3>Composizione Famiglia</h3>
+    ${Utils.sitCard(`
       <div class="form-row">
         <div class="form-group">
-          <label>Adulti attivi</label>
-          <input type="number" id="cb-adulti" value="2" min="0" max="10">
-        </div>
-        <div class="form-group">
-          <label>Adulti sedentari/anziani</label>
-          <input type="number" id="cb-anziani" value="0" min="0" max="10">
-        </div>
-        <div class="form-group">
-          <label>Bambini (sotto 12 anni)</label>
-          <input type="number" id="cb-bambini" value="1" min="0" max="10">
+          <label>Per quanti giorni hai cibo in casa?</label>
+          <input type="number" id="cb-scorta" data-pkey="cibo_scorte_giorni" data-ptype="num" value="0" min="0" max="3650">
+          <span class="form-hint">Stima a occhio: quanti giorni mangereste tutti con quello che c'è</span>
         </div>
       </div>
+      <p class="sit-people" id="cb-persone-txt"></p>`, 'cb-sit')}
+
+    <div class="card mt-16">
+      <h3>Calcola cosa comprare</h3>
       <div class="form-row">
         <div class="form-group">
-          <label>Giorni di autonomia</label>
+          <label>Giorni da coprire</label>
           <input type="number" id="cb-giorni" value="30" min="1" max="365">
         </div>
         <div class="form-group">
@@ -83,9 +79,6 @@ const CiboModule = (() => {
           <span class="form-hint">Opzionale, per stima costo</span>
         </div>
       </div>
-      <button class="btn btn-primary btn-full mt-16" onclick="CiboModule.calculate()">
-        🥫 Calcola Scorte
-      </button>
     </div>
 
     <div id="cb-results" class="hidden">
@@ -147,13 +140,20 @@ const CiboModule = (() => {
   };
 
   function calculate() {
-    const adulti   = Utils.int(document.getElementById('cb-adulti').value, 0);
-    const anziani  = Utils.int(document.getElementById('cb-anziani').value, 0);
-    const bambini  = Utils.int(document.getElementById('cb-bambini').value, 0);
+    const pr = SettingsModule.get();
+    const adulti   = pr.adulti || 0, anziani = pr.anziani || 0, bambini = pr.bambini || 0;
     const giorni   = Utils.int(document.getElementById('cb-giorni').value, 30);
+    const scorta   = Utils.int(document.getElementById('cb-scorta').value, 0);
     const persone  = adulti + anziani + bambini;
 
-    if (persone === 0) { alert('Inserisci almeno una persona'); return; }
+    document.getElementById('cb-persone-txt').innerHTML = persone > 0
+      ? `<i class="ph ph-users"></i> Calcolo per <strong>${persone} ${persone === 1 ? 'persona' : 'persone'}</strong> (lo cambi in Profilo › Famiglia e casa)`
+      : `<i class="ph ph-warning"></i> Indica quante persone siete in Profilo › Famiglia e casa`;
+    const manca = Math.max(0, giorni - scorta);
+    document.getElementById('cb-sit').innerHTML = `
+      <div class="sit-line"><span>Con quello che hai copri</span><strong>${scorta} ${scorta === 1 ? 'giorno' : 'giorni'}</strong></div>
+      <div class="sit-line ${manca > 0 ? 'bad' : 'good'}"><span>Per ${giorni} giorni ${manca > 0 ? 'ti mancano' : ''}</span><strong>${manca > 0 ? manca + (manca === 1 ? ' giorno' : ' giorni') : 'sei coperto ✓'}</strong></div>`;
+    if (persone === 0) { document.getElementById('cb-results').classList.add('hidden'); return; }
 
     const kcalGiorno = adulti * 2500 + anziani * 1800 + bambini * 1700;
 
@@ -216,13 +216,13 @@ const CiboModule = (() => {
     const root = document.getElementById('cibo-root');
     if (!root) return;
     root.innerHTML = HTML;
+    Utils.bindProfile(root, calculate);
     initialized = true;
     prefill();
   }
 
   function prefill() {
-    const p = SettingsModule.get();
-    Utils.prefill({ 'cb-adulti': p.adulti, 'cb-anziani': p.anziani, 'cb-bambini': p.bambini });
+    Utils.fillProfile(document.getElementById('cibo-root'));
     calculate();
   }
 

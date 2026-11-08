@@ -32,16 +32,15 @@ const RiscaldamentoModule = (() => {
   };
 
   const HTML = `
-    <div class="card">
-      <h3>La Tua Abitazione</h3>
+    ${Utils.sitCard(`
       <div class="form-row">
         <div class="form-group">
           <label>Superficie riscaldata (m²)</label>
-          <input type="number" id="ri-mq" value="80" min="10" max="500">
+          <input type="number" id="ri-mq" data-pkey="mq" data-ptype="num" value="80" min="10" max="500">
         </div>
         <div class="form-group">
           <label>Livello isolamento</label>
-          <select id="ri-isolamento">
+          <select id="ri-isolamento" data-pkey="isolamento">
             <option value="scarso">Scarso (anni '60-'70)</option>
             <option value="medio" selected>Medio (finestre doppie)</option>
             <option value="buono">Buono (cappotto termico)</option>
@@ -50,13 +49,45 @@ const RiscaldamentoModule = (() => {
         </div>
         <div class="form-group">
           <label>Zona climatica</label>
-          <select id="ri-zona">
+          <select id="ri-zona" data-pkey="ri_zona">
             <option value="c">C – Roma, Firenze</option>
             <option value="d" selected>D – Milano, Torino</option>
             <option value="e">E – Venezia, Trento</option>
             <option value="f">F – Montagna</option>
             <option value="b">B – Napoli, Palermo</option>
           </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Riscaldamento alternativo che hai</label>
+        <div class="sit-checks">
+          <label class="sit-check"><input type="checkbox" data-pkey="risc_legna" data-ptype="bool"> Stufa a legna</label>
+          <label class="sit-check"><input type="checkbox" data-pkey="risc_pellet" data-ptype="bool"> Stufa a pellet</label>
+          <label class="sit-check"><input type="checkbox" data-pkey="risc_gpl" data-ptype="bool"> Stufa a GPL</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Combustibile che hai in scorta (kg o L)</label>
+        <input type="number" id="ri-scorta" data-pkey="combustibile_kg" data-ptype="num" value="0" min="0">
+        <span class="form-hint">Inserisci 0 se non hai scorte</span>
+      </div>
+    `)}
+
+    <div class="card mt-16">
+      <h3>Calcola quanto te ne serve</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Combustibile da calcolare</label>
+          <select id="ri-combustibile">
+            <option value="legna">Legna da ardere</option>
+            <option value="pellet" selected>Pellet</option>
+            <option value="kerosene">Kerosene / Gasolio</option>
+            <option value="gpl">GPL (bombola)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Giorni da coprire</label>
+          <input type="number" id="ri-giorni" value="30" min="1" max="180">
         </div>
       </div>
       <div class="form-row">
@@ -69,32 +100,7 @@ const RiscaldamentoModule = (() => {
           <input type="number" id="ri-temp" value="18" min="12" max="24">
           <span class="form-hint">Min. confortevole: 18°C</span>
         </div>
-        <div class="form-group">
-          <label>Giorni di autonomia</label>
-          <input type="number" id="ri-giorni" value="30" min="1" max="180">
-        </div>
       </div>
-    </div>
-
-    <div class="card mt-16">
-      <h3>Fonte di Riscaldamento Alternativa</h3>
-      <div class="form-group">
-        <label>Combustibile disponibile</label>
-        <select id="ri-combustibile">
-          <option value="legna">Legna da ardere</option>
-          <option value="pellet" selected>Pellet</option>
-          <option value="kerosene">Kerosene / Gasolio</option>
-          <option value="gpl">GPL (bombola)</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Scorta attuale (kg o L)</label>
-        <input type="number" id="ri-scorta" value="0" min="0">
-        <span class="form-hint">Inserisci 0 se non hai scorte</span>
-      </div>
-      <button class="btn btn-primary btn-full mt-16" onclick="RiscaldamentoModule.calculate()">
-        🔥 Calcola Autonomia
-      </button>
     </div>
 
     <div id="ri-results" class="hidden">
@@ -203,6 +209,7 @@ const RiscaldamentoModule = (() => {
     const root = document.getElementById('riscaldamento-root');
     if (!root) return;
     root.innerHTML = HTML;
+    Utils.bindProfile(root, calculate);
     initialized = true;
     prefill();
   }
@@ -210,10 +217,8 @@ const RiscaldamentoModule = (() => {
   function prefill() {
     const p = SettingsModule.get();
     const comb = p.risc_legna ? 'legna' : p.risc_pellet ? 'pellet' : p.risc_gpl ? 'gpl' : null;
-    Utils.prefill({
-      'ri-mq': p.mq, 'ri-isolamento': p.isolamento, 'ri-zona': p.ri_zona,
-      'ri-combustibile': comb, 'ri-scorta': p.combustibile_kg,
-    });
+    Utils.fillProfile(document.getElementById('riscaldamento-root'));
+    Utils.prefill({ 'ri-combustibile': comb });
     calculate();
   }
 

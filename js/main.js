@@ -81,6 +81,8 @@ function navigateTo(section) {
 
   currentSection = section;
   document.getElementById('back-btn').classList.toggle('hidden', !backTarget || backTarget.section === section);
+  // arrivando dalla Home basta la freccia in alto: il pulsante «← Profilo» dei calcolatori confonderebbe
+  document.querySelectorAll('.calc-back').forEach(b => b.classList.toggle('hidden', !!backTarget && backTarget.section !== section));
 
   // Scroll to top
   window.scrollTo(0, 0);
