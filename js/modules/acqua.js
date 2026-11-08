@@ -162,6 +162,7 @@ const AcquaModule = (() => {
     const root = document.getElementById('acqua-root');
     if (!root) return;
     root.innerHTML = HTML;
+    Utils.calcLayout(root, 'aq-results', ['ph-package', 'ph-drop-half-bottom']);
     Utils.bindProfile(root, calculate);
 
     initialized = true;

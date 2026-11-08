@@ -209,6 +209,7 @@ const RiscaldamentoModule = (() => {
     const root = document.getElementById('riscaldamento-root');
     if (!root) return;
     root.innerHTML = HTML;
+    Utils.calcLayout(root, 'ri-results', ['ph-scales', 'ph-lightbulb']);
     Utils.bindProfile(root, calculate);
     initialized = true;
     prefill();

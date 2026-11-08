@@ -3909,3 +3909,30 @@ input, select, textarea { font-family: 'Nunito', sans-serif; font-size: 1rem; }
 .sit-checks { display: flex; flex-wrap: wrap; gap: 8px; }
 .sit-check { display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px; border: 1px solid var(--border); border-radius: 999px; background: var(--bg-input); cursor: pointer; font-size: 0.88rem; }
 .sit-check:has(input:checked) { border-color: var(--accent); background: var(--accent-muted); }
+
+/* ── Calcolatori: dati + risultato nello stesso pannello, consigli a sezioni (v83) ── */
+.calc-card h3 { display: flex; align-items: center; gap: 8px; }
+.calc-out { margin-top: 18px; padding-top: 14px; border-top: 1px dashed var(--border-accent); }
+.calc-out-lab {
+  display: flex; align-items: center; gap: 6px; margin-bottom: 12px;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--accent);
+}
+.calc-out .two-col, .calc-out .three-col { margin-bottom: 12px; }
+.calc-out .mini-card {
+  background: var(--bg-secondary); border-color: var(--border-accent); border-radius: var(--radius);
+  padding: 14px 8px;
+}
+.calc-out .mini-card .value { font-family: 'Rajdhani', sans-serif; font-size: 1.55rem; font-weight: 700; }
+.calc-out .mini-card .label { font-family: inherit; font-size: 0.68rem; text-transform: none; letter-spacing: 0; line-height: 1.3; }
+.calc-out .result-row { padding: 9px 0; }
+.calc-out .alert { margin-top: 10px; }
+.calc-res { margin: 0; }
+.calc-more { margin-top: 10px; }
+.calc-more .fold-title { font-size: 0.98rem; }
+.calc-more .fold-body > .result-row:first-child { padding-top: 0; }
+.calc-more .data-table { width: 100%; }
+@media (max-width: 480px) {
+  .calc-out .three-col { grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
+  .calc-out .mini-card .value { font-size: 1.25rem; }
+}

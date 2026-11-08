@@ -216,6 +216,7 @@ const CiboModule = (() => {
     const root = document.getElementById('cibo-root');
     if (!root) return;
     root.innerHTML = HTML;
+    Utils.calcLayout(root, 'cb-results', ['ph-list-checks', 'ph-warning']);
     Utils.bindProfile(root, calculate);
     initialized = true;
     prefill();

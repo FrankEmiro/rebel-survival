@@ -154,6 +154,7 @@ const CarburanteModule = (() => {
     const root = document.getElementById('carburante-root');
     if (!root) return;
     root.innerHTML = HTML;
+    Utils.calcLayout(root, 'ca-results', ['ph-map-trifold', 'ph-bicycle', 'ph-gas-can']);
     Utils.bindProfile(root, calculate);
     initialized = true;
     prefill();

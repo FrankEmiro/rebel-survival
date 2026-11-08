@@ -233,6 +233,7 @@ const EnergiaModule = (() => {
     const root = document.getElementById('energia-root');
     if (!root) return;
     root.innerHTML = HTML;
+    Utils.calcLayout(root, 'en-results', ['ph-list-numbers', 'ph-gas-can']);
     // se scrivi una potenza, nel Profilo la fonte risulta "presente" (0 = non ce l'hai)
     Utils.bindProfile(root, calculate, {
       pannelli_wp:  (p, v) => { p.en_pannelli = v > 0; },

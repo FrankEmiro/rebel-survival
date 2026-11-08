@@ -80,6 +80,48 @@ const Utils = {
     root.addEventListener('change', ev => { if (ev.target.tagName === 'SELECT' || ev.target.type === 'checkbox') handler(ev); });
   },
 
+  /* ── Impaginazione dei calcolatori (una volta, dopo aver inserito l'HTML) ──
+     - il risultato entra nello STESSO pannello dei dati del calcolo;
+     - le schede successive (consigli, metodi, liste) diventano sezioni
+       che si aprono con un tocco, la prima aperta. Il testo non cambia. */
+  calcLayout(root, resultsId, icons = []) {
+    const res = root.querySelector('#' + resultsId);
+    if (!res) return;
+    const calc = res.previousElementSibling;
+    const panel = res.querySelector('.results-panel');
+    if (calc && panel) {
+      calc.classList.add('calc-card');
+      const out = document.createElement('div');
+      out.className = 'calc-out';
+      out.innerHTML = '<div class="calc-out-lab"><i class="ph ph-chart-bar"></i> Risultato</div>';
+      panel.querySelector(':scope > h3')?.remove();
+      while (panel.firstChild) out.appendChild(panel.firstChild);
+      panel.remove();
+      calc.appendChild(out);
+      calc.appendChild(res);   // il contenitore dei risultati segue il pannello (resta per show/hide)
+      res.classList.add('calc-res');
+    }
+    const strip = t => t.replace(/^[^\p{L}\d]+/u, '').trim();
+    [...res.querySelectorAll(':scope > .card')].forEach((card, i) => {
+      const h = card.querySelector('h3');
+      const title = h ? strip(h.textContent) : '';
+      const head = h && h.parentElement !== card ? h.parentElement : h;   // es. titolo + pulsante Stampa
+      const extra = head && head !== h ? [...head.children].filter(x => x !== h) : [];
+      head?.remove();
+      const d = document.createElement('details');
+      d.className = 'card fold calc-more';
+      if (i === 0) d.open = true;
+      d.innerHTML = `<summary><i class="ph ${icons[i] || 'ph-info'} fold-icon"></i><span class="fold-title">${Utils.escapeHtml(title)}</span><i class="ph ph-caret-down fold-caret"></i></summary><div class="fold-body"></div>`;
+      const body = d.querySelector('.fold-body');
+      extra.forEach(x => body.appendChild(x));
+      while (card.firstChild) body.appendChild(card.firstChild);
+      card.replaceWith(d);
+    });
+    // le sezioni vanno DOPO il pannello, non dentro
+    const calcCard = res.closest('.calc-card');
+    if (calcCard) [...res.querySelectorAll(':scope > details.calc-more')].reverse().forEach(d => calcCard.after(d));
+  },
+
   int(value, def = 0) {
     const n = parseInt(value, 10);
     return Number.isFinite(n) ? n : def;
