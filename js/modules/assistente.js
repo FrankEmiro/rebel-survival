@@ -199,7 +199,8 @@ const AssistenteModule = (() => {
   const AI_MODELS = { f16: 'Llama-3.2-1B-Instruct-q4f16_1-MLC', f32: 'Llama-3.2-1B-Instruct-q4f32_1-MLC' };
   const AI_MODEL_LABEL = 'Llama 3.2 1B';
   const AI_KEY = 'assistente_ai';
-  const AI_MIN_FREE_MB = 1500;   // spazio libero minimo prima di scaricare
+  const AI_MODEL_MB = 700;       // peso reale del download (pesi 663 MB + programma e tokenizer)
+  const AI_MIN_FREE_MB = 1000;   // spazio libero richiesto: modello + margine
   // AI sperimentale: visibile SOLO a chi apre l'app con ?lab=1 (?lab=0 la nasconde di nuovo)
   const LAB_KEY = 'lab';
   (() => {
@@ -257,7 +258,7 @@ const AssistenteModule = (() => {
       loading = (async () => {
         const c = await capability();
         if (!c.ok) throw new Error('dispositivo non adatto');
-        setState({ phase: 'loading', pct: 0, stalled: false });
+        setState({ phase: 'loading', pct: 0, stalled: false, hint: null });
         lastProgress = Date.now();
         clearInterval(watchdog);
         watchdog = setInterval(() => {
@@ -281,9 +282,10 @@ const AssistenteModule = (() => {
     function _errMsg(e) {
       const m = String((e && e.message) || e || '');
       if (!navigator.onLine && !cfg().installed) return 'serve internet per il primo download';
-      if (/quota|space|storage/i.test(m)) return 'spazio insufficiente sul dispositivo';
-      return 'errore nel caricamento del modello';
+      if ((e && e.name === 'QuotaExceededError') || /quota/i.test(m)) return `spazio insufficiente: servono circa ${_gb(AI_MIN_FREE_MB)} liberi`;
+      return 'errore nel caricamento del modello (' + m.slice(0, 120) + ')';
     }
+    const _gb = mb => (mb >= 1024 ? (mb / 1024).toFixed(1).replace('.', ',') + ' GB' : Math.max(0, Math.round(mb)) + ' MB');
 
     async function enable() {
       const c = await capability();
@@ -291,8 +293,9 @@ const AssistenteModule = (() => {
       if (!cfg().installed && navigator.storage?.estimate) {
         try {
           const est = await navigator.storage.estimate();
-          if (est.quota && (est.quota - (est.usage || 0)) / 1048576 < AI_MIN_FREE_MB) {
-            return setState({ phase: 'error', msg: 'spazio insufficiente sul dispositivo' });
+          const freeMB = est.quota ? (est.quota - (est.usage || 0)) / 1048576 : null;
+          if (freeMB != null && freeMB < AI_MIN_FREE_MB) {
+            return setState({ phase: 'error', msg: `spazio insufficiente: servono circa ${_gb(AI_MIN_FREE_MB)} liberi, il browser ne concede ${_gb(freeMB)}`, hint: 'space' });
           }
         } catch (e) { /* stima non disponibile: si prova comunque */ }
       }
@@ -384,7 +387,7 @@ const AssistenteModule = (() => {
           <span>${conf.installed ? 'Pochi secondi.' : 'Con una connessione lenta può richiedere molti minuti.'} Non chiudere l'app: intanto la ricerca nelle guide funziona.</span></div>`;
       } else if (state.phase === 'error' && conf.enabled !== false) {
         html = `<i class="ph ph-warning"></i><div><strong>AI non disponibile: ${esc(state.msg || '')}</strong>
-          <span>La ricerca nelle guide funziona lo stesso.</span>
+          <span>${state.hint === 'space' ? 'Libera spazio sul telefono (foto, app, file scaricati) e riprova. Se lo spazio c\'è, verifica di non essere in navigazione in incognito: lì il browser concede pochissimo spazio. ' : ''}La ricerca nelle guide funziona lo stesso.</span>
           <div class="as-ai-btns"><button class="as-open" onclick="AssistenteModule.aiEnable()">Riprova</button>
           <button class="as-link" onclick="AssistenteModule.aiDisable()">Disattiva</button></div></div>`;
       } else if (conf.enabled && !conf.installed) {
@@ -402,7 +405,7 @@ const AssistenteModule = (() => {
         html = `<i class="ph ph-cpu"></i><div><strong>Risposte scritte dall'AI (sperimentale, facoltativa)</strong>
           <span>${conf.installed
             ? 'Il modello è già sul telefono: puoi riattivarlo.'
-            : `Un'AI che gira sul tuo telefono scrive la risposta usando solo i passaggi delle guide. Va scaricata una volta (circa 1 GB, meglio con il Wi‑Fi) da server pubblici (jsDelivr, Hugging Face, GitHub); poi funziona senza internet. Le tue domande non escono dal telefono. Vedi la ${privacy}.`}</span>
+            : `Un'AI che gira sul tuo telefono scrive la risposta usando solo i passaggi delle guide. Va scaricata una volta (circa ${_gb(AI_MODEL_MB)}, servono ${_gb(AI_MIN_FREE_MB)} liberi; meglio con il Wi‑Fi) da server pubblici (jsDelivr, Hugging Face, GitHub); poi funziona senza internet. Le tue domande non escono dal telefono. Vedi la ${privacy}.`}</span>
           ${mobile && !conf.installed ? '<span class="as-ai-warn">Sembri connesso alla rete mobile: il download consuma molti dati.</span>' : ''}
           <div class="as-ai-btns"><button class="as-open" onclick="AssistenteModule.aiEnable()"><i class="ph ph-download-simple"></i> ${conf.installed ? 'Attiva' : 'Scarica e attiva'}</button></div></div>`;
       }
