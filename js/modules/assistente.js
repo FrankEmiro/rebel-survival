@@ -236,12 +236,20 @@ const AssistenteModule = (() => {
 
     async function capability() {
       if (cap) return cap;
-      const c = { webgpu: false, f16: false, memGB: navigator.deviceMemory || null };
+      const c = { webgpu: false, f16: false, memGB: navigator.deviceMemory || null, sbuf: null, why: '' };
       try {
         const a = navigator.gpu && await navigator.gpu.requestAdapter();
-        if (a) { c.webgpu = true; c.f16 = a.features.has('shader-f16'); }
+        if (a) {
+          c.webgpu = true; c.f16 = a.features.has('shader-f16');
+          c.sbuf = a.limits.maxStorageBufferBindingSize;
+        }
       } catch (e) { /* nessuna GPU utilizzabile */ }
-      c.ok = c.webgpu && (c.memGB == null || c.memGB >= 4);
+      // WebLLM richiede almeno 128 MB per buffer sulla GPU (limite "maxStorageBufferBindingSize")
+      const gpuOk = c.sbuf == null || c.sbuf >= 134217728;
+      c.ok = c.webgpu && gpuOk && (c.memGB == null || c.memGB >= 4);
+      c.why = !c.webgpu ? 'il browser non ha WebGPU'
+        : !gpuOk ? 'la scheda grafica del telefono non supporta modelli di questa dimensione'
+        : (c.memGB != null && c.memGB < 4) ? 'memoria (RAM) inferiore a 4 GB' : '';
       c.model = c.f16 ? AI_MODELS.f16 : AI_MODELS.f32;
       return (cap = c);
     }
@@ -279,10 +287,13 @@ const AssistenteModule = (() => {
       finally { loading = null; }
     }
 
+    const diag = { freeMB: null, err: '' };
     function _errMsg(e) {
       const m = String((e && e.message) || e || '');
+      diag.err = ((e && e.name) ? e.name + ': ' : '') + m.slice(0, 300);
+      if (/maxStorageBufferBindingSize|maxComputeWorkgroupStorageSize|maxBufferSize/.test(m)) return 'la scheda grafica del telefono non supporta questo modello';
       if (!navigator.onLine && !cfg().installed) return 'serve internet per il primo download';
-      if ((e && e.name === 'QuotaExceededError') || /quota/i.test(m)) return `spazio insufficiente: servono circa ${_gb(AI_MIN_FREE_MB)} liberi`;
+      if ((e && e.name === 'QuotaExceededError') || /QuotaExceeded/i.test(m)) return `spazio insufficiente: servono circa ${_gb(AI_MIN_FREE_MB)} liberi`;
       return 'errore nel caricamento del modello (' + m.slice(0, 120) + ')';
     }
     const _gb = mb => (mb >= 1024 ? (mb / 1024).toFixed(1).replace('.', ',') + ' GB' : Math.max(0, Math.round(mb)) + ' MB');
@@ -294,8 +305,10 @@ const AssistenteModule = (() => {
         try {
           const est = await navigator.storage.estimate();
           const freeMB = est.quota ? (est.quota - (est.usage || 0)) / 1048576 : null;
-          if (freeMB != null && freeMB < AI_MIN_FREE_MB) {
-            return setState({ phase: 'error', msg: `spazio insufficiente: servono circa ${_gb(AI_MIN_FREE_MB)} liberi, il browser ne concede ${_gb(freeMB)}`, hint: 'space' });
+          diag.freeMB = freeMB == null ? null : Math.round(freeMB);
+          // la stima del browser è approssimativa: si blocca solo se non ci sta nemmeno il modello
+          if (freeMB != null && freeMB < AI_MODEL_MB) {
+            return setState({ phase: 'error', msg: `spazio insufficiente: servono almeno ${_gb(AI_MODEL_MB)}, il browser ne concede ${_gb(freeMB)}`, hint: 'space' });
           }
         } catch (e) { /* stima non disponibile: si prova comunque */ }
       }
@@ -368,6 +381,19 @@ const AssistenteModule = (() => {
       _upd(h);
     }
 
+    // dettagli tecnici per capire i problemi sui telefoni (nessun dato personale)
+    function _diagHtml(c) {
+      const rows = [
+        'Browser: ' + (navigator.userAgent.match(/(Chrome|Firefox|SamsungBrowser|Version)\/[\d.]+/g) || ['?']).join(' '),
+        'WebGPU: ' + (c.webgpu ? 'sì' : 'no') + ' · f16: ' + (c.f16 ? 'sì' : 'no'),
+        'Buffer GPU max: ' + (c.sbuf ? Math.round(c.sbuf / 1048576) + ' MB' : '?'),
+        'RAM indicata: ' + (c.memGB != null ? c.memGB + ' GB' : '?'),
+        'Spazio concesso dal browser: ' + (diag.freeMB != null ? _gb(diag.freeMB) : '?'),
+        diag.err ? 'Errore: ' + diag.err : '',
+      ].filter(Boolean);
+      return `<details class="as-diag"><summary>Dettagli tecnici</summary><pre>${esc(rows.join('\n'))}</pre></details>`;
+    }
+
     async function renderBox() {
       const el = document.getElementById('as-ai');
       if (!el) return;
@@ -378,7 +404,7 @@ const AssistenteModule = (() => {
       let html;
       if (!c.ok) {
         html = `<i class="ph ph-cpu"></i><div><strong>Risposte scritte dall'AI</strong>
-          <span>Non disponibili su questo dispositivo (servono un browser con WebGPU e almeno 4 GB di memoria). La ricerca nelle guide funziona lo stesso.</span></div>`;
+          <span>Non disponibili su questo dispositivo: ${esc(c.why)}. La ricerca nelle guide funziona lo stesso.</span>${_diagHtml(c)}</div>`;
       } else if (state.phase === 'loading') {
         html = `<i class="ph ph-download-simple"></i><div><strong>${conf.installed ? 'Carico l\'AI…' : 'Scarico l\'AI (una volta sola)…'} ${state.pct}%</strong>
           <div class="as-prog"><span style="width:${state.pct}%"></span></div>
@@ -387,7 +413,7 @@ const AssistenteModule = (() => {
           <span>${conf.installed ? 'Pochi secondi.' : 'Con una connessione lenta può richiedere molti minuti.'} Non chiudere l'app: intanto la ricerca nelle guide funziona.</span></div>`;
       } else if (state.phase === 'error' && conf.enabled !== false) {
         html = `<i class="ph ph-warning"></i><div><strong>AI non disponibile: ${esc(state.msg || '')}</strong>
-          <span>${state.hint === 'space' ? 'Libera spazio sul telefono (foto, app, file scaricati) e riprova. Se lo spazio c\'è, verifica di non essere in navigazione in incognito: lì il browser concede pochissimo spazio. ' : ''}La ricerca nelle guide funziona lo stesso.</span>
+          <span>${state.hint === 'space' ? 'Libera spazio sul telefono (foto, app, file scaricati) e riprova. Se lo spazio c\'è, verifica di non essere in navigazione in incognito: lì il browser concede pochissimo spazio. ' : ''}La ricerca nelle guide funziona lo stesso.</span>${_diagHtml(c)}
           <div class="as-ai-btns"><button class="as-open" onclick="AssistenteModule.aiEnable()">Riprova</button>
           <button class="as-link" onclick="AssistenteModule.aiDisable()">Disattiva</button></div></div>`;
       } else if (conf.enabled && !conf.installed) {
