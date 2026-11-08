@@ -558,21 +558,40 @@ const DashboardModule = (() => {
       (p.km_settimana || 0) > 0 && { label:'Mobilità', icon:'ph-car', pct:current.mobilita, val: p.carburante_litri ? p.carburante_litri + ' L' : '—', nav:'carburante' },
     ].filter(Boolean);
 
-    return rows.map(r => {
-      const isDays = r.days !== undefined;
-      const cls  = isDays ? dayCls(r.days) : pctCls(r.pct);
-      const fill = isDays ? Math.min(100, r.days / 30 * 100) : r.pct;
-      const ticks = isDays ? '<i class="res-tick" style="left:10%"></i><i class="res-tick" style="left:46.7%"></i>' : '';
-      const onclick = r.tab
-        ? `navigateTo('${r.nav}'); setTimeout(()=>SettingsModule._tab('${r.tab}'), 180)`
-        : `navigateTo('${r.nav}')`;
-      return `<div class="res-row" onclick="${onclick}">
-        <div class="res-label"><i class="ph ${r.icon}"></i><span>${r.label}</span></div>
-        <div class="res-bar ${cls}">${ticks}<div class="res-fill" style="width:${Math.max(fill, 2)}%"></div></div>
-        <div class="res-val ${cls}">${r.val}${r.sub ? `<small>${r.sub}</small>` : ''}</div>
-      </div>`;
-    }).join('') + `<div class="res-legend"><i class="res-tick-demo"></i> tacche sulle barre di acqua e cibo: 72 ore · 2 settimane · 30 giorni</div>`;
+    return rows.map(r => ({ ...r, cls: r.days !== undefined ? dayCls(r.days) : pctCls(r.pct) }));
   }
+
+  /* ── PANNELLO A ICONE (Home): stessi valori di sempre, in griglia ──
+     Pallino: verde/giallo/rosso con le stesse soglie delle vecchie barre
+     (acqua e cibo: 14 e 3 giorni; altri: 70 e 35 punti). */
+  const DOT_LABEL = { good: 'a posto', warn: 'da migliorare', bad: 'da fare' };
+  function buildTiles(current, p, persone) {
+    const tiles = buildResources(current, p).map(r => ({
+      ...r,
+      onclick: r.tab ? `navigateTo('${r.nav}'); setTimeout(()=>SettingsModule._tab('${r.tab}'), 180)` : `navigateTo('${r.nav}')`,
+    }));
+    tiles.push(
+      { label: 'Scorte',  icon: 'ph-backpack',  val: 'Zaino e spesa', onclick: "navigateTo('kit')" },
+      { label: 'Guide',   icon: 'ph-book-open', val: 'Anche offline', onclick: "navigateTo('guide')" },
+      { label: 'Profilo', icon: 'ph-users',     val: persone > 0 ? persone + (persone === 1 ? ' persona' : ' persone') : 'Da completare', onclick: "navigateTo('settings')" },
+    );
+    return `<div class="home-tiles">${tiles.map(t => `
+      <button class="home-tile" onclick="${t.onclick}"${t.cls ? ` aria-label="${t.label}: ${t.val}, ${DOT_LABEL[t.cls]}"` : ''}>
+        ${t.cls ? `<span class="home-dot ${t.cls}"></span>` : ''}
+        <i class="ph ${t.icon}"></i>
+        <strong>${t.label}</strong>
+        <span class="home-tile-val ${t.cls || ''}">${t.val}</span>
+      </button>`).join('')}
+    </div>`;
+  }
+
+  /* Colore di sfondo del riquadro scenario (solo estetica, per famiglia di scenario) */
+  const SC_TONE = {
+    'blackout-breve':'amber', 'blackout-lungo':'amber', 'blackout-mobile':'amber', 'cyberattacco':'amber',
+    'gas':'red', 'caldo':'red', 'incendio-zona':'red', 'conflitto':'red',
+    'alluvione':'blue', 'acqua':'blue', 'tempesta-invernale':'blue',
+    'terremoto':'earth', 'evacuazione':'earth', 'nucleare':'violet', 'pandemia':'violet',
+  };
 
   /* ── TASK CARD (shared renderer) ── */
   const AXIS_ICON = { acqua:'ph-drop', cibo:'ph-fork-knife', energia:'ph-lightning', calore:'ph-flame', comm:'ph-radio', mobilita:'ph-car' };
@@ -1141,52 +1160,51 @@ const DashboardModule = (() => {
         ].filter(Boolean).join(' e ') || 'completa le azioni qui sotto'}`
       : 'Ottimo livello: mantieni scorte e rotazione.';
 
-    const aqGg = _waterDays(profilo);
-    const fmtGg = n => (n < 10 ? (Math.round(n * 10) / 10).toString().replace('.', ',') : String(Math.round(n)));
+
+    const tone = scObj ? (SC_TONE[scObj.id] || 'olive') : 'none';
+    const ringPct = Math.round(lv.level.n / 3 * 100);
 
     root.innerHTML = `
-      <!-- EMERGENZA: accesso diretto alla pagina Emergenza -->
-      <button class="home-emg" onclick="navigateTo('strumenti')">
-        <span class="home-emg-ico"><i class="ph ph-siren"></i></span>
-        <span class="home-emg-txt">
-          <strong>Sta succedendo adesso?</strong>
-          <span>Apri Emergenza: chiama il 112${scObj ? `, passi per ${scObj.titolo}` : ''}, torcia e SOS</span>
-        </span>
-        <i class="ph ph-caret-right home-emg-go"></i>
-      </button>
-
-      <!-- SCENARIO: per cosa ti stai preparando (sempre visibile, si cambia con un tocco) -->
-      <button class="home-sc${scenarioName ? '' : ' home-sc-empty'}" onclick="DashboardModule.openScenarioPicker()">
-        <span class="home-sc-ico">${scObj?.icon ? scObj.icon : `<i class="ph ${scenarioName ? 'ph-sliders' : 'ph-question'}"></i>`}</span>
-        <span class="home-sc-txt">
-          <span class="home-sc-lab">Ti stai preparando per</span>
-          <strong>${scenarioName || 'Nessuna situazione scelta'}</strong>
-        </span>
-        <span class="home-sc-btn">${scenarioName ? 'Cambia' : 'Scegli'}</span>
-      </button>
-
-      <button class="as-entry as-entry-home" onclick="navigateTo('assistente')">
-        <i class="ph ph-chats-circle"></i>
-        <span><strong>Hai un dubbio? Chiedi</strong><small>Rispondo con le guide dell'app, anche offline</small></span>
-        <i class="ph ph-caret-right"></i>
-      </button>
-
-      <!-- STATUS: livello + percorso 72h / 2 sett / 30gg -->
-      <div class="status-banner ${bannerCls}">
-        <i class="ph ${bannerIcon}"></i>
-        <div class="status-banner-text">
-          <strong>${bannerLabel}</strong>
-          — ${lv.level.n === 0 ? 'meno di 72 ore di autonomia' : lv.level.label + ' di autonomia'}
-          <div class="banner-next">${nextHint}</div>
+      <!-- SCENARIO: riquadro grande in alto, con livello di autonomia -->
+      <div class="home-hero tone-${tone}">
+        <span class="home-hero-bg" aria-hidden="true">${scObj?.icon || `<i class="ph ${scenarioName ? 'ph-sliders' : 'ph-compass'}"></i>`}</span>
+        <div class="home-hero-top">
+          <div class="home-hero-txt">
+            <span class="home-hero-lab">Ti stai preparando per</span>
+            <strong>${scenarioName || 'Nessuna situazione scelta'}</strong>
+          </div>
+          <button class="home-hero-btn" onclick="DashboardModule.openScenarioPicker()">
+            <i class="ph ph-swap"></i> ${scenarioName ? 'Cambia' : 'Scegli'}
+          </button>
         </div>
-        <div class="level-track" role="img" aria-label="Livello ${lv.level.n} di 3">
-          ${LEVELS.slice(1).map(l => `
-            <div class="lt-step ${lv.level.n >= l.n ? 'done' : lv.level.n + 1 === l.n ? 'next' : ''}">
-              <span class="lt-dot">${lv.level.n >= l.n ? '<i class="ph ph-check-bold"></i>' : l.n}</span>
-              <span class="lt-lab">${l.label}</span>
-            </div>`).join('<span class="lt-line"></span>')}
+        <div class="home-hero-lv ${bannerCls}">
+          <div class="home-ring" style="--p:${ringPct}" role="img" aria-label="Livello ${lv.level.n} di 3">
+            <span>${lv.level.n}<small>/3</small></span>
+          </div>
+          <div class="home-hero-lvtxt">
+            <strong>${bannerLabel}</strong>
+            <span>${lv.level.n === 0 ? 'Meno di 72 ore di autonomia' : lv.level.label + ' di autonomia'}</span>
+            <span class="home-hero-next">${nextHint}</span>
+          </div>
         </div>
       </div>
+
+      <!-- DUE AZIONI GRANDI: Emergenza (rossa) e Chiedi -->
+      <div class="home-actions">
+        <button class="home-act home-act-emg" onclick="navigateTo('strumenti')">
+          <i class="ph ph-siren"></i>
+          <strong>Sta succedendo adesso?</strong>
+          <span>112${scObj ? `, passi per ${scObj.titolo}` : ''}, torcia e SOS</span>
+        </button>
+        <button class="home-act home-act-ask" onclick="navigateTo('assistente')">
+          <i class="ph ph-chats-circle"></i>
+          <strong>Hai un dubbio? Chiedi</strong>
+          <span>Rispondo con le guide, anche offline</span>
+        </button>
+      </div>
+
+      <!-- PANNELLO A ICONE -->
+      ${buildTiles(current, profilo, persone)}
 
       <!-- TASK OPERATIVE -->
       <div class="card">
@@ -1204,27 +1222,6 @@ const DashboardModule = (() => {
         ${buildTaskBoard(current, required, activeIds, detected, done, profilo)}
       </div>
 
-      ${_fold('res', 'ph-chart-bar', 'Le tue scorte', `Acqua ${fmtGg(aqGg)} gg · Cibo ${profilo.cibo_scorte_giorni || 0} gg`, `
-        ${buildResources(current, profilo)}
-        <button class="btn btn-outline btn-sm btn-full mt-16" onclick="navigateTo('settings')">
-          <i class="ph ph-pencil"></i> Aggiorna scorte
-        </button>`)}
-
-      <!-- PROFILO -->
-      <div class="profile-quick">
-        <button class="profile-chip profile-chip-btn" onclick="navigateTo('settings')">
-          <i class="ph ph-users"></i>${persone > 0 ? persone + (persone === 1 ? ' persona' : ' persone') : 'Configura profilo'}
-        </button>
-        ${profilo.ha_neonato ? '<div class="profile-chip"><i class="ph ph-baby"></i>Neonato</div>' : ''}
-        ${profilo.mobilita_ridotta ? '<div class="profile-chip"><i class="ph ph-wheelchair"></i>Mobilità ridotta</div>' : ''}
-        ${profilo.ha_animali ? '<div class="profile-chip"><i class="ph ph-paw-print"></i>Animali</div>' : ''}
-        ${profilo.tipo_abitazione ? `<div class="profile-chip">
-          <i class="ph ph-house-simple"></i>${TIPO_LABEL[profilo.tipo_abitazione] || profilo.tipo_abitazione}
-        </div>` : ''}
-        <button class="profile-chip profile-chip-btn" onclick="navigateTo('settings')">
-          <i class="ph ph-gear"></i> Modifica profilo
-        </button>
-      </div>
       <div class="home-legal">
         <a href="/legal/privacy.html">Privacy</a> · <a href="/legal/condizioni.html">Condizioni d'uso</a>
       </div>
