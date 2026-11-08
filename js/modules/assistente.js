@@ -9,7 +9,26 @@
 const AssistenteModule = (() => {
 
   let index = null;          // { chunks, df, avgLen }
-  const history = [];        // [{ q, results }]
+  const history = [];        // [{ q, results, ai }]
+
+  /* Conversazione salvata nel telefono (ultime 20 domande): le risposte
+     dell'AI richiedono tempo e non devono andare perse chiudendo l'app. */
+  const CHAT_KEY = 'assistente_chat';
+  function _saveChat() {
+    try { Storage.set(CHAT_KEY, history.map(h => ({ q: h.q, results: h.results, ai: h.ai ? { ...h.ai } : undefined }))); } catch (e) { /* spazio pieno: resta solo in memoria */ }
+  }
+  (() => {
+    const saved = (typeof Storage !== 'undefined' && Storage.get(CHAT_KEY, [])) || [];
+    saved.forEach(h => {
+      // risposta interrotta (app chiusa mentre l'AI scriveva)
+      if (h.ai && (h.ai.status === 'wait' || h.ai.status === 'run')) {
+        if (h.ai.text && h.ai.text.trim()) { h.ai.status = 'done'; h.ai.text += ' […]'; }
+        else { h.ai.status = 'error'; h.ai.msg = 'risposta interrotta'; }
+      }
+      history.push(h);
+    });
+    if (typeof document !== 'undefined') document.addEventListener('visibilitychange', () => { if (document.hidden) _saveChat(); });
+  })();
 
   /* ── TESTO ── */
   const STOP = new Set(('a ad al allo ai agli alla alle anche avere c che chi ci come con contro cosa cui da dal dallo dai dagli dalla dalle '
@@ -167,6 +186,7 @@ const AssistenteModule = (() => {
     if (AI.enabled() && h.results.length) h.ai = { status: 'wait', text: '' };
     history.push(h);
     if (history.length > 20) history.shift();
+    _saveChat();
     const inp = document.getElementById('as-input');
     if (inp) inp.value = '';
     _renderThread();
@@ -179,7 +199,7 @@ const AssistenteModule = (() => {
     return false;
   }
 
-  function clear() { history.length = 0; _renderThread(); }
+  function clear() { history.length = 0; _saveChat(); _renderThread(); }
 
   function openScenario(id) {
     if (typeof SettingsModule !== 'undefined') {
@@ -564,6 +584,7 @@ const AssistenteModule = (() => {
         h.ai.status = 'error'; h.ai.msg = _errMsg(e);
       }
       _upd(h);
+      _saveChat();
     }
 
     // dettagli tecnici per capire i problemi sui telefoni (nessun dato personale)
