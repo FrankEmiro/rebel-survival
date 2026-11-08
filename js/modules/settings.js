@@ -222,18 +222,10 @@ const SettingsModule = (() => {
   function _rCalore(p) {
     const r = [p.risc_legna && 'Legna', p.risc_pellet && 'Pellet', p.risc_gpl && 'GPL'].filter(Boolean);
 
-    // Stima giorni dal combustibile stoccato
-    const ggMap   = { a:600, b:900, c:1400, d:2100, e:2800, f:3800 };
-    const isolMap = { scarso:1.8, medio:1.2, buono:0.7, ottimo:0.4 };
-    const zoneGG  = ggMap[p.ri_zona]    || 2100;
-    const isol    = isolMap[p.isolamento] || 1.2;
-    const mq      = p.mq || 80;
-    // Consumo stimato (kWh/giorno) durante la stagione di riscaldamento
-    // formula: U_equiv × mq × GG_giornalieri / η_stufa
-    const dailyKwh = (0.15 * mq * isol * (zoneGG / 180)) / 0.65;
-    const kwhPerKg = p.risc_gpl ? 10 : 4;   // GPL ~10 kWh/kg; legna/pellet ~4 kWh/kg
-    const totalKwh = (p.combustibile_kg || 0) * kwhPerKg;
-    const giorni   = dailyKwh > 0 && totalKwh > 0 ? Math.round(totalKwh / dailyKwh) : 0;
+    // Stima giorni dal combustibile stoccato: stessa formula e stessi valori del calcolatore Riscaldamento
+    const est      = RiscaldamentoModule.profileEstimate(p);
+    const dailyKwh = est.kwhGiorno;
+    const giorni   = est.giorni;
     const hasFuel  = (p.combustibile_kg || 0) > 0;
 
     const sub = r.length > 0 && hasFuel

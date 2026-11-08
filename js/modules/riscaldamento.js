@@ -4,12 +4,17 @@
 const RiscaldamentoModule = (() => {
   let initialized = false;
 
-  // kWh termici utili per kg di combustibile (efficienza inclusa)
+  // kWh termici UTILI per kg (o L) = potere calorifico inferiore (PCI) × rendimento della stufa.
+  // PCI: «Tabella parametri standard nazionali» MASE/ISPRA (agg. 17/03/2017): legna 0,373 tep/t (≈4,3 kWh/kg),
+  //   GPL 46,110 GJ/t (≈12,8 kWh/kg), kerosene 1,047 tep/t (≈12,2 kWh/kg). Pellet: classe A1 ≥ 4,6 kWh/kg (UNI EN ISO 17225-2 / ENplus).
+  // Rendimento legna e pellet: minimi di legge per stufe a focolare chiuso, Reg. UE 2015/1185 (65% e 79%).
+  // Rendimenti di kerosene e GPL e densità del kerosene (per i litri): stime, NON da fonte ufficiale.
+  // Prezzi: indicativi, senza fonte né data — vanno aggiornati.
   const COMBUSTIBILI = {
-    legna:    { nome: 'Legna (faggio/quercia)', kwhKg: 2.8,  unitLabel: 'kg',   prezzoKg: 0.15, note: 'Stufa tradizionale, efficienza ~65%' },
-    pellet:   { nome: 'Pellet di legno A1',     kwhKg: 4.2,  unitLabel: 'kg',   prezzoKg: 0.45, note: 'Stufa a pellet, efficienza ~90%' },
-    kerosene: { nome: 'Kerosene/gasolio',       kwhKg: 8.5,  unitLabel: 'L',    prezzoKg: 1.50, note: 'Stufa da campeggio, efficienza ~85%' },
-    gpl:      { nome: 'GPL (bombola)',           kwhKg: 6.5,  unitLabel: 'kg',   prezzoKg: 1.80, note: 'Stufa GPL, efficienza ~90%' },
+    legna:    { nome: 'Legna (faggio/quercia)', kwhKg: 2.8,  unitLabel: 'kg',   prezzoKg: 0.15, note: 'Stufa a focolare chiuso, rendimento minimo di legge 65%' },
+    pellet:   { nome: 'Pellet di legno A1',     kwhKg: 3.6,  unitLabel: 'kg',   prezzoKg: 0.45, note: 'Stufa a pellet, rendimento minimo di legge 79%' },
+    kerosene: { nome: 'Kerosene/gasolio',       kwhKg: 8.5,  unitLabel: 'L',    prezzoKg: 1.50, note: 'Stufa portatile, rendimento stimato ~85%' },
+    gpl:      { nome: 'GPL (bombola)',           kwhKg: 11.5, unitLabel: 'kg',   prezzoKg: 1.80, note: 'Stufa GPL, rendimento stimato ~90%' },
     candele:  { nome: 'Candele (emergenza)',     kwhKg: 0.5,  unitLabel: 'pz',   prezzoKg: 0.50, note: 'Solo illuminazione/calore minimo' },
   };
 
@@ -129,6 +134,7 @@ const RiscaldamentoModule = (() => {
           <thead><tr><th>Combustibile</th><th>Al giorno</th><th>In <span id="ri-gg-label">30</span> gg</th><th>Costo stimato</th></tr></thead>
           <tbody id="ri-confronto"></tbody>
         </table>
+        <p class="form-hint mt-8">Quantità calcolate con i poteri calorifici della tabella nazionale MASE/ISPRA e i rendimenti minimi di legge per le stufe a legna e a pellet. I costi sono solo indicativi: controlla i prezzi attuali.</p>
       </div>
 
       <div class="card mt-16">
@@ -146,6 +152,23 @@ const RiscaldamentoModule = (() => {
     </div>
   `;
 
+  // kWh/giorno necessari: potenza (m² × W/m²) × ore, normalizzata su ΔT base 16°C.
+  // UNICA formula, usata anche dal Profilo (stima giorni di autonomia).
+  function _kwhGiorno(mq, isolamento, zona, ore, temp) {
+    const wMq = (ISOLAMENTO[isolamento] || ISOLAMENTO.medio).wMq;
+    const tempExt = zona === 'f' ? -5 : zona === 'e' ? 0 : zona === 'd' ? 2 : zona === 'c' ? 5 : 8;
+    const deltaT = Math.max(1, temp - tempExt);
+    return +((mq * wMq) / 1000 * ore * (deltaT / 16)).toFixed(2);
+  }
+
+  // Stima per il Profilo: giorni coperti dalla scorta, con 10 ore al giorno e 18 °C (valori iniziali del calcolatore)
+  function profileEstimate(p) {
+    const comb = p.risc_legna ? 'legna' : p.risc_pellet ? 'pellet' : p.risc_gpl ? 'gpl' : 'legna';
+    const kwh = _kwhGiorno(p.mq || 80, p.isolamento || 'medio', p.ri_zona || 'd', 10, 18);
+    const qty = kwh / COMBUSTIBILI[comb].kwhKg;
+    return { kwhGiorno: kwh, giorni: qty > 0 && p.combustibile_kg > 0 ? Math.floor(p.combustibile_kg / qty) : 0 };
+  }
+
   function calculate() {
     const mq          = Utils.num(document.getElementById('ri-mq').value, 80);
     const isolamento  = document.getElementById('ri-isolamento').value;
@@ -156,13 +179,7 @@ const RiscaldamentoModule = (() => {
     const combustibile= document.getElementById('ri-combustibile').value;
     const scortaAtt   = Utils.num(document.getElementById('ri-scorta').value, 0);
 
-    const wMq = ISOLAMENTO[isolamento].wMq;
-    const tempExt = zona === 'f' ? -5 : zona === 'e' ? 0 : zona === 'd' ? 2 : zona === 'c' ? 5 : 8;
-    const deltaT = Math.max(1, temp - tempExt);
-
-    // kWh/giorno necessari (potenza × ore)
-    const potenzaKw = (mq * wMq) / 1000; // kW
-    const kwhGiorno = +(potenzaKw * ore * (deltaT / 16)).toFixed(2); // normalizzato su ΔT base 16°C
+    const kwhGiorno = _kwhGiorno(mq, isolamento, zona, ore, temp);
 
     const comb = COMBUSTIBILI[combustibile];
     const qtyGiorno = +(kwhGiorno / comb.kwhKg).toFixed(2);
@@ -224,5 +241,5 @@ const RiscaldamentoModule = (() => {
     calculate();
   }
 
-  return { init, calculate };
+  return { init, calculate, profileEstimate };
 })();
