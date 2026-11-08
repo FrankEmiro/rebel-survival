@@ -190,22 +190,37 @@ const AssistenteModule = (() => {
   }
 
   /* ── FASE 2: AI LOCALE (facoltativa) ──
-     Libreria WebLLM e modello si scaricano UNA volta da server pubblici
+     Due motori, scelti in automatico:
+     - GPU (WebLLM + Llama 3.2 1B) se la scheda grafica lo permette;
+     - CPU (wllama/llama.cpp + Qwen3 0.6B) su tutti gli altri telefoni: più
+       lento, ma non dipende dalla scheda grafica.
+     Libreria e modello si scaricano UNA volta da server pubblici
      (jsDelivr, Hugging Face, GitHub) e poi restano nel telefono: funziona
      senza internet. Le domande non escono mai dal dispositivo.
      L'AI riassume SOLO i passaggi trovati dalla ricerca; se scrive numeri
      che non sono nei passaggi, la risposta viene nascosta. */
   const AI_LIB = 'https://cdn.jsdelivr.net/npm/@mlc-ai/web-llm@0.2.87/+esm';
   const AI_MODELS = { f16: 'Llama-3.2-1B-Instruct-q4f16_1-MLC', f32: 'Llama-3.2-1B-Instruct-q4f32_1-MLC' };
-  const AI_MODEL_LABEL = 'Llama 3.2 1B';
+  const WLLAMA_LIB = 'https://cdn.jsdelivr.net/npm/@wllama/wllama@3.8.1/esm/index.js';
+  const WLLAMA_WASM = 'https://cdn.jsdelivr.net/npm/@wllama/wllama@3.8.1/esm/wasm/wllama.wasm';
+  const CPU_MODEL_URL = 'https://huggingface.co/unsloth/Qwen3-0.6B-GGUF/resolve/main/Qwen3-0.6B-Q4_K_M.gguf';
+  // peso reale dei download (verificato su Hugging Face) e spazio libero richiesto
+  const BACKENDS = {
+    gpu: { label: 'Llama 3.2 1B', engine: 'scheda grafica', mb: 700, freeMB: 1000, note: ' Built with Llama.' },
+    cpu: { label: 'Qwen3 0.6B', engine: 'processore', mb: 390, freeMB: 600, note: '' },
+  };
   const AI_KEY = 'assistente_ai';
-  const AI_MODEL_MB = 700;       // peso reale del download (pesi 663 MB + programma e tokenizer)
-  const AI_MIN_FREE_MB = 1000;   // spazio libero richiesto: modello + margine
   // AI sperimentale: visibile SOLO a chi apre l'app con ?lab=1 (?lab=0 la nasconde di nuovo)
   const LAB_KEY = 'lab';
   (() => {
     const m = /[?&]lab=([01])/.exec(location.search);
     if (m && typeof Storage !== 'undefined') Storage.set(LAB_KEY, m[1] === '1');
+    const f = /[?&]ai=(cpu|gpu|auto)/.exec(location.search);   // solo per prove: forza il motore
+    if (f && typeof Storage !== 'undefined') {
+      const c = Storage.get('assistente_ai', {}) || {};
+      if (f[1] === 'auto') delete c.force; else c.force = f[1];
+      Storage.set('assistente_ai', c);
+    }
   })();
   const labOn = () => typeof Storage !== 'undefined' && Storage.get(LAB_KEY, false) === true;
   // prompt corto e un solo passaggio: i modelli piccoli seguono meglio istruzioni brevi
@@ -248,11 +263,20 @@ const AssistenteModule = (() => {
       // WebLLM richiede sulla GPU: buffer da almeno 128 MB e 32 KB di memoria per gruppo di calcolo
       // (molte GPU Android si fermano a 16 KB: lì il modello non può partire)
       const gpuOk = (c.sbuf == null || c.sbuf >= 134217728) && (c.wgs == null || c.wgs >= 32768);
-      c.ok = c.webgpu && gpuOk && (c.memGB == null || c.memGB >= 4);
-      c.why = !c.webgpu ? 'il browser non ha WebGPU'
-        : !gpuOk ? 'la scheda grafica del telefono non supporta modelli di questa dimensione'
-        : (c.memGB != null && c.memGB < 4) ? 'memoria (RAM) inferiore a 4 GB' : '';
+      c.gpuOk = c.webgpu && gpuOk && (c.memGB == null || c.memGB >= 4);
+      c.gpuWhy = !c.webgpu ? 'il browser non ha WebGPU'
+        : !gpuOk ? 'scheda grafica non adatta' : (c.memGB != null && c.memGB < 4) ? 'RAM inferiore a 4 GB' : '';
+      // motore CPU: serve WebAssembly e almeno 2 GB di RAM
+      c.cpuOk = typeof WebAssembly === 'object' && (c.memGB == null || c.memGB >= 2);
+      const force = cfg().force;   // per le prove: ?ai=cpu o ?ai=gpu
+      c.backend = (force === 'cpu' && c.cpuOk) ? 'cpu' : (force === 'gpu' && c.gpuOk) ? 'gpu'
+        : c.gpuOk ? 'gpu' : c.cpuOk ? 'cpu' : null;
+      c.ok = !!c.backend;
+      c.why = c.ok ? '' : (!c.cpuOk ? 'memoria (RAM) inferiore a 2 GB o browser troppo vecchio' : c.gpuWhy);
       c.model = c.f16 ? AI_MODELS.f16 : AI_MODELS.f32;
+      // modello installato per l'altro motore (es. dopo ?ai=cpu): va riscaricato quello giusto
+      const conf = cfg();
+      if (conf.installed && (conf.backend || 'gpu') !== c.backend) save({ ...conf, installed: false, enabled: false });
       return (cap = c);
     }
 
@@ -274,13 +298,10 @@ const AssistenteModule = (() => {
         watchdog = setInterval(() => {
           if (state.phase === 'loading' && !state.stalled && Date.now() - lastProgress > STALL_MS) setState({ stalled: true });
         }, 15000);
-        lib = lib || await import(AI_LIB);
-        try {
-          engine = await lib.CreateMLCEngine(c.model, {
-            initProgressCallback: p => { lastProgress = Date.now(); setState({ phase: 'loading', pct: Math.round((p.progress || 0) * 100), stalled: false }); },
-          });
-        } finally { clearInterval(watchdog); }
-        save({ ...cfg(), installed: true, model: c.model });
+        const onPct = p => { lastProgress = Date.now(); setState({ phase: 'loading', pct: Math.min(100, Math.round(p)), stalled: false }); };
+        try { engine = await _loadEngine(c, onPct); }
+        finally { clearInterval(watchdog); }
+        save({ ...cfg(), installed: true, backend: c.backend, model: c.backend === 'gpu' ? c.model : CPU_MODEL_URL });
         setState({ phase: 'ready' });
         return engine;
       })();
@@ -289,13 +310,50 @@ const AssistenteModule = (() => {
       finally { loading = null; }
     }
 
+    // adattatore unico per i due motori: gen(messaggi, onToken, deveFermarsi)
+    async function _loadEngine(c, onPct) {
+      if (c.backend === 'gpu') {
+        lib = lib || await import(AI_LIB);
+        const e = await lib.CreateMLCEngine(c.model, { initProgressCallback: p => onPct((p.progress || 0) * 100) });
+        return {
+          async gen(messages, onTok, isStop) {
+            const s = await e.chat.completions.create({ stream: true, temperature: 0.1, max_tokens: 320, messages });
+            for await (const ch of s) {
+              onTok(ch.choices?.[0]?.delta?.content || '');
+              if (isStop()) { try { e.interruptGenerate(); } catch (x) {} break; }
+            }
+          },
+          unload: () => e.unload(),
+        };
+      }
+      const W = await import(WLLAMA_LIB);
+      const w = new W.Wllama({ default: WLLAMA_WASM }, { allowOffline: true, suppressNativeLog: true, logger: W.LoggerWithoutDebug });
+      await w.loadModelFromUrl(CPU_MODEL_URL, {
+        n_ctx: 2048,
+        progressCallback: ({ loaded, total }) => { if (total) onPct(loaded / total * 100); },
+      });
+      return {
+        async gen(messages, onTok, isStop) {
+          const ac = new AbortController();
+          try {
+            await w.createChatCompletion({
+              messages, stream: true, temperature: 0.1, max_tokens: 320, abortSignal: ac.signal,
+              chat_template_kwargs: { enable_thinking: false },   // Qwen3: niente "ragionamento" lungo
+              onData: ch => { onTok(ch.choices?.[0]?.delta?.content || ''); if (isStop()) ac.abort(); },
+            });
+          } catch (x) { if (!isStop()) throw x; }
+        },
+        unload: () => w.exit(),
+      };
+    }
+
     const diag = { freeMB: null, err: '' };
     function _errMsg(e) {
       const m = String((e && e.message) || e || '');
       diag.err = ((e && e.name) ? e.name + ': ' : '') + m.slice(0, 300);
       if (/maxStorageBufferBindingSize|maxComputeWorkgroupStorageSize|maxBufferSize/.test(m)) return 'la scheda grafica del telefono non supporta questo modello';
       if (!navigator.onLine && !cfg().installed) return 'serve internet per il primo download';
-      if ((e && e.name === 'QuotaExceededError') || /QuotaExceeded/i.test(m)) return `spazio insufficiente: servono circa ${_gb(AI_MIN_FREE_MB)} liberi`;
+      if ((e && e.name === 'QuotaExceededError') || /QuotaExceeded/i.test(m)) return `spazio insufficiente: servono circa ${_gb(BACKENDS[cap?.backend || 'cpu'].freeMB)} liberi`;
       return 'errore nel caricamento del modello (' + m.slice(0, 200) + ')';
     }
     const _gb = mb => (mb >= 1024 ? (mb / 1024).toFixed(1).replace('.', ',') + ' GB' : Math.max(0, Math.round(mb)) + ' MB');
@@ -309,8 +367,9 @@ const AssistenteModule = (() => {
           const freeMB = est.quota ? (est.quota - (est.usage || 0)) / 1048576 : null;
           diag.freeMB = freeMB == null ? null : Math.round(freeMB);
           // la stima del browser è approssimativa: si blocca solo se non ci sta nemmeno il modello
-          if (freeMB != null && freeMB < AI_MODEL_MB) {
-            return setState({ phase: 'error', msg: `spazio insufficiente: servono almeno ${_gb(AI_MODEL_MB)}, il browser ne concede ${_gb(freeMB)}`, hint: 'space' });
+          const need = BACKENDS[c.backend].mb;
+          if (freeMB != null && freeMB < need) {
+            return setState({ phase: 'error', msg: `spazio insufficiente: servono almeno ${_gb(need)}, il browser ne concede ${_gb(freeMB)}`, hint: 'space' });
           }
         } catch (e) { /* stima non disponibile: si prova comunque */ }
       }
@@ -332,11 +391,17 @@ const AssistenteModule = (() => {
     }
 
     async function remove() {
-      const model = cfg().model || (await capability()).model;
+      const conf = cfg();
+      const be = conf.backend || (await capability()).backend;
       try {
         if (engine) { await engine.unload(); engine = null; }
-        lib = lib || await import(AI_LIB);
-        await lib.deleteModelAllInfoInCache(model);
+        if (be === 'cpu') {
+          const W = await import(WLLAMA_LIB);
+          await new W.Wllama({ default: WLLAMA_WASM }).cacheManager.delete(CPU_MODEL_URL);
+        } else {
+          lib = lib || await import(AI_LIB);
+          await lib.deleteModelAllInfoInCache(conf.model || (await capability()).model);
+        }
       } catch (e) { /* se fallisce, il modello resta: lo si può eliminare dalle impostazioni del browser */ }
       save({});
       state = { phase: 'idle', pct: 0 };
@@ -361,16 +426,19 @@ const AssistenteModule = (() => {
         }
         const src = ctx + ' ' + h.q;
         h.ai.status = 'run'; _upd(h);
-        const stream = await eng.chat.completions.create({
-          stream: true, temperature: 0.1, max_tokens: 320,
-          messages: [{ role: 'system', content: AI_SYSTEM }, { role: 'user', content: `PASSAGGIO:\n${ctx}\nDOMANDA: ${h.q}` }],
-        });
-        for await (const ch of stream) {
-          h.ai.text += ch.choices?.[0]?.delta?.content || '';
-          const extra = _unknownNumbers(h.ai.text, src, true);
-          if (extra.length) { h.ai.status = 'blocked'; h.ai.extra = extra; try { eng.interruptGenerate(); } catch (e) {} break; }
-          _upd(h);
-        }
+        let raw = '', stop = false;
+        await eng.gen(
+          [{ role: 'system', content: AI_SYSTEM }, { role: 'user', content: `PASSAGGIO:\n${ctx}\nDOMANDA: ${h.q}` }],
+          tok => {
+            if (stop) return;
+            raw += tok;
+            // Qwen3 può emettere un blocco <think>…</think> (anche vuoto): non va mostrato
+            h.ai.text = raw.replace(/<think>[\s\S]*?(<\/think>|$)/g, '').replace(/^\s+/, '');
+            const extra = _unknownNumbers(h.ai.text, src, true);
+            if (extra.length) { h.ai.status = 'blocked'; h.ai.extra = extra; stop = true; return; }
+            _upd(h);
+          },
+          () => stop);
         if (h.ai.status === 'run') {
           const extra = _unknownNumbers(h.ai.text, src, false);
           if (extra.length) { h.ai.status = 'blocked'; h.ai.extra = extra; }
@@ -390,6 +458,7 @@ const AssistenteModule = (() => {
         'WebGPU: ' + (c.webgpu ? 'sì' : 'no') + ' · f16: ' + (c.f16 ? 'sì' : 'no'),
         'Buffer GPU max: ' + (c.sbuf ? Math.round(c.sbuf / 1048576) + ' MB' : '?') + ' · memoria gruppo: ' + (c.wgs ? Math.round(c.wgs / 1024) + ' KB (servono 32)' : '?'),
         'RAM indicata: ' + (c.memGB != null ? c.memGB + ' GB' : '?'),
+        'Motore: ' + (c.backend ? BACKENDS[c.backend].engine + ' (' + BACKENDS[c.backend].label + ')' : 'nessuno') + (c.gpuWhy && c.backend === 'cpu' ? ' · GPU: ' + c.gpuWhy : ''),
         'Spazio concesso dal browser: ' + (diag.freeMB != null ? _gb(diag.freeMB) : '?'),
         diag.err ? 'Errore: ' + diag.err : '',
       ].filter(Boolean);
@@ -425,7 +494,7 @@ const AssistenteModule = (() => {
           <button class="as-link" onclick="AssistenteModule.aiRemove()">Annulla e libera spazio</button></div></div>`;
       } else if (conf.enabled) {
         html = `<i class="ph ph-cpu"></i><div><strong>Risposte AI attive (sperimentale)</strong>
-          <span>Modello ${AI_MODEL_LABEL} sul tuo telefono, funziona senza internet. Riassume il primo passaggio trovato e può sbagliare o essere lenta (anche un minuto su dispositivi poco potenti): controlla sempre i passaggi. Built with Llama.</span>
+          <span>Modello ${BACKENDS[conf.backend || c.backend].label} sul tuo telefono (usa il ${BACKENDS[conf.backend || c.backend].engine}), funziona senza internet. Riassume il primo passaggio trovato e può sbagliare o essere lenta (anche un minuto su dispositivi poco potenti): controlla sempre i passaggi.${BACKENDS[conf.backend || c.backend].note}</span>
           <div class="as-ai-btns"><button class="as-link" onclick="AssistenteModule.aiDisable()">Disattiva</button>
           <button class="as-link" onclick="AssistenteModule.aiRemove()">Elimina il modello (libera spazio)</button></div></div>`;
       } else {
@@ -433,7 +502,7 @@ const AssistenteModule = (() => {
         html = `<i class="ph ph-cpu"></i><div><strong>Risposte scritte dall'AI (sperimentale, facoltativa)</strong>
           <span>${conf.installed
             ? 'Il modello è già sul telefono: puoi riattivarlo.'
-            : `Un'AI che gira sul tuo telefono scrive la risposta usando solo i passaggi delle guide. Va scaricata una volta (circa ${_gb(AI_MODEL_MB)}, servono ${_gb(AI_MIN_FREE_MB)} liberi; meglio con il Wi‑Fi) da server pubblici (jsDelivr, Hugging Face, GitHub); poi funziona senza internet. Le tue domande non escono dal telefono. Vedi la ${privacy}.`}</span>
+            : `Un'AI che gira sul tuo telefono scrive la risposta usando solo i passaggi delle guide. Su questo telefono userà il ${BACKENDS[c.backend].engine} (modello ${BACKENDS[c.backend].label}). Va scaricata una volta (circa ${_gb(BACKENDS[c.backend].mb)}, servono ${_gb(BACKENDS[c.backend].freeMB)} liberi; meglio con il Wi‑Fi) da server pubblici (jsDelivr, Hugging Face, GitHub); poi funziona senza internet. Le tue domande non escono dal telefono. Vedi la ${privacy}.`}</span>
           ${mobile && !conf.installed ? '<span class="as-ai-warn">Sembri connesso alla rete mobile: il download consuma molti dati.</span>' : ''}
           <div class="as-ai-btns"><button class="as-open" onclick="AssistenteModule.aiEnable()"><i class="ph ph-download-simple"></i> ${conf.installed ? 'Attiva' : 'Scarica e attiva'}</button></div></div>`;
       }
