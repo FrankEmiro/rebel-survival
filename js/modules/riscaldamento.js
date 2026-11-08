@@ -117,7 +117,7 @@ const RiscaldamentoModule = (() => {
           </div>
           <div class="mini-card">
             <div class="value" id="ri-res-tot">—</div>
-            <div class="label">Totale per X giorni</div>
+            <div class="label">Totale per <span id="ri-res-gg">30</span> giorni</div>
           </div>
         </div>
         <div id="ri-autonomia-box"></div>
@@ -126,7 +126,7 @@ const RiscaldamentoModule = (() => {
       <div class="card mt-16">
         <h3>📊 Confronto Combustibili</h3>
         <table class="data-table">
-          <thead><tr><th>Combustibile</th><th>Qty/giorno</th><th>Tot ${'<span id="ri-gg-label">30</span>'} gg</th><th>Costo est.</th></tr></thead>
+          <thead><tr><th>Combustibile</th><th>Al giorno</th><th>In <span id="ri-gg-label">30</span> gg</th><th>Costo stimato</th></tr></thead>
           <tbody id="ri-confronto"></tbody>
         </table>
       </div>
@@ -188,16 +188,17 @@ const RiscaldamentoModule = (() => {
     // Confronto combustibili
     const tbody = document.getElementById('ri-confronto');
     document.getElementById('ri-gg-label').textContent = giorni;
+    document.getElementById('ri-res-gg').textContent = giorni;
     tbody.innerHTML = Object.entries(COMBUSTIBILI).filter(([k]) => k !== 'candele').map(([k, c]) => {
       const qG = +(kwhGiorno / c.kwhKg).toFixed(2);
       const qT = +(qG * giorni).toFixed(1);
       const cT = +(qT * c.prezzoKg).toFixed(0);
       const isSelected = k === combustibile;
-      return `<tr ${isSelected ? 'style="background:rgba(249,115,22,0.08)"' : ''}>
-        <td>${c.nome} ${isSelected ? '✓' : ''}</td>
-        <td>${qG} ${c.unitLabel}</td>
-        <td class="text-accent font-bold">${qT} ${c.unitLabel}</td>
-        <td>~€${cT}</td>
+      return `<tr${isSelected ? ' class="row-selected"' : ''}>
+        <td>${c.nome}${isSelected ? ' <i class="ph ph-check-circle text-accent" aria-label="scelto"></i>' : ''}</td>
+        <td class="num">${qG} ${c.unitLabel}</td>
+        <td class="num text-accent font-bold">${qT} ${c.unitLabel}</td>
+        <td class="num">~€${cT}</td>
       </tr>`;
     }).join('');
 

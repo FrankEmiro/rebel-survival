@@ -3955,3 +3955,15 @@ input, select, textarea { font-family: 'Nunito', sans-serif; font-size: 1rem; }
 .as-free-warn li { margin: 4px 0; }
 .as-free-note { margin: 8px 0 0; font-size: 0.75rem; color: #e0b357; display: flex; gap: 6px; align-items: center; }
 .as-aians.as-free { border-color: #b8862b; }
+
+/* ── Fix v86: caselle «La tua situazione» e tabella confronto ── */
+.form-group label.sit-check { display: inline-flex; margin: 0; font-family: 'Nunito', sans-serif; font-size: 0.88rem; font-weight: 600;
+  text-transform: none; letter-spacing: normal; color: var(--text-primary); }
+.form-group .sit-check input[type="checkbox"] { -webkit-appearance: auto; appearance: auto; width: 18px; height: 18px; flex: none;
+  padding: 0; margin: 0; border: 0; background: none; box-shadow: none; accent-color: var(--accent); }
+.data-table td.num { white-space: nowrap; }
+.data-table tr.row-selected td { background: var(--accent-muted); }
+@media (max-width: 480px) {
+  .calc-more .data-table th, .calc-more .data-table td { padding: 8px 5px; }
+  .calc-more .data-table { font-size: 0.8rem; }
+}
