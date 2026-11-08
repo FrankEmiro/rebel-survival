@@ -151,7 +151,7 @@ function initOfflineDetection() {
 
 // Service Worker registration
 function registerSW() {
-  if ('serviceWorker' in navigator) {
+  if ('serviceWorker' in navigator && !window.RS_OFFLINE_COPY) {
     navigator.serviceWorker.register('/sw.js').then(AppUpdate.watch).catch(() => {});
   }
 }
@@ -276,6 +276,7 @@ function initDisclaimer() {
 
 // App init
 document.addEventListener('DOMContentLoaded', () => {
+  if (typeof CopiaOffline !== 'undefined') CopiaOffline.initCopy();
   bindNavClicks();
   document.getElementById('back-btn').addEventListener('click', goBack);
   addCalcBackButtons();

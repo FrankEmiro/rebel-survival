@@ -3936,3 +3936,9 @@ input, select, textarea { font-family: 'Nunito', sans-serif; font-size: 1rem; }
   .calc-out .three-col { grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
   .calc-out .mini-card .value { font-size: 1.25rem; }
 }
+
+/* ── Copia offline (file .html passato via Bluetooth) — v84 ── */
+.rs-copy-bar { display:flex; gap:8px; align-items:flex-start; padding:8px 12px; margin-bottom:12px; font-size:13px; line-height:1.35;
+  background:#3a3320; color:#f3e7c0; border:1px solid #6b5a2a; border-radius:8px; transition:background .3s; }
+.rs-copy-bar b { word-break:break-all; }
+.rs-copy-flash { background:#6b5a2a; }

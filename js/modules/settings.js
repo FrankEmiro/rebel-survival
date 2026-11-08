@@ -1268,6 +1268,11 @@ const SettingsModule = (() => {
           <button class="pf-action" onclick="AppUpdate.check()"><i class="ph ph-arrows-clockwise"></i> Cerca aggiornamenti</button>
         </div>
         <p id="app-upd-msg" class="pf-note" aria-live="polite"></p>
+        <div class="pf-actions">
+          <button class="pf-action" onclick="CopiaOffline.share()"><i class="ph ph-bluetooth"></i> Passa l'app a un altro telefono</button>
+        </div>
+        <p class="pf-note"><i class="ph ph-wifi-slash"></i> Funziona anche senza internet: crea un file da inviare con Bluetooth o Quick Share. Chi lo riceve lo apre con il browser. Non contiene guide PDF, mappa e AI, e non contiene i tuoi dati.</p>
+        <p id="app-share-msg" class="pf-note" aria-live="polite"></p>
         <div id="app-lab-box" class="pf-lab hidden">
           <label class="pf-lab-row"><input type="checkbox" id="app-lab" onchange="AppUpdate.setLab(this.checked)">
             <span><i class="ph ph-flask"></i> Funzioni sperimentali (AI nella sezione «Chiedi»)</span></label>
