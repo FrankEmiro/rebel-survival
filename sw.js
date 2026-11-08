@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kit-resilienza-v71';
+const CACHE_NAME = 'kit-resilienza-v72';
 const CDN_CACHE  = 'kit-resilienza-cdn-v51';
 
 // Asset locali — cache-first
@@ -70,7 +70,14 @@ const CDN_HOSTS = ['tile.openstreetmap.org'];
 // confini comunali/province, tile mappa area locale) — NON vanno cancellate ad ogni
 // aggiornamento del service worker, altrimenti l'utente perderebbe silenziosamente
 // i download offline al prossimo deploy dell'app.
-const PACK_CACHES = ['kit-resilienza-guides', 'kit-resilienza-map', 'kit-resilienza-tiles'];
+const PACK_CACHES = ['kit-resilienza-guides', 'kit-resilienza-map', 'kit-resilienza-tiles', 'kit-resilienza-ai-lib'];
+
+// AI locale (facoltativa): la libreria WebLLM (versione fissa su jsDelivr) va in
+// cache-first per funzionare offline; il modello lo salva WebLLM nelle sue cache
+// "webllm/..." che NON vanno cancellate (sono ~1 GB scaricato dall'utente).
+const AI_LIB_HOSTS = ['cdn.jsdelivr.net'];
+const AI_BYPASS_HOSTS = ['huggingface.co', 'hf.co', 'raw.githubusercontent.com'];
+const AI_LIB_CACHE = 'kit-resilienza-ai-lib';
 
 self.addEventListener('install', e => {
   e.waitUntil(
@@ -87,7 +94,7 @@ self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys().then(keys =>
       Promise.all(
-        keys.filter(k => k !== CACHE_NAME && k !== CDN_CACHE && !PACK_CACHES.includes(k))
+        keys.filter(k => k !== CACHE_NAME && k !== CDN_CACHE && !PACK_CACHES.includes(k) && !k.startsWith('webllm'))
             .map(k => caches.delete(k))
       )
     )
@@ -98,6 +105,19 @@ self.addEventListener('activate', e => {
 self.addEventListener('fetch', e => {
   const url = new URL(e.request.url);
   const isCDN = CDN_HOSTS.some(h => url.hostname.includes(h));
+
+  // download del modello AI: lo gestisce WebLLM, il service worker non interviene
+  if (AI_BYPASS_HOSTS.some(h => url.hostname === h || url.hostname.endsWith('.' + h))) return;
+
+  if (AI_LIB_HOSTS.includes(url.hostname)) {
+    e.respondWith(
+      caches.match(e.request).then(cached => cached || fetch(e.request).then(res => {
+        if (res.ok) { const clone = res.clone(); caches.open(AI_LIB_CACHE).then(c => c.put(e.request, clone)); }
+        return res;
+      }))
+    );
+    return;
+  }
 
   if (isCDN) {
     // Network-first per CDN, fallback a cache

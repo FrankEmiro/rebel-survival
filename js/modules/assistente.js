@@ -3,7 +3,8 @@
    Fase 1: ricerca locale (100% offline, ogni telefono).
    Risponde SOLO con testi presenti nell'app (guide e piani degli
    scenari), sempre con la fonte e l'eventuale avviso di cautela.
-   Fase 2 (in valutazione): modello AI locale, solo su dispositivi capaci.
+   Fase 2: risposta scritta da un modello AI che gira SUL telefono (WebLLM),
+   facoltativa, solo su dispositivi capaci, basata solo sui passaggi trovati.
    ============================================================ */
 const AssistenteModule = (() => {
 
@@ -150,10 +151,10 @@ const AssistenteModule = (() => {
       </div>`;
       return;
     }
-    el.innerHTML = history.map(h => `
+    el.innerHTML = history.map((h, i) => `
       <div class="as-q"><span>${esc(h.q)}</span></div>
       <div class="as-a">${h.results.length
-        ? `<p class="as-lead">Ho trovato ${h.results.length === 1 ? 'questo passaggio' : 'questi passaggi'} nelle guide:</p>${h.results.map(_card).join('')}`
+        ? `${h.ai ? `<div class="as-aians" id="as-aians-${i}">${_aiHtml(h.ai)}</div>` : ''}<p class="as-lead">${h.ai ? 'Passaggi delle guide usati per la risposta:' : `Ho trovato ${h.results.length === 1 ? 'questo passaggio' : 'questi passaggi'} nelle guide:`}</p>${h.results.map(_card).join('')}`
         : `<p class="as-lead">Non ho trovato nulla nelle guide su questo. Prova con altre parole, oppure sfoglia le <button class="as-link" onclick="navigateTo('guide')">Guide</button>.</p>`}
       </div>`).join('');
     el.lastElementChild?.scrollIntoView({ block: 'start', behavior: 'smooth' });
@@ -162,11 +163,14 @@ const AssistenteModule = (() => {
   function ask(q) {
     q = String(q || '').trim();
     if (!q) return;
-    history.push({ q, results: search(q, 3) });
+    const h = { q, results: search(q, 3) };
+    if (AI.enabled() && h.results.length) h.ai = { status: 'wait', text: '' };
+    history.push(h);
     if (history.length > 20) history.shift();
     const inp = document.getElementById('as-input');
     if (inp) inp.value = '';
     _renderThread();
+    if (h.ai) AI.answer(h);
   }
 
   function submit(ev) {
@@ -185,19 +189,230 @@ const AssistenteModule = (() => {
     navigateTo('strumenti');
   }
 
-  /* ── FASE 2: compatibilità per l'AI locale (solo verifica, nessun download) ── */
-  async function _capability() {
-    const out = { webgpu: false, memGB: navigator.deviceMemory || null };
-    try { out.webgpu = !!(navigator.gpu && await navigator.gpu.requestAdapter()); } catch (e) {}
-    out.ok = out.webgpu && (out.memGB == null || out.memGB >= 4);
-    return out;
+  /* ── FASE 2: AI LOCALE (facoltativa) ──
+     Libreria WebLLM e modello si scaricano UNA volta da server pubblici
+     (jsDelivr, Hugging Face, GitHub) e poi restano nel telefono: funziona
+     senza internet. Le domande non escono mai dal dispositivo.
+     L'AI riassume SOLO i passaggi trovati dalla ricerca; se scrive numeri
+     che non sono nei passaggi, la risposta viene nascosta. */
+  const AI_LIB = 'https://cdn.jsdelivr.net/npm/@mlc-ai/web-llm@0.2.87/+esm';
+  const AI_MODELS = { f16: 'Llama-3.2-1B-Instruct-q4f16_1-MLC', f32: 'Llama-3.2-1B-Instruct-q4f32_1-MLC' };
+  const AI_MODEL_LABEL = 'Llama 3.2 1B';
+  const AI_KEY = 'assistente_ai';
+  const AI_MIN_FREE_MB = 1500;   // spazio libero minimo prima di scaricare
+  // prompt corto e un solo passaggio: i modelli piccoli seguono meglio istruzioni brevi
+  // e su GPU deboli ogni parola in più nel contesto costa secondi.
+  const AI_SYSTEM = 'Rispondi in italiano con un breve elenco a trattini, riassumendo il PASSAGGIO per rispondere alla DOMANDA. '
+    + 'Usa solo il passaggio. Copia i numeri esattamente. Non aggiungere altro.';
+  const AI_CTX_CHARS = 600;
+
+  // numeri nella risposta che non compaiono nei passaggi (né nella domanda)
+  function _numbers(s) {
+    return (String(s).match(/\d+(?:[.,]\d+)?/g) || []).map(n => n.replace(',', '.'));
   }
-  async function _renderCapability() {
-    const el = document.getElementById('as-ai');
-    if (!el) return;
-    const c = await _capability();
-    el.innerHTML = `<i class="ph ph-cpu"></i><div><strong>Risposte scritte dall'AI (in arrivo)</strong>
-      <span>${c.ok ? 'Questo dispositivo sembra adatto: quando sarà pronta potrai attivarla.' : 'Su questo dispositivo resterà attiva la ricerca nelle guide, che funziona ovunque.'}</span></div>`;
+  function _unknownNumbers(answer, source, partial) {
+    let t = String(answer).replace(/^\s*\d+[.)]\s/gm, ' ').replace(/\[\d+\]/g, ' ');
+    if (partial) t = t.replace(/\d+(?:[.,]\d*)?$/, '');   // numero ancora in scrittura
+    const ok = new Set([..._numbers(source), '112']);
+    return [...new Set(_numbers(t).filter(n => !ok.has(n)))];
+  }
+
+  const AI = (() => {
+    let lib = null, engine = null, loading = null, cap = null, queue = Promise.resolve();
+    let state = { phase: 'idle', pct: 0 };
+    let lastProgress = 0, watchdog = null;
+    const STALL_MS = 15 * 60 * 1000;  // nessun progresso per 15 minuti = download forse fermo (il pezzo più grande è ~130 MB)
+    const cfg = () => (typeof Storage !== 'undefined' && Storage.get(AI_KEY, {})) || {};
+    const save = c => Storage.set(AI_KEY, c);
+    const enabled = () => !!cfg().enabled && !!cfg().installed && (!cap || cap.ok);
+
+    async function capability() {
+      if (cap) return cap;
+      const c = { webgpu: false, f16: false, memGB: navigator.deviceMemory || null };
+      try {
+        const a = navigator.gpu && await navigator.gpu.requestAdapter();
+        if (a) { c.webgpu = true; c.f16 = a.features.has('shader-f16'); }
+      } catch (e) { /* nessuna GPU utilizzabile */ }
+      c.ok = c.webgpu && (c.memGB == null || c.memGB >= 4);
+      c.model = c.f16 ? AI_MODELS.f16 : AI_MODELS.f32;
+      return (cap = c);
+    }
+
+    function setState(s) {
+      state = { ...state, ...s };
+      renderBox();
+      history.forEach(h => { if (h.ai && h.ai.status === 'wait') _upd(h); });
+    }
+
+    async function load() {
+      if (engine) return engine;
+      if (loading) return loading;
+      loading = (async () => {
+        const c = await capability();
+        if (!c.ok) throw new Error('dispositivo non adatto');
+        setState({ phase: 'loading', pct: 0, stalled: false });
+        lastProgress = Date.now();
+        clearInterval(watchdog);
+        watchdog = setInterval(() => {
+          if (state.phase === 'loading' && !state.stalled && Date.now() - lastProgress > STALL_MS) setState({ stalled: true });
+        }, 15000);
+        lib = lib || await import(AI_LIB);
+        try {
+          engine = await lib.CreateMLCEngine(c.model, {
+            initProgressCallback: p => { lastProgress = Date.now(); setState({ phase: 'loading', pct: Math.round((p.progress || 0) * 100), stalled: false }); },
+          });
+        } finally { clearInterval(watchdog); }
+        save({ ...cfg(), installed: true, model: c.model });
+        setState({ phase: 'ready' });
+        return engine;
+      })();
+      try { return await loading; }
+      catch (e) { engine = null; setState({ phase: 'error', msg: _errMsg(e) }); throw e; }
+      finally { loading = null; }
+    }
+
+    function _errMsg(e) {
+      const m = String((e && e.message) || e || '');
+      if (!navigator.onLine && !cfg().installed) return 'serve internet per il primo download';
+      if (/quota|space|storage/i.test(m)) return 'spazio insufficiente sul dispositivo';
+      return 'errore nel caricamento del modello';
+    }
+
+    async function enable() {
+      const c = await capability();
+      if (!c.ok) return renderBox();
+      if (!cfg().installed && navigator.storage?.estimate) {
+        try {
+          const est = await navigator.storage.estimate();
+          if (est.quota && (est.quota - (est.usage || 0)) / 1048576 < AI_MIN_FREE_MB) {
+            return setState({ phase: 'error', msg: 'spazio insufficiente sul dispositivo' });
+          }
+        } catch (e) { /* stima non disponibile: si prova comunque */ }
+      }
+      try { await navigator.storage?.persist?.(); } catch (e) { /* facoltativo */ }
+      save({ ...cfg(), enabled: true });
+      try { await load(); } catch (e) { /* stato già mostrato */ }
+    }
+
+    // riprende un download fermo: ricarica l'app e riparte (i pezzi già scaricati restano)
+    function resume() {
+      save({ ...cfg(), resume: true });
+      location.reload();
+    }
+
+    function disable() {
+      save({ ...cfg(), enabled: false });
+      state = { phase: 'idle', pct: 0 };
+      renderBox();
+    }
+
+    async function remove() {
+      const model = cfg().model || (await capability()).model;
+      try {
+        if (engine) { await engine.unload(); engine = null; }
+        lib = lib || await import(AI_LIB);
+        await lib.deleteModelAllInfoInCache(model);
+      } catch (e) { /* se fallisce, il modello resta: lo si può eliminare dalle impostazioni del browser */ }
+      save({});
+      state = { phase: 'idle', pct: 0 };
+      renderBox();
+    }
+
+    function _upd(h) {
+      const el = document.getElementById('as-aians-' + history.indexOf(h));
+      if (el) el.innerHTML = _aiHtml(h.ai);
+    }
+
+    function answer(h) { queue = queue.then(() => _answer(h)).catch(() => {}); }
+
+    async function _answer(h) {
+      try {
+        const eng = await load();
+        const c0 = h.results[0];
+        let ctx = `${c0.title} — ${c0.heading || ''}\n`, n = 0;
+        for (const x of (c0.items || [c0.body || ''])) {     // righe intere, mai tagliate a metà
+          if (n && n + x.length > AI_CTX_CHARS) break;
+          ctx += '- ' + x + '\n'; n += x.length;
+        }
+        const src = ctx + ' ' + h.q;
+        h.ai.status = 'run'; _upd(h);
+        const stream = await eng.chat.completions.create({
+          stream: true, temperature: 0.1, max_tokens: 320,
+          messages: [{ role: 'system', content: AI_SYSTEM }, { role: 'user', content: `PASSAGGIO:\n${ctx}\nDOMANDA: ${h.q}` }],
+        });
+        for await (const ch of stream) {
+          h.ai.text += ch.choices?.[0]?.delta?.content || '';
+          const extra = _unknownNumbers(h.ai.text, src, true);
+          if (extra.length) { h.ai.status = 'blocked'; h.ai.extra = extra; try { eng.interruptGenerate(); } catch (e) {} break; }
+          _upd(h);
+        }
+        if (h.ai.status === 'run') {
+          const extra = _unknownNumbers(h.ai.text, src, false);
+          if (extra.length) { h.ai.status = 'blocked'; h.ai.extra = extra; }
+          else if (!h.ai.text.trim()) { h.ai.status = 'error'; h.ai.msg = 'nessuna risposta'; }
+          else h.ai.status = 'done';
+        }
+      } catch (e) {
+        h.ai.status = 'error'; h.ai.msg = _errMsg(e);
+      }
+      _upd(h);
+    }
+
+    async function renderBox() {
+      const el = document.getElementById('as-ai');
+      if (!el) return;
+      const c = await capability();
+      const conf = cfg();
+      const privacy = `<a href="legal/privacy.html" target="_blank" rel="noopener">privacy</a>`;
+      let html;
+      if (!c.ok) {
+        html = `<i class="ph ph-cpu"></i><div><strong>Risposte scritte dall'AI</strong>
+          <span>Non disponibili su questo dispositivo (servono un browser con WebGPU e almeno 4 GB di memoria). La ricerca nelle guide funziona lo stesso.</span></div>`;
+      } else if (state.phase === 'loading') {
+        html = `<i class="ph ph-download-simple"></i><div><strong>${conf.installed ? 'Carico l\'AI…' : 'Scarico l\'AI (una volta sola)…'} ${state.pct}%</strong>
+          <div class="as-prog"><span style="width:${state.pct}%"></span></div>
+          ${state.stalled ? `<span class="as-ai-warn">Il download è fermo o molto lento. Puoi riprenderlo: le parti già completate non si perdono.</span>
+          <div class="as-ai-btns"><button class="as-open" onclick="AssistenteModule.aiResume()">Riprendi il download</button></div>` : ''}
+          <span>${conf.installed ? 'Pochi secondi.' : 'Con una connessione lenta può richiedere molti minuti.'} Non chiudere l'app: intanto la ricerca nelle guide funziona.</span></div>`;
+      } else if (state.phase === 'error' && conf.enabled !== false) {
+        html = `<i class="ph ph-warning"></i><div><strong>AI non disponibile: ${esc(state.msg || '')}</strong>
+          <span>La ricerca nelle guide funziona lo stesso.</span>
+          <div class="as-ai-btns"><button class="as-open" onclick="AssistenteModule.aiEnable()">Riprova</button>
+          <button class="as-link" onclick="AssistenteModule.aiDisable()">Disattiva</button></div></div>`;
+      } else if (conf.enabled && !conf.installed) {
+        html = `<i class="ph ph-download-simple"></i><div><strong>Download dell'AI non completato</strong>
+          <span>Le parti già scaricate restano sul telefono.</span>
+          <div class="as-ai-btns"><button class="as-open" onclick="AssistenteModule.aiEnable()">Riprendi il download</button>
+          <button class="as-link" onclick="AssistenteModule.aiRemove()">Annulla e libera spazio</button></div></div>`;
+      } else if (conf.enabled) {
+        html = `<i class="ph ph-cpu"></i><div><strong>Risposte AI attive (sperimentale)</strong>
+          <span>Modello ${AI_MODEL_LABEL} sul tuo telefono, funziona senza internet. Riassume il primo passaggio trovato e può sbagliare o essere lenta (anche un minuto su dispositivi poco potenti): controlla sempre i passaggi. Built with Llama.</span>
+          <div class="as-ai-btns"><button class="as-link" onclick="AssistenteModule.aiDisable()">Disattiva</button>
+          <button class="as-link" onclick="AssistenteModule.aiRemove()">Elimina il modello (libera spazio)</button></div></div>`;
+      } else {
+        const mobile = navigator.connection && (navigator.connection.type === 'cellular' || navigator.connection.saveData);
+        html = `<i class="ph ph-cpu"></i><div><strong>Risposte scritte dall'AI (sperimentale, facoltativa)</strong>
+          <span>${conf.installed
+            ? 'Il modello è già sul telefono: puoi riattivarlo.'
+            : `Un'AI che gira sul tuo telefono scrive la risposta usando solo i passaggi delle guide. Va scaricata una volta (circa 1 GB, meglio con il Wi‑Fi) da server pubblici (jsDelivr, Hugging Face, GitHub); poi funziona senza internet. Le tue domande non escono dal telefono. Vedi la ${privacy}.`}</span>
+          ${mobile && !conf.installed ? '<span class="as-ai-warn">Sembri connesso alla rete mobile: il download consuma molti dati.</span>' : ''}
+          <div class="as-ai-btns"><button class="as-open" onclick="AssistenteModule.aiEnable()"><i class="ph ph-download-simple"></i> ${conf.installed ? 'Attiva' : 'Scarica e attiva'}</button></div></div>`;
+      }
+      el.innerHTML = html;
+    }
+
+    const resumePending = () => { const c = cfg(); if (!c.resume) return false; save({ ...c, resume: false }); return true; };
+    return { resumePending, enabled, enable, disable, remove, resume, answer, renderBox, capability };
+  })();
+
+  function _aiHtml(ai) {
+    const head = `<div class="as-aihead"><i class="ph ph-cpu"></i> Risposta dell'AI</div>`;
+    if (ai.status === 'wait') return head + `<p class="as-aimuted">Preparo l'AI…</p>`;
+    if (ai.status === 'error') return head + `<p class="as-aimuted">AI non disponibile (${esc(ai.msg || '')}). Leggi i passaggi qui sotto.</p>`;
+    if (ai.status === 'blocked') return head + `<p class="as-aimuted">Ho nascosto la risposta dell'AI perché conteneva numeri che non trovo nelle guide (${esc(ai.extra.join(', '))}). Leggi i passaggi qui sotto.</p>`;
+    const txt = esc(ai.text.trim()).replace(/\n/g, '<br>') || '…';
+    return head + `<p class="as-aitext">${txt}${ai.status === 'run' ? ' <span class="as-cursor">▍</span>' : ''}</p>
+      <p class="as-ainote">Scritta da un'AI sul tuo telefono riassumendo il primo passaggio qui sotto. Può sbagliare: controlla sempre i passaggi.</p>`;
   }
 
   function init() {
@@ -218,8 +433,9 @@ const AssistenteModule = (() => {
       root.dataset.ready = '1';
     }
     _renderThread();
-    _renderCapability();
+    AI.renderBox();
+    if (AI.resumePending()) AI.enable();
   }
 
-  return { init, ask, submit, clear, search, openScenario };
+  return { init, ask, submit, clear, search, openScenario, aiEnable: () => AI.enable(), aiDisable: () => AI.disable(), aiRemove: () => AI.remove(), aiResume: () => AI.resume() };
 })();

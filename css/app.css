@@ -3783,3 +3783,17 @@ input, select, textarea { font-family: 'Nunito', sans-serif; font-size: 1rem; }
 .as-ai i { font-size: 1.2rem; color: var(--accent); }
 .as-ai div { display: flex; flex-direction: column; gap: 2px; }
 .as-ai strong { color: var(--text-primary); }
+
+/* Assistente: risposta AI locale */
+.as-aians { background: var(--bg-card, rgba(255,255,255,0.03)); border: 1px solid var(--accent); border-radius: var(--radius-md, 10px); padding: 10px 12px; margin-bottom: 10px; }
+.as-aihead { font-size: 0.78rem; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 6px; display: flex; gap: 6px; align-items: center; }
+.as-aitext { color: var(--text-primary); line-height: 1.5; margin: 0; }
+.as-aimuted { color: var(--text-secondary); font-size: 0.85rem; margin: 0; }
+.as-ainote { color: var(--text-secondary); font-size: 0.72rem; margin: 8px 0 0; }
+.as-cursor { animation: as-blink 1s steps(1) infinite; color: var(--accent); }
+@keyframes as-blink { 50% { opacity: 0; } }
+.as-prog { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; margin: 4px 0; }
+.as-prog span { display: block; height: 100%; background: var(--accent); transition: width .3s; }
+.as-ai-btns { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 6px; }
+.as-ai-warn { color: var(--warning); font-size: 0.78rem; }
+.as-ai a { color: var(--accent); }
