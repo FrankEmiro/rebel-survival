@@ -200,6 +200,13 @@ const AssistenteModule = (() => {
   const AI_MODEL_LABEL = 'Llama 3.2 1B';
   const AI_KEY = 'assistente_ai';
   const AI_MIN_FREE_MB = 1500;   // spazio libero minimo prima di scaricare
+  // AI sperimentale: visibile SOLO a chi apre l'app con ?lab=1 (?lab=0 la nasconde di nuovo)
+  const LAB_KEY = 'lab';
+  (() => {
+    const m = /[?&]lab=([01])/.exec(location.search);
+    if (m && typeof Storage !== 'undefined') Storage.set(LAB_KEY, m[1] === '1');
+  })();
+  const labOn = () => typeof Storage !== 'undefined' && Storage.get(LAB_KEY, false) === true;
   // prompt corto e un solo passaggio: i modelli piccoli seguono meglio istruzioni brevi
   // e su GPU deboli ogni parola in più nel contesto costa secondi.
   const AI_SYSTEM = 'Rispondi in italiano con un breve elenco a trattini, riassumendo il PASSAGGIO per rispondere alla DOMANDA. '
@@ -224,7 +231,7 @@ const AssistenteModule = (() => {
     const STALL_MS = 15 * 60 * 1000;  // nessun progresso per 15 minuti = download forse fermo (il pezzo più grande è ~130 MB)
     const cfg = () => (typeof Storage !== 'undefined' && Storage.get(AI_KEY, {})) || {};
     const save = c => Storage.set(AI_KEY, c);
-    const enabled = () => !!cfg().enabled && !!cfg().installed && (!cap || cap.ok);
+    const enabled = () => labOn() && !!cfg().enabled && !!cfg().installed && (!cap || cap.ok);
 
     async function capability() {
       if (cap) return cap;
@@ -361,6 +368,7 @@ const AssistenteModule = (() => {
     async function renderBox() {
       const el = document.getElementById('as-ai');
       if (!el) return;
+      if (!labOn()) { el.innerHTML = ''; return; }
       const c = await capability();
       const conf = cfg();
       const privacy = `<a href="legal/privacy.html" target="_blank" rel="noopener">privacy</a>`;
