@@ -1261,6 +1261,19 @@ const SettingsModule = (() => {
           <button class="pf-action pf-action-danger" onclick="SettingsModule.reset()"><i class="ph ph-arrow-counter-clockwise"></i> Cancella tutti i dati</button>
         </div>
       </div>
+      <div class="pf-group">
+        <h2 class="pf-group-title">App</h2>
+        <p class="pf-note" onclick="AppUpdate.tapVersion()"><i class="ph ph-info"></i> Versione <span id="app-ver">—</span></p>
+        <div class="pf-actions">
+          <button class="pf-action" onclick="AppUpdate.check()"><i class="ph ph-arrows-clockwise"></i> Cerca aggiornamenti</button>
+        </div>
+        <p id="app-upd-msg" class="pf-note" aria-live="polite"></p>
+        <div id="app-lab-box" class="pf-lab hidden">
+          <label class="pf-lab-row"><input type="checkbox" id="app-lab" onchange="AppUpdate.setLab(this.checked)">
+            <span><i class="ph ph-flask"></i> Funzioni sperimentali (AI nella sezione «Chiedi»)</span></label>
+          <p class="pf-note">Solo per prove: possono essere lente o sbagliare.</p>
+        </div>
+      </div>
       <p id="s-save-msg" class="text-center text-secondary text-sm mt-12 hidden">
         <i class="ph ph-check-circle"></i> Profilo aggiornato — Home aggiornata
       </p>
@@ -1278,6 +1291,7 @@ const SettingsModule = (() => {
     renderClimateVis();
     _updateTabResults();
     _renderScenarioTab();
+    if (typeof AppUpdate !== 'undefined') AppUpdate.render();
   }
 
   return { init, save, reset, exportData, importData, setField, get, getTotalPeople, _onTipoChange, _onTempChange, _autoSave, _tab, selectScenario, _toggleScCheck, _resetScCheck, toggleCustomThreat };

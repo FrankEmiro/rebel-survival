@@ -150,9 +150,84 @@ function initOfflineDetection() {
 // Service Worker registration
 function registerSW() {
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js').catch(() => {});
+    navigator.serviceWorker.register('/sw.js').then(AppUpdate.watch).catch(() => {});
   }
 }
+
+/* Aggiornamenti dall'app: «Cerca aggiornamenti» nel Profilo, avviso quando
+   una nuova versione si installa da sola, interruttore funzioni sperimentali
+   (nascosto: si mostra toccando 5 volte il numero di versione). I dati
+   dell'utente (localStorage, pacchetti offline, modello AI) non vengono toccati. */
+const AppUpdate = (() => {
+  let reloading = false, taps = 0;
+  const reloadOnce = () => { if (!reloading) { reloading = true; location.reload(); } };
+  const say = t => { const el = document.getElementById('app-upd-msg'); if (el) el.textContent = t; };
+
+  async function version() {
+    try {
+      const v = (await caches.keys()).map(k => /^kit-resilienza-v(\d+)$/.exec(k)).filter(Boolean).map(m => +m[1]).sort((a, b) => b - a)[0];
+      return v ? 'v' + v : '—';
+    } catch (e) { return '—'; }
+  }
+
+  // nuova versione installata in background mentre l'app è aperta
+  function watch(reg) {
+    if (!reg || !navigator.serviceWorker.controller) return;
+    reg.addEventListener('updatefound', () => {
+      const nw = reg.installing;
+      if (!nw) return;
+      nw.addEventListener('statechange', () => { if (nw.state === 'activated' && !reloading) _toast(); });
+    });
+  }
+  function _toast() {
+    if (document.getElementById('upd-toast')) return;
+    const d = document.createElement('div');
+    d.id = 'upd-toast'; d.className = 'upd-toast';
+    d.innerHTML = '<span>Nuova versione dell\'app pronta.</span><button onclick="location.reload()">Ricarica</button>';
+    document.body.appendChild(d);
+  }
+
+  async function check() {
+    if (!('serviceWorker' in navigator)) return say('Aggiornamento non disponibile su questo browser.');
+    if (!navigator.onLine) return say('Serve internet per cercare aggiornamenti.');
+    say('Cerco aggiornamenti…');
+    try {
+      const reg = await navigator.serviceWorker.getRegistration();
+      if (!reg) { await navigator.serviceWorker.register('/sw.js'); return say('Fatto. Chiudi e riapri l\'app.'); }
+      await reg.update();
+      const nw = reg.installing || reg.waiting;
+      if (!nw) return say('Hai già l\'ultima versione.');
+      say('Scarico la nuova versione…');
+      navigator.serviceWorker.addEventListener('controllerchange', reloadOnce);
+      nw.addEventListener('statechange', () => {
+        if (nw.state === 'activated') reloadOnce();
+        if (nw.state === 'redundant') say('Aggiornamento non riuscito. Riprova.');
+      });
+      if (nw.state === 'activated') reloadOnce();
+    } catch (e) { say('Non riesco a controllare ora. Riprova più tardi.'); }
+  }
+
+  const labOn = () => Storage.get('lab', false) === true;
+  function setLab(on) {
+    Storage.set('lab', !!on);
+    say(on ? 'Funzioni sperimentali attive: le trovi in «Chiedi».' : 'Funzioni sperimentali disattivate.');
+  }
+  function tapVersion() {
+    if (++taps < 5) return;
+    taps = 0;
+    const box = document.getElementById('app-lab-box');
+    if (box) box.classList.remove('hidden');
+  }
+  async function render() {
+    const v = document.getElementById('app-ver');
+    if (v) v.textContent = await version();
+    const box = document.getElementById('app-lab-box'), cb = document.getElementById('app-lab');
+    if (cb) cb.checked = labOn();
+    if (box && labOn()) box.classList.remove('hidden');
+  }
+
+  return { check, watch, setLab, tapVersion, render };
+})();
 
 // Disclaimer
 function showDisclaimer() {
