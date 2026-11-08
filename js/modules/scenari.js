@@ -687,8 +687,8 @@ const ScenariModule = (() => {
       steps: [
         { fase: 'PRIMI SECONDI (lampo / allarme)', azioni: [
           'NON guardare il lampo. Giraiti e distogli lo sguardo',
-          'Se sei all\'aperto: sdraiati subito dietro un riparo, copri testa e collo con le braccia. L\'onda d\'urto arriva dopo secondi o minuti',
-          'Resta giù finché l\'onda d\'urto non è passata (almeno 1-2 minuti)',
+          'Se sei all\'aperto: sdraiati a faccia in giù dietro un riparo, copri testa e collo con le braccia. L\'onda d\'urto arriva dopo il lampo',
+          'Resta giù finché l\'onda d\'urto non è passata, poi entra subito nell\'edificio più vicino',
         ]},
         { fase: 'ENTRA E RESTA AL CHIUSO (primi 10-30 minuti)', azioni: [
           'Entra nell\'edificio più vicino, meglio un seminterrato o una stanza interna lontana da finestre e tetto',

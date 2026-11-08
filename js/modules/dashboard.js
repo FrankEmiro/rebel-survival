@@ -104,7 +104,7 @@ const DashboardModule = (() => {
     { id:'ca04', axis:'calore',   scoreBonus: 8, nav:'guide',    tab:null,       threats:['freddo'],              guide:'isolamento-stanza',           resolve: null,                                                    text:'Isola una stanza principale (tende termiche, nastro)' },
     // COMM
     { id:'co01', axis:'comm',     scoreBonus:30, nav:'settings', tab:'comm',     threats:['comm'],                guide:'comm-radio-canali',           resolve: p=>!!p.has_radio,           field:'has_radio',            text:'Radio FM/AM portatile a manovella' },
-    { id:'co02', axis:'comm',     scoreBonus:20, nav:'settings', tab:'comm',     threats:['comm'],                guide:'comm-pmr446',                 resolve: p=>!!p.has_walkie,          field:'has_walkie',           text:'Coppia walkie-talkie PMR446 (canale 8 emergenza)' },
+    { id:'co02', axis:'comm',     scoreBonus:20, nav:'settings', tab:'comm',     threats:['comm'],                guide:'comm-pmr446',                 resolve: p=>!!p.has_walkie,          field:'has_walkie',           text:'Coppia walkie-talkie PMR446 (canale e codice concordati in famiglia)' },
     { id:'co03', axis:'comm',     scoreBonus:12, nav:'settings', tab:'comm',     threats:['comm','medico'],       guide:'comm-piano-famiglia',         resolve: p=>!!p.comm_contatti_stampati, field:'comm_contatti_stampati', text:'Lista contatti emergenza stampata + piano ritrovo fisso' },
     { id:'co04', axis:'comm',     scoreBonus: 8, nav:'settings', tab:'comm',     threats:['comm'],                guide:'energia-blackout-protocollo', resolve: null,                                                    text:'Tutti i power bank caricati e mantenuti > 80%' },
     // MOBILITÀ
@@ -188,9 +188,9 @@ const DashboardModule = (() => {
     { id:'cib03', axis:'cibo',    scoreBonus:12, nav:'guide', tab:null, threats:['cibo'],                 guide:'cibo-conservazione',          resolve: null, text:'Impara fermentazione: crauti in 7 giorni, kimchi in 14 — conserva verdure senza energia' },
     { id:'cib04', axis:'cibo',    scoreBonus: 8, nav:'guide', tab:null, threats:['cibo'],                 guide:'cibo-conservazione',          resolve: null, text:'Zero sprechi: bucce e fondi per brodo, pane secco in pan di pane, avanzi proteici in frittata' },
     // ── BLACKOUT RETE MOBILE ──────────────────────────────────────────────────
-    { id:'bmo01', axis:'comm',    scoreBonus:20, nav:'guide', tab:null, threats:['comm'],                 guide:'comm-radio-canali',           resolve: null, text:'Radio FM/AM: RAI Radio 1 emergenze nazionali — 97.7 MHz o 1332 kHz in AM' },
+    { id:'bmo01', axis:'comm',    scoreBonus:20, nav:'guide', tab:null, threats:['comm'],                 guide:'comm-radio-canali',           resolve: null, text:'Radio FM: annota le frequenze di RAI Radio 1 della tua zona (le onde medie RAI sono spente dal 2022)' },
     { id:'bmo02', axis:'comm',    scoreBonus:15, nav:'guide', tab:null, threats:['comm'],                 guide:'comm-piano-famiglia',         resolve: null, text:'Recati al punto di ritrovo fisico prestabilito — lascia nota cartacea sulla porta di casa' },
-    { id:'bmo03', axis:'comm',    scoreBonus:12, nav:'guide', tab:null, threats:['comm'],                 guide:'comm-pmr446',                 resolve: null, text:'Walkie-talkie PMR446 canale 8: check ogni 4h con familiari nel raggio di 2–5km' },
+    { id:'bmo03', axis:'comm',    scoreBonus:12, nav:'guide', tab:null, threats:['comm'],                 guide:'comm-pmr446',                 resolve: null, text:'Walkie-talkie PMR446 sul canale concordato: check ogni 4h con familiari nel raggio di 2–5km' },
 
     // ── CYBERATTACCO (fonte: Ready.gov / FEMA) ────────────────────────────────
     { id:'cy01', axis:'comm',    scoreBonus:15, nav:'guide', tab:null, threats:['comm'],                 guide:'cyberattacco',                resolve: null, text:'Aggiorna sistema e app di telefono e computer; attiva la verifica in due passaggi' },

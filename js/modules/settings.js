@@ -851,8 +851,8 @@ const SettingsModule = (() => {
           <span><i class="ph ph-graph"></i> Rete mesh locale (Meshtastic / LoRa)</span></label>
       </div>
       <div class="comm-channel-info mt-16">
-        <div class="comm-row"><i class="ph ph-radio"></i><div><strong>Radio FM/AM</strong> — ricezione notizie emergenza (Protezione Civile su 97.7 MHz). Solo ricezione, nessuna trasmissione.</div></div>
-        <div class="comm-row"><i class="ph ph-broadcast"></i><div><strong>PMR446</strong> — comunicazione locale 0.5–3 km, canale 8 riservato emergenza, batterie AA/AAA.</div></div>
+        <div class="comm-row"><i class="ph ph-radio"></i><div><strong>Radio FM</strong> — ricezione notizie in emergenza (RAI Radio 1 e radio locali: annota le frequenze della tua zona). Solo ricezione, nessuna trasmissione.</div></div>
+        <div class="comm-row"><i class="ph ph-broadcast"></i><div><strong>PMR446</strong> — comunicazione locale 0.5–3 km, canale e codice concordati in famiglia, batterie AA/AAA.</div></div>
         <div class="comm-row"><i class="ph ph-phone"></i><div><strong>Sat phone</strong> — funziona ovunque, indipendente da infrastrutture terrestri. Costo elevato.</div></div>
         <div class="comm-row"><i class="ph ph-graph"></i><div><strong>Mesh LoRa</strong> — rete peer-to-peer autonoma, range fino a 5–10 km in campo aperto, nessun abbonamento.</div></div>
       </div>

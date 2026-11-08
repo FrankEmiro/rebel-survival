@@ -782,7 +782,7 @@ const GUIDES_DATA = [
     quickRef: [
       'ABCDE: Airway (vie aeree) → Breathing → Circulation → Disability → Exposure',
       'Arresto cardiaco: 30 compressioni + 2 insufflazioni — ritmo "Stayin\' Alive" (100–120/min)',
-      'Emorragia: comprimi DIRETTAMENTE per 10 min senza alzare. Se non si ferma: laccio emostatico',
+      'Emorragia: comprimi DIRETTAMENTE e senza interruzioni, senza alzare per controllare. Se non si ferma: laccio emostatico',
       'Ostruzione vie aeree cosciente: 5 colpi schiena + 5 manovre di Heimlich',
       'Frattura: immobilizza COM\'È — non raddrizzare mai un arto deformato',
     ],
@@ -816,7 +816,7 @@ const GUIDES_DATA = [
         steps: [
           'Indossa guanti prima di toccare sangue altrui (kit medico)',
           'Comprimi DIRETTAMENTE sulla ferita con garza o tessuto pulito',
-          'Premi continuamente per 10 minuti senza alzare per controllare',
+          'Premi forte e senza interruzioni, senza alzare per controllare',
           'Se il sangue attraversa la garza: AGGIUNGI altra garza sopra, non togliere quella sotto',
           'Emorragia che non si ferma agli arti: laccio emostatico 5–8 cm sopra la ferita',
           'Scrivi l\'ora di applicazione del laccio — comunicala al 118',
@@ -916,7 +916,7 @@ const GUIDES_DATA = [
         steps: [
           'In caso di emergenza: invia prima SMS (consumano meno banda dei telefoni e passano anche con rete congestionata)',
           'Whatsapp e Telegram funzionano anche con 2G — più affidabili delle chiamate in emergenza di massa',
-          'Se rete completamente giù: walkie-talkie PMR446, canale 8, check-in alle ore concordate',
+          'Se rete completamente giù: walkie-talkie PMR446 sul canale e codice concordati in famiglia, check-in alle ore concordate',
           'Canale radio: sintonizza radio FM su emittente locale — Protezione Civile interrompe i programmi',
           'Non intasare il telefono con chiamate ripetute — un SMS ogni 30 min è più efficace',
           'Se batteria scarica: risparmia per comunicazioni essenziali, spegni dati mobili quando non cerchi info',
@@ -935,7 +935,7 @@ const GUIDES_DATA = [
     source: 'ETSI · Protezione Civile',
     readTime: '3 min',
     quickRef: [
-      'PMR446: libero da licenza in tutta Europa, 8 canali (o 16 digitali), max 0.5W',
+      'PMR446: libero da licenza in Europa, 16 canali analogici dal 2016 (i modelli più vecchi ne hanno 8), max 0,5 W',
       'Canale 8: usato per abitudine come canale di chiamata d\'emergenza tra utenti — non è un canale ufficiale della Protezione Civile',
       'Portata reale: 0.5–2 km in città, 2–5 km in pianura aperta, 500m in edifici',
       'Codici CTCSS/DCS (sub-toni): filtrano le interferenze — usa lo stesso codice in famiglia',
@@ -944,7 +944,7 @@ const GUIDES_DATA = [
     sections: [
       {
         heading: 'Frequenze e canali',
-        content: 'I walkie-talkie PMR446 operano nella banda UHF 446 MHz. Canali standard: 8 canali da 446.00625 a 446.09375 MHz (passo 12.5 kHz). Canali digitali (dPMR446): 16 canali con compressione digitale, portata leggermente superiore. CANALE 8 (446.09375 MHz): convenzionalmente usato per chiamata di emergenza e coordinamento iniziale. Una volta stabilito il contatto, spostatevi su un canale meno frequentato per comunicazioni private.',
+        content: 'I walkie-talkie PMR446 operano nella banda UHF 446,0–446,2 MHz (decisione europea CEPT ECC/DEC/(15)05). Canali analogici: 16, da 446,00625 a 446,19375 MHz (passo 12,5 kHz); gli apparecchi più vecchi usano solo i primi 8. Canali digitali (dPMR446): 32. Due apparecchi si sentono solo se usano lo stesso tipo (analogico o digitale), lo stesso canale e lo stesso codice. CANALE 8 (446,09375 MHz): per abitudine alcuni utenti lo usano per la prima chiamata, ma non è un canale ufficiale di emergenza. Una volta stabilito il contatto, spostatevi su un canale meno frequentato per comunicazioni private.',
       },
       {
         heading: 'Protocollo di comunicazione',
@@ -983,22 +983,22 @@ const GUIDES_DATA = [
     readTime: '2 min',
     quickRef: [
       'RAI Radio 1: canale ufficiale comunicazioni Protezione Civile durante emergenze',
-      'RAI Radio 1 principali frequenze: 89.7 (Milano), 97.7 (Roma), 93.7 (Napoli)',
-      'PMR446 canale 8: emergenza civile volontaria',
+      'RAI Radio 1: la frequenza FM cambia da zona a zona — cerca quella della tua zona e scrivila su carta',
+      'PMR446 canale 8: usato per abitudine, non è un canale ufficiale di emergenza',
       'Radio portatile a manovella: NON dipende da corrente, funziona sempre',
-      'AM (onde medie/corte): portata molto superiore all\'FM, fondamentale per notizie nazionali',
+      'Onde medie: la RAI le ha spente nel settembre 2022 — per la RAI usa l\'FM (o il digitale DAB+ se la radio lo riceve)',
     ],
     sections: [
       {
         heading: 'Frequenze di emergenza per zona',
-        content: 'RAI RADIO 1 (canale di allerta ufficiale): Milano/Lombardia 89.7 FM, Roma/Lazio 97.7 FM, Napoli/Campania 93.7 FM, Torino/Piemonte 89.3 FM, Bologna/Emilia 99.7 FM, Firenze/Toscana 98.0 FM, Palermo/Sicilia 101.0 FM. Per la tua zona specifica: cerca "RAI Radio 1 frequenza [tua città]" e stampa il numero. RADIO LOCALI: le emittenti locali spesso trasmettono aggiornamenti di emergenza più puntuali di quelle nazionali.',
+        content: 'RAI RADIO 1: le frequenze FM cambiano da zona a zona. Cerca le frequenze di RAI Radio 1 della tua città sul sito della Rai, scrivile su carta e tienile vicino alla radio. RADIO LOCALI: le emittenti locali spesso trasmettono aggiornamenti di emergenza più puntuali di quelle nazionali.',
       },
       {
         heading: 'Cosa ascoltare e quando',
         steps: [
           'Blackout: accendi subito la radio — le emittenti FM con UPS trasmettono fino a 12–24h',
           'Emergenza regionale: preferisci emittenti locali — informazioni più aggiornate e geograficamente precise',
-          'Notizie nazionali: RAI Radio 1 AM 1332 kHz — portata notturna su tutta Italia',
+          'Notizie nazionali: RAI Radio 1 in FM (le onde medie RAI sono spente dal settembre 2022)',
           'In zone remote: onde corte (SW) per notizie internazionali — utile in crisi prolungate',
           'Protezione Civile interrompe i programmi normali per allerte — non spegnere la radio',
           'Tieni un\'agenda con le frequenze scritte — non fare affidamento sulla memoria',
@@ -1271,7 +1271,7 @@ const GUIDES_DATA = [
         steps: [
           'Non guardare la luce: girati e abbassati',
           'Sdraiati dietro un riparo, proteggi testa e collo',
-          'Resta giù 1-2 minuti: l\'onda d\'urto arriva dopo',
+          'Resta giù finché non è passata l\'onda d\'urto, che arriva dopo il lampo',
           'Poi entra subito nell\'edificio più vicino e resta lontano da finestre',
         ],
       },
@@ -1850,7 +1850,7 @@ const GUIDES_DATA = [
       {
         heading: 'Emorragia — controllo rapido',
         steps: [
-          'PRESSIONE DIRETTA: premi forte con entrambe le mani per minimo 5 minuti senza guardare',
+          'PRESSIONE DIRETTA: premi forte con entrambe le mani, senza interruzioni e senza sollevare per guardare',
           'Se ancora sanguina: aggiungi altra garza sopra (non rimuovere la prima) — pressione continua',
           'LACCIO EMOSTATICO (arti): applica 5–7cm sopra la ferita, stringi fino a cessazione del sanguinamento, segna l\'ora — non allentarlo e non toglierlo: lo fa solo il personale sanitario',
           'GARZA EMOSTATICA (ferite profonde/inguine/ascella): comprimi la garza nella ferita con forza — Combat Gauze o QuikClot',

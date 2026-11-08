@@ -320,7 +320,7 @@ const ListaSpesaModule = (() => {
         titolo: 'Comunicazione',
         items: [
           { nome:'Radio FM/AM a pile o manovella', qty:'1 pz',     note:'Info emergenza senza internet' },
-          { nome:'Walkie-talkie PMR446 (coppia)',  qty:'1 coppia', note:'Canale 8: emergenza locale' },
+          { nome:'Walkie-talkie PMR446 (coppia)',  qty:'1 coppia', note:'Concordate canale e codice in famiglia' },
           { nome:'SIM prepagata con credito',      qty:'1 pz',     note:'Rete alternativa in roaming' },
         ],
       },
