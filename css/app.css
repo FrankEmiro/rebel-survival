@@ -3942,3 +3942,16 @@ input, select, textarea { font-family: 'Nunito', sans-serif; font-size: 1rem; }
   background:#3a3320; color:#f3e7c0; border:1px solid #6b5a2a; border-radius:8px; transition:background .3s; }
 .rs-copy-bar b { word-break:break-all; }
 .rs-copy-flash { background:#6b5a2a; }
+
+/* ── Chiedi: modalità di risposta e AI libera — v85 ── */
+.as-mode { margin-top: 12px; }
+.as-mode-row { display: flex; gap: 6px; flex-wrap: wrap; }
+.as-mode-btn { flex: 1 1 0; min-width: 0; padding: 8px 6px; border-radius: 10px; border: 1px solid var(--border, #3a3f33);
+  background: transparent; color: var(--text-secondary); font: inherit; font-size: 0.8rem; font-weight: 600; cursor: pointer;
+  display: flex; gap: 5px; align-items: center; justify-content: center; white-space: nowrap; }
+.as-mode-btn.active { background: var(--accent); border-color: var(--accent); color: #131810; }
+.as-free-warn { margin-top: 10px; padding: 12px; border-radius: 10px; border: 1px solid #b8862b; background: rgba(184,134,43,.12); font-size: 0.85rem; }
+.as-free-warn ul { margin: 8px 0; padding-left: 18px; }
+.as-free-warn li { margin: 4px 0; }
+.as-free-note { margin: 8px 0 0; font-size: 0.75rem; color: #e0b357; display: flex; gap: 6px; align-items: center; }
+.as-aians.as-free { border-color: #b8862b; }

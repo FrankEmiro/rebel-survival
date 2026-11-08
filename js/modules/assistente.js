@@ -165,25 +165,77 @@ const AssistenteModule = (() => {
     if (!el) return;
     if (!history.length) {
       el.innerHTML = `<div class="as-empty">
-        <p>Fai una domanda con parole tue. Ti rispondo con i passaggi delle guide di questa app, indicando sempre da dove vengono. Funziona senza internet.</p>
+        <p>${_mode() === 'free'
+          ? 'Scrivi quello che vuoi all\'AI del telefono, anche senza internet. Le sue risposte NON vengono dalle guide: possono essere sbagliate o inventate.'
+          : 'Fai una domanda con parole tue. Ti rispondo con i passaggi delle guide di questa app, indicando sempre da dove vengono. Funziona senza internet.'}</p>
         <div class="as-chips">${_suggestions().map(s => `<button class="as-chip" onclick="AssistenteModule.ask(this.textContent)">${esc(s)}</button>`).join('')}</div>
       </div>`;
       return;
     }
     el.innerHTML = history.map((h, i) => `
       <div class="as-q"><span>${esc(h.q)}</span></div>
-      <div class="as-a">${h.results.length
+      <div class="as-a">${h.ai && h.ai.free
+        ? `<div class="as-aians as-free" id="as-aians-${i}">${_aiHtml(h.ai)}</div>${h.results.length
+            ? `<p class="as-lead">Da confrontare con le guide dell'app:</p>${h.results.map(_card).join('')}` : ''}`
+        : h.results.length
         ? `${h.ai ? `<div class="as-aians" id="as-aians-${i}">${_aiHtml(h.ai)}</div>` : ''}<p class="as-lead">${h.ai ? 'Passaggi delle guide usati per la risposta:' : `Ho trovato ${h.results.length === 1 ? 'questo passaggio' : 'questi passaggi'} nelle guide:`}</p>${h.results.map(_card).join('')}`
         : `<p class="as-lead">Non ho trovato nulla nelle guide su questo. Prova con altre parole, oppure sfoglia le <button class="as-link" onclick="navigateTo('guide')">Guide</button>.</p>`}
       </div>`).join('');
     el.lastElementChild?.scrollIntoView({ block: 'start', behavior: 'smooth' });
   }
 
+  /* ── Modalità di risposta (solo se l'AI è attiva sul telefono) ──
+     guide = solo passaggi delle guide · ai = guide + riassunto AI · free = chat libera con l'AI
+     La chat libera si attiva solo dopo aver letto e accettato l'avviso sulla precisione. */
+  const MODE_KEY = 'assistente_modo', FREE_OK_KEY = 'assistente_libera_ok';
+  let askFree = false;   // avviso della chat libera aperto
+  function _mode() {
+    if (!AI.enabled()) return 'guide';
+    const m = Storage.get(MODE_KEY, 'ai');
+    if (m === 'free' && Storage.get(FREE_OK_KEY, false) !== true) return 'ai';
+    return ['guide', 'ai', 'free'].includes(m) ? m : 'ai';
+  }
+  function setMode(m) {
+    if (m === 'free' && Storage.get(FREE_OK_KEY, false) !== true) { askFree = true; return _renderMode(); }
+    askFree = false;
+    Storage.set(MODE_KEY, m);
+    _renderMode();
+    if (!history.length) _renderThread();
+  }
+  function acceptFree(ok) {
+    askFree = false;
+    if (ok) { Storage.set(FREE_OK_KEY, true); return setMode('free'); }
+    _renderMode();
+  }
+  function _renderMode() {
+    const el = document.getElementById('as-mode');
+    if (!el) return;
+    if (!AI.enabled()) { el.innerHTML = ''; return; }
+    const m = _mode();
+    const b = (id, icon, label) => `<button type="button" class="as-mode-btn${m === id ? ' active' : ''}" aria-pressed="${m === id}" onclick="AssistenteModule.setMode('${id}')"><i class="ph ${icon}"></i> ${label}</button>`;
+    el.innerHTML = `<div class="as-mode-row" role="group" aria-label="Come rispondere">
+        ${b('guide', 'ph-book-open-text', 'Solo guide')}${b('ai', 'ph-cpu', 'Guide + AI')}${b('free', 'ph-chats-circle', 'AI libera')}
+      </div>
+      ${askFree ? `<div class="as-free-warn" role="alertdialog" aria-label="Avviso AI libera">
+        <strong><i class="ph ph-warning"></i> Prima di usare l'AI libera</strong>
+        <ul>
+          <li>Risponde con quello che "sa" il modello, <b>non con le guide</b> dell'app.</li>
+          <li>È un modello molto piccolo: <b>può sbagliare o inventare</b> numeri, dosi, distanze, procedure e fatti, anche con tono sicuro.</li>
+          <li><b>Non usarla</b> per decisioni su salute e sicurezza: per quelle segui le guide e le autorità. In pericolo chiama il 112.</li>
+        </ul>
+        <div class="as-ai-btns"><button class="as-open" onclick="AssistenteModule.acceptFree(true)">Ho capito, attiva</button>
+          <button class="as-link" onclick="AssistenteModule.acceptFree(false)">Annulla</button></div>
+      </div>` : ''}
+      ${m === 'free' && !askFree ? `<p class="as-free-note"><i class="ph ph-warning"></i> AI libera: risposte non basate sulle guide, possono essere sbagliate.</p>` : ''}`;
+  }
+
   function ask(q) {
     q = String(q || '').trim();
     if (!q) return;
-    const h = { q, results: search(q, 3) };
-    if (AI.enabled() && h.results.length) h.ai = { status: 'wait', text: '' };
+    const mode = _mode();
+    const h = { q, results: search(q, mode === 'free' ? 2 : 3) };
+    if (mode === 'free') h.ai = { status: 'wait', text: '', free: true };
+    else if (mode === 'ai' && h.results.length) h.ai = { status: 'wait', text: '' };
     history.push(h);
     if (history.length > 20) history.shift();
     _saveChat();
@@ -347,6 +399,10 @@ const AssistenteModule = (() => {
   const AI_SYSTEM = 'Rispondi in italiano con un breve elenco a trattini, riassumendo il PASSAGGIO per rispondere alla DOMANDA. '
     + 'Usa solo il passaggio. Copia i numeri esattamente. Non aggiungere altro.';
   const AI_CTX_CHARS = 600;
+  // chat libera: nessun passaggio delle guide, il modello risponde da sé
+  const AI_FREE_SYSTEM = 'Sei un assistente. Rispondi in italiano, in modo breve e chiaro. '
+    + 'Se non sei sicuro di qualcosa, dillo. Non inventare numeri o fatti.';
+  const AI_FREE_TURNS = 3, AI_FREE_CHARS = 500;   // memoria corta: il contesto del modello è piccolo
 
   // numeri nella risposta che non compaiono nei passaggi (né nella domanda)
   function _numbers(s) {
@@ -553,6 +609,7 @@ const AssistenteModule = (() => {
     async function _answer(h) {
       try {
         const eng = await load();
+        if (h.ai.free) return await _answerFree(eng, h);
         const c0 = h.results[0];
         let ctx = `${c0.title} — ${c0.heading || ''}\n`, n = 0;
         for (const x of (c0.items || [c0.body || ''])) {     // righe intere, mai tagliate a metà
@@ -580,6 +637,30 @@ const AssistenteModule = (() => {
           else if (!h.ai.text.trim()) { h.ai.status = 'error'; h.ai.msg = 'nessuna risposta'; }
           else h.ai.status = 'done';
         }
+      } catch (e) {
+        h.ai.status = 'error'; h.ai.msg = _errMsg(e);
+      }
+      _upd(h);
+      _saveChat();
+    }
+
+    async function _answerFree(eng, h) {
+      try {
+        const msgs = [{ role: 'system', content: AI_FREE_SYSTEM }];
+        const prev = history.slice(0, history.indexOf(h))
+          .filter(x => x.ai && x.ai.free && x.ai.status === 'done').slice(-AI_FREE_TURNS);
+        prev.forEach(x => msgs.push({ role: 'user', content: x.q.slice(0, AI_FREE_CHARS) },
+          { role: 'assistant', content: x.ai.text.replace(/ \[…\]$/, '').slice(0, AI_FREE_CHARS) }));
+        msgs.push({ role: 'user', content: h.q });
+        h.ai.status = 'run'; _upd(h);
+        let raw = '';
+        await eng.gen(msgs, tok => {
+          raw += tok;
+          h.ai.text = raw.replace(/<think>[\s\S]*?(<\/think>|$)/g, '').replace(/^\s+/, '');
+          _upd(h);
+        }, () => false);
+        if (!h.ai.text.trim()) { h.ai.status = 'error'; h.ai.msg = 'nessuna risposta'; }
+        else h.ai.status = 'done';
       } catch (e) {
         h.ai.status = 'error'; h.ai.msg = _errMsg(e);
       }
@@ -643,6 +724,7 @@ const AssistenteModule = (() => {
           <div class="as-ai-btns"><button class="as-open" onclick="AssistenteModule.aiEnable()"><i class="ph ph-download-simple"></i> ${conf.installed ? 'Attiva' : 'Scarica e attiva'}</button></div></div>`;
       }
       el.innerHTML = html;
+      _renderMode();
     }
 
     const resumePending = () => { const c = cfg(); if (!c.resume) return false; save({ ...c, resume: false }); return true; };
@@ -650,13 +732,17 @@ const AssistenteModule = (() => {
   })();
 
   function _aiHtml(ai) {
-    const head = `<div class="as-aihead"><i class="ph ph-cpu"></i> Risposta dell'AI</div>`;
+    const head = ai.free
+      ? `<div class="as-aihead"><i class="ph ph-chats-circle"></i> AI libera · non verificata</div>`
+      : `<div class="as-aihead"><i class="ph ph-cpu"></i> Risposta dell'AI</div>`;
     if (ai.status === 'wait') return head + `<p class="as-aimuted">Preparo l'AI…</p>`;
-    if (ai.status === 'error') return head + `<p class="as-aimuted">AI non disponibile (${esc(ai.msg || '')}). Leggi i passaggi qui sotto.</p>`;
+    if (ai.status === 'error') return head + `<p class="as-aimuted">AI non disponibile (${esc(ai.msg || '')}).${ai.free ? '' : ' Leggi i passaggi qui sotto.'}</p>`;
     if (ai.status === 'blocked') return head + `<p class="as-aimuted">Ho nascosto la risposta dell'AI perché conteneva numeri che non trovo nelle guide (${esc(ai.extra.join(', '))}). Leggi i passaggi qui sotto.</p>`;
     const txt = esc(ai.text.trim()).replace(/\n/g, '<br>') || '…';
     return head + `<p class="as-aitext">${txt}${ai.status === 'run' ? ' <span class="as-cursor">▍</span>' : ''}</p>
-      <p class="as-ainote">Scritta da un'AI sul tuo telefono riassumendo il primo passaggio qui sotto. Può sbagliare: controlla sempre i passaggi.</p>`;
+      <p class="as-ainote">${ai.free
+        ? 'Risposta libera di un\'AI piccola sul tuo telefono, NON basata sulle guide: può essere sbagliata o inventata. Non usarla per decisioni su salute e sicurezza; in pericolo chiama il 112.'
+        : 'Scritta da un\'AI sul tuo telefono riassumendo il primo passaggio qui sotto. Può sbagliare: controlla sempre i passaggi.'}</p>`;
   }
 
   function init() {
@@ -666,6 +752,7 @@ const AssistenteModule = (() => {
       root.innerHTML = `
         <div class="as-warn"><i class="ph ph-phone-call"></i> In pericolo? Chiama subito il <a href="tel:112">112</a>.</div>
         <div id="as-thread" class="as-thread" aria-live="polite"></div>
+        <div id="as-mode" class="as-mode"></div>
         <form class="as-form" onsubmit="return AssistenteModule.submit(event)">
           <input id="as-input" type="text" enterkeyhint="send" autocomplete="off" placeholder="Scrivi la tua domanda…" aria-label="La tua domanda">
           <button type="submit" class="as-send" aria-label="Chiedi"><i class="ph ph-paper-plane-right"></i></button>
@@ -677,9 +764,9 @@ const AssistenteModule = (() => {
       root.dataset.ready = '1';
     }
     _renderThread();
-    AI.renderBox();
+    AI.renderBox();   // mostra anche la scelta della modalità, se l'AI è attiva
     if (AI.resumePending()) AI.enable();
   }
 
-  return { init, ask, submit, clear, search, openScenario, aiEnable: () => AI.enable(), aiDisable: () => AI.disable(), aiRemove: () => AI.remove(), aiResume: () => AI.resume() };
+  return { init, ask, submit, clear, search, openScenario, setMode, acceptFree, aiEnable: () => AI.enable(), aiDisable: () => AI.disable(), aiRemove: () => AI.remove(), aiResume: () => AI.resume() };
 })();
