@@ -112,10 +112,10 @@ const CarburanteModule = (() => {
     const litriSett   = +(kmSett * consumo / 100).toFixed(1);
     const litriNecessari = +(litriSett * settimane).toFixed(0);
     const litriTotale = serbatoio + scorta;
-    const settAutonomia = +(litriTotale / litriSett).toFixed(1);
+    const settAutonomia = litriSett > 0 ? +(litriTotale / litriSett).toFixed(1) : null;   // 0 km a settimana: nessun consumo
 
     document.getElementById('ca-res-km').textContent = kmSerbatoio + ' km';
-    document.getElementById('ca-res-sett').textContent = settAutonomia + ' sett.';
+    document.getElementById('ca-res-sett').textContent = settAutonomia == null ? '—' : settAutonomia + ' sett.';
     document.getElementById('ca-res-fabb').textContent = litriNecessari + ' L';
 
     const deficit = litriNecessari - litriTotale;
@@ -131,7 +131,7 @@ const CarburanteModule = (() => {
     pianoEl.innerHTML = RIDUZIONI.map(r => {
       const kmRidotti = +(kmSett * (1 - r.riduzione)).toFixed(0);
       const litriRidotti = +(kmRidotti * consumo / 100).toFixed(1);
-      const settRid = +(litriTotale / litriRidotti).toFixed(1);
+      const settRid = litriRidotti > 0 ? +(litriTotale / litriRidotti).toFixed(1) : '—';
       return `
         <div class="result-row">
           <div>

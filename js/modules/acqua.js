@@ -88,7 +88,7 @@ const AcquaModule = (() => {
 
     const climaMult = clima === 'caldo' ? 1.3 : clima === 'freddo' ? 0.85 : 1;
     const minDay    = Utils.WATER_L_PPD * climaMult;   // bere + cucinare (stessa regola di Home e Piano)
-    const racDay    = 5   * climaMult;   // consigliato: include igiene di base
+    const racDay    = 7.5 * climaMult;   // consigliato con igiene di base: minimo OMS 7,5 L (WHO/SEARO Technical Note 9)
 
     const minDayTot = +(persone * minDay).toFixed(1);
     const racDayTot = +(persone * racDay).toFixed(1);

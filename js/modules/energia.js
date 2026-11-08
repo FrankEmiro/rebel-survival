@@ -50,7 +50,7 @@ const EnergiaModule = (() => {
 
     <div class="card mt-16">
       <h3>Dispositivi da Alimentare</h3>
-      <p class="text-secondary text-sm mb-16">Seleziona i dispositivi essenziali e modifica watt/ore se necessario</p>
+      <p class="text-secondary text-sm mb-16">Seleziona i dispositivi essenziali e modifica watt/ore se necessario. I watt proposti sono valori di esempio: per un calcolo preciso usa quelli scritti sull'etichetta o sul libretto del tuo apparecchio.</p>
       <div id="en-dispositivi-list"></div>
       <div class="form-row mt-16">
         <div class="form-group">

@@ -88,7 +88,7 @@ const GUIDES_DATA = [
     source: 'FEMA · WHO',
     readTime: '3 min',
     quickRef: [
-      'Obiettivo: 5L/persona/giorno × 30 giorni = 150L per adulto',
+      'Obiettivo: 7,5L/persona/giorno × 30 giorni = 225L per adulto (minimo OMS con igiene di base)',
       'Contenitori HDPE (codice 2) o PET (codice 1) — mai PVC o contenitori riusati con prodotti chimici',
       'Conserva al buio, fresco (10–15°C), lontano da prodotti chimici',
       'Acqua trattata in casa: cambia ogni 6 mesi',
@@ -97,7 +97,7 @@ const GUIDES_DATA = [
     sections: [
       {
         heading: 'Quanto stoccare',
-        content: 'Il calcolo base è 3L/giorno tra bere e cucinare (minimo vitale), fino a 5L/persona/giorno con igiene minima. Per climi caldi, lavori fisici o bambini piccoli: 8–10L/giorno. Bambini sotto i 2 anni e donne in allattamento: +1L/giorno. Con questo calcolo: famiglia di 4 persone × 30 giorni = 600 litri. Inizia con 7 giorni (140L per 4 persone) e costruisci gradualmente.',
+        content: 'Il calcolo base è 3L/giorno tra bere e cucinare (minimo vitale), almeno 7,5L/persona/giorno con igiene di base (minimo indicato dall\'OMS per le emergenze). Per climi caldi, lavori fisici o bambini piccoli: 8–10L/giorno. Bambini sotto i 2 anni e donne in allattamento: +1L/giorno. Con questo calcolo: famiglia di 4 persone × 30 giorni = 900 litri. Inizia con 7 giorni (210L per 4 persone) e costruisci gradualmente.',
       },
       {
         heading: 'Contenitori — quale scegliere',

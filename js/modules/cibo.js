@@ -31,13 +31,9 @@ const CiboModule = (() => {
     { nome: 'Multivitaminici',       kcal: 0,   durata: '2 anni',  cat: 'Integratori', unita: 'confezioni' },
   ];
 
-  const FABBISOGNO = {
-    adulto_sedentario: 2000,
-    adulto_attivo:     2500,
-    adulto_pesante:    3000,
-    bambino:           1700,
-    anziano:           1700,
-  };
+  // Fabbisogno di riferimento in emergenza: 2.100 kcal a persona al giorno (valore medio di pianificazione
+  // del Manuale Sphere / UNHCR / WFP). Il piano base qui sotto fornisce circa 2.050 kcal a persona.
+  const KCAL_PPD = 2100;
 
   // Piano base per X kcal/giorno/persona: quante percentuali da ogni categoria
   const PIANO_BASE = [
@@ -87,7 +83,7 @@ const CiboModule = (() => {
         <div class="three-col mb-16">
           <div class="mini-card">
             <div class="value" id="cb-res-kcal">—</div>
-            <div class="label">kcal/giorno tot.</div>
+            <div class="label">kcal/giorno (2.100 a persona)</div>
           </div>
           <div class="mini-card">
             <div class="value" id="cb-res-giorni">—</div>
@@ -155,7 +151,7 @@ const CiboModule = (() => {
       <div class="sit-line ${manca > 0 ? 'bad' : 'good'}"><span>Per ${giorni} giorni ${manca > 0 ? 'ti mancano' : ''}</span><strong>${manca > 0 ? manca + (manca === 1 ? ' giorno' : ' giorni') : 'sei coperto ✓'}</strong></div>`;
     if (persone === 0) { document.getElementById('cb-results').classList.add('hidden'); return; }
 
-    const kcalGiorno = adulti * 2500 + anziani * 1800 + bambini * 1700;
+    const kcalGiorno = persone * KCAL_PPD;
 
     // Costruisci lista per categoria
     const perCategoria = {};

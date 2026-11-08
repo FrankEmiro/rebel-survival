@@ -208,9 +208,8 @@ const SettingsModule = (() => {
   }
   function _rCibo(p) {
     const g = p.cibo_scorte_giorni || 0;
-    const persone = (p.adulti || 2) + (p.bambini || 0) * 0.7 + (p.anziani || 0) * 0.9;
-    const kcalMap = { sedentario: 1800, normale: 2200, fisico: 3500 };
-    const kcalGiorno = (kcalMap[p.cibo_attivita] || 2200) * persone;
+    // stesso riferimento del calcolatore Cibo: 2.100 kcal a persona al giorno (Manuale Sphere / UNHCR)
+    const kcalGiorno = 2100 * ((p.adulti || 0) + (p.bambini || 0) + (p.anziani || 0));
     const sub = `autonomia · ${Math.round(kcalGiorno)} kcal/giorno fam.`;
     _badge('sr-cibo', _gg(g), sub, g >= 30 ? 'good' : g >= 7 ? 'warn' : 'bad');
   }
@@ -727,13 +726,8 @@ const SettingsModule = (() => {
       </div>
     </div>
     <div class="card">
-      <h3><i class="ph ph-person-simple-run"></i> Livello Attività Fisica</h3>
-      <p class="text-secondary text-sm mb-12">Determina il fabbisogno calorico giornaliero stimato per la famiglia.</p>
-      <select id="s-cibo-attivita">
-        <option value="sedentario">Sedentario — 1 800 kcal/p (riposo, anziani, bambini piccoli)</option>
-        <option value="normale" selected>Normale — 2 200 kcal/p (adulto medio, attività leggera)</option>
-        <option value="fisico">Lavoro fisico — 3 500 kcal/p (emergenza attiva, lavori pesanti)</option>
-      </select>
+      <h3><i class="ph ph-bowl-food"></i> Fabbisogno di riferimento</h3>
+      <p class="text-secondary text-sm">Per le scorte l'app calcola 2.100 kcal a persona al giorno: è il valore medio usato per pianificare gli aiuti alimentari nelle emergenze (Manuale Sphere, UNHCR). Bambini, anziani, donne in gravidanza o allattamento e chi fa lavori pesanti possono avere bisogni diversi.</p>
     </div>
     <div class="card">
       <h3><i class="ph ph-target"></i> Target di Riferimento</h3>
