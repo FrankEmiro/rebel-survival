@@ -20,7 +20,7 @@ rsync -a --delete \
 
 echo "Compilo l'APK…"
 cd "$ROOT/android"
-./gradlew --quiet assembleRelease -PrsVersion="$VER"
+"${GRADLE:-./gradlew}" --quiet assembleRelease -PrsVersion="$VER"
 
 mkdir -p "$ROOT/dist"
 cp "$ROOT/android/app/build/outputs/apk/release/app-release.apk" "$ROOT/dist/RebelSurvival-v$VER.apk"
