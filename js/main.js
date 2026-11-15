@@ -154,7 +154,8 @@ function initOfflineDetection() {
 
 // Service Worker registration
 function registerSW() {
-  if ('serviceWorker' in navigator && !window.RS_OFFLINE_COPY) {
+  // nell'app Android i file sono già dentro l'APK: niente service worker
+  if ('serviceWorker' in navigator && !window.RS_OFFLINE_COPY && !window.RSAndroid) {
     navigator.serviceWorker.register('/sw.js').then(AppUpdate.watch).catch(() => {});
   }
 }
@@ -208,6 +209,7 @@ const AppUpdate = (() => {
   }
 
   async function check() {
+    if (window.RSAndroid) return say('Per aggiornare l\'app installa la nuova versione (da Google Play o dal file che ricevi). I tuoi dati restano.');
     if (!('serviceWorker' in navigator)) return say('Aggiornamento non disponibile su questo browser.');
     if (!navigator.onLine) return say('Serve internet per cercare aggiornamenti.');
     say('Cerco aggiornamenti…');
@@ -244,7 +246,11 @@ const AppUpdate = (() => {
   }
   async function render() {
     const v = document.getElementById('app-ver');
-    if (v) {
+    if (v && window.RSAndroid) {
+      v.textContent = RSAndroid.version() + ' (app Android)';
+      const note = document.getElementById('app-share-note');
+      if (note) note.innerHTML = '<i class="ph ph-wifi-slash"></i> Funziona anche senza internet: invia l\'app completa con Bluetooth o Quick Share. Chi la riceve deve consentire l\'installazione da questa fonte. Non contiene i tuoi dati.';
+    } else if (v) {
       const [r, l] = await Promise.all([running, latest()]);
       v.textContent = r ? 'v' + r : (l ? 'v' + l : '—');
       if (await stale()) say(`È pronta la v${l}: tocca «Cerca aggiornamenti» per applicarla.`);
@@ -256,6 +262,13 @@ const AppUpdate = (() => {
 
   return { check, watch, setLab, tapVersion, render };
 })();
+
+// Tasto «Indietro» del telefono nell'app Android: torna dove eri, poi alla Home, poi esce
+window.RSAppBack = () => {
+  if (backTarget) { goBack(); return true; }
+  if (currentSection !== 'home') { clearBackTarget(); navigateTo('home'); return true; }
+  return false;
+};
 
 // Disclaimer
 function showDisclaimer() {

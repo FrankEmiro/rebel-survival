@@ -630,7 +630,22 @@ const StrumentiModule = (() => {
     // Layer OSM — subdomain fisso ('a'): le tile scaricate per uso offline vengono
     // richieste sempre dallo stesso host, così la cache le serve senza mismatch
     // (con rotazione a/b/c una tile su tre andrebbe in cache-miss anche se già scaricata)
-    _layerOSM = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    // App Android: non c'è il service worker, quindi le tile scaricate per l'uso
+    // offline si leggono qui dalla cache prima di chiederle a internet
+    const TileLayer = window.RSAndroid ? L.TileLayer.extend({
+      createTile(coords, done) {
+        const img = document.createElement('img');
+        img.alt = '';
+        const url = this.getTileUrl(coords);
+        img.onload = () => done(null, img);
+        img.onerror = e => done(e, img);
+        caches.open(TILES_CACHE).then(c => c.match(url)).then(r => r ? r.blob() : null)
+          .then(b => { img.src = b ? URL.createObjectURL(b) : url; })
+          .catch(() => { img.src = url; });
+        return img;
+      },
+    }) : L.TileLayer;
+    _layerOSM = new TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 18,
       subdomains: 'a',
     }).addTo(_map);
@@ -898,6 +913,7 @@ const StrumentiModule = (() => {
 
   async function _requestWakeLock() {
     try { if ('wakeLock' in navigator) wakeLock = await navigator.wakeLock.request('screen'); } catch(e) {}
+    if (window.RSAndroid) RSAndroid.keepScreenOn(true);   // app Android: la WebView non ha Wake Lock
   }
 
   /* ── RENDER ── */
@@ -1002,6 +1018,7 @@ const StrumentiModule = (() => {
     if (torchOn) toggleTorch();
     if (sosActive) _stopSOS();
     if (wakeLock) { try { wakeLock.release(); } catch(e) {} wakeLock = null; }
+    if (window.RSAndroid) RSAndroid.keepScreenOn(false);
     if (_map) { _map.remove(); _map = null; _mapReady = false; _gpsMarker = null; _gpsCircle = null; _waypointMarker = null; _waypointLine = null; _settingWaypoint = false; _layerComuni = null; _comuniEnabled = false; _comuniLoading = false; }
     window.removeEventListener('online',  _networkUI);
     window.removeEventListener('offline', _networkUI);

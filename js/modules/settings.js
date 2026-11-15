@@ -1208,11 +1208,18 @@ const SettingsModule = (() => {
   // numero di versione dello schema per eventuali migrazioni future.
   function exportData() {
     const data = Storage.exportAll();
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const json = JSON.stringify(data, null, 2);
+    const name = `rebel-survival-backup-${new Date().toISOString().slice(0,10)}.json`;
+    // App Android: la WebView non scarica i file, li passa al telefono (salva in File o invia)
+    if (window.RSAndroid) {
+      RSAndroid.shareData(name, 'application/json', btoa(unescape(encodeURIComponent(json))));
+      return;
+    }
+    const blob = new Blob([json], { type: 'application/json' });
     const url  = URL.createObjectURL(blob);
     const a    = document.createElement('a');
     a.href     = url;
-    a.download = `rebel-survival-backup-${new Date().toISOString().slice(0,10)}.json`;
+    a.download = name;
     a.click();
     URL.revokeObjectURL(url);
   }
@@ -1288,7 +1295,7 @@ const SettingsModule = (() => {
         <div class="pf-actions">
           <button class="pf-action" onclick="CopiaOffline.share()"><i class="ph ph-bluetooth"></i> Passa l'app a un altro telefono</button>
         </div>
-        <p class="pf-note"><i class="ph ph-wifi-slash"></i> Funziona anche senza internet: crea un file da inviare con Bluetooth o Quick Share. Chi lo riceve lo apre con il browser. Non contiene guide PDF, mappa e AI, e non contiene i tuoi dati.</p>
+        <p class="pf-note" id="app-share-note"><i class="ph ph-wifi-slash"></i> Funziona anche senza internet: crea un file da inviare con Bluetooth o Quick Share. Chi lo riceve lo apre con il browser. Non contiene guide PDF, mappa e AI, e non contiene i tuoi dati.</p>
         <p id="app-share-msg" class="pf-note" aria-live="polite"></p>
         <label class="pf-lab-row"><input type="checkbox" id="app-hide-caution" ${Storage.get('hide_caution', false) === true ? 'checked' : ''} onchange="SettingsModule.setHideCaution(this.checked)">
           <span><i class="ph ph-warning"></i> Nascondi le guide da usare con cautela</span></label>

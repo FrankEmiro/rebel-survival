@@ -1,0 +1,40 @@
+plugins {
+    id 'com.android.application'
+}
+
+// Numero di versione = numero della cache del service worker (sw.js, «kit-resilienza-vNN»).
+// Lo passa tools/build-android.sh con -PrsVersion=NN.
+def rsVersion = (project.findProperty('rsVersion') ?: '1').toString().toInteger()
+
+android {
+    // Identificativo dell'app: su Google Play NON si può più cambiare dopo la prima pubblicazione.
+    namespace 'it.cyberrebellion.rebelsurvival'
+    compileSdk 36
+
+    defaultConfig {
+        applicationId 'it.cyberrebellion.rebelsurvival'
+        minSdk 24
+        targetSdk 36
+        versionCode rsVersion
+        versionName "v${rsVersion}"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            // Per ora firmata con la chiave di prova del computer: va bene per installare a mano.
+            // Per Google Play servirà una chiave di caricamento vera (vedi android/LEGGIMI.md).
+            signingConfig signingConfigs.debug
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    // I file dell'app web sono già compressi o piccoli: non ricomprimere PNG e PDF
+    androidResources {
+        noCompress += ['png', 'pdf', 'geojson']
+    }
+}

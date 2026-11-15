@@ -1,0 +1,17 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+// Nome del progetto (rinomina prodotto: cambiare qui e in app/build.gradle, strings.xml)
+rootProject.name = 'RebelSurvival'
+include ':app'
