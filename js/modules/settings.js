@@ -43,11 +43,16 @@ const SettingsModule = (() => {
     { id: 'cibo',     group: 'have',  label: 'Cibo',                desc: 'Giorni di scorte',                   icon: 'ph-fork-knife'     },
     { id: 'energia',  group: 'have',  label: 'Energia',             desc: 'Pannelli, batterie, generatore',     icon: 'ph-lightning'      },
     { id: 'calore',   group: 'have',  label: 'Riscaldamento',       desc: 'Stufe e combustibile',               icon: 'ph-flame'          },
-    { id: 'mobilita', group: 'have',  label: 'Auto e spostamenti',  desc: 'Carburante e zaino pronto',          icon: 'ph-car'            },
+    { id: 'mobilita', group: 'have',  label: 'Auto e spostamenti',  desc: 'Carburante e kit in auto',          icon: 'ph-car'            },
     { id: 'comm',     group: 'ready', label: 'Comunicazioni',       desc: 'Radio, internet, contatti',          icon: 'ph-radio'          },
     { id: 'medico',   group: 'ready', label: 'Salute',              desc: 'Kit medico, farmaci, corsi',         icon: 'ph-first-aid'      },
     { id: 'sicurezza',group: 'ready', label: 'Sicurezza in casa',   desc: 'Estintore, rilevatore CO, vicini',   icon: 'ph-shield-check'   },
+    { id: 'igiene',   group: 'ready', label: 'Igiene, documenti, contanti', desc: 'Sapone, carta, copie, soldi',  icon: 'ph-hand-soap'      },
+    { id: 'zaino',    group: 'ready', label: 'Zaino d\'emergenza',   desc: 'Pronto da prendere e andare',        icon: 'ph-backpack'       },
   ];
+  // Profilo = «Chi siete»; tutto il resto («cosa avete») sta nella sezione Scorte
+  const STOCK_GROUPS = ['have', 'ready'];
+  const isStockTab = id => { const t = TABS.find(x => x.id === id); return !!t && STOCK_GROUPS.includes(t.group); };
   const GROUPS = [
     { id: 'about', label: 'Chi siete' },
     { id: 'have',  label: 'Cosa avete già' },
@@ -67,6 +72,12 @@ const SettingsModule = (() => {
   // _tab(id)        → apre la sezione (usato da Home e calcolatori)
   // _tab(id, true)  → tocco sulla riga: apre o chiude
   function _tab(id, fromRow) {
+    // le sezioni «cosa avete» sono nelle Scorte: se servono da un'altra pagina, ci si va
+    const want = isStockTab(id) ? 'kit' : 'settings';
+    if (!fromRow && typeof currentSection !== 'undefined' && currentSection !== want && typeof navigateTo === 'function') {
+      activeTab = id;
+      navigateTo(want);
+    }
     activeTab = (fromRow && activeTab === id) ? null : id;
     document.querySelectorAll('.pf-sec').forEach(sec => {
       const open = sec.dataset.tab === activeTab;
@@ -281,6 +292,16 @@ const SettingsModule = (() => {
       items.length + ' su 5',
       'sicurezza attiva',
       items.length >= 4 ? 'good' : items.length >= 2 ? 'warn' : 'bad');
+  }
+
+  // numero di voci spuntate per area (checklist delle Scorte)
+  function refreshCounts() {
+    if (typeof KitModule === 'undefined') return;
+    TABS.forEach(t => {
+      const el = document.getElementById('kc-' + t.id);
+      const c = KitModule.areaCount(t.id);
+      if (el) el.textContent = c ? ` · ${c.done}/${c.total} oggetti` : '';
+    });
   }
 
   /* ── TEMPERATURE ── */
@@ -534,21 +555,22 @@ const SettingsModule = (() => {
     return `<div class="pf-sec${open ? ' open' : ''}" data-tab="${t.id}">
       <button class="pf-row" aria-expanded="${open}" aria-controls="stab-${t.id}" onclick="SettingsModule._tab('${t.id}', true)">
         <span class="pf-ico"><i class="ph ${t.icon}"></i></span>
-        <span class="pf-txt"><span class="pf-title">${t.label}</span><span class="pf-desc">${t.desc}</span></span>
+        <span class="pf-txt"><span class="pf-title">${t.label}</span><span class="pf-desc">${t.desc}<span class="pf-kc" id="kc-${t.id}"></span></span></span>
         <span class="pf-status" id="sr-${t.id}"></span>
         <i class="ph ph-caret-down pf-caret"></i>
       </button>
-      <div class="stab-panel${open ? '' : ' hidden'}" id="stab-${t.id}">${inner}</div>
+      <div class="stab-panel${open ? '' : ' hidden'}" id="stab-${t.id}">${inner}${typeof KitModule !== 'undefined' ? KitModule.areaHtml(t.id) : ''}</div>
     </div>`;
   }
 
-  function _sectionsHtml() {
+  function _sectionsHtml(groupIds) {
     const builders = {
       profilo: _htmlProfilo, scenario: () => '', acqua: _htmlAcqua, cibo: _htmlCibo,
       energia: _htmlEnergia, calore: _htmlCalore, mobilita: _htmlMobilita,
       comm: _htmlComm, medico: _htmlMedico, sicurezza: _htmlSicurezza,
+      igiene: () => '', zaino: _htmlZaino,
     };
-    return GROUPS.map(g => `
+    return GROUPS.filter(g => groupIds.includes(g.id)).map(g => `
       <div class="pf-group">
         <h2 class="pf-group-title">${g.label}</h2>
         ${TABS.filter(t => t.group === g.id).map(t => _section(t, builders[t.id]())).join('')}
@@ -916,11 +938,14 @@ const SettingsModule = (() => {
         <i class="ph ph-calculator"></i> Calcolatore mobilità dettagliato →
       </button>
     </div>
+  `; }
+
+  function _htmlZaino() { return `
     <div class="card">
-      <h3><i class="ph ph-backpack"></i> Go-Bag</h3>
+      <h3><i class="ph ph-backpack"></i> Zaino pronto</h3>
       <div class="checkbox-grid">
         <label class="check-option"><input type="checkbox" id="s-has-gobag">
-          <span><i class="ph ph-backpack"></i> Go-bag pronto (72h)<br><small>Documenti, contanti, cambio, farmaci, acqua, cibo</small></span></label>
+          <span><i class="ph ph-backpack"></i> Zaino d'emergenza pronto (72 ore)<br><small>Documenti, contanti, cambio, farmaci, acqua, cibo</small></span></label>
       </div>
       <div class="form-hint mt-8">Kit medico e farmaci → sezione <strong>Salute</strong> · Radio e walkie → sezione <strong>Comunicazioni</strong></div>
     </div>
@@ -1083,7 +1108,7 @@ const SettingsModule = (() => {
   /* ── BIND EVENTS ── */
   function bindEvents() {
     // All inputs/selects → auto-save
-    document.querySelectorAll('#settings-root input, #settings-root select').forEach(el => {
+    document.querySelectorAll('#settings-root input, #settings-root select, #kit-root input[id^="s-"], #kit-root select[id^="s-"]').forEach(el => {
       el.addEventListener('input',  _autoSave);
       el.addEventListener('change', _autoSave);
     });
@@ -1234,8 +1259,14 @@ const SettingsModule = (() => {
     const root = document.getElementById('settings-root');
     if (!root) return;
 
+    // Scorte: disegnate qui insieme al Profilo, così ogni campo esiste una volta sola
+    // e il salvataggio automatico trova sempre tutti i valori
+    const stock = document.getElementById('kit-root');
+    if (stock) stock.innerHTML = (typeof KitModule !== 'undefined' ? KitModule.headHtml() : '') +
+      _sectionsHtml(STOCK_GROUPS) + (typeof KitModule !== 'undefined' ? KitModule.footHtml() : '');
+
     root.innerHTML = `
-      ${_sectionsHtml()}
+      ${_sectionsHtml(['about'])}
       <div class="pf-group">
         <h2 class="pf-group-title">I tuoi dati</h2>
         <p class="pf-note"><i class="ph ph-lock-simple"></i> Restano solo su questo dispositivo.</p>
@@ -1284,6 +1315,7 @@ const SettingsModule = (() => {
     bindEvents();
     renderClimateVis();
     _updateTabResults();
+    refreshCounts();
     _renderScenarioTab();
     if (typeof AppUpdate !== 'undefined') AppUpdate.render();
   }
@@ -1294,5 +1326,5 @@ const SettingsModule = (() => {
     if (typeof AssistenteModule !== 'undefined' && AssistenteModule.reindex) AssistenteModule.reindex();
   }
 
-  return { setHideCaution, init, save, reset, exportData, importData, setField, get, getTotalPeople, _onTipoChange, _onTempChange, _autoSave, _tab, selectScenario, _toggleScCheck, _resetScCheck, toggleCustomThreat };
+  return { refreshCounts, setHideCaution, init, save, reset, exportData, importData, setField, get, getTotalPeople, _onTipoChange, _onTempChange, _autoSave, _tab, selectScenario, _toggleScCheck, _resetScCheck, toggleCustomThreat };
 })();

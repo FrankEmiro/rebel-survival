@@ -84,7 +84,7 @@ function navigateTo(section) {
 
   currentSection = section;
   document.getElementById('back-btn').classList.toggle('hidden', !backTarget || backTarget.section === section);
-  // arrivando dalla Home basta la freccia in alto: il pulsante «← Profilo» dei calcolatori confonderebbe
+  // arrivando dalla Home basta la freccia in alto: il pulsante «← Scorte» dei calcolatori confonderebbe
   document.querySelectorAll('.calc-back').forEach(b => b.classList.toggle('hidden', !!backTarget && backTarget.section !== section));
 
   // Scroll to top
@@ -94,7 +94,7 @@ function navigateTo(section) {
   initSection(section);
 }
 
-// Calcolatori di dettaglio: raggiungibili solo dal Piano → mostra "← Piano"
+// Calcolatori di dettaglio: si aprono dalle Scorte → mostra "← Scorte"
 const CALC_SECTIONS = ['acqua', 'cibo', 'energia', 'riscaldamento', 'carburante'];
 
 function addCalcBackButtons() {
@@ -103,9 +103,9 @@ function addCalcBackButtons() {
     if (!header || header.querySelector('.calc-back')) return;
     const btn = document.createElement('button');
     btn.className = 'btn btn-outline btn-sm calc-back';
-    btn.innerHTML = '<i class="ph ph-arrow-left"></i> Profilo';
+    btn.innerHTML = '<i class="ph ph-arrow-left"></i> Scorte';
     btn.addEventListener('click', () => {
-      navigateTo('settings');
+      navigateTo('kit');
       setTimeout(() => SettingsModule._tab(id === 'riscaldamento' ? 'calore' : id === 'carburante' ? 'mobilita' : id), 0);
     });
     header.prepend(btn);
@@ -280,6 +280,8 @@ function initDisclaimer() {
 // App init
 document.addEventListener('DOMContentLoaded', () => {
   if (typeof CopiaOffline !== 'undefined') CopiaOffline.initCopy();
+  // Scorte unificate: le vecchie spunte doppie passano ai dati del Profilo (una volta sola)
+  if (typeof KitModule !== 'undefined' && KitModule.migrate) KitModule.migrate();
   bindNavClicks();
   document.getElementById('back-btn').addEventListener('click', goBack);
   addCalcBackButtons();

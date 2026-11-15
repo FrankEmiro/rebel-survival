@@ -2,8 +2,6 @@
    Modulo Kit Emergenza — Checklist casa, auto, go-bag
    ============================================================ */
 const KitModule = (() => {
-  let initialized = false;
-  let activeTab = 'casa';
 
   const KIT = {
     casa: {
@@ -102,7 +100,7 @@ const KitModule = (() => {
     gobag: {
       label: '<i class="ph ph-backpack"></i> Zaino d\'emergenza',
       categorie: [
-        { nome: 'Il Go-Bag (72h)', items: [
+        { nome: 'Lo zaino', items: [
           { id: 'g0',  nome: 'Zaino resistente 40-60L impermeabile',       note: 'Base del go-bag' },
         ]},
         { nome: 'Acqua & Cibo', items: [
@@ -147,149 +145,109 @@ const KitModule = (() => {
     }
   };
 
-  function getTotalItems() {
-    let total = 0;
-    Object.values(KIT).forEach(tab => {
-      tab.categorie.forEach(cat => { total += cat.items.length; });
-    });
-    return total;
+  /* Scorte = un solo posto per «cosa avete». Le sezioni (Acqua, Cibo, …) le disegna
+     SettingsModule con i dati che contano per la Home (litri, giorni, radio, kit…);
+     qui ci sono le voci di checklist in più, per area. Le voci che erano doppioni di un
+     dato del Profilo sono state tolte (vedi MIGRATE: le spunte vecchie passano al dato). */
+  const AREA = {
+    acqua:     ['casa', ['c2', 'c4', 'c5']],
+    cibo:      ['casa', ['c7', 'c8', 'c9', 'c10']],
+    energia:   ['casa', ['c12', 'c13', 'c14', 'c15', 'c17']],
+    calore:    ['casa', ['c27', 'c30']],
+    mobilita:  ['auto', null],
+    medico:    ['casa', ['c22', 'c23', 'c24', 'c25']],
+    igiene:    ['casa', ['c36', 'c37', 'c38', 'c39', 'c40', 'c41', 'c42', 'c44']],
+    zaino:     ['gobag', null],
+  };
+  // vecchie voci doppie → campo del Profilo (una sola volta, poi non servono più)
+  const MIGRATE = {
+    c3: 'ha_filtro', c16: 'has_radio', c18: 'comm_contatti_stampati', c43: 'comm_contatti_stampati',
+    c19: 'has_walkie', c20: 'has_kit_medico', c21: 'has_farmaci_cronici', c26: 'has_manuale_ps',
+    c11: 'has_luci_emergenza', c31: 'en_pannelli', c32: 'en_batteria', c33: 'en_generatore',
+    c34: 'has_rilevatore_co', c35: 'has_estintore', c29: 'risc_gpl',
+  };
+
+  const _allItems = () => {
+    const out = {};
+    Object.values(KIT).forEach(t => t.categorie.forEach(c => c.items.forEach(i => { out[i.id] = i; })));
+    return out;
+  };
+  // per un'area: elenco di { nome categoria, voci }
+  function _areaGroups(area) {
+    const def = AREA[area];
+    if (!def) return [];
+    const [tab, ids] = def;
+    if (!ids) return KIT[tab].categorie;
+    const all = _allItems();
+    return [{ nome: 'Da avere in casa', items: ids.map(id => all[id]).filter(Boolean) }];
+  }
+  function _areaIds(area) { return _areaGroups(area).flatMap(c => c.items.map(i => i.id)); }
+
+  function _migrate() {
+    if (Storage.get('kit-migr-1')) return;
+    const saved = Storage.get('kit-checks') || {};
+    const p = Storage.get('profilo') || {};
+    let changed = false;
+    Object.entries(MIGRATE).forEach(([id, key]) => { if (saved[id] && !p[key]) { p[key] = true; changed = true; } });
+    if (changed) Storage.set('profilo', p);
+    Storage.set('kit-migr-1', true);
   }
 
-  // Voci della checklist che corrispondono a un dato del Profilo: spuntarle aggiorna anche la Home
-  const PROFILE_LINK = { c3: 'ha_filtro', c16: 'has_radio', c20: 'has_kit_medico' };
-  const _profilo = () => (typeof SettingsModule !== 'undefined' ? SettingsModule.get() : {});
-  const _isChecked = (id, saved, p) => !!(saved[id] || (PROFILE_LINK[id] && p[PROFILE_LINK[id]]));
-
-  function renderTab(tab) {
-    activeTab = tab;
+  // HTML delle voci di un'area (dentro la sezione disegnata da SettingsModule)
+  function areaHtml(area) {
+    const groups = _areaGroups(area);
+    if (!groups.length) return '';
     const saved = Storage.get('kit-checks') || {};
-    const prof = _profilo();
-    const kitData = KIT[tab];
+    return groups.map(cat => `
+      <div class="card">
+        <h3>${cat.nome}</h3>
+        <ul class="checklist">
+          ${cat.items.map(item => {
+            const checked = !!saved[item.id];
+            return `<li class="checklist-item ${checked ? 'checked' : ''}" onclick="KitModule.toggleItem('${item.id}', this)">
+                <input type="checkbox" ${checked ? 'checked' : ''} tabindex="-1">
+                <div class="flex-1">
+                  <div class="checklist-label">${item.nome}</div>
+                  ${item.note ? `<div class="checklist-meta">${item.note}</div>` : ''}
+                </div>
+              </li>`;
+          }).join('')}
+        </ul>
+      </div>`).join('');
+  }
 
-    let totalTab = 0, checkedTab = 0;
-    kitData.categorie.forEach(cat => {
-      cat.items.forEach(item => {
-        totalTab++;
-        if (_isChecked(item.id, saved, prof)) checkedTab++;
-      });
-    });
-    const pct = totalTab > 0 ? Math.round((checkedTab / totalTab) * 100) : 0;
-
-    const contentEl = document.getElementById('kit-content');
-    contentEl.innerHTML = `
-      <div class="card mb-16">
-        <div class="flex-between">
-          <span class="text-secondary text-sm">${checkedTab}/${totalTab} completati</span>
-          <span class="font-bold text-accent">${pct}%</span>
-        </div>
-        <div class="progress-bar-container mt-8">
-          <div class="progress-bar ${pct >= 80 ? 'success' : ''}" style="width:${pct}%"></div>
-        </div>
-      </div>
-      ${kitData.categorie.map(cat => `
-        <div class="card mb-16">
-          <h3>${cat.nome}</h3>
-          <ul class="checklist">
-            ${cat.items.map(item => {
-              const checked = _isChecked(item.id, saved, prof);
-              return `
-                <li class="checklist-item ${checked ? 'checked' : ''}"
-                  onclick="KitModule.toggleItem('${item.id}', this)">
-                  <input type="checkbox" ${checked ? 'checked' : ''}>
-                  <div class="flex-1">
-                    <div class="checklist-label">${item.nome}</div>
-                    ${item.note ? `<div class="checklist-meta">${item.note}</div>` : ''}
-                  </div>
-                </li>
-              `;
-            }).join('')}
-          </ul>
-        </div>
-      `).join('')}
-      <div class="flex gap-8 mt-8">
-        <button class="btn btn-outline btn-sm" onclick="KitModule.print()"><i class="ph ph-printer"></i> Stampa</button>
-        <button class="btn btn-outline btn-sm" onclick="KitModule.resetTab()"><i class="ph ph-arrow-counter-clockwise"></i> Azzera</button>
-      </div>
-    `;
+  // «3/8» spuntate in un'area, per la riga della sezione
+  function areaCount(area) {
+    const ids = _areaIds(area);
+    if (!ids.length) return null;
+    const saved = Storage.get('kit-checks') || {};
+    return { done: ids.filter(id => saved[id]).length, total: ids.length };
   }
 
   function toggleItem(id, el) {
     const saved = Storage.get('kit-checks') || {};
-    const val = !_isChecked(id, saved, _profilo());
+    const val = !saved[id];
     saved[id] = val;
     Storage.set('kit-checks', saved);
-    if (PROFILE_LINK[id]) {
-      const p = _profilo();
-      p[PROFILE_LINK[id]] = val;
-      Storage.set('profilo', p);
-      SettingsModule._syncFromStorage?.();
-    }
     el.classList.toggle('checked', val);
     el.querySelector('input').checked = val;
-    renderTab(activeTab);
-    updateTabBadges();
-  }
-
-  function updateTabBadges() {
-    const saved = Storage.get('kit-checks') || {};
-    const prof = _profilo();
-    Object.entries(KIT).forEach(([tabId, tabData]) => {
-      let total = 0, checked = 0;
-      tabData.categorie.forEach(cat => {
-        cat.items.forEach(item => { total++; if (_isChecked(item.id, saved, prof)) checked++; });
-      });
-      const badge = document.getElementById('kit-badge-' + tabId);
-      if (badge) badge.textContent = `${checked}/${total}`;
-    });
-  }
-
-  function resetTab() {
-    const saved = Storage.get('kit-checks') || {};
-    const tabData = KIT[activeTab];
-    const p = _profilo();
-    let profChanged = false;
-    tabData.categorie.forEach(cat => {
-      cat.items.forEach(item => {
-        delete saved[item.id];
-        if (PROFILE_LINK[item.id] && p[PROFILE_LINK[item.id]]) { p[PROFILE_LINK[item.id]] = false; profChanged = true; }
-      });
-    });
-    Storage.set('kit-checks', saved);
-    if (profChanged) { Storage.set('profilo', p); SettingsModule._syncFromStorage?.(); }
-    renderTab(activeTab);
-    updateTabBadges();
+    if (typeof SettingsModule !== 'undefined' && SettingsModule.refreshCounts) SettingsModule.refreshCounts();
   }
 
   function print() { window.print(); }
 
+  function headHtml() {
+    return `<p class="pf-note"><i class="ph ph-info"></i> Apri un'area e segna cosa avete già. Le quantità e le voci principali aggiornano subito la Home; la lista della spesa usa gli stessi dati.</p>`;
+  }
+  function footHtml() {
+    return `<div class="flex gap-8 mt-8"><button class="btn btn-outline btn-sm" onclick="KitModule.print()"><i class="ph ph-printer"></i> Stampa</button></div>`;
+  }
+
   function init() {
-    // Già costruita: ridisegna (i dati del Profilo potrebbero essere cambiati)
-    if (initialized) { renderTab(activeTab); updateTabBadges(); return; }
-    const root = document.getElementById('kit-root');
-    if (!root) return;
-    initialized = true;
-
-    root.innerHTML = `
-      <div class="tabs">
-        ${Object.entries(KIT).map(([id, data]) => `
-          <button class="tab-btn ${id === activeTab ? 'active' : ''}"
-            onclick="KitModule.switchTab('${id}', this)">
-            ${data.label} <span id="kit-badge-${id}" class="text-xs text-secondary"></span>
-          </button>
-        `).join('')}
-      </div>
-      <div id="kit-content"></div>
-    `;
-
-    renderTab(activeTab);
-    updateTabBadges();
+    _migrate();
+    // tutto il disegno (Profilo e Scorte) lo fa SettingsModule, così i dati restano uno solo
+    if (typeof SettingsModule !== 'undefined') SettingsModule.init();
   }
 
-  function switchTab(id, btn) {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    renderTab(id);
-  }
-
-  return { init, toggleItem, switchTab, resetTab, print, getTotalItems };
+  return { init, toggleItem, print, areaHtml, areaCount, headHtml, footHtml, migrate: _migrate };
 })();

@@ -38,7 +38,7 @@ const Utils = {
       <div class="sit-head">
         <i class="ph ph-house-line"></i>
         <div><h3>La tua situazione</h3>
-          <span>Sono gli stessi dati del Profilo: se li cambi qui, si aggiornano anche lì.</span></div>
+          <span>Sono gli stessi dati delle Scorte: se li cambi qui, si aggiornano anche lì.</span></div>
         <span class="sit-saved" aria-live="polite"></span>
       </div>
       ${inner}

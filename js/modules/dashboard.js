@@ -615,16 +615,16 @@ const DashboardModule = (() => {
            <span class="task-cb"></span>
          </label>`
       : (t.completed
-          ? `<span class="task-auto-badge resolved" title="Dati del Profilo a posto: risolto automaticamente">
+          ? `<span class="task-auto-badge resolved" title="Dati delle Scorte a posto: risolto automaticamente">
                <i class="ph ph-check-circle"></i>
              </span>`
           : `<span class="task-auto-badge pending" onclick="DashboardModule.goToTask('${t.id}')"
-               title="Aggiorna i dati nel Profilo per risolvere">
+               title="Aggiorna i dati per risolvere">
                <i class="ph ph-sliders"></i>
              </span>`);
 
     const navIcon  = t.tab ? 'ph-sliders' : (t.guide ? 'ph-arrow-right' : 'ph-arrow-right');
-    const navTitle = t.tab ? 'Aggiorna il Profilo' : 'Apri guida';
+    const navTitle = t.tab ? 'Aggiorna i dati' : 'Apri guida';
 
     return `
       <div class="priority-task ${t.urgency} ${t.completed ? 'task-completed' : ''}${t.isAutoTask ? ' task-auto' : ''}">
@@ -1036,7 +1036,7 @@ const DashboardModule = (() => {
 
     if (top.length === 0) return `<div class="tasks-empty">
       <i class="ph ph-check-circle" style="font-size:2rem;color:var(--success);display:block;margin-bottom:8px"></i>
-      <p>Hai completato le azioni principali per questo scenario — controlla il <strong>Profilo</strong> per eventuali mancanze.</p></div>`;
+      <p>Hai completato le azioni principali per questo scenario — controlla le <strong>Scorte</strong> per eventuali mancanze.</p></div>`;
 
     return `<div class="focus-header">
         <i class="ph ph-crosshair"></i>
