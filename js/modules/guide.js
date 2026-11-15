@@ -37,7 +37,9 @@ const GuideModule = (() => {
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-|-$/g, '')
         .slice(0, 40);
-      const imgSrc = `/js/images/guides/${g.id}--${slug}.webp`;
+      const imgKey = `${g.id}--${slug}`;
+      const imgOff = typeof GUIDE_IMG_HIDDEN !== 'undefined' && GUIDE_IMG_HIDDEN.has(imgKey);
+      const imgSrc = `/js/images/guides/${imgKey}.webp`;
 
       let body = '';
       if (sec.steps) {
@@ -53,8 +55,8 @@ const GuideModule = (() => {
             <i class="ph ${expanded ? 'ph-caret-up' : 'ph-caret-down'}"></i>
           </button>
           <div class="guide-sec-body">
-            <img class="guide-sec-img" src="${imgSrc}" alt="${sec.heading}"
-                 onerror="this.style.display='none'" loading="lazy">
+            ${imgOff ? '' : `<img class="guide-sec-img" src="${imgSrc}" alt="${sec.heading}"
+                 onerror="this.style.display='none'" loading="lazy">`}
             ${body}
           </div>
         </div>`;

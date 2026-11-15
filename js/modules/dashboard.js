@@ -233,6 +233,7 @@ const DashboardModule = (() => {
       (g.sections || []).forEach(sec => {
         const slug = sec.heading.toLowerCase()
           .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40);
+        if (typeof GUIDE_IMG_HIDDEN !== 'undefined' && GUIDE_IMG_HIDDEN.has(`${g.id}--${slug}`)) return;   // illustrazione nascosta
         paths.push(`/js/images/guides/${g.id}--${slug}.webp`);
       });
     });
