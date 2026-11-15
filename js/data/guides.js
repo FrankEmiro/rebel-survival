@@ -459,59 +459,111 @@ const GUIDES_DATA = [
   /* ══════════════════════ ENERGIA ══════════════════════ */
   {
     id: 'energia-blackout-protocollo',
-    title: 'Blackout: Protocollo d\'Azione',
+    title: 'Blackout totale: cosa fare',
     icon: 'ph-lightning-slash',
     category: 'energia',
-    source: 'FEMA · Protezione Civile',
-    readTime: '3 min',
+    // Fonti: Ready.gov «Power Outages»; Energy.gov «Keeping Mobile Devices Charged»;
+    // Comune di Ravenna, Protezione civile, «Rischio black out elettrico»;
+    // Commissione europea, linee guida di preparazione 72 ore (3/11/2026); Alertswiss «Piano d'emergenza»
+    source: 'Ready.gov · Energy.gov · Protezione civile (Ravenna) · Commissione UE · Alertswiss',
+    readTime: '4 min',
     quickRef: [
-      'Primo 15 min: non aprire frigo/freezer — mantiene freddo 4h/24–48h',
-      'Distacca gli elettrodomestici principali (protegge dai picchi di tensione al ritorno)',
-      'Frigo: 4°C per max 4h senza apertura. Freezer pieno: 48h. Mezzo pieno: 24h',
-      'Priorità energia di riserva: comunicazioni > illuminazione > cottura > ricarica',
-      'Segnala l\'anomalia al gestore (Enel 800.900.860) per capire la durata prevista',
+      'Spegni o stacca gli apparecchi accesi: al ritorno la corrente può arrivare con sbalzi che li danneggiano',
+      'Non usare l\'ascensore finché non è annunciato il ripristino della rete',
+      'Tieni chiusi frigo e freezer: il frigo tiene il freddo circa 4 ore, il freezer pieno circa 48 ore',
+      'Ascolta la radio a pile per le notizie. Usa il telefono solo per le emergenze',
+      'Apparecchi medici elettrici vitali senza corrente: chiama il 118 o i servizi sociali',
+      'Mai fornelli a gas, generatori o barbecue per scaldare o illuminare in casa: monossido e incendio',
     ],
     sections: [
       {
-        heading: 'Azione immediata (primi 30 minuti)',
+        heading: 'Cosa può smettere di funzionare',
+        content: 'Con un blackout esteso possono fermarsi anche servizi che non sembrano elettrici: bancomat e banche possono restare chiusi e i pagamenti elettronici possono bloccarsi; l\'acqua potabile può mancare; la rete del cellulare e internet possono essere sovraccariche o ferme; gli ascensori si fermano. Il telefono fisso funziona senza corrente solo con alcuni impianti: verifica in anticipo il tuo e per quanto tempo regge la sua batteria.',
+      },
+      {
+        heading: 'Prepararsi prima',
         steps: [
-          'Non aprire frigo e freezer — mantengono la temperatura se chiusi',
-          'Distacca TV, computer, elettrodomestici — rischio picchi al ritorno corrente',
-          'Lascia accesa UNA lampadina: quando torna la corrente, lo vedi subito',
-          'Attiva torcia di emergenza (dovrebbe essere già sul comodino)',
-          'Controlla se il blackout è solo tuo (fusibili) o di tutto il quartiere',
-          'Chiama il gestore per sapere la durata prevista — decisione critica per i prossimi passi',
+          'Fai l\'elenco di tutto ciò che in casa dipende dalla corrente e prevedi pile o altre fonti di energia per ciò che ti serve davvero',
+          'Una torcia per ogni persona della famiglia, con pile di riserva',
+          'Una radio a pile (FM, meglio se anche DAB+) con pile di riserva',
+          'Powerbank e caricatori portatili tenuti carichi; un caricatore da auto per il telefono',
+          'Contanti in casa, con banconote di piccolo taglio e monete, per gli acquisti indispensabili se i pagamenti elettronici si bloccano',
+          'Acqua e cibo per almeno 72 ore, compresi alimenti che si mangiano senza cottura (vedi le guide Acqua e Cibo)',
+          'Se in famiglia qualcuno usa apparecchi medici elettrici o farmaci da frigo: prepara un piano con il medico e chiedi per quanto tempo i farmaci restano validi fuori dal frigo',
+          'Rilevatori di monossido di carbonio con batteria, su ogni piano della casa',
         ],
       },
       {
-        heading: 'Gestione frigo e freezer',
-        content: 'Frigo chiuso: mantiene alimenti sicuri per 4 ore. Freezer pieno chiuso: 48 ore. Freezer mezzo pieno: 24 ore. Regola di sicurezza: a 4°C per max 2 ore la carne è ancora sicura. Dopo 4 ore di frigo aperto o a temperatura ambiente: carne, latticini, uova, avanzi di cucina — se non sei sicuro, butta. "When in doubt, throw it out." Risparmia il cibo da freezer: cucina immediatamente i prodotti parzialmente scongelati.',
-      },
-      {
-        heading: 'Priorità per l\'energia di riserva',
+        heading: 'Durante il blackout',
         steps: [
-          '1° COMUNICAZIONI: carica telefono e radio — informazioni = sicurezza',
-          '2° ILLUMINAZIONE: torce LED, lampade solari da giardino portate all\'interno',
-          '3° RISCALDAMENTO: se temperatura esterna < 5°C, attiva riscaldamento alternativo',
-          '4° COTTURA: usa fornello da campo per cena calda',
-          '5° APPARECCHIATURE MEDICHE: generatore dedicato se ci sono dipendenti da macchine',
-          'NON usare candele senza supervisione — sono responsabili del 30% degli incendi domestici',
+          'Spegni gli apparecchi che erano accesi (computer, lavatrice, ecc.): la corrente può tornare con sbalzi',
+          'Non prendere l\'ascensore: anche se la corrente torna per poco, può essere solo per i lavori di riparazione',
+          'Non intasare le linee per cercare notizie: ascolta la radio e usa il telefono solo per le emergenze',
+          'Apri il meno possibile frigo e freezer. Se serve usa borse frigo con ghiaccio e controlla la temperatura con un termometro',
+          'Se fa molto caldo o molto freddo, vai in un luogo pubblico con corrente indicato dal Comune',
+          'Non usare il fornello o il forno a gas per scaldare la casa',
+          'Generatore: mai collegarlo all\'impianto elettrico di casa. Collega gli apparecchi direttamente al generatore, sempre all\'aperto (vedi la guida Generatore)',
         ],
       },
       {
-        heading: 'Blackout prolungato (oltre 24h)',
+        heading: 'Quando torna la corrente',
         steps: [
-          'Cucina gli alimenti più deperibili nelle prime 6h',
-          'Se inverno e temperatura scende: isola una stanza (vedi guida isolamento)',
-          'Coordinati con vicini: condivisione risorse, verifica anziani e fragili',
-          'Acqua: riempi vasche e contenitori disponibili subito (la pressione potrebbe calare)',
-          'Carburante: non fare il pieno a raffica — causa panico e code. Usa le riserve che hai',
-          'Comunicazione con famiglia: punto di ritrovo fisso se i telefoni non funzionano',
+          'Riaccendi gli apparecchi un po\' alla volta, non tutti insieme',
+          'Butta il cibo rimasto a 4 °C o più per 2 ore o più, o che ha odore, aspetto o consistenza strani. Nel dubbio, buttalo',
+          'Se la corrente è mancata per più di un giorno, butta i farmaci che vanno tenuti in frigo, salvo diversa indicazione sulla confezione, e chiedi subito al medico o al farmacista come sostituirli',
         ],
       },
     ],
-    relatedGuides: ['energia-generatore', 'isolamento-stanza', 'comm-piano-famiglia'],
+    relatedGuides: ['energia-ricarica', 'senza-internet', 'energia-generatore', 'comm-piano-famiglia'],
     tasks: ['en01', 'en02', 'en04'],
+  },
+
+  {
+    id: 'energia-ricarica',
+    title: 'Ricaricare il telefono senza corrente',
+    icon: 'ph-battery-charging',
+    category: 'energia',
+    // Fonti: Energy.gov «Keeping Mobile Devices Charged»; Ready.gov «Power Outages» e «Get Tech Ready»;
+    // FCC/FEMA «Tips for communicating in an emergency»; Commissione europea (powerbank carichi)
+    source: 'Energy.gov · Ready.gov · FCC/FEMA · Commissione UE',
+    readTime: '3 min',
+    quickRef: [
+      'Prima dell\'emergenza: powerbank carichi, pile di riserva e caricatore da auto',
+      'Risparmia batteria: luminosità bassa, modalità aereo quando non ti serve la rete, chiudi le app',
+      'In auto: ricarica solo con l\'auto all\'aperto in un posto ben ventilato, mai in garage',
+      'Radio a manovella o solare con presa USB: alcune ricaricano il telefono, leggi prima il manuale',
+      'Chiamate brevi, solo informazioni essenziali. Se la chiamata non passa, prova con un SMS',
+    ],
+    sections: [
+      {
+        heading: 'Prima: cosa tenere pronto',
+        steps: [
+          'Powerbank e caricatori portatili, tenuti sempre carichi',
+          'Pile di riserva per i dispositivi che le usano (radio, torce)',
+          'Un caricatore da auto per il telefono',
+          'Se vuoi una fonte che non si esaurisce: un caricatore solare o a manovella',
+        ],
+      },
+      {
+        heading: 'Far durare la batteria',
+        steps: [
+          'Abbassa la luminosità dello schermo',
+          'Metti il telefono in modalità aereo quando non ti serve la rete',
+          'Chiudi le app che non stai usando',
+          'Fai chiamate brevi e di\' solo le informazioni essenziali',
+        ],
+      },
+      {
+        heading: 'Ricaricare in auto',
+        content: 'Puoi ricaricare il telefono con il caricatore dell\'auto. Se per farlo devi tenere acceso il motore, l\'auto deve stare all\'aperto in un posto ben ventilato: mai in garage, nemmeno con la porta aperta, per il monossido di carbonio. Esci con l\'auto solo quando il pericolo è passato. Con l\'autoradio puoi anche ascoltare le notizie e gli avvisi.',
+      },
+      {
+        heading: 'Radio a manovella o solare',
+        content: 'Alcune radio a manovella o solari hanno una presa USB e possono dare un po\' di carica al telefono. Prima di usarla per ricaricare, leggi il manuale della radio. Sono utili anche perché ricevono le notizie senza pile e senza corrente.',
+      },
+    ],
+    relatedGuides: ['energia-blackout-protocollo', 'senza-internet', 'comm-radio-canali'],
+    tasks: [],
   },
 
   {
@@ -519,7 +571,7 @@ const GUIDES_DATA = [
     title: 'Generatore: Uso Sicuro',
     icon: 'ph-engine',
     category: 'energia',
-    source: 'Ready.gov (FEMA) · CDC',
+    source: 'Ready.gov (FEMA) · CDC · CPSC · Protezione civile',
     readTime: '3 min',
     quickRef: [
       'SOLO all\'aperto: mai in casa, in garage o in locali semichiusi. Il monossido di carbonio (CO) non ha colore né odore e uccide senza preavviso',
@@ -539,7 +591,8 @@ const GUIDES_DATA = [
           'Usalo solo all\'aperto, ad almeno 6 metri (20 piedi) da finestre, porte e garage attaccati alla casa',
           'Mai in casa, in garage o in cantina, nemmeno con porte e finestre aperte',
           'Tienilo asciutto e al riparo da pioggia e allagamenti: toccare un generatore bagnato o gli apparecchi collegati può dare la scossa',
-          'Collega gli apparecchi con prolunghe per uso pesante',
+          'Collega gli apparecchi direttamente al generatore con prolunghe per uso pesante',
+          'Non collegarlo mai all\'impianto elettrico di casa (per esempio con una spina in una presa): rischi folgorazione e incendio, e la corrente può tornare nella rete e ferire chi la ripara. Un collegamento fisso all\'impianto lo può fare solo un elettricista abilitato',
           'Installa rilevatori di CO funzionanti su ogni piano della casa',
         ],
       },
@@ -913,6 +966,53 @@ const GUIDES_DATA = [
       },
     ],
     relatedGuides: ['comm-pmr446', 'comm-radio-canali'],
+    tasks: ['co03'],
+  },
+
+  {
+    id: 'senza-internet',
+    title: 'Senza internet e senza telefono',
+    icon: 'ph-wifi-slash',
+    category: 'comm',
+    // Fonti: Alertswiss «Piano d'emergenza»; Commissione europea, linee guida 72 ore (3/11/2026);
+    // FCC/FEMA (SMS quando la chiamata non passa); Comune di Ravenna, Protezione civile; Energy.gov
+    source: 'Alertswiss · Commissione UE · FCC/FEMA · Protezione civile',
+    readTime: '3 min',
+    quickRef: [
+      'Le notizie e le istruzioni delle autorità arrivano via radio: tieni una radio a pile (FM, meglio anche DAB+)',
+      'Scrivi su carta i numeri di famiglia, scuola, lavoro, vicini e medico: conosci a memoria i loro numeri?',
+      'Concorda almeno due punti di ritrovo: uno vicino a casa e uno per quando casa non è raggiungibile',
+      'Contanti con banconote piccole e monete: i pagamenti elettronici possono bloccarsi',
+      'Rete congestionata: chiamate brevi e solo se serve. Un SMS spesso passa quando la chiamata non passa',
+    ],
+    sections: [
+      {
+        heading: 'Prepararsi finché funziona tutto',
+        steps: [
+          'Scrivi su carta i numeri di familiari, di chi tiene i tuoi figli, della scuola, del lavoro, dei vicini e delle persone che assisti. Tienine una copia nello zaino di emergenza',
+          'Concorda con la famiglia almeno due punti di ritrovo: uno vicino a casa e uno da usare se casa non è raggiungibile',
+          'Decidi per ogni familiare la strada per tornare a casa, evitando le strade più trafficate. Accordati con colleghi e vicini per condividere l\'auto',
+          'Scegli uno o più posti dove stare per qualche giorno in caso di evacuazione (parenti, amici): né troppo vicini né troppo lontani da casa',
+          'Tieni in casa una radio a pile con pile di riserva e un po\' di contanti in banconote piccole e monete',
+          'Scarica ora sul telefono questa app, le mappe della tua zona (sezione Emergenza → Mappa) e i documenti che ti servono: senza rete non potrai farlo',
+        ],
+      },
+      {
+        heading: 'Dove trovare le notizie',
+        content: 'Quando la rete del cellulare è sovraccarica o ferma, le autorità danno le istruzioni anche via radio. Ascolta una radio a pile o a manovella, oppure l\'autoradio. Le notizie ufficiali sul tuo Comune le danno il sindaco e la Protezione civile: segui le loro indicazioni e diffida delle voci non confermate.',
+      },
+      {
+        heading: 'Comunicare con la rete congestionata',
+        steps: [
+          'Non chiamare per chiedere notizie: lascia libere le linee per le emergenze',
+          'Se una chiamata non passa, prova con un SMS: spesso arriva anche quando la voce non passa',
+          'Fai chiamate brevi e di\' solo le informazioni essenziali',
+          'Se i telefoni non funzionano, raggiungi il punto di ritrovo concordato',
+          'Per le emergenze chiama sempre il 112',
+        ],
+      },
+    ],
+    relatedGuides: ['comm-piano-famiglia', 'comm-radio-canali', 'energia-ricarica', 'energia-blackout-protocollo'],
     tasks: ['co03'],
   },
 
