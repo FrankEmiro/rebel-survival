@@ -1,0 +1,20 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 576' width='1024' height='576' role='img' aria-label='Quando torna la corrente'>
+<rect width='1024' height='576' fill='#f4eedf'/>
+<rect x='10' y='10' width='1004' height='556' fill='none' stroke='#2a2a26' stroke-width='3' rx='6'/>
+<text x='512.0' y='60' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='38' font-weight='800' fill='#2a2a26'>QUANDO TORNA LA CORRENTE</text>
+<text x='512.0' y='94' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='20' fill='#a8781f'>Blackout (Ready.gov · Protezione civile)</text>
+<g transform='translate(184.0,303.0) scale(1.750)'><g transform='translate(-60,-60)' fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><path d='M14 100 h28 v-24 h28 v-24 h28 v-24'/><circle cx='28' cy='88' r='5' fill='#a8781f'/><circle cx='56' cy='64' r='5' fill='#a8781f'/><circle cx='84' cy='40' r='5' fill='#a8781f'/></g></g>
+<circle cx='46.0' cy='210.0' r='14' fill='#a8781f'/><text x='46.0' y='216.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>1</text>
+<text x='184.0' y='436.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='18' font-weight='700' fill='#2a2a26'>Riaccendi gli apparecchi un</text>
+<text x='184.0' y='457.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='18' font-weight='500' fill='#2a2a26'>po&#x27; alla volta</text>
+<g transform='translate(512.0,303.0) scale(1.750)'><g transform='translate(-60,-60)' fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><rect x='48' y='14' width='24' height='70' rx='12'/><circle cx='60' cy='94' r='16' fill='#b0362a'/><path d='M60 84 v-40' stroke='#b0362a' stroke-width='8'/><text x='96' y='54' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='18' font-weight='700' fill='#2a2a26' stroke='none'>≥4°C</text></g></g>
+<circle cx='374.0' cy='210.0' r='14' fill='#a8781f'/><text x='374.0' y='216.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>2</text>
+<text x='512.0' y='436.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='18' font-weight='700' fill='#2a2a26'>Cibo a 4 °C o più per 2 ore o</text>
+<text x='512.0' y='457.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='18' font-weight='500' fill='#2a2a26'>più: buttalo. Nel dubbio,</text>
+<text x='512.0' y='478.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='18' font-weight='500' fill='#2a2a26'>buttalo</text>
+<g transform='translate(840.0,303.0) scale(1.750)'><g transform='translate(-60,-60)' fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><rect x='22' y='44' width='76' height='36' rx='18'/><path d='M60 44 v36'/><rect x='70' y='18' width='20' height='20' rx='4' fill='#d9cfb8'/><path d='M74 28 h12 M80 22 v12'/></g></g>
+<circle cx='702.0' cy='210.0' r='14' fill='#a8781f'/><text x='702.0' y='216.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>3</text>
+<text x='840.0' y='436.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='18' font-weight='700' fill='#2a2a26'>Corrente mancata più di un</text>
+<text x='840.0' y='457.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='18' font-weight='500' fill='#2a2a26'>giorno: farmaci da frigo da</text>
+<text x='840.0' y='478.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='18' font-weight='500' fill='#2a2a26'>buttare, salvo indicazioni</text>
+</svg>

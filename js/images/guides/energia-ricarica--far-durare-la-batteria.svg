@@ -1,0 +1,22 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 576' width='1024' height='576' role='img' aria-label='Far durare la batteria'>
+<rect width='1024' height='576' fill='#f4eedf'/>
+<rect x='10' y='10' width='1004' height='556' fill='none' stroke='#2a2a26' stroke-width='3' rx='6'/>
+<text x='512.0' y='60' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='38' font-weight='800' fill='#2a2a26'>FAR DURARE LA BATTERIA</text>
+<text x='512.0' y='94' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='20' fill='#a8781f'>Ricaricare senza corrente (Energy.gov)</text>
+<g transform='translate(143.0,303.0) scale(1.750)'><g transform='translate(-60,-60)' fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><rect x='38' y='12' width='44' height='96' rx='8'/><path d='M54 22 h12'/><circle cx='60' cy='96' r='4'/><circle cx='60' cy='56' r='10' fill='#a8781f'/><path d='M60 36 v-6 M60 82 v-6 M40 56 h-6 M86 56 h-6' stroke='#a8781f'/></g></g>
+<circle cx='46.0' cy='210.0' r='14' fill='#a8781f'/><text x='46.0' y='216.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>1</text>
+<text x='143.0' y='436.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='18' font-weight='700' fill='#2a2a26'>Abbassa la luminosità</text>
+<text x='143.0' y='457.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='18' font-weight='500' fill='#2a2a26'>dello schermo</text>
+<g transform='translate(389.0,303.0) scale(1.750)'><g transform='translate(-60,-60)' fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><rect x='38' y='12' width='44' height='96' rx='8'/><path d='M54 22 h12'/><circle cx='60' cy='96' r='4'/><path d='M60 34 v40 M46 56 l14 -6 l14 6 M52 74 l8 -4 l8 4' stroke='#a8781f'/></g></g>
+<circle cx='292.0' cy='210.0' r='14' fill='#a8781f'/><text x='292.0' y='216.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>2</text>
+<text x='389.0' y='436.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='18' font-weight='700' fill='#2a2a26'>Modalità aereo quando</text>
+<text x='389.0' y='457.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='18' font-weight='500' fill='#2a2a26'>non ti serve la rete</text>
+<g transform='translate(635.0,303.0) scale(1.750)'><g transform='translate(-60,-60)' fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><rect x='38' y='12' width='44' height='96' rx='8'/><path d='M54 22 h12'/><circle cx='60' cy='96' r='4'/><rect x='46' y='34' width='12' height='12'/><rect x='62' y='34' width='12' height='12'/><rect x='46' y='52' width='12' height='12'/><path d='M59 49 L77 67 M77 49 L59 67' stroke='#b0362a' stroke-width='8'/></g></g>
+<circle cx='538.0' cy='210.0' r='14' fill='#a8781f'/><text x='538.0' y='216.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>3</text>
+<text x='635.0' y='436.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='18' font-weight='700' fill='#2a2a26'>Chiudi le app che non</text>
+<text x='635.0' y='457.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='18' font-weight='500' fill='#2a2a26'>usi</text>
+<g transform='translate(881.0,303.0) scale(1.750)'><g transform='translate(-60,-60)' fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><path d='M20 30 h70 q8 0 8 8 v30 q0 8 -8 8 h-40 l-16 14 v-14 h-14 q-8 0 -8 -8 v-30 q0 -8 8 -8z'/><path d='M34 48 h44 M34 60 h24'/></g></g>
+<circle cx='784.0' cy='210.0' r='14' fill='#a8781f'/><text x='784.0' y='216.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>4</text>
+<text x='881.0' y='436.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='18' font-weight='700' fill='#2a2a26'>Chiamate brevi, solo</text>
+<text x='881.0' y='457.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='18' font-weight='500' fill='#2a2a26'>informazioni essenziali</text>
+</svg>

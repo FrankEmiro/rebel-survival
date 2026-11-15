@@ -1,0 +1,24 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 576' width='1024' height='576' role='img' aria-label='Installazione corretta del generatore'>
+<rect width='1024' height='576' fill='#f4eedf'/><rect x='10' y='10' width='1004' height='556' fill='none' stroke='#2a2a26' stroke-width='3' rx='6'/>
+<text x='512.0' y='60' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='38' font-weight='800' fill='#2a2a26'>INSTALLAZIONE CORRETTA</text>
+<text x='512.0' y='94' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='20' font-weight='400' fill='#a8781f'>Generatore: uso sicuro (Ready.gov · CDC)</text>
+<g fill='none' stroke='#2a2a26' stroke-width='4' stroke-linejoin='round'>
+<path d='M40 290 L170 180 L300 290'/><path d='M60 274 v150 h220 v-150'/>
+<rect x='90' y='320' width='50' height='104'/><rect x='180' y='320' width='70' height='50'/><path d='M215 320 v50'/>
+<path d='M20 424 h980' stroke='#d9cfb8'/></g>
+<g transform='translate(600,250) scale(1.5)'><g transform='translate(0,0)' fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><rect x='22' y='40' width='76' height='50' rx='6'/><circle cx='42' cy='65' r='12'/><path d='M66 56 h20 M66 66 h20 M66 76 h12'/><path d='M30 90 v10 M90 90 v10'/><path d='M98 50 q14 -4 14 -16' stroke='#d9cfb8' stroke-width='6'/></g></g>
+<g stroke='#3d7a3a' stroke-width='5' fill='none'><path d='M282 456 H622'/><path d='M282 442 v28 M622 442 v28'/></g>
+<text x='452' y='498' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='32' font-weight='800' fill='#3d7a3a'>almeno 6 metri</text>
+<text x='452' y='526' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='18' font-weight='500' fill='#2a2a26'>da finestre, porte e garage attaccati alla casa</text>
+<g transform='translate(130,150) scale(0.7)'><g transform='translate(0,0)' fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><circle cx='60' cy='60' r='38'/><circle cx='60' cy='60' r='12' fill='#a8781f'/><path d='M36 34 q-12 -12 -24 -2 M84 34 q12 -12 24 -2'/><text x='60' y='112' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='18' font-weight='700' fill='#2a2a26' stroke='none'>CO</text></g></g>
+<text x='170' y='140' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='700' fill='#2a2a26'>Rilevatore di CO su ogni piano</text>
+<g transform='translate(640,140) scale(0.75)'><g transform='translate(0,0)' fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><path d='M30 46 q0 -20 22 -20 q8 -14 26 -8 q20 0 20 20 q12 4 8 16 h-76 q-10 -6 0 -8z'/><path d='M40 70 l-6 14' stroke='#a8781f'/><path d='M58 70 l-6 14' stroke='#a8781f'/><path d='M76 70 l-6 14' stroke='#a8781f'/><path d='M94 70 l-6 14' stroke='#a8781f'/></g></g>
+<text x='685' y='245' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='700' fill='#2a2a26'>Tienilo asciutto</text>
+<g transform='translate(830,130) scale(0.8)'><g transform='translate(0,0)' fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><rect x='24' y='24' width='72' height='72' rx='10'/><circle cx='48' cy='60' r='5' fill='#2a2a26'/><circle cx='72' cy='60' r='5' fill='#2a2a26'/><path d='M20 20 L100 100 M100 20 L20 100' stroke='#b0362a' stroke-width='8'/></g></g>
+<text x='878' y='250' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='18' font-weight='800' fill='#b0362a'>Mai collegarlo</text>
+<text x='878' y='272' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='18' font-weight='800' fill='#b0362a'>all&#x27;impianto di casa</text>
+<text x='878' y='312' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>Apparecchi collegati</text>
+<text x='878' y='332' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>al generatore con</text>
+<text x='878' y='352' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>prolunghe per uso pesante</text>
+<text x='150' y='510' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='18' font-weight='800' fill='#b0362a'>Mai in casa, garage o cantina</text>
+</svg>

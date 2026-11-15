@@ -2735,6 +2735,27 @@ const GUIDE_IMG_HIDDEN = new Set([
   'survival-trappole--pesca-di-sussistenza',
 ]);
 
+// Schemi SVG disegnati a partire dal testo verificato (tools/make-guide-svgs.py): al posto della .webp
+const GUIDE_IMG_SVG = new Set([
+  'acqua-purificazione--metodo-1-bollitura-migliore',
+  'acqua-purificazione--metodo-2-candeggina-domestica',
+  'acqua-purificazione--metodo-3-filtro-portatile',
+  'acqua-purificazione--quale-metodo-scegliere',
+  'casa-utenze--come-chiudere',
+  'casa-utenze--quando-chiudere',
+  'energia-blackout-protocollo--durante-il-blackout',
+  'energia-blackout-protocollo--quando-torna-la-corrente',
+  'energia-generatore--installazione-corretta',
+  'energia-generatore--monossido-di-carbonio-il-pericolo-invisi',
+  'energia-generatore--rifornimento-e-manutenzione',
+  'energia-ricarica--far-durare-la-batteria',
+  'energia-ricarica--ricaricare-in-auto',
+  'igiene-wc-emergenza--bagno-di-emergenza-nel-wc',
+  'igiene-wc-emergenza--rifiuti-e-mani',
+  'nucleare-radiologico--decontaminazione',
+  'nucleare-radiologico--restare-al-chiuso',
+]);
+
 // Profilo → «Nascondi le guide da usare con cautela»: se attivo, le guide in GUIDE_CAUTION
 // non compaiono nell'elenco, nei collegamenti e nella ricerca «Chiedi».
 function guideVisible(id) {

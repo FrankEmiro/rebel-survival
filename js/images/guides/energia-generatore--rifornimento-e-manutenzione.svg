@@ -1,0 +1,22 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 576' width='1024' height='576' role='img' aria-label='Rifornimento'>
+<rect width='1024' height='576' fill='#f4eedf'/>
+<rect x='10' y='10' width='1004' height='556' fill='none' stroke='#2a2a26' stroke-width='3' rx='6'/>
+<text x='512.0' y='60' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='38' font-weight='800' fill='#2a2a26'>RIFORNIMENTO</text>
+<text x='512.0' y='94' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='20' fill='#a8781f'>Generatore: uso sicuro (Ready.gov)</text>
+<g transform='translate(143.0,303.0) scale(1.750)'><g transform='translate(-60,-60)' fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><rect x='22' y='40' width='76' height='50' rx='6'/><circle cx='42' cy='65' r='12'/><path d='M66 56 h20 M66 66 h20 M66 76 h12'/><path d='M30 90 v10 M90 90 v10'/><path d='M98 50 q14 -4 14 -16' stroke='#d9cfb8' stroke-width='6'/><path d='M40 40 L80 80 M80 40 L40 80' stroke='#b0362a' stroke-width='8'/></g></g>
+<circle cx='46.0' cy='210.0' r='14' fill='#a8781f'/><text x='46.0' y='216.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>1</text>
+<text x='143.0' y='436.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='18' font-weight='700' fill='#2a2a26'>Spegnilo</text>
+<g transform='translate(389.0,303.0) scale(1.750)'><g transform='translate(-60,-60)' fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><circle cx='60' cy='62' r='40'/><path d='M50 16 h20 M60 16 v6'/><path d='M60 62 V36'/><path d='M60 62 l18 10'/></g></g>
+<circle cx='292.0' cy='210.0' r='14' fill='#a8781f'/><text x='292.0' y='216.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>2</text>
+<text x='389.0' y='436.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='18' font-weight='700' fill='#2a2a26'>Lascialo raffreddare: la</text>
+<text x='389.0' y='457.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='18' font-weight='500' fill='#2a2a26'>benzina su parti calde</text>
+<text x='389.0' y='478.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='18' font-weight='500' fill='#2a2a26'>può prendere fuoco</text>
+<g transform='translate(635.0,303.0) scale(1.750)'><g transform='translate(-60,-60)' fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><path d='M30 40 l14 -16 h40 v86 h-54z'/><path d='M84 36 h12 v20'/><path d='M44 60 h26 M44 74 h26' stroke='#a8781f'/></g></g>
+<circle cx='538.0' cy='210.0' r='14' fill='#a8781f'/><text x='538.0' y='216.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>3</text>
+<text x='635.0' y='436.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='18' font-weight='700' fill='#2a2a26'>Poi fai rifornimento</text>
+<g transform='translate(881.0,303.0) scale(1.750)'><g transform='translate(-60,-60)' fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><path d='M20 28 q20 -8 40 4 q20 -12 40 -4 v70 q-20 -8 -40 4 q-20 -12 -40 -4z'/><path d='M60 32 v70'/><path d='M30 44 h20 M30 56 h20 M70 44 h20 M70 56 h20'/></g></g>
+<circle cx='784.0' cy='210.0' r='14' fill='#a8781f'/><text x='784.0' y='216.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>4</text>
+<text x='881.0' y='436.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='18' font-weight='700' fill='#2a2a26'>Olio, manutenzione e</text>
+<text x='881.0' y='457.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='18' font-weight='500' fill='#2a2a26'>carburante: istruzioni</text>
+<text x='881.0' y='478.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='18' font-weight='500' fill='#2a2a26'>del produttore</text>
+</svg>

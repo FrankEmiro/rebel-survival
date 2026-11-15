@@ -1,0 +1,19 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 576' width='1024' height='576' role='img' aria-label='Filtro portatile'>
+<rect width='1024' height='576' fill='#f4eedf'/>
+<rect x='10' y='10' width='1004' height='556' fill='none' stroke='#2a2a26' stroke-width='3' rx='6'/>
+<text x='512.0' y='60' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='38' font-weight='800' fill='#2a2a26'>FILTRO PORTATILE</text>
+<text x='512.0' y='94' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='20' fill='#a8781f'>Purificazione acqua (CDC)</text>
+<g transform='translate(184.0,303.0) scale(1.750)'><g transform='translate(-60,-60)' fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><rect x='44' y='16' width='32' height='64' rx='8'/><path d='M44 34 h32 M44 50 h32 M44 66 h32'/><path d='M60 80 v14'/><path d='M60 100 q-8 10 0 14 q8 -4 0 -14z'/></g></g>
+<circle cx='46.0' cy='210.0' r='14' fill='#a8781f'/><text x='46.0' y='216.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>1</text>
+<text x='184.0' y='436.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='18' font-weight='700' fill='#2a2a26'>Molti filtri trattengono</text>
+<text x='184.0' y='457.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='18' font-weight='500' fill='#2a2a26'>parassiti e batteri, non i</text>
+<text x='184.0' y='478.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='18' font-weight='500' fill='#2a2a26'>virus</text>
+<g transform='translate(512.0,303.0) scale(1.750)'><g transform='translate(-60,-60)' fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><path d='M22 52 h76 v34 q0 12 -12 12 h-52 q-12 0 -12 -12z'/><path d='M14 52 h92'/><path d='M98 60 h14'/><path d='M42 42 q-6 -10 0 -18 q6 -8 0 -16'/><path d='M60 42 q-6 -10 0 -18 q6 -8 0 -16'/><path d='M78 42 q-6 -10 0 -18 q6 -8 0 -16'/><path d='M44 116 q-6 -10 4 -16 q-2 8 6 8 q2 -10 10 -12 q-4 10 6 14 q6 -6 2 -12 q12 8 4 18z' stroke='#b0362a'/></g></g>
+<circle cx='374.0' cy='210.0' r='14' fill='#a8781f'/><text x='374.0' y='216.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>2</text>
+<text x='512.0' y='436.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='18' font-weight='700' fill='#2a2a26'>Per i virus: dopo il filtro</text>
+<text x='512.0' y='457.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='18' font-weight='500' fill='#2a2a26'>bolli o usa la candeggina</text>
+<g transform='translate(840.0,303.0) scale(1.750)'><g transform='translate(-60,-60)' fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><path d='M20 28 q20 -8 40 4 q20 -12 40 -4 v70 q-20 -8 -40 4 q-20 -12 -40 -4z'/><path d='M60 32 v70'/><path d='M30 44 h20 M30 56 h20 M70 44 h20 M70 56 h20'/></g></g>
+<circle cx='702.0' cy='210.0' r='14' fill='#a8781f'/><text x='702.0' y='216.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>3</text>
+<text x='840.0' y='436.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='18' font-weight='700' fill='#2a2a26'>Pulizia, durata e gelo:</text>
+<text x='840.0' y='457.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='18' font-weight='500' fill='#2a2a26'>istruzioni del produttore</text>
+</svg>

@@ -38,8 +38,9 @@ const GuideModule = (() => {
         .replace(/^-|-$/g, '')
         .slice(0, 40);
       const imgKey = `${g.id}--${slug}`;
-      const imgOff = typeof GUIDE_IMG_HIDDEN !== 'undefined' && GUIDE_IMG_HIDDEN.has(imgKey);
-      const imgSrc = `/js/images/guides/${imgKey}.webp`;
+      const imgSvg = typeof GUIDE_IMG_SVG !== 'undefined' && GUIDE_IMG_SVG.has(imgKey);
+      const imgOff = !imgSvg && typeof GUIDE_IMG_HIDDEN !== 'undefined' && GUIDE_IMG_HIDDEN.has(imgKey);
+      const imgSrc = `/js/images/guides/${imgKey}.${imgSvg ? 'svg' : 'webp'}`;
 
       let body = '';
       if (sec.steps) {
