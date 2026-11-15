@@ -1259,6 +1259,9 @@ const SettingsModule = (() => {
         </div>
         <p class="pf-note"><i class="ph ph-wifi-slash"></i> Funziona anche senza internet: crea un file da inviare con Bluetooth o Quick Share. Chi lo riceve lo apre con il browser. Non contiene guide PDF, mappa e AI, e non contiene i tuoi dati.</p>
         <p id="app-share-msg" class="pf-note" aria-live="polite"></p>
+        <label class="pf-lab-row"><input type="checkbox" id="app-hide-caution" ${Storage.get('hide_caution', false) === true ? 'checked' : ''} onchange="SettingsModule.setHideCaution(this.checked)">
+          <span><i class="ph ph-warning"></i> Nascondi le guide da usare con cautela</span></label>
+        <p class="pf-note">Le guide con fonti non ufficiali o non ancora verificate non compariranno in Guide e in «Chiedi».</p>
         <div id="app-lab-box" class="pf-lab hidden">
           <label class="pf-lab-row"><input type="checkbox" id="app-lab" onchange="AppUpdate.setLab(this.checked)">
             <span><i class="ph ph-flask"></i> Funzioni sperimentali (AI nella sezione «Chiedi»)</span></label>
@@ -1285,5 +1288,11 @@ const SettingsModule = (() => {
     if (typeof AppUpdate !== 'undefined') AppUpdate.render();
   }
 
-  return { init, save, reset, exportData, importData, setField, get, getTotalPeople, _onTipoChange, _onTempChange, _autoSave, _tab, selectScenario, _toggleScCheck, _resetScCheck, toggleCustomThreat };
+  function setHideCaution(on) {
+    Storage.set('hide_caution', !!on);
+    if (typeof GuideModule !== 'undefined' && GuideModule.reset) GuideModule.reset();
+    if (typeof AssistenteModule !== 'undefined' && AssistenteModule.reindex) AssistenteModule.reindex();
+  }
+
+  return { setHideCaution, init, save, reset, exportData, importData, setField, get, getTotalPeople, _onTipoChange, _onTempChange, _autoSave, _tab, selectScenario, _toggleScCheck, _resetScCheck, toggleCustomThreat };
 })();

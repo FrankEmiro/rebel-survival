@@ -52,6 +52,9 @@ const AssistenteModule = (() => {
     tsunami: 'maremoto', eruzione: 'vulcano', cenere: 'vulcano', lava: 'vulcano',
     zaino: 'kit', borsa: 'kit', medicine: 'farmaci', medicinali: 'farmaci',
     telefono: 'comunicazione', walkie: 'pmr', ricetrasmittente: 'pmr',
+    gabinetto: 'bagno', wc: 'bagno', water: 'bagno', cane: 'animali', gatto: 'animali',
+    galena: 'radio', cristallo: 'radio', solare: 'pannello', ansia: 'stress', paura: 'stress',
+    disabile: 'disabilita', carrozzina: 'disabilita', anziano: 'fragili', rubinetto: 'chiudere',
   };
 
   function norm(s) {
@@ -88,6 +91,7 @@ const AssistenteModule = (() => {
       chunks.push(c);
     };
     (typeof GUIDES_DATA !== 'undefined' ? GUIDES_DATA : []).forEach(g => {
+      if (typeof guideVisible === 'function' && !guideVisible(g.id)) return;
       if (g.quickRef?.length) add({ kind: 'guide', id: g.id, title: g.title, heading: 'In breve', items: g.quickRef, text: g.quickRef.join(' '), source: g.source });
       (g.sections || []).forEach(s => {
         const items = s.steps || null;
@@ -774,5 +778,5 @@ const AssistenteModule = (() => {
     if (AI.resumePending()) AI.enable();
   }
 
-  return { init, ask, submit, clear, search, openScenario, setMode, acceptFree, aiEnable: () => AI.enable(), aiDisable: () => AI.disable(), aiRemove: () => AI.remove(), aiResume: () => AI.resume() };
+  return { reindex: () => { index = null; }, init, ask, submit, clear, search, openScenario, setMode, acceptFree, aiEnable: () => AI.enable(), aiDisable: () => AI.disable(), aiRemove: () => AI.remove(), aiResume: () => AI.resume() };
 })();

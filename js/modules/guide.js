@@ -62,7 +62,7 @@ const GuideModule = (() => {
 
     const related = (g.relatedGuides || []).map(rid => {
       const r = GUIDES_DATA.find(x => x.id === rid);
-      if (!r) return '';
+      if (!r || !guideVisible(rid)) return '';
       return `<button class="guide-related-btn" onclick="GuideModule.openGuide('${rid}')">
         <i class="ph ${r.icon}"></i> ${r.title}
       </button>`;
@@ -115,6 +115,7 @@ const GuideModule = (() => {
 
     const q = searchQuery.toLowerCase();
     const visible = GUIDES_DATA.filter(g => {
+      if (!guideVisible(g.id)) return false;
       if (activeCategory !== 'all' && g.category !== activeCategory) return false;
       if (q) {
         const hay = (g.title + ' ' + g.source + ' ' + g.quickRef.join(' ')).toLowerCase();
@@ -183,7 +184,7 @@ const GuideModule = (() => {
       <div id="offline-pack-slot"></div>
       <div class="alert alert-success mb-12">
         <i class="ph ph-wifi-slash"></i>
-        <div><strong>${GUIDES_DATA.length} guide disponibili offline</strong> — nessuna connessione necessaria.</div>
+        <div><strong>${GUIDES_DATA.filter(g => guideVisible(g.id)).length} guide disponibili offline</strong> — nessuna connessione necessaria.</div>
       </div>
 
       ${_catBar()}
@@ -324,5 +325,8 @@ const GuideModule = (() => {
     }, 300);
   }
 
-  return { init, openGuide, printAll, savePdf, _toggleCard, _toggleSection, _setCategory, _onSearch };
+  // il filtro «cautela» del Profilo è cambiato: alla prossima apertura l'elenco si ricostruisce
+  function reset() { initialized = false; }
+
+  return { init, reset, openGuide, printAll, savePdf, _toggleCard, _toggleSection, _setCategory, _onSearch };
 })();

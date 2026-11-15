@@ -456,6 +456,49 @@ const GUIDES_DATA = [
     tasks: ['ci02', 'ci04'],
   },
 
+  {
+    id: 'cibo-senza-frigo-gas',
+    title: 'Frigo a evaporazione e cottura a fuoco spento',
+    icon: 'ph-cooking-pot',
+    category: 'cibo',
+    // Fonti (non ufficiali): Practical Action «Evaporative cooling – the clay refrigerator»; Tearfund «Making a zeer pot fridge»;
+    // Low Impact «Haybox (retained heat) cooking and food safety». Zona di pericolo 5–60 °C: USDA/FSIS.
+    source: 'Practical Action · Tearfund · Low Impact · USDA (non tutte ufficiali)',
+    readTime: '3 min',
+    quickRef: [
+      'Frigo a evaporazione: un vaso di terracotta dentro uno più grande, sabbia bagnata in mezzo, panno bagnato sopra',
+      'Funziona bene solo con clima secco e caldo. NON va bene per carne, latticini e farmaci',
+      'Cottura a fuoco spento: porta a bollore pieno, poi chiudi la pentola in una cassa isolata (coperte, paglia)',
+      'Il cibo non deve restare a lungo tra 5 e 60 °C: prima di mangiare riportalo a bollore',
+      'Risparmia combustibile, ma richiede più tempo',
+    ],
+    sections: [
+      {
+        heading: 'Frigo a evaporazione (vaso nel vaso)',
+        steps: [
+          'Metti un vaso di terracotta non smaltata dentro un vaso più grande',
+          'Riempi lo spazio tra i due vasi con sabbia e bagnala',
+          'Metti frutta e verdura nel vaso interno e coprilo con un panno bagnato',
+          'Aggiungi acqua alla sabbia più volte al giorno, perché resti sempre umida',
+          'Tienilo in un posto asciutto e ventilato: l\'acqua che evapora porta via calore',
+          'Funziona poco con aria umida. Non usarlo per carne, latticini o farmaci che devono restare freddi',
+        ],
+      },
+      {
+        heading: 'Cottura a fuoco spento (cassa termica)',
+        steps: [
+          'Porta il cibo a bollore pieno sul fuoco, nella sua pentola con coperchio',
+          'Togli dal fuoco e metti subito la pentola in una cassa o scatola ben isolata (coperte, cuscini, paglia, sacco a pelo)',
+          'Lascia cuocere con il calore trattenuto: serve più tempo della cottura normale',
+          'Prima di mangiare riporta il cibo a bollore, o controlla con un termometro: sotto i 60 °C i batteri possono crescere',
+          'Adatto a legumi, cereali e zuppe. Non lasciare il cibo tiepido per ore',
+        ],
+      },
+    ],
+    relatedGuides: ['cibo-conservazione', 'cibo-cottura-campo'],
+    tasks: [],
+  },
+
   /* ══════════════════════ ENERGIA ══════════════════════ */
   {
     id: 'energia-blackout-protocollo',
@@ -567,6 +610,43 @@ const GUIDES_DATA = [
   },
 
   {
+    id: 'energia-solare-piccola',
+    title: 'Pannello solare e batterie portatili',
+    icon: 'ph-solar-panel',
+    category: 'energia',
+    // Fonti: Energy.gov (powerbank, caricatori); indicazioni dei produttori di batterie (non ufficiali): marcatura,
+    // ventilazione, lontano da materiali infiammabili. Il collegamento all'impianto di casa: Protezione civile (Ravenna)
+    source: 'Energy.gov · Protezione civile · indicazioni dei produttori (non ufficiali)',
+    readTime: '2 min',
+    quickRef: [
+      'Un pannello solare portatile con una batteria portatile (power station) può ricaricare telefono, radio, luci',
+      'Compra prodotti con marcatura CE e segui il manuale del produttore',
+      'Batteria in un posto ventilato, asciutto, lontano da fonti di calore e da cose che bruciano',
+      'Non collegare mai pannelli o batterie all\'impianto elettrico di casa da solo: serve un elettricista',
+      'Batteria gonfia, calda o che puzza: staccala, portala lontano da cose infiammabili, non usarla più',
+    ],
+    sections: [
+      {
+        heading: 'A cosa serve',
+        content: 'Un piccolo pannello solare portatile e una batteria portatile (power station o powerbank grande) ti danno un po\' di corrente anche se il blackout dura giorni: per telefono, radio, luci LED, piccoli apparecchi. Quanta energia ottieni dipende dal sole e dalla potenza del pannello: controlla i dati del produttore e prova il sistema prima dell\'emergenza.',
+      },
+      {
+        heading: 'Usarlo in sicurezza',
+        steps: [
+          'Scegli prodotti con marcatura CE e leggi il manuale',
+          'Carica e usa la batteria in un posto ventilato e asciutto, lontano dal sole diretto, da fonti di calore e da materiali infiammabili',
+          'Non coprirla mentre lavora: scalda un po\' durante la carica e con apparecchi potenti',
+          'Non collegarla da solo all\'impianto elettrico di casa: un collegamento fisso lo fa solo un elettricista abilitato',
+          'Se la batteria si gonfia, scotta, fa fumo o puzza: staccala, allontanala da cose che bruciano e non usarla più',
+          'Tienila carica e provala ogni tanto, come i powerbank',
+        ],
+      },
+    ],
+    relatedGuides: ['energia-ricarica', 'energia-blackout-protocollo'],
+    tasks: [],
+  },
+
+  {
     id: 'energia-generatore',
     title: 'Generatore: Uso Sicuro',
     icon: 'ph-engine',
@@ -606,6 +686,251 @@ const GUIDES_DATA = [
     ],
     relatedGuides: ['energia-blackout-protocollo'],
     tasks: ['en01', 'en04'],
+  },
+
+  /* ══════════════════════ CASA E PERSONE ══════════════════════ */
+  {
+    id: 'igiene-wc-emergenza',
+    title: 'Igiene e bagno senza acqua corrente',
+    icon: 'ph-toilet',
+    category: 'casa',
+    // Fonti: CDC «Potential Sanitation Solutions During an Emergency Response»; NC DHHS «Toilet use during an emergency»;
+    // Oregon OEM e Washington County (OR) «Disaster sanitation»; Ready.gov «Build a kit»
+    source: 'CDC · NC DHHS · Oregon OEM · Ready.gov',
+    readTime: '3 min',
+    quickRef: [
+      'Prima prova un bagno funzionante di un vicino o di un locale vicino',
+      'WC senza acqua: chiudi il rubinetto del WC, svuota la tazza e mettici dentro due sacchi della spazzatura uno nell\'altro',
+      'Dopo ogni uso copri con segatura, carta sminuzzata, lettiera o terra asciutta e chiudi il sacco',
+      'Sacchi pieni: doppio sacco, chiusi, lontano da cibo e acqua',
+      'Accanto al bagno: sapone, acqua e asciugamani di carta per lavarsi le mani ogni volta',
+    ],
+    sections: [
+      {
+        heading: 'Cosa tenere pronto',
+        steps: [
+          'Sacchi robusti per la spazzatura e fascette o lacci per chiuderli',
+          'Un secchio con coperchio che chiude bene',
+          'Carta igienica, salviette umide, sapone, gel igienizzante, assorbenti e prodotti per l\'igiene personale',
+          'Segatura, lettiera per gatti, sabbia o carta sminuzzata per coprire',
+          'Candeggina per disinfettare',
+        ],
+      },
+      {
+        heading: 'Bagno di emergenza nel WC',
+        steps: [
+          'Chiudi il rubinetto dell\'acqua del WC e svuota l\'acqua rimasta nella tazza: non deve riempirsi di nuovo',
+          'Metti nella tazza un sacco dentro un altro sacco della spazzatura',
+          'Dopo ogni uso copri con segatura, carta sminuzzata, lettiera o terra asciutta: asciuga e riduce l\'odore',
+          'Chiudi il sacco tra un uso e l\'altro e tieni chiuso il coperchio',
+          'Se non hai il WC, usa un secchio con coperchio, rivestito allo stesso modo',
+          'I bambini piccoli vanno sorvegliati quando usano il bagno di emergenza',
+        ],
+      },
+      {
+        heading: 'Rifiuti e mani',
+        steps: [
+          'Chiudi bene i sacchi pieni, mettili in un secondo sacco e tienili separati dalla spazzatura normale, lontano da cibo e acqua',
+          'Segui le indicazioni del Comune su dove e quando portarli via',
+          'Lavati le mani con acqua e sapone dopo il bagno e prima di toccare il cibo. Se l\'acqua manca usa il gel igienizzante',
+          'Se il secchio si sporca, disinfettalo con candeggina diluita o buttalo',
+        ],
+      },
+    ],
+    relatedGuides: ['acqua-stoccaggio', 'energia-blackout-protocollo'],
+    tasks: [],
+  },
+
+  {
+    id: 'casa-utenze',
+    title: 'Chiudere gas, acqua e luce',
+    icon: 'ph-wrench',
+    category: 'casa',
+    // Fonti: Ready.gov «Utility Shut-off & Safety» (archivio) e «Safety skills»; Adams County OEM (CO)
+    source: 'Ready.gov · Adams County OEM',
+    readTime: '2 min',
+    quickRef: [
+      'Impara ORA dove sono i rubinetti di gas e acqua e il quadro elettrico, e insegnalo a tutti in casa',
+      'Chiudili solo se le autorità lo chiedono o se c\'è un pericolo reale (odore di gas, perdita, allagamento)',
+      'Odore di gas: niente fiamme né interruttori, apri le finestre, esci e chiama il 112 da fuori',
+      'Il gas, una volta chiuso, lo deve riaprire solo un tecnico',
+      'Luce: abbassa prima i singoli interruttori, poi il generale',
+    ],
+    sections: [
+      {
+        heading: 'Prepararsi prima',
+        steps: [
+          'Trova il rubinetto del gas, il rubinetto generale dell\'acqua dentro casa e il quadro elettrico',
+          'Segnali con un\'etichetta e tieni vicino l\'attrezzo che serve (alcuni rubinetti richiedono una chiave apposita)',
+          'Mostra a tutti gli adulti della famiglia come si chiudono',
+        ],
+      },
+      {
+        heading: 'Quando chiudere',
+        content: 'Chiudi le utenze solo se te lo chiedono le autorità o se c\'è un pericolo reale: odore di gas, una perdita d\'acqua, acqua che entra in casa, fili danneggiati. Nel dubbio chiedi al gestore o al 112. Una scintilla elettrica può incendiare il gas che perde: se senti odore di gas non toccare interruttori, non accendere fiamme, apri le finestre, esci e chiama il 112 da fuori.',
+      },
+      {
+        heading: 'Come chiudere',
+        steps: [
+          'Gas: gira il rubinetto del contatore in posizione chiusa. NON riaprirlo da solo: deve farlo un tecnico',
+          'Elettricità: abbassa prima i singoli interruttori del quadro, poi l\'interruttore generale',
+          'Acqua: usa il rubinetto generale dentro casa. Quello in strada è spesso difficile da girare e richiede un attrezzo speciale',
+        ],
+      },
+    ],
+    relatedGuides: ['evacuazione-piano', 'sicurezza-casa'],
+    tasks: [],
+  },
+
+  {
+    id: 'animali-emergenza',
+    title: 'Animali domestici in emergenza',
+    icon: 'ph-paw-print',
+    category: 'casa',
+    // Fonti: Ready.gov «Pets and Animals»; Commissione europea, linee guida 72 ore (3/11/2026)
+    source: 'Ready.gov · Commissione UE',
+    readTime: '3 min',
+    quickRef: [
+      'Se devi evacuare, porta con te anche gli animali: non lasciarli chiusi in casa',
+      'Molti rifugi pubblici e alberghi non accettano animali: trova prima un posto che li accetti',
+      'Microchip con i tuoi recapiti aggiornati, collare con medaglietta e un contatto fuori zona',
+      'Kit: cibo e acqua per alcuni giorni, ciotola, farmaci, guinzaglio, trasportino, sacchetti',
+      'Una tua foto insieme all\'animale aiuta a dimostrare che è tuo se vi separate',
+    ],
+    sections: [
+      {
+        heading: 'Il piano',
+        steps: [
+          'Trova prima un posto sicuro dove portare gli animali: molti rifugi pubblici e alberghi non li accettano',
+          'Accordati con vicini, amici o parenti che possano occuparsene o portarli via se tu non puoi',
+          'Fai mettere il microchip e tieni aggiornati i tuoi recapiti; aggiungi un contatto fuori dalla tua zona',
+          'Chiedi al tuo veterinario e al Comune come gestire gli animali in emergenza',
+          'Al primo segnale di pericolo porta gli animali dentro casa',
+        ],
+      },
+      {
+        heading: 'Il kit per l\'animale',
+        steps: [
+          'Cibo per alcuni giorni in un contenitore chiuso e impermeabile, acqua e ciotola',
+          'Una scorta dei suoi farmaci in un contenitore impermeabile; chiedi al veterinario cosa serve per il primo soccorso',
+          'Collare con medaglietta, pettorina o guinzaglio, e un ricambio',
+          'Trasportino robusto per ogni animale',
+          'Copia dei documenti (libretto, registrazione) in busta impermeabile e sul telefono',
+          'Igiene: lettiera, giornali, carta, sacchetti, candeggina',
+          'Una tua foto con l\'animale, giochi o coperta familiari per ridurre lo stress',
+          'Controlla il kit spesso e cambia cibo e farmaci prima che scadano',
+        ],
+      },
+      {
+        heading: 'Abituarlo al trasportino',
+        steps: [
+          'Lascia il trasportino aperto dove l\'animale sta di solito',
+          'Mettici dentro premi e una coperta che conosce',
+          'Impara dove si nasconde, per trovarlo in fretta se devi uscire',
+        ],
+      },
+    ],
+    relatedGuides: ['evacuazione-piano', 'gobag-checklist'],
+    tasks: [],
+  },
+
+  {
+    id: 'stress-bambini',
+    title: 'Paura e stress: adulti e bambini',
+    icon: 'ph-heart',
+    category: 'casa',
+    // Fonte: Ready.gov «Coping with Disaster»
+    source: 'Ready.gov',
+    readTime: '3 min',
+    quickRef: [
+      'È normale avere paura, rabbia o tristezza: parlarne aiuta',
+      'Mantieni il più possibile la routine: pasti, sonno, gioco, piccoli compiti',
+      'Con i bambini: abbracci, risposte semplici e vere, tempo in più insieme',
+      'Limita le notizie ripetute davanti ai bambini e guardale insieme a loro',
+      'Se il disagio dura o peggiora, chiedi aiuto al medico, al pediatra o a uno psicologo',
+    ],
+    sections: [
+      {
+        heading: 'Per gli adulti',
+        steps: [
+          'Parla con qualcuno di ciò che provi: paura, rabbia, tristezza',
+          'Non sentirti responsabile di ciò che è successo',
+          'Mangia, riposa, muoviti e prenditi momenti di calma',
+          'Mantieni una routine normale per te e la famiglia, senza chiederti troppo',
+          'Passa tempo con familiari e amici e accetta l\'aiuto della comunità',
+        ],
+      },
+      {
+        heading: 'Segnali da non trascurare',
+        content: 'Chiedi aiuto se compaiono e durano: difficoltà a dormire o a concentrarsi, confusione, irritabilità, più alcol o farmaci, mal di testa o mal di pancia, tristezza profonda, senso di impotenza o di colpa, paura di stare soli o tra la gente, crisi di pianto. Rivolgiti al medico di famiglia, a uno psicologo o ai servizi della tua zona.',
+      },
+      {
+        heading: 'Per i bambini',
+        steps: [
+          'I genitori sono quasi sempre il sostegno migliore: stai vicino, abbraccia, rassicura',
+          'Ascolta le loro paure e rispondi con parole semplici e vere. I più piccoli possono disegnare o raccontare',
+          'Le paure più comuni: che succeda di nuovo, che qualcuno si faccia male, di restare soli',
+          'Ripristina appena puoi gli orari di pasti, gioco, sonno e scuola. Dai piccoli compiti utili e lodali',
+          'Guarda le notizie insieme e spiega: le immagini ripetute fanno credere che stia succedendo di nuovo',
+          'Reazioni possibili: i piccoli possono tornare a bagnare il letto o non volersi staccare; i grandi possono essere arrabbiati o chiudersi',
+          'Se il disagio dura, peggiora o blocca la vita normale, chiedi aiuto al pediatra o a uno specialista',
+        ],
+      },
+    ],
+    relatedGuides: ['comm-piano-famiglia', 'community-resilienza'],
+    tasks: [],
+  },
+
+  {
+    id: 'persone-fragili',
+    title: 'Persone fragili e con disabilità',
+    icon: 'ph-wheelchair',
+    category: 'casa',
+    // Fonti: Ready.gov «People with Disabilities»; Comune di Ravenna, Protezione civile (apparecchi elettromedicali)
+    source: 'Ready.gov · Protezione civile',
+    readTime: '3 min',
+    quickRef: [
+      'Crea una rete di persone che possano aiutarti e di\' loro dove sono le tue scorte',
+      'Apparecchi medici elettrici: chiedi al medico come tenerli accesi senza corrente. Se servono subito: 118',
+      'Elenco farmaci con dosi e allergie, scorta concordata con il medico, borsa frigo per i farmaci da frigo',
+      'Batterie di ricambio per apparecchi acustici, carrozzine e altri dispositivi',
+      'Chiedi al Comune se esiste un registro delle persone fragili per le emergenze',
+    ],
+    sections: [
+      {
+        heading: 'Il piano',
+        steps: [
+          'Chiediti se potresti cavartela da solo per alcuni giorni senza farmacia né ospedale',
+          'Crea una rete di persone che possano aiutarti; tieni i loro numeri su carta e sul telefono e di\' loro dove sono le scorte',
+          'Organizza in anticipo un trasporto accessibile per l\'evacuazione',
+          'Se fai dialisi o terapie salvavita, conosci almeno due centri che possono seguirti',
+          'Apparecchi medici a corrente: chiedi al medico come mantenerli in funzione durante un blackout. Se servono e la corrente manca, chiama il 118 o i servizi sociali',
+          'Chiedi al Comune se esiste un registro volontario delle persone con disabilità',
+        ],
+      },
+      {
+        heading: 'Farmaci e dispositivi',
+        steps: [
+          'Chiedi al medico o al farmacista come preparare una scorta di emergenza dei farmaci',
+          'Elenco scritto: farmaci, dosi, orari, diagnosi, allergie, dispositivi con modello e numero di serie',
+          'Borsa frigo e siberini per i farmaci che vanno tenuti al fresco',
+          'Occhiali, apparecchi acustici e batterie di ricambio',
+          'Carrozzina elettrica: batteria di riserva carica, kit per forature o camera d\'aria, pompa; se possibile una carrozzina manuale leggera di scorta. Insegna ad altri come usarla e smontarla',
+        ],
+      },
+      {
+        heading: 'Comunicare',
+        steps: [
+          'Persone sorde: carta e penna, una lampada a pile per leggere il labiale o la lingua dei segni al buio',
+          'Persone cieche: etichette in Braille o a caratteri grandi sulle scorte',
+          'Difficoltà di parola: cartellini plastificati con frasi o immagini se il dispositivo smette di funzionare',
+          'Autismo e disabilità intellettive: dispositivi carichi con video e attività, cuffie antirumore, cibi che rassicurano',
+          'Demenza: non lasciare mai sola la persona; portate oggetti familiari; in un rifugio scegliete un angolo tranquillo lontano dalle uscite',
+        ],
+      },
+    ],
+    relatedGuides: ['farmaci-scorta', 'energia-blackout-protocollo', 'evacuazione-piano'],
+    tasks: [],
   },
 
   /* ══════════════════════ CALORE ══════════════════════ */
@@ -1014,6 +1339,60 @@ const GUIDES_DATA = [
     ],
     relatedGuides: ['comm-piano-famiglia', 'comm-radio-canali', 'energia-ricarica', 'energia-blackout-protocollo'],
     tasks: ['co03'],
+  },
+
+  {
+    id: 'radio-emergenza',
+    title: 'Radio di emergenza: onde corte e radio a galena',
+    icon: 'ph-radio',
+    category: 'comm',
+    // Fonti: Cornell University con Tompkins County Amateur Radio Club «Make your own crystal radio»;
+    // University of Iowa, Physics «Build a simple crystal radio set»; Alertswiss (radio FM e DAB+).
+    // Spegnimento onde medie RAI: 2022.
+    source: 'Cornell University · Tompkins County Amateur Radio Club · University of Iowa · Alertswiss',
+    readTime: '4 min',
+    quickRef: [
+      'In un\'emergenza grave non sai quali emittenti resteranno attive: una radio che riceve FM, DAB+, onde medie e onde corte ti dà più possibilità',
+      'Onde corte: si ricevono anche da molto lontano, utili se le emittenti vicine tacciono',
+      'Radio a galena: funziona senza pile né corrente, prende energia dall\'onda radio. Riceve solo onde medie (AM)',
+      'Antenna: MAI vicino a linee elettriche. Mai collegarsi a fili elettrici o tubi del gas',
+      'Antenna esterna: staccala quando c\'è rischio di fulmini',
+    ],
+    sections: [
+      {
+        heading: 'Quale radio tenere',
+        content: 'Le autorità danno le istruzioni anche via radio, soprattutto se la rete del cellulare è ferma. Tieni una radio a pile o a manovella che riceva FM e DAB+. Se puoi, scegline una che riceva anche onde medie e onde corte: in Italia la RAI ha spento le onde medie nel 2022, ma in un\'emergenza grave non si sa quali emittenti, vicine o lontane, continueranno a trasmettere. Le onde corte viaggiano molto lontano, soprattutto di notte, e permettono di ascoltare emittenti di altri paesi.',
+      },
+      {
+        heading: 'Come funziona la radio a galena',
+        content: 'È una radio che non ha bisogno di pile: usa l\'energia dell\'onda radio stessa. Ha quattro parti: ANTENNA e TERRA (due conduttori grandi, per esempio un filo lungo e un tubo metallico dell\'acqua fredda) che catturano l\'onda; il CIRCUITO DI SINTONIA (una bobina di filo e un condensatore variabile) che sceglie la stazione; il RIVELATORE (un diodo al germanio, oppure un cristallo di galena) che estrae la voce o la musica; l\'AURICOLARE piezoelettrico (ad alta impedenza) che la trasforma in suono. Riceve solo le onde medie (AM) e sente poco: serve una stazione abbastanza vicina o potente.',
+      },
+      {
+        heading: 'Costruirla: materiale',
+        steps: [
+          'Filo di rame isolato per antenna e collegamenti, il più lungo possibile per l\'antenna',
+          'Una bobina: filo di rame avvolto su un tubo di cartone o plastica, con alcune prese intermedie per provare la sintonia',
+          'Un condensatore variabile (si trova nelle vecchie radio o nei negozi di elettronica)',
+          'Un diodo al germanio',
+          'Un auricolare piezoelettrico (cristallo). Le cuffie normali non funzionano bene',
+          'Morsetti a coccodrillo per collegare e cambiare le prese della bobina',
+          'Gli schemi completi sono nelle guide delle università (Cornell, University of Iowa): procurale e stampale prima',
+        ],
+      },
+      {
+        heading: 'Antenna e terra: sicurezza',
+        steps: [
+          'MAI lanciare o stendere l\'antenna sopra o vicino a linee elettriche: è molto pericoloso',
+          'Non collegarti mai a fili elettrici sotto tensione né ai tubi del gas',
+          'Terra: un tubo metallico dell\'acqua fredda (non di plastica) o un rubinetto da giardino in metallo',
+          'Antenna: un filo steso il più lungo possibile, sollevato da terra all\'aperto, oppure grandi parti metalliche (grondaia, telaio metallico, condotto dell\'aria)',
+          'Un\'antenna esterna va staccata quando non la usi e quando c\'è rischio di temporale. Un\'antenna fissa richiede un parafulmine installato da un elettricista',
+          'Prova direzioni e collegamenti diversi: la ricezione cambia molto',
+        ],
+      },
+    ],
+    relatedGuides: ['comm-radio-canali', 'senza-internet', 'energia-ricarica'],
+    tasks: [],
   },
 
   {
@@ -2139,6 +2518,7 @@ const GUIDE_CATEGORIES = [
   { id: 'medico',   label: 'Medico',         icon: 'ph-first-aid'     },
   { id: 'comm',     label: 'Comunicazioni',  icon: 'ph-radio'         },
   { id: 'mobilita', label: 'Mobilità',       icon: 'ph-car'           },
+  { id: 'casa',     label: 'Casa e persone', icon: 'ph-house-line'    },
 ];
 
 const PC_GUIDES = [
@@ -2242,6 +2622,9 @@ const GUIDE_SOURCE_URLS = {
 // Guide tolte dalla lista dopo verifica sulle fonti (v90): acqua-purificazione (CDC, EPA, Eawag),
 // energia-generatore (Ready.gov, CDC), nucleare-radiologico (Ready.gov, CDC, Protezione civile).
 const GUIDE_CAUTION = {
+  'cibo-senza-frigo-gas':          'pratica',   // fonti ONG e siti non ufficiali
+  'radio-emergenza':               'pratica',   // fonti universitarie e radioamatori, non enti pubblici
+  'energia-solare-piccola':        'pratica',   // parte delle indicazioni dai produttori
   'acqua-raccolta-pioggia':        'salute',
   'acqua-fonti-alternative':       'salute',
   'cibo-conservazione':            'salute',
@@ -2268,3 +2651,10 @@ const GUIDE_CAUTION_TEXT = {
   salute:  'Guida a rischio: contiene indicazioni su salute, acqua, cibo o farmaci non ancora verificate da una fonte sanitaria ufficiale. Se applicate male possono essere pericolose. Usala con cautela, solo come orientamento. In caso di dubbio chiama il 112 o il tuo medico e segui le autorità sanitarie.',
   pratica: 'Guida non verificata: le indicazioni non sono ancora state controllate su fonti ufficiali italiane e alcune pratiche possono essere pericolose. Usala con cautela, solo come orientamento, e segui sempre le istruzioni delle autorità.',
 };
+
+// Profilo → «Nascondi le guide da usare con cautela»: se attivo, le guide in GUIDE_CAUTION
+// non compaiono nell'elenco, nei collegamenti e nella ricerca «Chiedi».
+function guideVisible(id) {
+  try { if (Storage.get('hide_caution', false) !== true) return true; } catch (e) { return true; }
+  return !GUIDE_CAUTION[id];
+}
