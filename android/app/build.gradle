@@ -35,6 +35,6 @@ android {
 
     // I file dell'app web sono già compressi o piccoli: non ricomprimere PNG e PDF
     androidResources {
-        noCompress += ['png', 'pdf', 'geojson']
+        noCompress += ['png', 'webp', 'pdf']
     }
 }
