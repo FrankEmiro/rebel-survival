@@ -37,7 +37,7 @@ const GuideModule = (() => {
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-|-$/g, '')
         .slice(0, 40);
-      const imgSrc = `/js/images/guides/${g.id}--${slug}.png`;
+      const imgSrc = `/js/images/guides/${g.id}--${slug}.webp`;
 
       let body = '';
       if (sec.steps) {

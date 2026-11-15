@@ -233,7 +233,7 @@ const DashboardModule = (() => {
       (g.sections || []).forEach(sec => {
         const slug = sec.heading.toLowerCase()
           .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40);
-        paths.push(`/js/images/guides/${g.id}--${slug}.png`);
+        paths.push(`/js/images/guides/${g.id}--${slug}.webp`);
       });
     });
     return paths;

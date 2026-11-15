@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kit-resilienza-v94';
+const CACHE_NAME = 'kit-resilienza-v97';
 const CDN_CACHE  = 'kit-resilienza-cdn-v51';
 
 // Asset locali — cache-first
@@ -98,7 +98,10 @@ self.addEventListener('activate', e => {
         keys.filter(k => k !== CACHE_NAME && k !== CDN_CACHE && !PACK_CACHES.includes(k) && !k.startsWith('webllm'))
             .map(k => caches.delete(k))
       )
-    )
+    ).then(() => caches.open('kit-resilienza-guides')).then(async c => {
+      // illustrazioni vecchie in PNG (sostituite da WebP, v97): liberano spazio nel telefono
+      for (const r of await c.keys()) if (/\/js\/images\/guides\/.*\.png$/.test(r.url)) await c.delete(r);
+    }).catch(() => {})
   );
   self.clients.claim();
 });
