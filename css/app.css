@@ -3967,3 +3967,13 @@ input, select, textarea { font-family: 'Nunito', sans-serif; font-size: 1rem; }
   .calc-more .data-table th, .calc-more .data-table td { padding: 8px 5px; }
   .calc-more .data-table { font-size: 0.8rem; }
 }
+
+/* ── Wikipedia offline ── */
+.wiki-bar { display: flex; gap: 6px; align-items: center; position: sticky; top: 0; z-index: 5; background: var(--bg-primary, #131810); padding: 6px 0; }
+.wiki-bar input { flex: 1; min-width: 0; }
+.wiki-results { display: flex; flex-direction: column; gap: 4px; margin: 6px 0; }
+.wiki-hit { text-align: left; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-secondary); color: var(--text-primary); font: inherit; cursor: pointer; }
+.wiki-frame { width: 100%; min-height: 400px; border: 0; border-radius: 8px; background: #fff; }
+.wiki-book { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.wiki-book > div:first-child { min-width: 0; }
+.wiki-bar input { background: var(--bg-secondary); color: var(--text-primary); border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; font: inherit; }

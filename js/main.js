@@ -14,6 +14,7 @@ const SECTION_TITLES = {
   settings: 'Profilo',
   strumenti: 'Emergenza',
   assistente: 'Chiedi',
+  wiki: 'Wikipedia',
 };
 
 // Sezione corrente
@@ -73,7 +74,7 @@ function navigateTo(section) {
 
   // Update bottom nav: le sezioni senza pulsante proprio accendono quello da cui si arriva
   // (Chiedi si apre dalla Home), così non resta in evidenza solo il tasto rosso Emergenza
-  const BOTTOM_NAV_PARENT = { assistente: 'home' };
+  const BOTTOM_NAV_PARENT = { assistente: 'home', wiki: 'guide' };
   const navSection = BOTTOM_NAV_PARENT[section] || section;
   document.querySelectorAll('.bottom-nav-item').forEach(l => {
     l.classList.toggle('active', l.dataset.section === navSection);
@@ -123,6 +124,7 @@ function initSection(section) {
     case 'kit':         KitModule.init(); switchKitTab('kit'); break;
     case 'guide':       GuideModule.init(); break;
     case 'assistente':  AssistenteModule.init(); break;
+    case 'wiki':        WikiModule.init(); break;
     case 'settings':    SettingsModule.init(); break;
     case 'strumenti':   DashboardModule.renderEmergency(); StrumentiModule.init(); break;
   }

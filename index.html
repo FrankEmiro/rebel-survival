@@ -173,10 +173,23 @@
         <span><strong>Fai una domanda</strong><small>Es. «come rendo potabile l'acqua?» — rispondo con le guide</small></span>
         <i class="ph ph-caret-right"></i>
       </button>
+      <button class="as-entry" onclick="navigateTo('wiki')">
+        <i class="ph ph-globe-hemisphere-west"></i>
+        <span><strong>Wikipedia offline</strong><small>Scegli cosa scaricare (medicina, voci principali, tutta Wikipedia) e leggila senza internet</small></span>
+        <i class="ph ph-caret-right"></i>
+      </button>
       <div id="guide-root"></div>
     </section>
 
     <!-- ===== DIMENSIONI (ex Impostazioni) ===== -->
+    <section id="section-wiki" class="section">
+      <div class="section-header">
+        <h1><i class="ph ph-globe-hemisphere-west"></i> Wikipedia offline</h1>
+        <p class="subtitle">Scegli tu cosa scaricare: poi funziona senza internet</p>
+      </div>
+      <div id="wiki-root"></div>
+    </section>
+
     <section id="section-settings" class="section">
       <div class="section-header">
         <h1><i class="ph ph-user-circle"></i> Profilo</h1>
@@ -263,6 +276,9 @@
   <script src="js/modules/guide.js"></script>
   <script src="js/modules/strumenti.js"></script>
   <script src="js/modules/assistente.js"></script>
+  <script src="js/vendor/fzstd.min.js"></script>
+  <script src="js/modules/zim.js"></script>
+  <script src="js/modules/wiki.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>
