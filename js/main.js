@@ -248,6 +248,12 @@ const AppUpdate = (() => {
   }
   async function render() {
     const v = document.getElementById('app-ver');
+    // pulsante «Scarica l'app Android»: solo su telefoni Android (non nell'app) e solo se il file è sul sito
+    if (!window.RSAndroid && /Android/i.test(navigator.userAgent) && navigator.onLine) {
+      fetch('/download/RebelSurvival.apk', { method: 'HEAD', cache: 'no-store' }).then(res => {
+        if (res.ok) ['app-apk-box', 'app-apk-note'].forEach(id => document.getElementById(id)?.classList.remove('hidden'));
+      }).catch(() => {});
+    }
     if (v && window.RSAndroid) {
       v.textContent = RSAndroid.version() + ' (app Android)';
       const note = document.getElementById('app-share-note');
