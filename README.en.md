@@ -4,7 +4,7 @@
 
 <p align="center">
   <b>The app to prepare for emergencies and get through them, even without internet.</b><br>
-  Guides from official sources, step-by-step plans for each scenario, supply calculators, practical tools, offline Wikipedia and a Bluetooth chat between nearby phones. No account: your data stays on your phone.
+  Guides that gather information from several sources, step-by-step plans for each scenario, supply calculators, practical tools, offline Wikipedia and a Bluetooth chat between nearby phones. No account: your data stays on your phone.
 </p>
 
 <p align="center">
@@ -22,7 +22,7 @@
   <a href="https://github.com/FrankEmiro/rebel-survival/releases/latest"><b>⬇ Download for Android</b></a>
 </p>
 
-> 🏴 **Rebel Survival is a [Cyber Rebellion](https://cyberrebellion.site/en/) project.** The app is free and its code is public. The app and its guides are in **Italian** and follow Italian official sources. Ideas, bug reports and corrections to the guides are welcome in the [issues](https://github.com/FrankEmiro/rebel-survival/issues).
+> 🏴 **Rebel Survival is a [Cyber Rebellion](https://cyberrebellion.site/en/) project.** The app is free and its code is public. The app and its guides are in **Italian** and draw on Italian official sources where possible. Ideas, bug reports and corrections to the guides are welcome in the [issues](https://github.com/FrankEmiro/rebel-survival/issues).
 
 ## The problem
 
@@ -37,8 +37,8 @@ It puts in **one app that works offline** what you need **before** an emergency 
 | | |
 |---|---|
 | 🚨 **What is happening?** | Pick the situation and the app gives you the plan to follow, step by step. **21 scenarios**: short and long blackout, earthquake, flood, tsunami, volcano, wildfire, heat wave, winter storm, evacuation, lack of water, food or gas, pandemic, economic crisis, cyberattack, conflict, nuclear or radiological incident, survival in the wild and more. |
-| 📚 **Guides from official sources** | **47 guides** in 8 areas (water, food, energy, heat, health, communications, mobility, home and people), with illustrated diagrams. Every practical instruction comes from official bodies (Italian Civil Protection, WHO, Ready.gov, ERC and others), with a link to the source. Guides not yet fully verified are marked **"Caution"** and can be hidden. Plus the **Italian Civil Protection PDF guides**. |
-| 🧮 **Supply calculators** | How much water and food your family needs, how many days your energy lasts, heating, fuel. The numbers follow official recommendations and are based on your profile. |
+| 📚 **Guides from several sources** | **47 guides** in 8 areas (water, food, energy, heat, health, communications, mobility, home and people), with illustrated diagrams. We have tried to gather and combine information from several sources (Italian Civil Protection, WHO, Ready.gov, ERC and others), with a link to the source where available. **We do not guarantee it is complete, correct or up to date.** Guides with unofficial or still unchecked sources are marked **"Caution"** and can be hidden. Plus the **Italian Civil Protection PDF guides**. |
+| 🧮 **Supply calculators** | How much water and food your family needs, how many days your energy lasts, heating, fuel. They are rough estimates based on public recommendations and your profile: not a guarantee. |
 | 🎒 **Supplies and kits** | What you already have and what is missing, area by area: water, food, energy, health, hygiene, go-bag. With a ready **shopping list**. |
 | 🔦 **Tools** | Flashlight, SOS signal, compass, GPS position, map with Italian municipal, provincial and regional borders, battery and network status. The screen can stay on. |
 | 📖 **Offline Wikipedia** | Choose and download the parts of Wikipedia you need (for example medicine) and read them with no connection. Files come from Kiwix; the reader is built into the app. On Android the download keeps going with the app in the background. |
@@ -54,7 +54,12 @@ It puts in **one app that works offline** what you need **before** an emergency 
 3. **Prepare your supplies** with the calculators and lists, area by area.
 4. **In an emergency** tap "What is happening?" and follow the plan. Everything works without a connection.
 
-> ⚠️ **Please note.** Rebel Survival collects advice from official sources, but it **does not replace emergency services or instructions from the authorities**. In danger, call **112** (the European emergency number) and follow Civil Protection and local authorities. Features marked "experimental" may not work on every phone.
+> ⚠️ **Important warnings.**
+> - Rebel Survival **gathers and summarises information from several sources**. It may contain errors, omissions or outdated advice. **It is not an emergency service, nor medical, legal or technical advice.**
+> - **The provider accepts no responsibility** for harm to people or property arising from the use of the app, guides, calculations or experimental features. **Use it at your own risk.**
+> - **You must be aware of the risks** of the activities described (for example fire, unsafe water, medicines, food, travel) and always check the information against official sources. If in doubt, don't do it.
+> - In danger call **112** and follow Civil Protection and local authorities: they come before anything you read here.
+> - Features marked "experimental" may not work on every phone: don't rely on them as your only means.
 
 ## For developers
 
@@ -67,7 +72,7 @@ npm start          # or: python3 -m http.server 5500
 ```
 Then open **http://localhost:5500**. Project structure, release steps and the Android build are described in the [Italian README](README.md#per-sviluppatori) and in [android/LEGGIMI.md](android/LEGGIMI.md).
 
-**Contributing to the guides:** they concern people's safety. **Every practical instruction (doses, numbers, distances, procedures) needs an official source.** Please include the link to the source with any change.
+**Contributing to the guides:** they concern people's safety. **For every practical instruction (doses, numbers, distances, procedures) we look for an official source.** Please include the link to the source with any change.
 
 ## Third-party libraries and content
 

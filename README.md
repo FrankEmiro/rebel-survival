@@ -4,7 +4,7 @@
 
 <p align="center">
   <b>L'app per prepararsi alle emergenze e affrontarle, anche senza internet.</b><br>
-  Guide da fonti ufficiali, piani per scenario, calcolatori delle scorte, strumenti pratici, Wikipedia offline e una chat Bluetooth tra telefoni vicini. Niente account: i dati restano sul tuo telefono.
+  Guide che raccolgono informazioni da più fonti, piani per scenario, calcolatori delle scorte, strumenti pratici, Wikipedia offline e una chat Bluetooth tra telefoni vicini. Niente account: i dati restano sul tuo telefono.
 </p>
 
 <p align="center">
@@ -26,7 +26,7 @@
 
 ## Il problema
 
-Quando manca la corrente, l'acqua o la rete telefonica, le informazioni servono subito, ma internet spesso non c'è. Le indicazioni ufficiali esistono, però sono sparse tra siti e PDF diversi. E prepararsi prima, cioè capire quanta acqua e quanto cibo tenere in casa o cosa mettere nello zaino, richiede tempo e calcoli che nessuno fa.
+Quando manca la corrente, l'acqua o la rete telefonica, le informazioni servono subito, ma internet spesso non c'è. Le indicazioni di enti e organizzazioni esistono, però sono sparse tra siti e PDF diversi. E prepararsi prima, cioè capire quanta acqua e quanto cibo tenere in casa o cosa mettere nello zaino, richiede tempo e calcoli che nessuno fa.
 
 ## Cosa fa Rebel Survival
 
@@ -37,8 +37,8 @@ Mette in **un'unica app che funziona offline** quello che serve **prima** di un'
 | | |
 |---|---|
 | 🚨 **Cosa sta succedendo?** | Scegli la situazione e l'app ti dà il piano da seguire, passo per passo. **21 scenari**: blackout breve e lungo, terremoto, alluvione, maremoto, vulcano, incendio, ondata di caldo, tempesta invernale, evacuazione, mancanza di acqua, cibo o gas, pandemia, crisi economica, attacco informatico, conflitto, incidente nucleare o radiologico, sopravvivenza in natura e altri. |
-| 📚 **Guide da fonti ufficiali** | **47 guide** in 8 aree (acqua, cibo, energia, calore, salute, comunicazioni, mobilità, casa e persone), con schemi illustrati. Ogni indicazione pratica viene da enti ufficiali (Protezione civile, OMS, Ready.gov, ERC e altri), con il link alla fonte. Le guide ancora da verificare sono segnate **«Cautela»** e si possono nascondere. In più ci sono le **guide PDF della Protezione civile**. |
-| 🧮 **Calcolatori delle scorte** | Quanta acqua e quanto cibo servono alla tua famiglia, per quanti giorni ti basta l'energia, il riscaldamento, il carburante. I numeri seguono le raccomandazioni ufficiali e sono calcolati sul tuo profilo. |
+| 📚 **Guide da più fonti** | **47 guide** in 8 aree (acqua, cibo, energia, calore, salute, comunicazioni, mobilità, casa e persone), con schemi illustrati. Abbiamo cercato di raccogliere e mettere insieme le informazioni di più fonti (Protezione civile, OMS, Ready.gov, ERC e altre), con il link alla fonte dove c'è. **Non garantiamo che siano complete, corrette o aggiornate.** Le guide con fonti non ufficiali o ancora da controllare sono segnate **«Cautela»** e si possono nascondere. In più ci sono le **guide PDF della Protezione civile**. |
+| 🧮 **Calcolatori delle scorte** | Quanta acqua e quanto cibo servono alla tua famiglia, per quanti giorni ti basta l'energia, il riscaldamento, il carburante. Sono stime approssimative basate su raccomandazioni pubbliche e sul tuo profilo: non sono una garanzia. |
 | 🎒 **Scorte e kit** | Cosa hai già e cosa ti manca, area per area: acqua, cibo, energia, salute, igiene, zaino di emergenza. Con la **lista della spesa** pronta. |
 | 🔦 **Strumenti** | Torcia, segnale SOS, bussola, posizione GPS, mappa con i confini di comuni, province e regioni, stato di batteria e rete. Lo schermo può restare acceso. |
 | 📖 **Wikipedia offline** | Scegli e scarica le parti di Wikipedia che ti servono, per esempio la medicina, e leggile senza rete. I file vengono da Kiwix; il lettore è dentro l'app. Su Android il download continua anche con l'app in secondo piano. |
@@ -54,7 +54,12 @@ Mette in **un'unica app che funziona offline** quello che serve **prima** di un'
 3. **Prepara le scorte** con i calcolatori e le liste, area per area.
 4. **In un'emergenza** tocca «Cosa sta succedendo?» e segui il piano. Tutto funziona anche senza rete.
 
-> ⚠️ **Da sapere.** Rebel Survival raccoglie indicazioni da fonti ufficiali, ma **non sostituisce i soccorsi né le istruzioni delle autorità**. In caso di pericolo chiama il **112** e segui le indicazioni della Protezione civile e delle autorità locali. Le funzioni segnate «sperimentale» possono non funzionare su tutti i telefoni.
+> ⚠️ **Avvertenze importanti.**
+> - Rebel Survival **raccoglie e riassume informazioni da più fonti**. Può contenere errori, omissioni o indicazioni superate. **Non è un servizio di soccorso né un parere medico, legale o tecnico.**
+> - **Chi la fornisce non si assume alcuna responsabilità** per danni a persone o cose derivanti dall'uso dell'app, delle guide, dei calcoli o delle funzioni sperimentali. **Usala a tuo rischio.**
+> - **Devi essere consapevole dei rischi** delle attività descritte (per esempio uso di fuoco, acqua non sicura, farmaci, cibo, spostamenti) e verificare sempre le informazioni con le fonti ufficiali. In caso di dubbio, non farlo.
+> - In caso di pericolo chiama il **112** e segui le istruzioni della Protezione civile e delle autorità locali: vengono prima di tutto ciò che trovi qui.
+> - Le funzioni segnate «sperimentale» possono non funzionare su tutti i telefoni: non contarci come unico mezzo.
 
 ## Per sviluppatori
 
@@ -91,7 +96,7 @@ Poi apri **http://localhost:5500**.
 3. Per l'app Android: `tools/build-android.sh` crea l'APK, `tools/pubblica-apk.sh NN` scrive il comando per pubblicarla come release `vNN` su GitHub. L'APK non sta sul sito: l'app installata vede la nuova versione dall'ultima release.
 
 ### Contribuire alle guide
-Le guide riguardano la sicurezza delle persone. **Ogni indicazione pratica (dosi, numeri, distanze, procedure) deve avere una fonte ufficiale**: Protezione civile, OMS, ministeri, enti pubblici. Se proponi una modifica, metti il link alla fonte. Senza fonte, la guida resta segnata «Cautela».
+Le guide riguardano la sicurezza delle persone. **Per ogni indicazione pratica (dosi, numeri, distanze, procedure) cerchiamo una fonte ufficiale**: Protezione civile, OMS, ministeri, enti pubblici. Se proponi una modifica, metti il link alla fonte. Senza fonte, la guida resta segnata «Cautela».
 
 ## Librerie e contenuti di terzi
 
