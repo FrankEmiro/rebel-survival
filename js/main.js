@@ -167,6 +167,10 @@ function registerSW() {
    (nascosto: si mostra toccando 5 volte il numero di versione). I dati
    dell'utente (localStorage, pacchetti offline, modello AI) non vengono toccati. */
 const AppUpdate = (() => {
+  // Indirizzo del sito: l'app Android (che gira da file interni) lo usa per sapere se c'è un APK nuovo.
+  // Sul sito sono pubblicati /download/RebelSurvival.apk e /download/version.json (vedi tools/pubblica-apk.sh).
+  const SITE_URL = '';
+  const APK_PATH = '/download/RebelSurvival.apk';
   let reloading = false, taps = 0;
   const startedAt = Date.now();
   const reloadOnce = () => { if (!reloading) { reloading = true; location.reload(); } };
@@ -210,8 +214,35 @@ const AppUpdate = (() => {
     document.body.appendChild(d);
   }
 
+  // App Android: i file sono dentro l'APK, quindi si aggiorna installando un APK nuovo dal sito.
+  const apkVersion = () => parseInt(String(window.RSAndroid.version() || '').replace(/\D/g, ''), 10) || 0;
+  function apkLink(show) {
+    const box = document.getElementById('app-apk-upd');
+    if (!box) return;
+    box.classList.toggle('hidden', !show);
+    const a = box.querySelector('a');
+    if (a) a.href = SITE_URL + APK_PATH;
+  }
+  async function checkApk(quiet) {
+    if (!SITE_URL) return quiet || say('Controllo aggiornamenti non ancora configurato.');
+    if (!navigator.onLine) return quiet || say('Serve internet per cercare aggiornamenti.');
+    if (!quiet) say('Cerco aggiornamenti…');
+    try {
+      const res = await fetch(SITE_URL + '/download/version.json', { cache: 'no-store' });
+      if (!res.ok) throw new Error(res.status);
+      const last = parseInt((await res.json()).version, 10) || 0;
+      if (last > apkVersion()) {
+        apkLink(true);
+        say(`È disponibile la v${last}. Tocca «Scarica l'aggiornamento», poi apri il file e conferma «Aggiorna»: i tuoi dati restano.`);
+      } else if (!quiet) {
+        apkLink(false);
+        say('Hai già l\'ultima versione.');
+      }
+    } catch (e) { if (!quiet) say('Non riesco a controllare ora. Riprova più tardi.'); }
+  }
+
   async function check() {
-    if (window.RSAndroid) return say('Per aggiornare l\'app installa la nuova versione (da Google Play o dal file che ricevi). I tuoi dati restano.');
+    if (window.RSAndroid) return checkApk(false);
     if (!('serviceWorker' in navigator)) return say('Aggiornamento non disponibile su questo browser.');
     if (!navigator.onLine) return say('Serve internet per cercare aggiornamenti.');
     say('Cerco aggiornamenti…');
@@ -250,14 +281,15 @@ const AppUpdate = (() => {
     const v = document.getElementById('app-ver');
     // pulsante «Scarica l'app Android»: solo su telefoni Android (non nell'app) e solo se il file è sul sito
     if (!window.RSAndroid && /Android/i.test(navigator.userAgent) && navigator.onLine) {
-      fetch('/download/RebelSurvival.apk', { method: 'HEAD', cache: 'no-store' }).then(res => {
+      fetch(APK_PATH, { method: 'HEAD', cache: 'no-store' }).then(res => {
         if (res.ok) ['app-apk-box', 'app-apk-note'].forEach(id => document.getElementById(id)?.classList.remove('hidden'));
       }).catch(() => {});
     }
     if (v && window.RSAndroid) {
-      v.textContent = RSAndroid.version() + ' (app Android)';
+      v.textContent = 'v' + apkVersion() + ' (app Android)';
       const note = document.getElementById('app-share-note');
       if (note) note.innerHTML = '<i class="ph ph-wifi-slash"></i> Funziona anche senza internet: invia l\'app completa con Bluetooth o Quick Share. Chi la riceve deve consentire l\'installazione da questa fonte. Non contiene i tuoi dati.';
+      checkApk(true);                       // in silenzio: parla solo se c'è una versione nuova
     } else if (v) {
       const [r, l] = await Promise.all([running, latest()]);
       v.textContent = r ? 'v' + r : (l ? 'v' + l : '—');
