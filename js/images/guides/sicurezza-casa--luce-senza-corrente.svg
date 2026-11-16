@@ -1,0 +1,21 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 576' width='1024' height='576' role='img' aria-label='Luce senza corrente'>
+<rect width='1024' height='576' fill='#f4eedf'/>
+<rect x='10' y='10' width='1004' height='556' fill='none' stroke='#2a2a26' stroke-width='3' rx='6'/>
+<text x='512.0' y='58' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='36' font-weight='800' fill='#2a2a26'>LUCE SENZA CORRENTE</text>
+<text x='512.0' y='92' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='19' fill='#a8781f'>Sicurezza Domestica in Emergenza (Ready.gov)</text>
+<g transform='translate(94.0,212.0) scale(1.500)'><g fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><rect x='22' y='38' width='70' height='44' rx='6'/><rect x='92' y='52' width='8' height='16' rx='2'/><rect x='30' y='46' width='36' height='28' fill='#3d7a3a' stroke='none'/></g></g>
+<circle cx='44.0' cy='226.0' r='14' fill='#a8781f'/><text x='44.0' y='232.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>1</text>
+<text x='184.0' y='422.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='700' fill='#2a2a26'>Una torcia per ogni persona</text>
+<text x='184.0' y='442.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>della famiglia, con pile di</text>
+<text x='184.0' y='462.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>riserva</text>
+<g transform='translate(422.0,222.0) scale(1.500)'><g fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><path d='M60 108 q-34 -12 -24 -50 q6 14 16 12 q-10 -30 12 -54 q2 30 18 40 q12 34 -22 52z' stroke='#b0362a'/><path d='M30 110 h60'/></g></g>
+<circle cx='372.0' cy='236.0' r='14' fill='#a8781f'/><text x='372.0' y='242.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>2</text>
+<text x='512.0' y='432.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='700' fill='#2a2a26'>Preferisci luci senza fiamma</text>
+<text x='512.0' y='452.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>alle candele</text>
+<g transform='translate(750.0,202.0) scale(1.500)'><g fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><path d='M60 16 L106 100 H14z' fill='#d9cfb8'/><path d='M60 44 v28' stroke-width='7'/><circle cx='60' cy='86' r='4' fill='#2a2a26'/></g></g>
+<circle cx='700.0' cy='216.0' r='14' fill='#a8781f'/><text x='700.0' y='222.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>3</text>
+<text x='840.0' y='412.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='700' fill='#2a2a26'>Se usi candele: almeno 30 cm</text>
+<text x='840.0' y='432.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>da tende, carta e tutto ciò</text>
+<text x='840.0' y='452.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>che può bruciare, e mai</text>
+<text x='840.0' y='472.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>incustodite</text>
+</svg>

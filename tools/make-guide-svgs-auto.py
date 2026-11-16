@@ -60,6 +60,7 @@ def pin(): return f"<path d='M60 110 q-36 -40 -36 -62 a36 36 0 0 1 72 0 q0 22 -3
 def building(): return "<rect x='28' y='14' width='64' height='96'/>" + ''.join(f"<rect x='{x}' y='{y}' width='12' height='12'/>" for x in (38, 70) for y in (26, 48, 70)) + "<rect x='52' y='86' width='16' height='24'/>"
 def drop(): return "<path d='M60 14 q-36 46 -36 66 a36 36 0 0 0 72 0 q0 -20 -36 -66z' fill='#5a8fb0'/><path d='M44 82 q0 12 12 16' stroke='#fff'/>"
 def container(): return f"<path d='M30 30 h44 l16 16 v58 q0 6 -6 6 h-54 q-6 0 -6 -6 v-68 q0 -6 6 -6z'/><path d='M74 30 v-12 h-16 v12'/><path d='M36 70 h48' stroke='{GOLD}'/>"
+def smoke_det(): return f"<circle cx='60' cy='60' r='38'/><circle cx='60' cy='60' r='12' fill='{GOLD}'/><path d='M36 34 q-12 -12 -24 -2 M84 34 q12 -12 24 -2'/><path d='M44 104 q6 -8 0 -14 q-6 -8 2 -14 M60 108 q6 -8 0 -14 q-6 -8 2 -14 M76 104 q6 -8 0 -14 q-6 -8 2 -14' stroke='#888'/>"
 def number(n): return f"<circle cx='60' cy='60' r='42' fill='{SOFT}'/><text x='60' y='76' text-anchor='middle' {FONT} font-size='46' font-weight='800' fill='{INK}' stroke='none'>{n}</text>"
 
 # parole → pittogramma (il primo che corrisponde vince)
@@ -71,6 +72,7 @@ RULES = [
     (r'\b(112|118|115|113|chiama|telefon|cellular|sms|smartphone)', lambda: B.phone()),
     (r'radio|notizie|autoradio|onde corte|dab', B.radio),
     (r'generatore', B.generator),
+    (r'rilevator\w* di fumo|staccare mai il rilevatore', smoke_det),
     (r'monossido|\bco\b|rilevator', B.detector),
     (r'candeggina|cloro', B.bleach),
     (r'bollit|bollore|bolli', B.pot),
@@ -204,7 +206,7 @@ process.stdout.write(JSON.stringify(out));
 # farmaci e kit medico (antibiotici, farmaci scaduti), test di commestibilità delle piante.
 EXCLUDE = ('farmaci-scorta--', 'kit-medico--', 'survival-piante--test-universale',
            'comm-piano-famiglia--', 'acqua-stoccaggio--', 'cibo-scorte-piano--', 'orto-emergenza--',
-           'evacuazione-piano--livelli')   # livelli e tempi di evacuazione senza fonte
+           )
 # (piano famiglia, stoccaggio acqua, piano scorte e orto: numeri senza fonte già segnalati, da decidere)
 # Le guide «Cautela» (GUIDE_CAUTION) non si illustrano: il loro testo non è ancora verificato
 # e contiene numeri senza fonte; uno schema li renderebbe più credibili.
@@ -213,13 +215,15 @@ EXCLUDE = ('farmaci-scorta--', 'kit-medico--', 'survival-piante--test-universale
 # dati non verificati, quindi niente schema. Eccezioni: testo già riscritto su fonti ufficiali,
 # o illustrazione nascosta solo per un difetto del disegno.
 HIDDEN_OK = ('acqua-purificazione--perch-ogni-fonte-sospetta', 'community-resilienza--costruire-la-rete-locale')
+# Guide riscritte su fonti ufficiali dopo la revisione: tutte le sezioni si possono illustrare
+VERIFIED = ('sicurezza-casa--', 'gobag-checklist--', 'evacuazione-piano--')
 
 def main():
     data = json.loads(subprocess.check_output(['node', '-e', NODE, ROOT]))
     manual = {f"{gid}--{B.slug(h)}" for gid, h in B.SVGS}
     keys = []
     for sec in data:
-        if sec['webp'] or sec['key'] in manual or sec['key'].startswith(EXCLUDE) or sec['caution'] or (sec['hidden'] and sec['key'] not in HIDDEN_OK):
+        if sec['webp'] or sec['key'] in manual or sec['key'].startswith(EXCLUDE) or sec['caution'] or (sec['hidden'] and sec['key'] not in HIDDEN_OK and not sec['key'].startswith(VERIFIED)):
             continue
         with open(os.path.join(B.OUT, sec['key'] + '.svg'), 'w', encoding='utf-8') as f:
             f.write(build(sec))

@@ -1,0 +1,23 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 576' width='1024' height='576' role='img' aria-label='Dopo'>
+<rect width='1024' height='576' fill='#f4eedf'/>
+<rect x='10' y='10' width='1004' height='556' fill='none' stroke='#2a2a26' stroke-width='3' rx='6'/>
+<text x='512.0' y='58' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='36' font-weight='800' fill='#2a2a26'>DOPO</text>
+<text x='512.0' y='92' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='19' fill='#a8781f'>Piano di Evacuazione (Ready.gov)</text>
+<g transform='translate(192.5,128.0) scale(1.225)'><g fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><rect x='28' y='14' width='64' height='96'/><rect x='38' y='26' width='12' height='12'/><rect x='38' y='48' width='12' height='12'/><rect x='38' y='70' width='12' height='12'/><rect x='70' y='26' width='12' height='12'/><rect x='70' y='48' width='12' height='12'/><rect x='70' y='70' width='12' height='12'/><rect x='52' y='86' width='16' height='24'/></g></g>
+<circle cx='44.0' cy='142.0' r='14' fill='#a8781f'/><text x='44.0' y='148.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>1</text>
+<text x='266.0' y='305.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='700' fill='#2a2a26'>Torna a casa solo quando le</text>
+<text x='266.0' y='325.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>autorità dicono che è sicuro</text>
+<g transform='translate(694.5,128.0) scale(1.058)'><g fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><path d='M20 52 h52 q22 0 22 22 q0 22 -22 22 q-22 0 -22 -22 v-8 h-30z'/><circle cx='72' cy='74' r='6'/><path d='M96 40 l10 -10 M100 56 h12' stroke='#a8781f'/></g></g>
+<circle cx='536.0' cy='142.0' r='14' fill='#a8781f'/><text x='536.0' y='148.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>2</text>
+<text x='758.0' y='285.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='700' fill='#2a2a26'>Stai lontano dai cavi elettrici</text>
+<text x='758.0' y='305.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>caduti, che possono essere sotto</text>
+<text x='758.0' y='325.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>tensione, e segnalali</text>
+<g transform='translate(192.5,349.0) scale(1.225)'><g fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><rect x='22' y='40' width='76' height='50' rx='6'/><circle cx='42' cy='65' r='12'/><path d='M66 56 h20 M66 66 h20 M66 76 h12'/><path d='M30 90 v10 M90 90 v10'/><path d='M98 50 q14 -4 14 -16' stroke='#d9cfb8' stroke-width='6'/></g></g>
+<circle cx='44.0' cy='363.0' r='14' fill='#a8781f'/><text x='44.0' y='369.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>3</text>
+<text x='266.0' y='526.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='700' fill='#2a2a26'>Usa il generatore solo all&#x27;aperto,</text>
+<text x='266.0' y='546.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>mai in casa o in garage</text>
+<g transform='translate(684.5,349.0) scale(1.225)'><g fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><circle cx='60' cy='60' r='42' fill='#d9cfb8'/><text x='60' y='76' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='46' font-weight='800' fill='#2a2a26' stroke='none'>4</text></g></g>
+<circle cx='536.0' cy='363.0' r='14' fill='#a8781f'/><text x='536.0' y='369.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>4</text>
+<text x='758.0' y='526.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='700' fill='#2a2a26'>Avvisa familiari e amici quando</text>
+<text x='758.0' y='546.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>parti e quando arrivi</text>
+</svg>

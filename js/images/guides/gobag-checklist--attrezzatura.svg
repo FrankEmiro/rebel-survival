@@ -1,0 +1,33 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 576' width='1024' height='576' role='img' aria-label='Attrezzatura'>
+<rect width='1024' height='576' fill='#f4eedf'/>
+<rect x='10' y='10' width='1004' height='556' fill='none' stroke='#2a2a26' stroke-width='3' rx='6'/>
+<text x='512.0' y='58' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='36' font-weight='800' fill='#2a2a26'>ATTREZZATURA</text>
+<text x='512.0' y='92' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='19' fill='#a8781f'>Zaino d&#x27;emergenza: lista completa (Ready.gov)</text>
+<g transform='translate(110.5,128.0) scale(1.225)'><g fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><rect x='16' y='42' width='88' height='56' rx='8'/><path d='M30 42 l50 -26'/><circle cx='44' cy='70' r='14'/><path d='M70 60 h22 M70 72 h22 M70 84 h14'/></g></g>
+<circle cx='44.0' cy='142.0' r='14' fill='#a8781f'/><text x='44.0' y='148.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>1</text>
+<text x='184.0' y='305.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='700' fill='#2a2a26'>Radio a pile o a manovella,</text>
+<text x='184.0' y='325.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>torcia e pile di riserva</text>
+<g transform='translate(438.5,128.0) scale(1.225)'><g fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><rect x='38' y='12' width='44' height='96' rx='8'/><path d='M54 22 h12'/><circle cx='60' cy='96' r='4'/></g></g>
+<circle cx='372.0' cy='142.0' r='14' fill='#a8781f'/><text x='372.0' y='148.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>2</text>
+<text x='512.0' y='305.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='700' fill='#2a2a26'>Telefono con caricatore e</text>
+<text x='512.0' y='325.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>batteria di riserva</text>
+<g transform='translate(765.0,136.5) scale(1.250)'><g fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><rect x='18' y='36' width='84' height='64' rx='8'/><path d='M44 36 v-12 h32 v12'/><path d='M60 50 v36 M42 68 h36' stroke='#b0362a' stroke-width='8'/></g></g>
+<circle cx='700.0' cy='150.5' r='14' fill='#a8781f'/><text x='700.0' y='156.5' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>3</text>
+<text x='840.0' y='316.5' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='700' fill='#2a2a26'>Kit di primo soccorso</text>
+<g transform='translate(110.5,349.0) scale(1.225)'><g fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><path d='M20 52 h52 q22 0 22 22 q0 22 -22 22 q-22 0 -22 -22 v-8 h-30z'/><circle cx='72' cy='74' r='6'/><path d='M96 40 l10 -10 M100 56 h12' stroke='#a8781f'/></g></g>
+<circle cx='44.0' cy='363.0' r='14' fill='#a8781f'/><text x='44.0' y='369.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>4</text>
+<text x='184.0' y='526.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='700' fill='#2a2a26'>Fischietto per chiedere aiuto</text>
+<text x='184.0' y='546.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>e mascherina antipolvere</text>
+<g transform='translate(448.5,349.0) scale(1.058)'><g fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><path d='M60 14 q-36 46 -36 66 a36 36 0 0 0 72 0 q0 -20 -36 -66z' fill='#5a8fb0'/><path d='M44 82 q0 12 12 16' stroke='#fff'/></g></g>
+<circle cx='372.0' cy='363.0' r='14' fill='#a8781f'/><text x='372.0' y='369.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>5</text>
+<text x='512.0' y='506.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='700' fill='#2a2a26'>Teli di plastica, forbici e</text>
+<text x='512.0' y='526.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>nastro adesivo; chiave o pinza</text>
+<text x='512.0' y='546.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>per chiudere gas e acqua</text>
+<g transform='translate(796.5,349.0) scale(0.725)'><g fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><path d='M30 30 h44 l16 16 v58 q0 6 -6 6 h-54 q-6 0 -6 -6 v-68 q0 -6 6 -6z'/><path d='M74 30 v-12 h-16 v12'/><path d='M36 70 h48' stroke='#a8781f'/></g></g>
+<circle cx='700.0' cy='363.0' r='14' fill='#a8781f'/><text x='700.0' y='369.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>6</text>
+<text x='840.0' y='466.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='700' fill='#2a2a26'>Salviette umide, sacchi della</text>
+<text x='840.0' y='486.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>spazzatura e fascette per</text>
+<text x='840.0' y='506.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>l&#x27;igiene; cartine della zona;</text>
+<text x='840.0' y='526.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>fiammiferi in contenitore</text>
+<text x='840.0' y='546.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>impermeabile</text>
+</svg>
