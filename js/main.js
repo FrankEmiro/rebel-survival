@@ -14,6 +14,8 @@ const SECTION_TITLES = {
   settings: 'Profilo',
   strumenti: 'Emergenza',
   assistente: 'Chiedi',
+  wiki: 'Wikipedia',
+  chat: 'Chat vicini',
 };
 
 // Sezione corrente
@@ -73,7 +75,7 @@ function navigateTo(section) {
 
   // Update bottom nav: le sezioni senza pulsante proprio accendono quello da cui si arriva
   // (Chiedi si apre dalla Home), così non resta in evidenza solo il tasto rosso Emergenza
-  const BOTTOM_NAV_PARENT = { assistente: 'home' };
+  const BOTTOM_NAV_PARENT = { assistente: 'home', wiki: 'guide', chat: 'strumenti' };
   const navSection = BOTTOM_NAV_PARENT[section] || section;
   document.querySelectorAll('.bottom-nav-item').forEach(l => {
     l.classList.toggle('active', l.dataset.section === navSection);
@@ -123,8 +125,11 @@ function initSection(section) {
     case 'kit':         KitModule.init(); switchKitTab('kit'); break;
     case 'guide':       GuideModule.init(); break;
     case 'assistente':  AssistenteModule.init(); break;
+    case 'wiki':        WikiModule.init(); break;
+    case 'chat':        ChatModule.init(); break;
     case 'settings':    SettingsModule.init(); break;
-    case 'strumenti':   DashboardModule.renderEmergency(); StrumentiModule.init(); break;
+    case 'strumenti':   DashboardModule.renderEmergency(); StrumentiModule.init();
+      document.getElementById('chat-entry')?.classList.toggle('hidden', !ChatModule.available()); break;
   }
 }
 
@@ -154,7 +159,8 @@ function initOfflineDetection() {
 
 // Service Worker registration
 function registerSW() {
-  if ('serviceWorker' in navigator && !window.RS_OFFLINE_COPY) {
+  // nell'app Android i file sono già dentro l'APK: niente service worker
+  if ('serviceWorker' in navigator && !window.RS_OFFLINE_COPY && !window.RSAndroid) {
     navigator.serviceWorker.register('/sw.js').then(AppUpdate.watch).catch(() => {});
   }
 }
@@ -283,7 +289,9 @@ const AppUpdate = (() => {
       }).catch(() => {});
     }
     if (v && window.RSAndroid) {
-      v.textContent = 'v' + apkVersion();
+      v.textContent = 'v' + apkVersion() + ' (app Android)';
+      const note = document.getElementById('app-share-note');
+      if (note) note.innerHTML = '<i class="ph ph-wifi-slash"></i> Funziona anche senza internet: invia l\'app completa con Bluetooth o Quick Share. Chi la riceve deve consentire l\'installazione da questa fonte. Non contiene i tuoi dati.';
       checkApk(true);                       // in silenzio: parla solo se c'è una versione nuova
     } else if (v) {
       const [r, l] = await Promise.all([running, latest()]);
@@ -297,6 +305,13 @@ const AppUpdate = (() => {
 
   return { check, watch, setLab, tapVersion, render };
 })();
+
+// Tasto «Indietro» del telefono nell'app Android: torna dove eri, poi alla Home, poi esce
+window.RSAppBack = () => {
+  if (backTarget) { goBack(); return true; }
+  if (currentSection !== 'home') { clearBackTarget(); navigateTo('home'); return true; }
+  return false;
+};
 
 // Disclaimer
 function showDisclaimer() {

@@ -1,0 +1,65 @@
+plugins {
+    id 'com.android.application'
+}
+
+// Numero di versione = numero della cache del service worker (sw.js, «kit-resilienza-vNN»).
+// Lo passa tools/build-android.sh con -PrsVersion=NN.
+def rsVersion = (project.findProperty('rsVersion') ?: '1').toString().toInteger()
+
+android {
+    // Identificativo dell'app: su Google Play NON si può più cambiare dopo la prima pubblicazione.
+    namespace 'it.cyberrebellion.rebelsurvival'
+    compileSdk 36
+
+    defaultConfig {
+        applicationId 'it.cyberrebellion.rebelsurvival'
+        minSdk 26   // 26: richiesto dalla chat Bluetooth (bitchat)
+        targetSdk 36
+        versionCode rsVersion
+        versionName "v${rsVersion}"
+    }
+
+    // Firma definitiva: file della chiave fuori dal repository (RS_KEYSTORE, predefinito
+    // ~/RebelSurvival-firma/rebelsurvival.jks) e password solo da variabile d'ambiente
+    // ANDROID_KEYSTORE_PASSWORD. Se mancano, si usa la chiave di prova del computer.
+    def ksFile = file(System.getenv('RS_KEYSTORE') ?: (System.getProperty('user.home') + '/RebelSurvival-firma/rebelsurvival.jks'))
+    def ksPass = System.getenv('ANDROID_KEYSTORE_PASSWORD')
+    def hasReleaseKey = ksFile.exists() && ksPass
+    signingConfigs {
+        if (hasReleaseKey) {
+            rsRelease {
+                storeFile ksFile
+                storePassword ksPass
+                keyAlias 'rebelsurvival'
+                keyPassword ksPass
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig hasReleaseKey ? signingConfigs.rsRelease : signingConfigs.debug
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    // Librerie della chat Bluetooth: file di servizio duplicati, non servono nell'APK
+    packaging {
+        resources { excludes += ['META-INF/versions/9/OSGI-INF/MANIFEST.MF', 'META-INF/DEPENDENCIES', 'META-INF/*.kotlin_module'] }
+    }
+
+    // I file dell'app web sono già compressi o piccoli: non ricomprimere PNG e PDF
+    androidResources {
+        noCompress += ['png', 'webp', 'pdf']
+    }
+}
+
+dependencies {
+    // Chat tra telefoni vicini via Bluetooth (bitchat-android, GPLv3): vedi android/mesh
+    implementation project(':mesh')
+}

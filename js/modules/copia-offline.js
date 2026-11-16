@@ -74,6 +74,14 @@ const CopiaOffline = (() => {
   const say = t => { const el = document.getElementById('app-share-msg'); if (el) el.textContent = t; };
 
   async function share() {
+    // App Android installata: si passa direttamente l'app (file .apk), con tutto dentro
+    if (window.RSAndroid) {
+      say('Preparo l\'app…');
+      const mb = RSAndroid.shareApp();
+      say(mb ? `App pronta (${mb} MB): scegli Bluetooth o Quick Share. Chi la riceve apre il file e tocca «Installa».`
+             : 'Non riesco a preparare l\'app. Riprova.');
+      return;
+    }
     if (isCopy()) {
       say('Per passarla ancora, invia lo stesso file che hai ricevuto (lo trovi nei Download).');
       return;

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Nome visibile sotto l'icona (rinomina prodotto: cambiare qui) -->
+    <string name="app_name">Rebel Survival</string>
+</resources>
