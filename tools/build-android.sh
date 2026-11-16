@@ -24,4 +24,5 @@ cd "$ROOT/android"
 
 mkdir -p "$ROOT/dist"
 cp "$ROOT/android/app/build/outputs/apk/release/app-release.apk" "$ROOT/dist/RebelSurvival-v$VER.apk"
+[ -n "${ANDROID_KEYSTORE_PASSWORD:-}" ] && echo "Firma: chiave definitiva" || echo "Firma: chiave di PROVA (non distribuire)"
 echo "Fatto: dist/RebelSurvival-v$VER.apk ($(du -h "$ROOT/dist/RebelSurvival-v$VER.apk" | cut -f1))"

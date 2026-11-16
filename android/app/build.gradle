@@ -19,12 +19,27 @@ android {
         versionName "v${rsVersion}"
     }
 
+    // Firma definitiva: file della chiave fuori dal repository (RS_KEYSTORE, predefinito
+    // ~/RebelSurvival-firma/rebelsurvival.jks) e password solo da variabile d'ambiente
+    // ANDROID_KEYSTORE_PASSWORD. Se mancano, si usa la chiave di prova del computer.
+    def ksFile = file(System.getenv('RS_KEYSTORE') ?: (System.getProperty('user.home') + '/RebelSurvival-firma/rebelsurvival.jks'))
+    def ksPass = System.getenv('ANDROID_KEYSTORE_PASSWORD')
+    def hasReleaseKey = ksFile.exists() && ksPass
+    signingConfigs {
+        if (hasReleaseKey) {
+            rsRelease {
+                storeFile ksFile
+                storePassword ksPass
+                keyAlias 'rebelsurvival'
+                keyPassword ksPass
+            }
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
-            // Per ora firmata con la chiave di prova del computer: va bene per installare a mano.
-            // Per Google Play servirà una chiave di caricamento vera (vedi android/LEGGIMI.md).
-            signingConfig signingConfigs.debug
+            signingConfig hasReleaseKey ? signingConfigs.rsRelease : signingConfigs.debug
         }
     }
 
