@@ -129,6 +129,11 @@ const WikiModule = (() => {
     const ac = new AbortController();
     busy = { name, pct: 0, abort: () => ac.abort(), msg: 'Preparo il download…' };
     render();
+    // App Android: il download continua anche con l'app in secondo piano (notifica con l'avanzamento)
+    const bg = window.RSAndroid && window.RSAndroid.bgStart ? window.RSAndroid : null;
+    const bgTitle = 'Scarico Wikipedia';
+    let bgLast = 0;
+    try { bg && bg.bgStart(bgTitle); } catch (e) {}
     try {
       try { await navigator.storage.persist?.(); } catch (e) {}
       const d = await bookDir(name, true);
@@ -151,7 +156,10 @@ const WikiModule = (() => {
       if (est && est.quota && est.quota - est.usage < (meta.total - have) * 1.02) {
         throw new Error(`spazio insufficiente: servono ${fmt(meta.total - have)}, ne restano ${fmt(est.quota - est.usage)}`);
       }
-      const show = got => { busy.pct = (have + got) / meta.total * 100; busy.msg = `${fmt(have + got)} di ${fmt(meta.total)}`; _progress(); };
+      const show = got => {
+        busy.pct = (have + got) / meta.total * 100; busy.msg = `${fmt(have + got)} di ${fmt(meta.total)}`; _progress();
+        if (bg && Date.now() - bgLast > 2000) { bgLast = Date.now(); try { bg.bgProgress(bgTitle, busy.msg, Math.floor(busy.pct)); } catch (e) {} }
+      };
       show(0);
       for (const i of missing) {
         const [s, e] = span(meta, i);
@@ -178,6 +186,8 @@ const WikiModule = (() => {
       busy = null;
       render(err.message === 'fermato' ? 'Download in pausa: tocca «Riprendi» per continuare da dove eri.'
         : 'Download interrotto (' + err.message + '). Le parti scaricate restano: tocca «Riprendi».');
+    } finally {
+      try { bg && bg.bgStop(); } catch (e) {}
     }
   }
 

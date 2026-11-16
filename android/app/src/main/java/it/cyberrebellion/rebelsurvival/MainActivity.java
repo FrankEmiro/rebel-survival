@@ -53,7 +53,7 @@ public class MainActivity extends Activity {
     static final String START = "https://" + HOST + "/index.html";
     static final String APK_NAME = "RebelSurvival.apk";   // nome del file condiviso (rinomina prodotto: cambiare qui)
 
-    private static final int REQ_LOCATION = 1, REQ_CAMERA = 2, REQ_FILE = 3, REQ_BT = 4;
+    private static final int REQ_LOCATION = 1, REQ_CAMERA = 2, REQ_FILE = 3, REQ_BT = 4, REQ_NOTIFY = 5;
 
     private WebView web;
     private GeolocationPermissions.Callback geoCb;
@@ -101,6 +101,10 @@ public class MainActivity extends Activity {
         s.setAllowFileAccess(false);
         s.setAllowContentAccess(false);
         s.setUserAgentString(s.getUserAgentString() + " RebelSurvivalApp");
+
+        // Con l'app in secondo piano la pagina continua a lavorare (download di Wikipedia):
+        // il processo della WebView non viene declassato quando non è visibile
+        web.setRendererPriorityPolicy(WebView.RENDERER_PRIORITY_IMPORTANT, false);
 
         web.addJavascriptInterface(new Bridge(), "RSAndroid");
         web.setWebViewClient(new Client());
@@ -238,12 +242,13 @@ public class MainActivity extends Activity {
     @Override
     protected void onDestroy() {
         // Senza servizio in background la chat resta attiva solo con l'app aperta
-        if (isFinishing()) RsMesh.stop();
+        if (isFinishing()) { RsMesh.stop(); KeepAliveService.stop(this); }
         super.onDestroy();
     }
 
     @Override
     public void onRequestPermissionsResult(int code, String[] perms, int[] res) {
+        if (code == REQ_NOTIFY) return;   // senza permesso il download continua lo stesso, solo senza notifica visibile
         if (code == REQ_BT) {
             if (hasBt()) startMesh(); else meshEvent("{\"type\":\"error\",\"code\":\"permission\"}");
             return;
@@ -351,6 +356,21 @@ public class MainActivity extends Activity {
         @JavascriptInterface public String meshSendPrivate(String peerID, String text) { return RsMesh.sendPrivate(peerID, text); }
         @JavascriptInterface public String meshNick() { String n = RsMesh.nickname(); return n == null ? "" : n; }
         @JavascriptInterface public void meshSetNick(String name) { RsMesh.setNickname(name); }
+
+        /** Lavoro lungo della pagina (download): l'app resta viva in secondo piano, con notifica. */
+        @JavascriptInterface
+        public void bgStart(String title) {
+            runOnUiThread(() -> {
+                if (Build.VERSION.SDK_INT >= 33 && !has(Manifest.permission.POST_NOTIFICATIONS)) {
+                    requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, REQ_NOTIFY);
+                }
+                try { KeepAliveService.start(MainActivity.this, title); } catch (Exception e) { /* senza servizio il download va solo in primo piano */ }
+            });
+        }
+        @JavascriptInterface
+        public void bgProgress(String title, String text, int pct) { KeepAliveService.progress(MainActivity.this, title, text, pct); }
+        @JavascriptInterface
+        public void bgStop() { KeepAliveService.stop(MainActivity.this); }
 
         /** Schermo sempre acceso (sostituisce Wake Lock, che la WebView non ha). */
         @JavascriptInterface
