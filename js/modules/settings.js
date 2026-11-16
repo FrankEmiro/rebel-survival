@@ -1285,6 +1285,9 @@ const SettingsModule = (() => {
           <button class="pf-action" onclick="AppUpdate.check()"><i class="ph ph-arrows-clockwise"></i> Cerca aggiornamenti</button>
         </div>
         <p id="app-upd-msg" class="pf-note" aria-live="polite"></p>
+        <div id="app-apk-upd" class="pf-actions hidden">
+          <a class="pf-action" href="#"><i class="ph ph-download-simple"></i> Scarica l'aggiornamento</a>
+        </div>
         <div class="pf-actions">
           <button class="pf-action" onclick="CopiaOffline.share()"><i class="ph ph-bluetooth"></i> Passa l'app a un altro telefono</button>
         </div>
