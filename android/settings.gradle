@@ -14,4 +14,4 @@ dependencyResolutionManagement {
 }
 // Nome del progetto (rinomina prodotto: cambiare qui e in app/build.gradle, strings.xml)
 rootProject.name = 'RebelSurvival'
-include ':app'
+include ':app', ':mesh'

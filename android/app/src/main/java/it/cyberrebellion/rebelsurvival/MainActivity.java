@@ -36,6 +36,8 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.bitchat.android.rs.RsMesh;
+
 /**
  * Rebel Survival per Android: la stessa app web, presa dai file dentro l'APK
  * (assets/www) e mostrata in una WebView. Funziona senza internet.
@@ -51,7 +53,7 @@ public class MainActivity extends Activity {
     static final String START = "https://" + HOST + "/index.html";
     static final String APK_NAME = "RebelSurvival.apk";   // nome del file condiviso (rinomina prodotto: cambiare qui)
 
-    private static final int REQ_LOCATION = 1, REQ_CAMERA = 2, REQ_FILE = 3;
+    private static final int REQ_LOCATION = 1, REQ_CAMERA = 2, REQ_FILE = 3, REQ_BT = 4;
 
     private WebView web;
     private GeolocationPermissions.Callback geoCb;
@@ -103,6 +105,11 @@ public class MainActivity extends Activity {
         web.addJavascriptInterface(new Bridge(), "RSAndroid");
         web.setWebViewClient(new Client());
         web.setWebChromeClient(new Chrome());
+
+        // Chat Bluetooth: gli eventi (messaggi, vicini) arrivano alla pagina come RSMeshEvent({...})
+        RsMesh.attach(this);
+        RsMesh.INSTANCE.setListener(json -> runOnUiThread(() ->
+                web.evaluateJavascript("window.RSMeshEvent && window.RSMeshEvent(" + json + ")", null)));
 
         if (state != null) web.restoreState(state);
         else web.loadUrl(START + launchQuery(getIntent()));
@@ -206,8 +213,41 @@ public class MainActivity extends Activity {
 
     private boolean has(String perm) { return checkSelfPermission(perm) == PackageManager.PERMISSION_GRANTED; }
 
+    /* ── Chat Bluetooth (bitchat) ── */
+    private String[] btPerms() {
+        return Build.VERSION.SDK_INT >= 31
+                ? new String[]{Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_ADVERTISE, Manifest.permission.BLUETOOTH_CONNECT}
+                : new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+    }
+    private boolean hasBt() {
+        for (String p : btPerms()) if (!has(p)) return Build.VERSION.SDK_INT < 31 && has(Manifest.permission.ACCESS_COARSE_LOCATION);
+        return true;
+    }
+    private void meshEvent(String json) {
+        runOnUiThread(() -> web.evaluateJavascript("window.RSMeshEvent && window.RSMeshEvent(" + json + ")", null));
+    }
+    private void startMesh() {
+        android.bluetooth.BluetoothManager bm = (android.bluetooth.BluetoothManager) getSystemService(BLUETOOTH_SERVICE);
+        android.bluetooth.BluetoothAdapter ad = bm != null ? bm.getAdapter() : null;
+        if (ad == null) { meshEvent("{\"type\":\"error\",\"code\":\"no-bluetooth\"}"); return; }
+        if (!ad.isEnabled()) { meshEvent("{\"type\":\"error\",\"code\":\"bluetooth-off\"}"); return; }
+        try { RsMesh.start(this); }
+        catch (Exception e) { meshEvent("{\"type\":\"error\",\"code\":\"start\"}"); }
+    }
+
+    @Override
+    protected void onDestroy() {
+        // Senza servizio in background la chat resta attiva solo con l'app aperta
+        if (isFinishing()) RsMesh.stop();
+        super.onDestroy();
+    }
+
     @Override
     public void onRequestPermissionsResult(int code, String[] perms, int[] res) {
+        if (code == REQ_BT) {
+            if (hasBt()) startMesh(); else meshEvent("{\"type\":\"error\",\"code\":\"permission\"}");
+            return;
+        }
         boolean ok = res.length > 0 && res[0] == PackageManager.PERMISSION_GRANTED;
         if (code == REQ_LOCATION && geoCb != null) { geoCb.invoke(geoOrigin, ok, false); geoCb = null; }
         if (code == REQ_CAMERA && camReq != null) {
@@ -297,6 +337,20 @@ public class MainActivity extends Activity {
                 return false;
             }
         }
+
+        /** Chat Bluetooth: accende la rete (chiede i permessi se servono). Il risultato arriva come evento. */
+        @JavascriptInterface
+        public void meshStart() {
+            runOnUiThread(() -> { if (hasBt()) startMesh(); else requestPermissions(btPerms(), REQ_BT); });
+        }
+        @JavascriptInterface public void meshStop() { RsMesh.stop(); }
+        @JavascriptInterface public boolean meshRunning() { return RsMesh.INSTANCE.getRunning(); }
+        @JavascriptInterface public String meshMe() { return RsMesh.myPeerID(); }
+        @JavascriptInterface public String meshPeers() { return RsMesh.peersJson().toString(); }
+        @JavascriptInterface public boolean meshSend(String text) { return RsMesh.sendPublic(text); }
+        @JavascriptInterface public String meshSendPrivate(String peerID, String text) { return RsMesh.sendPrivate(peerID, text); }
+        @JavascriptInterface public String meshNick() { String n = RsMesh.nickname(); return n == null ? "" : n; }
+        @JavascriptInterface public void meshSetNick(String name) { RsMesh.setNickname(name); }
 
         /** Schermo sempre acceso (sostituisce Wake Lock, che la WebView non ha). */
         @JavascriptInterface

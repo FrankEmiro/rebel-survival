@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId 'it.cyberrebellion.rebelsurvival'
-        minSdk 24
+        minSdk 26   // 26: richiesto dalla chat Bluetooth (bitchat)
         targetSdk 36
         versionCode rsVersion
         versionName "v${rsVersion}"
@@ -48,8 +48,18 @@ android {
         targetCompatibility JavaVersion.VERSION_17
     }
 
+    // Librerie della chat Bluetooth: file di servizio duplicati, non servono nell'APK
+    packaging {
+        resources { excludes += ['META-INF/versions/9/OSGI-INF/MANIFEST.MF', 'META-INF/DEPENDENCIES', 'META-INF/*.kotlin_module'] }
+    }
+
     // I file dell'app web sono già compressi o piccoli: non ricomprimere PNG e PDF
     androidResources {
         noCompress += ['png', 'webp', 'pdf']
     }
+}
+
+dependencies {
+    // Chat tra telefoni vicini via Bluetooth (bitchat-android, GPLv3): vedi android/mesh
+    implementation project(':mesh')
 }

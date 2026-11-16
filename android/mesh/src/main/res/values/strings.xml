@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Testi della chat Bluetooth (rinomina prodotto: «Rebel Survival» compare in mesh_quit) -->
+<resources>
+    <string name="notification_active_peers_title">Persone vicine con la chat attiva</string>
+    <string name="notification_active_peers_one">1 persona nei dintorni</string>
+    <string name="notification_active_peers_many">%1$d persone nei dintorni</string>
+    <string name="mesh_service_channel_name">Chat Bluetooth in background</string>
+    <string name="mesh_service_channel_desc">Tiene attiva la chat tra telefoni vicini anche ad app chiusa</string>
+    <string name="mesh_service_notification_content">Chat Bluetooth attiva — %1$d vicini</string>
+    <string name="notification_action_quit_bitchat">Spegni la chat</string>
+    <string name="mesh_app_name">Rebel Survival</string>
+</resources>

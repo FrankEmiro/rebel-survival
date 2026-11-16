@@ -1,0 +1,30 @@
+// Chat tra telefoni vicini via Bluetooth (senza internet).
+// Codice preso da bitchat-android (https://github.com/permissionlesstech/bitchat-android),
+// licenza GPLv3: vedi LICENSE-bitchat.md e BITCHAT_COMMIT (versione di partenza).
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id 'org.jetbrains.kotlin.plugin.parcelize'
+}
+
+android {
+    namespace 'com.bitchat.android'
+    compileSdk 36
+    defaultConfig { minSdk 26 }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+kotlin { jvmToolchain(17) }
+
+dependencies {
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2'
+    implementation 'org.bouncycastle:bcprov-jdk18on:1.85'
+    implementation 'com.google.code.gson:gson:2.13.2'
+    implementation 'no.nordicsemi.android:ble:2.11.0'
+    implementation 'androidx.core:core-ktx:1.16.0'
+    implementation 'androidx.lifecycle:lifecycle-process:2.9.4'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.9.4'
+    implementation 'androidx.security:security-crypto:1.1.0'
+}

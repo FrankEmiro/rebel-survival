@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kit-resilienza-v110';
+const CACHE_NAME = 'kit-resilienza-v111';
 const CDN_CACHE  = 'kit-resilienza-cdn-v51';
 
 // Asset locali — cache-first
@@ -48,6 +48,7 @@ const LOCAL_ASSETS = [
   '/js/vendor/fzstd.min.js',
   '/js/modules/zim.js',
   '/js/modules/wiki.js',
+  '/js/modules/chat.js',
   '/js/vendor/phosphor/style.css',
   '/js/vendor/phosphor/Phosphor.woff2',
   '/js/vendor/leaflet/leaflet.js',

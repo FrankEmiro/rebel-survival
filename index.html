@@ -149,8 +149,22 @@
     <!-- ===== STRUMENTI DI CAMPO ===== -->
     <section id="section-strumenti" class="section">
       <div id="emg-root"></div>
+      <button id="chat-entry" class="as-entry hidden" onclick="navigateTo('chat')">
+        <i class="ph ph-bluetooth"></i>
+        <span><strong>Chat tra telefoni vicini</strong><small>Messaggi via Bluetooth senza internet né rete telefonica (sperimentale)</small></span>
+        <i class="ph ph-caret-right"></i>
+      </button>
       <h2 class="st-section-title"><i class="ph ph-toolbox"></i> Strumenti</h2>
       <div id="strumenti-root"></div>
+    </section>
+
+    <!-- ===== CHAT BLUETOOTH (solo app Android) ===== -->
+    <section id="section-chat" class="section">
+      <div class="section-header">
+        <h1><i class="ph ph-bluetooth"></i> Chat vicini</h1>
+        <p class="subtitle">Senza internet né rete telefonica</p>
+      </div>
+      <div id="chat-root"></div>
     </section>
 
     <!-- ===== ASSISTENTE ===== -->
@@ -279,6 +293,7 @@
   <script src="js/vendor/fzstd.min.js"></script>
   <script src="js/modules/zim.js"></script>
   <script src="js/modules/wiki.js"></script>
+  <script src="js/modules/chat.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>
