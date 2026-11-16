@@ -1,0 +1,18 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 576' width='1024' height='576' role='img' aria-label='Provare il piano'>
+<rect width='1024' height='576' fill='#f4eedf'/>
+<rect x='10' y='10' width='1004' height='556' fill='none' stroke='#2a2a26' stroke-width='3' rx='6'/>
+<text x='512.0' y='58' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='36' font-weight='800' fill='#2a2a26'>PROVARE IL PIANO</text>
+<text x='512.0' y='92' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='19' fill='#a8781f'>Piano di Comunicazione Famiglia (Ready.gov)</text>
+<g transform='translate(94.0,222.0) scale(1.500)'><g fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><path d='M30 18 h44 l16 16 v76 h-60z'/><path d='M74 18 v16 h16'/><path d='M42 54 h36 M42 68 h36 M42 82 h24' stroke='#a8781f'/></g></g>
+<circle cx='44.0' cy='236.0' r='14' fill='#a8781f'/><text x='44.0' y='242.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>1</text>
+<text x='184.0' y='432.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='700' fill='#2a2a26'>Scrivete il piano e tenetelo</text>
+<text x='184.0' y='452.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>con i documenti</text>
+<g transform='translate(422.0,222.0) scale(1.500)'><g fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><circle cx='38' cy='34' r='12'/><path d='M38 46 v34 M38 56 l-14 12 M38 56 l14 12 M38 80 l-10 26 M38 80 l10 26'/><circle cx='82' cy='50' r='9'/><path d='M82 59 v26 M82 66 l-10 8 M82 66 l10 8 M82 85 l-8 20 M82 85 l8 20'/></g></g>
+<circle cx='372.0' cy='236.0' r='14' fill='#a8781f'/><text x='372.0' y='242.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>2</text>
+<text x='512.0' y='432.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='700' fill='#2a2a26'>Provatelo con tutta la</text>
+<text x='512.0' y='452.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>famiglia</text>
+<g transform='translate(750.0,222.0) scale(1.500)'><g fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><circle cx='60' cy='60' r='42' fill='#d9cfb8'/><text x='60' y='76' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='46' font-weight='800' fill='#2a2a26' stroke='none'>3</text></g></g>
+<circle cx='700.0' cy='236.0' r='14' fill='#a8781f'/><text x='700.0' y='242.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>3</text>
+<text x='840.0' y='432.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='700' fill='#2a2a26'>Aggiornatelo quando cambiano</text>
+<text x='840.0' y='452.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>persone, numeri o abitudini</text>
+</svg>

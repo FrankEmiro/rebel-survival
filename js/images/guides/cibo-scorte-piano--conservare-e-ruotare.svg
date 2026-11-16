@@ -1,0 +1,30 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 576' width='1024' height='576' role='img' aria-label='Conservare e ruotare'>
+<rect width='1024' height='576' fill='#f4eedf'/>
+<rect x='10' y='10' width='1004' height='556' fill='none' stroke='#2a2a26' stroke-width='3' rx='6'/>
+<text x='512.0' y='58' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='36' font-weight='800' fill='#2a2a26'>CONSERVARE E RUOTARE</text>
+<text x='512.0' y='92' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='19' fill='#a8781f'>Scorte di cibo (Ready.gov)</text>
+<g transform='translate(110.5,128.0) scale(1.225)'><g fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><rect x='34' y='30' width='52' height='12' rx='3' fill='#a8781f'/><path d='M36 42 h48 v58 q0 8 -8 8 h-32 q-8 0 -8 -8z'/><path d='M44 62 h32 M44 76 h32' stroke='#a8781f'/></g></g>
+<circle cx='44.0' cy='142.0' r='14' fill='#a8781f'/><text x='44.0' y='148.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>1</text>
+<text x='184.0' y='305.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='700' fill='#2a2a26'>Conserva le scorte in un luogo</text>
+<text x='184.0' y='325.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>fresco, asciutto e al buio</text>
+<g transform='translate(438.5,128.0) scale(1.225)'><g fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><path d='M30 30 h44 l16 16 v58 q0 6 -6 6 h-54 q-6 0 -6 -6 v-68 q0 -6 6 -6z'/><path d='M74 30 v-12 h-16 v12'/><path d='M36 70 h48' stroke='#a8781f'/></g></g>
+<circle cx='372.0' cy='142.0' r='14' fill='#a8781f'/><text x='372.0' y='148.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>2</text>
+<text x='512.0' y='305.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='700' fill='#2a2a26'>Tieni il cibo in contenitori</text>
+<text x='512.0' y='325.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>chiusi</text>
+<g transform='translate(776.5,128.0) scale(1.058)'><g fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><rect x='34' y='30' width='52' height='12' rx='3' fill='#a8781f'/><path d='M36 42 h48 v58 q0 8 -8 8 h-32 q-8 0 -8 -8z'/><path d='M44 62 h32 M44 76 h32' stroke='#a8781f'/></g></g>
+<circle cx='700.0' cy='142.0' r='14' fill='#a8781f'/><text x='700.0' y='148.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>3</text>
+<text x='840.0' y='285.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='700' fill='#2a2a26'>Consuma le scorte e ricomprale</text>
+<text x='840.0' y='305.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>regolarmente, attento alla</text>
+<text x='840.0' y='325.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>data di scadenza</text>
+<g transform='translate(284.5,349.0) scale(1.058)'><g fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><path d='M22 52 h76 v34 q0 12 -12 12 h-52 q-12 0 -12 -12z'/><path d='M14 52 h92'/><path d='M98 60 h14'/><path d='M42 42 q-6 -10 0 -18 q6 -8 0 -16'/><path d='M60 42 q-6 -10 0 -18 q6 -8 0 -16'/><path d='M78 42 q-6 -10 0 -18 q6 -8 0 -16'/></g></g>
+<circle cx='208.0' cy='363.0' r='14' fill='#a8781f'/><text x='208.0' y='369.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>4</text>
+<text x='348.0' y='506.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='700' fill='#2a2a26'>Non mangiare da lattine</text>
+<text x='348.0' y='526.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>gonfie, ammaccate o</text>
+<text x='348.0' y='546.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>arrugginite</text>
+<g transform='translate(622.5,349.0) scale(0.892)'><g fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><path d='M60 14 q-36 46 -36 66 a36 36 0 0 0 72 0 q0 -20 -36 -66z' fill='#5a8fb0'/><path d='M44 82 q0 12 12 16' stroke='#fff'/></g></g>
+<circle cx='536.0' cy='363.0' r='14' fill='#a8781f'/><text x='536.0' y='369.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>5</text>
+<text x='676.0' y='486.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='700' fill='#2a2a26'>Butta il cibo con odore,</text>
+<text x='676.0' y='506.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>colore o consistenza strani, o</text>
+<text x='676.0' y='526.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>venuto a contatto con acqua di</text>
+<text x='676.0' y='546.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>alluvione</text>
+</svg>

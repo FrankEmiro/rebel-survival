@@ -1,0 +1,31 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 576' width='1024' height='576' role='img' aria-label='Le domande da farsi'>
+<rect width='1024' height='576' fill='#f4eedf'/>
+<rect x='10' y='10' width='1004' height='556' fill='none' stroke='#2a2a26' stroke-width='3' rx='6'/>
+<text x='512.0' y='58' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='36' font-weight='800' fill='#2a2a26'>LE DOMANDE DA FARSI</text>
+<text x='512.0' y='92' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='19' fill='#a8781f'>Piano di Comunicazione Famiglia (Ready.gov)</text>
+<g transform='translate(110.5,128.0) scale(1.225)'><g fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><circle cx='60' cy='60' r='42' fill='#d9cfb8'/><text x='60' y='76' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='46' font-weight='800' fill='#2a2a26' stroke='none'>1</text></g></g>
+<circle cx='44.0' cy='142.0' r='14' fill='#a8781f'/><text x='44.0' y='148.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>1</text>
+<text x='184.0' y='305.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='700' fill='#2a2a26'>Come riceviamo allerte e</text>
+<text x='184.0' y='325.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>avvisi?</text>
+<g transform='translate(438.5,128.0) scale(1.225)'><g fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><path d='M14 100 L60 22 L106 100z'/><path d='M60 22 v78 M48 100 L60 70 L72 100'/></g></g>
+<circle cx='372.0' cy='142.0' r='14' fill='#a8781f'/><text x='372.0' y='148.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>2</text>
+<text x='512.0' y='305.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='700' fill='#2a2a26'>Dove ci ripariamo se dobbiamo</text>
+<text x='512.0' y='325.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>restare in casa?</text>
+<g transform='translate(766.5,128.0) scale(1.225)'><g fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><path d='M16 30 l28 -10 l32 10 l28 -10 v70 l-28 10 l-32 -10 l-28 10z'/><path d='M44 20 v70 M76 30 v70'/><circle cx='62' cy='54' r='6' fill='#b0362a' stroke='none'/></g></g>
+<circle cx='700.0' cy='142.0' r='14' fill='#a8781f'/><text x='700.0' y='148.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>3</text>
+<text x='840.0' y='305.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='700' fill='#2a2a26'>Da che strada andiamo via se</text>
+<text x='840.0' y='325.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>dobbiamo evacuare?</text>
+<g transform='translate(110.5,349.0) scale(1.225)'><g fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><circle cx='60' cy='60' r='42' fill='#d9cfb8'/><text x='60' y='76' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='46' font-weight='800' fill='#2a2a26' stroke='none'>4</text></g></g>
+<circle cx='44.0' cy='363.0' r='14' fill='#a8781f'/><text x='44.0' y='369.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>4</text>
+<text x='184.0' y='526.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='700' fill='#2a2a26'>Come ci contattiamo e dove ci</text>
+<text x='184.0' y='546.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>ritroviamo se siamo separati?</text>
+<g transform='translate(438.5,349.0) scale(1.225)'><g fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><path d='M34 34 q0 -16 26 -16 q26 0 26 16 v66 q0 8 -8 8 h-36 q-8 0 -8 -8z'/><path d='M44 60 h32 v26 h-32z'/><path d='M50 18 q10 -10 20 0'/></g></g>
+<circle cx='372.0' cy='363.0' r='14' fill='#a8781f'/><text x='372.0' y='369.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>5</text>
+<text x='512.0' y='526.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='700' fill='#2a2a26'>Lo zaino e le scorte sono da</text>
+<text x='512.0' y='546.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>aggiornare?</text>
+<g transform='translate(776.5,349.0) scale(1.058)'><g fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><ellipse cx='60' cy='76' rx='22' ry='18' fill='#a8781f'/><ellipse cx='32' cy='50' rx='8' ry='10' fill='#a8781f'/><ellipse cx='50' cy='34' rx='8' ry='10' fill='#a8781f'/><ellipse cx='70' cy='34' rx='8' ry='10' fill='#a8781f'/><ellipse cx='88' cy='50' rx='8' ry='10' fill='#a8781f'/></g></g>
+<circle cx='700.0' cy='363.0' r='14' fill='#a8781f'/><text x='700.0' y='369.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>6</text>
+<text x='840.0' y='506.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='700' fill='#2a2a26'>Cosa serve a ognuno: età,</text>
+<text x='840.0' y='526.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>farmaci, diete, lingue,</text>
+<text x='840.0' y='546.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>animali?</text>
+</svg>

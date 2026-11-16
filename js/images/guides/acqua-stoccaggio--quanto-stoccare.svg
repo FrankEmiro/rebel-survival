@@ -1,0 +1,27 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 576' width='1024' height='576' role='img' aria-label='Quanto stoccare'>
+<rect width='1024' height='576' fill='#f4eedf'/>
+<rect x='10' y='10' width='1004' height='556' fill='none' stroke='#2a2a26' stroke-width='3' rx='6'/>
+<text x='512.0' y='58' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='36' font-weight='800' fill='#2a2a26'>QUANTO STOCCARE</text>
+<text x='512.0' y='92' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='19' fill='#a8781f'>Scorte d&#x27;acqua (OMS)</text>
+<g transform='translate(202.5,128.0) scale(1.058)'><g fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><path d='M60 14 q-36 46 -36 66 a36 36 0 0 0 72 0 q0 -20 -36 -66z' fill='#5a8fb0'/><path d='M44 82 q0 12 12 16' stroke='#fff'/></g></g>
+<circle cx='44.0' cy='142.0' r='14' fill='#a8781f'/><text x='44.0' y='148.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>1</text>
+<text x='266.0' y='285.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='700' fill='#2a2a26'>Solo per bere e cucinare servono</text>
+<text x='266.0' y='305.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>2,5–3 litri a persona al giorno</text>
+<text x='266.0' y='325.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>(OMS, livello di sopravvivenza)</text>
+<g transform='translate(694.5,128.0) scale(1.058)'><g fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><circle cx='60' cy='60' r='42' fill='#d9cfb8'/><text x='60' y='76' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='46' font-weight='800' fill='#2a2a26' stroke='none'>2</text></g></g>
+<circle cx='536.0' cy='142.0' r='14' fill='#a8781f'/><text x='536.0' y='148.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>2</text>
+<text x='758.0' y='285.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='700' fill='#2a2a26'>Con l&#x27;igiene di base il minimo OMS</text>
+<text x='758.0' y='305.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>in emergenza è 7,5 litri a persona</text>
+<text x='758.0' y='325.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>al giorno</text>
+<g transform='translate(192.5,349.0) scale(1.225)'><g fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><circle cx='60' cy='60' r='20' fill='#a8781f'/><path d='M90 60 L104 60'/><path d='M30 60 L16 60'/><path d='M60 90 L60 104'/><path d='M60 30 L60 16'/><path d='M81 81 L91 91'/><path d='M39 81 L29 91'/><path d='M81 39 L91 29'/><path d='M39 39 L29 29'/></g></g>
+<circle cx='44.0' cy='363.0' r='14' fill='#a8781f'/><text x='44.0' y='369.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>3</text>
+<text x='266.0' y='526.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='700' fill='#2a2a26'>Con molto caldo il bisogno può</text>
+<text x='266.0' y='546.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>raddoppiare</text>
+<g transform='translate(714.5,349.0) scale(0.725)'><g fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><path d='M60 14 q-36 46 -36 66 a36 36 0 0 0 72 0 q0 -20 -36 -66z' fill='#5a8fb0'/><path d='M44 82 q0 12 12 16' stroke='#fff'/></g></g>
+<circle cx='536.0' cy='363.0' r='14' fill='#a8781f'/><text x='536.0' y='369.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>4</text>
+<text x='758.0' y='466.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='700' fill='#2a2a26'>Esempio a 7,5 litri: 4 persone per</text>
+<text x='758.0' y='486.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>7 giorni = 210 litri; per 30</text>
+<text x='758.0' y='506.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>giorni = 900 litri. Il calcolatore</text>
+<text x='758.0' y='526.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>Acqua fa il conto per la tua</text>
+<text x='758.0' y='546.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>famiglia</text>
+</svg>

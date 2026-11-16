@@ -66,7 +66,8 @@ def number(n): return f"<circle cx='60' cy='60' r='42' fill='{SOFT}'/><text x='6
 # parole → pittogramma (il primo che corrisponde vince)
 RULES = [
     (r'^(evita|mai |attenzione|non usare|non toccare|non accendere)', warn),
-    (r'rubinett|contatore|quadro', B.gas_valve),
+    (r'candeggina|cloro', B.bleach),
+    (r'rubinetto (del gas|generale)|contatore|quadro', B.gas_valve),
     (r'etichett', docs),
     (r'trasportin|animal|cane|gatto|veterinar', paw),
     (r'\b(112|118|115|113|chiama|telefon|cellular|sms|smartphone)', lambda: B.phone()),
@@ -205,7 +206,7 @@ process.stdout.write(JSON.stringify(out));
 # Sezioni da NON illustrare finché il testo non è deciso dal titolare (vedi note-interne):
 # farmaci e kit medico (antibiotici, farmaci scaduti), test di commestibilità delle piante.
 EXCLUDE = ('farmaci-scorta--', 'kit-medico--', 'survival-piante--test-universale',
-           'comm-piano-famiglia--', 'acqua-stoccaggio--', 'cibo-scorte-piano--', 'orto-emergenza--',
+           'orto-emergenza--',
            )
 # (piano famiglia, stoccaggio acqua, piano scorte e orto: numeri senza fonte già segnalati, da decidere)
 # Le guide «Cautela» (GUIDE_CAUTION) non si illustrano: il loro testo non è ancora verificato
@@ -216,7 +217,8 @@ EXCLUDE = ('farmaci-scorta--', 'kit-medico--', 'survival-piante--test-universale
 # o illustrazione nascosta solo per un difetto del disegno.
 HIDDEN_OK = ('acqua-purificazione--perch-ogni-fonte-sospetta', 'community-resilienza--costruire-la-rete-locale')
 # Guide riscritte su fonti ufficiali dopo la revisione: tutte le sezioni si possono illustrare
-VERIFIED = ('sicurezza-casa--', 'gobag-checklist--', 'evacuazione-piano--')
+VERIFIED = ('sicurezza-casa--', 'gobag-checklist--', 'evacuazione-piano--', 'acqua-stoccaggio--',
+            'cibo-scorte-piano--', 'comm-piano-famiglia--', 'community-resilienza--')
 
 def main():
     data = json.loads(subprocess.check_output(['node', '-e', NODE, ROOT]))

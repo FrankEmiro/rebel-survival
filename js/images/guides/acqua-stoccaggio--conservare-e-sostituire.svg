@@ -1,0 +1,20 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 576' width='1024' height='576' role='img' aria-label='Conservare e sostituire'>
+<rect width='1024' height='576' fill='#f4eedf'/>
+<rect x='10' y='10' width='1004' height='556' fill='none' stroke='#2a2a26' stroke-width='3' rx='6'/>
+<text x='512.0' y='58' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='36' font-weight='800' fill='#2a2a26'>CONSERVARE E SOSTITUIRE</text>
+<text x='512.0' y='92' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='19' fill='#a8781f'>Scorte d&#x27;acqua (OMS)</text>
+<g transform='translate(94.0,222.0) scale(1.500)'><g fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><path d='M60 14 q-36 46 -36 66 a36 36 0 0 0 72 0 q0 -20 -36 -66z' fill='#5a8fb0'/><path d='M44 82 q0 12 12 16' stroke='#fff'/></g></g>
+<circle cx='44.0' cy='236.0' r='14' fill='#a8781f'/><text x='44.0' y='242.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>1</text>
+<text x='184.0' y='432.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='700' fill='#2a2a26'>Tieni l&#x27;acqua in un luogo</text>
+<text x='184.0' y='452.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>fresco e buio</text>
+<g transform='translate(422.0,212.0) scale(1.500)'><g fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><path d='M30 30 h44 l16 16 v58 q0 6 -6 6 h-54 q-6 0 -6 -6 v-68 q0 -6 6 -6z'/><path d='M74 30 v-12 h-16 v12'/><path d='M36 70 h48' stroke='#a8781f'/></g></g>
+<circle cx='372.0' cy='226.0' r='14' fill='#a8781f'/><text x='372.0' y='232.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>2</text>
+<text x='512.0' y='422.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='700' fill='#2a2a26'>L&#x27;acqua in bottiglia resta</text>
+<text x='512.0' y='442.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>nella confezione originale</text>
+<text x='512.0' y='462.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>sigillata</text>
+<g transform='translate(750.0,212.0) scale(1.500)'><g fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><path d='M30 30 h44 l16 16 v58 q0 6 -6 6 h-54 q-6 0 -6 -6 v-68 q0 -6 6 -6z'/><path d='M74 30 v-12 h-16 v12'/><path d='M36 70 h48' stroke='#a8781f'/></g></g>
+<circle cx='700.0' cy='226.0' r='14' fill='#a8781f'/><text x='700.0' y='232.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>3</text>
+<text x='840.0' y='422.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='700' fill='#2a2a26'>L&#x27;acqua che hai messo tu nei</text>
+<text x='840.0' y='442.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>contenitori va sostituita ogni</text>
+<text x='840.0' y='462.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>6 mesi</text>
+</svg>
