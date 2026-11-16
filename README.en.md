@@ -21,7 +21,7 @@
 
 <p align="center">
   <a href="https://resilienza.cyberrebellion.site"><b>▶ Open the app</b></a> &nbsp;·&nbsp;
-  <a href="https://resilienza.cyberrebellion.site/download/RebelSurvival.apk"><b>⬇ Download for Android</b></a>
+  <a href="https://github.com/FrankEmiro/rebel-survival/releases/latest"><b>⬇ Download for Android</b></a>
 </p>
 
 > 🏴 **Rebel Survival is a [Cyber Rebellion](https://cyberrebellion.site/en/) project.** The app is free and its code is public. The app and its guides are in **Italian** and follow Italian official sources. Ideas, bug reports and corrections to the guides are welcome in the [issues](https://github.com/FrankEmiro/rebel-survival/issues).
@@ -51,7 +51,7 @@ It puts in **one app that works offline** what you need **before** an emergency 
 
 ## How to use it
 
-1. **Open the app** at [resilienza.cyberrebellion.site](https://resilienza.cyberrebellion.site) and install it from the browser menu ("Add to Home screen"). On Android you can also [download the APK](https://resilienza.cyberrebellion.site/download/RebelSurvival.apk).
+1. **Open the app** at [resilienza.cyberrebellion.site](https://resilienza.cyberrebellion.site) and install it from the browser menu ("Add to Home screen"). On Android you can also [download the APK from Releases](https://github.com/FrankEmiro/rebel-survival/releases/latest).
 2. **Fill in your profile**: how many people, any pets, what you already have at home.
 3. **Prepare your supplies** with the calculators and lists, area by area.
 4. **In an emergency** tap "What is happening?" and follow the plan. Everything works without a connection.

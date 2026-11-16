@@ -21,7 +21,7 @@
 
 <p align="center">
   <a href="https://resilienza.cyberrebellion.site"><b>▶ Apri l'app</b></a> &nbsp;·&nbsp;
-  <a href="https://resilienza.cyberrebellion.site/download/RebelSurvival.apk"><b>⬇ Scarica l'app Android</b></a>
+  <a href="https://github.com/FrankEmiro/rebel-survival/releases/latest"><b>⬇ Scarica l'app Android</b></a>
 </p>
 
 > 🏴 **Rebel Survival è un progetto di [Cyber Rebellion](https://cyberrebellion.site).** L'app è gratuita e il codice è pubblico. Idee, segnalazioni di errori e correzioni alle guide sono benvenute nelle [issues](https://github.com/FrankEmiro/rebel-survival/issues).
@@ -51,7 +51,7 @@ Mette in **un'unica app che funziona offline** quello che serve **prima** di un'
 
 ## Come si usa
 
-1. **Apri l'app** su [resilienza.cyberrebellion.site](https://resilienza.cyberrebellion.site) e installala: dal menu del browser, «Aggiungi a schermata Home». Su Android puoi anche [scaricare l'APK](https://resilienza.cyberrebellion.site/download/RebelSurvival.apk).
+1. **Apri l'app** su [resilienza.cyberrebellion.site](https://resilienza.cyberrebellion.site) e installala: dal menu del browser, «Aggiungi a schermata Home». Su Android puoi anche [scaricare l'APK dalle release](https://github.com/FrankEmiro/rebel-survival/releases/latest).
 2. **Compila il profilo**: quante persone siete, eventuali animali, cosa hai già in casa.
 3. **Prepara le scorte** con i calcolatori e le liste, area per area.
 4. **In un'emergenza** tocca «Cosa sta succedendo?» e segui il piano. Tutto funziona anche senza rete.
@@ -75,7 +75,7 @@ Poi apri **http://localhost:5500**.
 | Percorso | Contenuto |
 |---|---|
 | `index.html` | Pagina unica: tutte le sezioni (`section-*`) |
-| `js/main.js` | Navigazione, avvio, controllo aggiornamenti dell'APK (`SITE_URL`) |
+| `js/main.js` | Navigazione, avvio, controllo aggiornamenti dell'APK su GitHub (`REPO`) |
 | `js/modules/` | Un modulo per sezione (acqua, cibo, energia, kit, strumenti, chat, wiki, assistente…) |
 | `js/data/guides.js` | Testo delle guide, fonti e avvisi di cautela |
 | `js/data/*.geojson` | Confini di comuni, province e regioni |
@@ -85,13 +85,12 @@ Poi apri **http://localhost:5500**.
 | `sw.js` | Service worker: tiene in cache i file per l'uso offline |
 | `android/` | App Android, vedi [android/LEGGIMI.md](android/LEGGIMI.md) |
 | `tools/` | Script: compilare e pubblicare l'APK, generare icone e schemi delle guide |
-| `download/` | APK pubblicato sul sito e `version.json` |
 | `Dockerfile`, `nginx.conf` | Server del sito (nginx) |
 
 ### Pubblicare una nuova versione
 1. A ogni modifica dei file dell'app aumenta il numero in `sw.js` (`CACHE_NAME = 'kit-resilienza-vNN'`): senza questo, chi ha già l'app continua a vedere i file vecchi. Lo stesso numero diventa la versione dell'app Android.
 2. Il ramo `main` va online da solo con il deploy automatico: lavora su un altro ramo e unisci a `main` solo quando è pronto.
-3. Per l'app Android: `tools/build-android.sh` crea l'APK, `tools/pubblica-apk.sh NN` la mette in `download/`, poi fai il commit. L'app installata vede la nuova versione da `download/version.json`.
+3. Per l'app Android: `tools/build-android.sh` crea l'APK, `tools/pubblica-apk.sh NN` scrive il comando per pubblicarla come release `vNN` su GitHub. L'APK non sta sul sito: l'app installata vede la nuova versione dall'ultima release.
 
 ### Contribuire alle guide
 Le guide riguardano la sicurezza delle persone. **Ogni indicazione pratica (dosi, numeri, distanze, procedure) deve avere una fonte ufficiale**: Protezione civile, OMS, ministeri, enti pubblici. Se proponi una modifica, metti il link alla fonte. Senza fonte, la guida resta segnata «Cautela».

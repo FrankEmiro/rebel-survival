@@ -170,10 +170,11 @@ function registerSW() {
    (nascosto: si mostra toccando 5 volte il numero di versione). I dati
    dell'utente (localStorage, pacchetti offline, modello AI) non vengono toccati. */
 const AppUpdate = (() => {
-  // Indirizzo del sito: l'app Android (che gira da file interni) lo usa per sapere se c'è un APK nuovo.
-  // Sul sito sono pubblicati /download/RebelSurvival.apk e /download/version.json (vedi tools/pubblica-apk.sh).
-  const SITE_URL = 'https://resilienza.cyberrebellion.site';   // dominio del sito: cambiare qui se cambia
-  const APK_PATH = '/download/RebelSurvival.apk';
+  // L'APK si pubblica solo su GitHub Releases (vedi tools/pubblica-apk.sh): il tag della release
+  // è la versione (es. v114) e il file allegato si chiama RebelSurvival.apk. Cambiare qui se cambia il repository.
+  const REPO = 'FrankEmiro/rebel-survival';
+  const APK_URL = 'https://github.com/' + REPO + '/releases/latest/download/RebelSurvival.apk';
+  const LATEST_API = 'https://api.github.com/repos/' + REPO + '/releases/latest';
   let reloading = false, taps = 0;
   const startedAt = Date.now();
   const reloadOnce = () => { if (!reloading) { reloading = true; location.reload(); } };
@@ -217,23 +218,22 @@ const AppUpdate = (() => {
     document.body.appendChild(d);
   }
 
-  // App Android: i file sono dentro l'APK, quindi si aggiorna installando un APK nuovo dal sito.
+  // App Android: i file sono dentro l'APK, quindi si aggiorna installando un APK nuovo da GitHub.
   const apkVersion = () => parseInt(String(window.RSAndroid.version() || '').replace(/\D/g, ''), 10) || 0;
   function apkLink(show) {
     const box = document.getElementById('app-apk-upd');
     if (!box) return;
     box.classList.toggle('hidden', !show);
     const a = box.querySelector('a');
-    if (a) a.href = SITE_URL + APK_PATH;
+    if (a) a.href = APK_URL;
   }
   async function checkApk(quiet) {
-    if (!SITE_URL) return quiet || say('Controllo aggiornamenti non ancora configurato.');
     if (!navigator.onLine) return quiet || say('Serve internet per cercare aggiornamenti.');
     if (!quiet) say('Cerco aggiornamenti…');
     try {
-      const res = await fetch(SITE_URL + '/download/version.json', { cache: 'no-store' });
+      const res = await fetch(LATEST_API, { cache: 'no-store', headers: { Accept: 'application/vnd.github+json' } });
       if (!res.ok) throw new Error(res.status);
-      const last = parseInt((await res.json()).version, 10) || 0;
+      const last = parseInt(String((await res.json()).tag_name || '').replace(/\D/g, ''), 10) || 0;
       if (last > apkVersion()) {
         apkLink(true);
         say(`È disponibile la v${last}. Tocca «Scarica l'aggiornamento», poi apri il file e conferma «Aggiorna»: i tuoi dati restano.`);
@@ -282,11 +282,11 @@ const AppUpdate = (() => {
   }
   async function render() {
     const v = document.getElementById('app-ver');
-    // pulsante «Scarica l'app Android»: solo su telefoni Android (non nell'app) e solo se il file è sul sito
-    if (!window.RSAndroid && /Android/i.test(navigator.userAgent) && navigator.onLine) {
-      fetch(APK_PATH, { method: 'HEAD', cache: 'no-store' }).then(res => {
-        if (res.ok) ['app-apk-box', 'app-apk-note'].forEach(id => document.getElementById(id)?.classList.remove('hidden'));
-      }).catch(() => {});
+    // pulsante «Scarica l'app Android» (da GitHub): solo su telefoni Android, non dentro l'app
+    if (!window.RSAndroid && /Android/i.test(navigator.userAgent)) {
+      const a = document.querySelector('#app-apk-box a');
+      if (a) a.href = APK_URL;
+      ['app-apk-box', 'app-apk-note'].forEach(id => document.getElementById(id)?.classList.remove('hidden'));
     }
     if (v && window.RSAndroid) {
       v.textContent = 'v' + apkVersion() + ' (app Android)';

@@ -1301,7 +1301,7 @@ const SettingsModule = (() => {
         <p class="pf-note" id="app-share-note"><i class="ph ph-wifi-slash"></i> Funziona anche senza internet: crea un file da inviare con Bluetooth o Quick Share. Chi lo riceve lo apre con il browser. Non contiene guide PDF, mappa e AI, e non contiene i tuoi dati.</p>
         <p id="app-share-msg" class="pf-note" aria-live="polite"></p>
         <div id="app-apk-box" class="pf-actions hidden">
-          <a class="pf-action" href="/download/RebelSurvival.apk" download><i class="ph ph-android-logo"></i> Scarica l'app Android</a>
+          <a class="pf-action" href="https://github.com/FrankEmiro/rebel-survival/releases/latest/download/RebelSurvival.apk" target="_blank" rel="noopener"><i class="ph ph-android-logo"></i> Scarica l'app Android</a>
         </div>
         <p id="app-apk-note" class="pf-note hidden"><i class="ph ph-info"></i> App completa con tutto dentro: funziona senza internet e si passa ad altri telefoni via Bluetooth. Il telefono chiederà di consentire l'installazione da questa fonte.</p>
         <label class="pf-lab-row"><input type="checkbox" id="app-hide-caution" ${Storage.get('hide_caution', false) === true ? 'checked' : ''} onchange="SettingsModule.setHideCaution(this.checked)">

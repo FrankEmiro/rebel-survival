@@ -51,9 +51,10 @@ Il numero aumenta a ogni versione, così Android accetta l'aggiornamento.
 - **Backup:** la chiave va conservata con cura. Se si perde, non si possono più pubblicare aggiornamenti.
 
 ## Aggiornamenti
-1. `tools/pubblica-apk.sh NN` copia l'APK in `download/RebelSurvival.apk` e scrive `download/version.json`.
-2. Quando questi file arrivano su `main`, il sito li pubblica.
-3. L'app installata legge `version.json` dal sito (`SITE_URL` in `js/main.js`) e propone l'aggiornamento.
+L'APK si distribuisce solo da **GitHub Releases**, non dal sito.
+1. `tools/pubblica-apk.sh NN` controlla l'APK in `dist/` e scrive il comando `gh release create vNN …` da lanciare.
+2. La release ha il tag `vNN` e il file allegato `RebelSurvival.apk`.
+3. L'app installata legge l'ultima release da GitHub (`REPO` in `js/main.js`) e propone l'aggiornamento. Funziona solo se il repository è pubblico.
 
 ## Differenze rispetto al sito
 - **Niente service worker:** i file sono già nell'APK. Per aggiornare si installa un APK nuovo.

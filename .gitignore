@@ -16,3 +16,4 @@ android/mesh/build/
 # Impostazioni locali di Claude Code (percorsi del computer)
 .claude/
 tools/__pycache__/
+download/
