@@ -109,6 +109,20 @@ Le guide riguardano la sicurezza delle persone. **Per ogni indicazione pratica (
 - Mappe © contributori di OpenStreetMap (ODbL); pagine di Wikipedia © autori di Wikipedia (CC BY-SA), scaricate da Kiwix
 - Guide PDF © Dipartimento della Protezione civile
 
+## ❤️ Sostieni il progetto
+
+Rebel Survival è **gratuita, senza pubblicità e senza account**. Se ti è utile, puoi aiutare a mantenerla e aggiornarla:
+
+- **[Dona con GitHub Sponsors](https://github.com/sponsors/FrankEmiro)**: una donazione libera, una tantum o mensile. Non sblocca funzioni: l'app resta uguale per tutti.
+- **⭐ Metti una stella** al repository e raccontala a chi può averne bisogno.
+- **Segnala errori o correzioni** alle guide nelle [issues](https://github.com/FrankEmiro/rebel-survival/issues): è un aiuto prezioso.
+
+## 🤝 Sponsor
+
+Aziende, scuole, associazioni ed enti possono sostenere il progetto come **sponsor**: il nome (e un link, se vuoi) compare qui sotto e nell'app. **Gli sponsor non influenzano il contenuto delle guide**, che seguono solo le fonti indicate. Per informazioni apri una [segnalazione](https://github.com/FrankEmiro/rebel-survival/issues).
+
+*Ancora nessuno sponsor: potresti essere il primo.*
+
 ## Cyber Rebellion
 
 [Cyber Rebellion](https://cyberrebellion.site) è una rete di professionisti indipendenti in Italia che porta gli agenti AI nelle aziende. Rebel Survival è il nostro progetto per la preparazione alle emergenze, gratuito e aperto a tutti.

@@ -1313,6 +1313,15 @@ const SettingsModule = (() => {
           <p class="pf-note">Solo per prove: possono essere lente o sbagliare.</p>
         </div>
       </div>
+      <div class="pf-group">
+        <h2 class="pf-group-title">Sostieni il progetto</h2>
+        <p class="pf-note"><i class="ph ph-heart"></i> Rebel Survival è gratuita e senza pubblicità. Se ti è utile puoi sostenere chi la sviluppa con una donazione libera: serve a mantenerla e aggiornarla. Non cambia nulla nell'app e non dà accesso a funzioni in più.</p>
+        <div class="pf-actions">
+          <a class="pf-action" href="https://github.com/sponsors/FrankEmiro" target="_blank" rel="noopener"><i class="ph ph-heart"></i> Sostieni con una donazione</a>
+          <a class="pf-action" href="https://github.com/FrankEmiro/rebel-survival/issues" target="_blank" rel="noopener"><i class="ph ph-chat-circle-text"></i> Segnala un errore o proponi un'idea</a>
+        </div>
+        <p class="pf-note">Aziende, scuole e associazioni possono diventare <strong>sponsor</strong>: il nome compare nel README del progetto. Gli sponsor non influenzano il contenuto delle guide. Per informazioni apri una segnalazione nel progetto.</p>
+      </div>
       <p id="s-save-msg" class="text-center text-secondary text-sm mt-12 hidden">
         <i class="ph ph-check-circle"></i> Profilo aggiornato — Home aggiornata
       </p>

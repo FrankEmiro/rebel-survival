@@ -81,6 +81,20 @@ Then open **http://localhost:5500**. Project structure, release steps and the An
 - Fonts Rajdhani, Nunito and JetBrains Mono (SIL Open Font License 1.1)
 - Maps © OpenStreetMap contributors (ODbL); Wikipedia pages © Wikipedia authors (CC BY-SA), via Kiwix; PDF guides © Italian Civil Protection Department
 
+## ❤️ Support the project
+
+Rebel Survival is **free, ad-free and needs no account**. If it is useful to you, you can help keep it maintained and up to date:
+
+- **[Donate with GitHub Sponsors](https://github.com/sponsors/FrankEmiro)**: a free-choice donation, one-off or monthly. It unlocks nothing: the app stays the same for everyone.
+- **⭐ Star the repository** and tell people who may need it.
+- **Report errors or corrections** to the guides in the [issues](https://github.com/FrankEmiro/rebel-survival/issues): very helpful.
+
+## 🤝 Sponsors
+
+Companies, schools, associations and public bodies can support the project as **sponsors**: their name (and a link, if they wish) appears here and in the app. **Sponsors do not influence the content of the guides**, which follow only the sources they cite. For information open an [issue](https://github.com/FrankEmiro/rebel-survival/issues).
+
+*No sponsors yet: you could be the first.*
+
 ## Cyber Rebellion
 
 [Cyber Rebellion](https://cyberrebellion.site/en/) is a network of independent professionals based in Italy that brings AI agents into companies. Rebel Survival is our emergency-preparedness project, free and open to everyone.
