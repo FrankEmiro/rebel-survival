@@ -1,4 +1,4 @@
-<p align="center"><a href="https://resilienza.cyberrebellion.site"><img src="icons/icon-rs-512.png" alt="Rebel Survival" width="140"></a></p>
+<p align="center"><a href="https://github.com/FrankEmiro/rebel-survival/releases/latest"><img src="icons/icon-rs-512.png" alt="Rebel Survival" width="140"></a></p>
 
 <h1 align="center">Rebel Survival</h1>
 
@@ -10,7 +10,6 @@
 <p align="center">
   <a href="LICENSE"><img alt="Licenza: GPL v3" src="https://img.shields.io/badge/licenza-GPL%20v3-6366f1"></a>
   <img alt="Funziona offline" src="https://img.shields.io/badge/funziona-offline-10b981">
-  <img alt="Web app installabile" src="https://img.shields.io/badge/web%20app-installabile%20(PWA)-f59e0b">
   <img alt="Android 8 o più recente" src="https://img.shields.io/badge/Android-8.0%2B-3ddc84">
   <img alt="Nessun account" src="https://img.shields.io/badge/account-nessuno-ec4899">
   <img alt="In italiano" src="https://img.shields.io/badge/lingua-italiano-3b82f6">
@@ -20,7 +19,6 @@
 <p align="center">🇮🇹 Italiano · <a href="README.en.md">🇬🇧 English</a></p>
 
 <p align="center">
-  <a href="https://resilienza.cyberrebellion.site"><b>▶ Apri l'app</b></a> &nbsp;·&nbsp;
   <a href="https://github.com/FrankEmiro/rebel-survival/releases/latest"><b>⬇ Scarica l'app Android</b></a>
 </p>
 
@@ -32,7 +30,7 @@ Quando manca la corrente, l'acqua o la rete telefonica, le informazioni servono 
 
 ## Cosa fa Rebel Survival
 
-Mette in **un'unica app che funziona offline** quello che serve **prima** di un'emergenza (scorte, piani, kit) e quello che serve **durante** (cosa fare passo per passo, strumenti, comunicare con chi è vicino). Si apre dal browser e si installa sul telefono come un'app; su Android c'è anche l'app vera e propria.
+Mette in **un'unica app che funziona offline** quello che serve **prima** di un'emergenza (scorte, piani, kit) e quello che serve **durante** (cosa fare passo per passo, strumenti, comunicare con chi è vicino). È un'app Android e si scarica gratis da GitHub.
 
 ## ✨ Funzioni principali
 
@@ -46,12 +44,12 @@ Mette in **un'unica app che funziona offline** quello che serve **prima** di un'
 | 📖 **Wikipedia offline** | Scegli e scarica le parti di Wikipedia che ti servono, per esempio la medicina, e leggile senza rete. I file vengono da Kiwix; il lettore è dentro l'app. Su Android il download continua anche con l'app in secondo piano. |
 | 📡 **Chat tra telefoni vicini** *(Android, sperimentale)* | Messaggi via **Bluetooth, senza internet né rete telefonica**. I messaggi passano di telefono in telefono fino a 7 passaggi, quelli privati sono cifrati. È compatibile con l'app **bitchat** per Android e iPhone. |
 | 💬 **Assistente** *(sperimentale)* | Fai una domanda a parole tue: l'app cerca la risposta nelle sue guide, **offline**, e ti mostra sempre la fonte. Sui telefoni più potenti può anche scrivere la risposta con un modello AI che gira sul telefono stesso. |
-| 📲 **Passala a chi non ha internet** | Condividi il tuo piano con un **codice QR**. Passa l'app intera a un altro telefono con Bluetooth o Quick Share: l'APK su Android, una copia offline in un unico file dal browser. |
-| 🔒 **Privacy** | Niente account e niente registrazione. Profilo, scorte e messaggi restano sul telefono; puoi esportarli in un backup e reimportarli. Il server del sito non tiene il registro delle visite. |
+| 📲 **Passala a chi non ha internet** | Condividi il tuo piano con un **codice QR**. Passa l'app intera a un altro telefono con Bluetooth o Quick Share: l'APK, oppure una copia offline in un unico file che si apre con il browser. |
+| 🔒 **Privacy** | Niente account e niente registrazione. Profilo, scorte e messaggi restano sul telefono; puoi esportarli in un backup e reimportarli. |
 
 ## Come si usa
 
-1. **Apri l'app** su [resilienza.cyberrebellion.site](https://resilienza.cyberrebellion.site) e installala: dal menu del browser, «Aggiungi a schermata Home». Su Android puoi anche [scaricare l'APK dalle release](https://github.com/FrankEmiro/rebel-survival/releases/latest).
+1. **Scarica l'app** dall'[ultima release](https://github.com/FrankEmiro/rebel-survival/releases/latest) (file `RebelSurvival.apk`) e installala: il telefono ti chiederà di consentire l'installazione da questa fonte.
 2. **Compila il profilo**: quante persone siete, eventuali animali, cosa hai già in casa.
 3. **Prepara le scorte** con i calcolatori e le liste, area per area.
 4. **In un'emergenza** tocca «Cosa sta succedendo?» e segui il piano. Tutto funziona anche senza rete.
@@ -85,11 +83,11 @@ Poi apri **http://localhost:5500**.
 | `sw.js` | Service worker: tiene in cache i file per l'uso offline |
 | `android/` | App Android, vedi [android/LEGGIMI.md](android/LEGGIMI.md) |
 | `tools/` | Script: compilare e pubblicare l'APK, generare icone e schemi delle guide |
-| `Dockerfile`, `nginx.conf` | Server del sito (nginx) |
+| `Dockerfile`, `nginx.conf` | Server per la versione web (oggi non pubblicata) |
 
 ### Pubblicare una nuova versione
 1. A ogni modifica dei file dell'app aumenta il numero in `sw.js` (`CACHE_NAME = 'kit-resilienza-vNN'`): senza questo, chi ha già l'app continua a vedere i file vecchi. Lo stesso numero diventa la versione dell'app Android.
-2. Il ramo `main` va online da solo con il deploy automatico: lavora su un altro ramo e unisci a `main` solo quando è pronto.
+2. Lavora su un altro ramo e unisci a `main` solo quando è pronto.
 3. Per l'app Android: `tools/build-android.sh` crea l'APK, `tools/pubblica-apk.sh NN` scrive il comando per pubblicarla come release `vNN` su GitHub. L'APK non sta sul sito: l'app installata vede la nuova versione dall'ultima release.
 
 ### Contribuire alle guide

@@ -1,4 +1,4 @@
-<p align="center"><a href="https://resilienza.cyberrebellion.site"><img src="icons/icon-rs-512.png" alt="Rebel Survival" width="140"></a></p>
+<p align="center"><a href="https://github.com/FrankEmiro/rebel-survival/releases/latest"><img src="icons/icon-rs-512.png" alt="Rebel Survival" width="140"></a></p>
 
 <h1 align="center">Rebel Survival</h1>
 
@@ -10,7 +10,6 @@
 <p align="center">
   <a href="LICENSE"><img alt="License: GPL v3" src="https://img.shields.io/badge/license-GPL%20v3-6366f1"></a>
   <img alt="Works offline" src="https://img.shields.io/badge/works-offline-10b981">
-  <img alt="Installable web app" src="https://img.shields.io/badge/web%20app-installable%20(PWA)-f59e0b">
   <img alt="Android 8 or later" src="https://img.shields.io/badge/Android-8.0%2B-3ddc84">
   <img alt="No account" src="https://img.shields.io/badge/account-none-ec4899">
   <img alt="Italian" src="https://img.shields.io/badge/UI-Italian-3b82f6">
@@ -20,7 +19,6 @@
 <p align="center"><a href="README.md">🇮🇹 Italiano</a> · 🇬🇧 English</p>
 
 <p align="center">
-  <a href="https://resilienza.cyberrebellion.site"><b>▶ Open the app</b></a> &nbsp;·&nbsp;
   <a href="https://github.com/FrankEmiro/rebel-survival/releases/latest"><b>⬇ Download for Android</b></a>
 </p>
 
@@ -32,7 +30,7 @@ When power, water or the phone network go down, you need information right away,
 
 ## What Rebel Survival does
 
-It puts in **one app that works offline** what you need **before** an emergency (supplies, plans, kits) and what you need **during** one (what to do step by step, tools, talking to people nearby). It opens in the browser and installs on the phone like an app; on Android there is also a native app.
+It puts in **one app that works offline** what you need **before** an emergency (supplies, plans, kits) and what you need **during** one (what to do step by step, tools, talking to people nearby). It is an Android app, free to download from GitHub.
 
 ## ✨ Highlights
 
@@ -46,12 +44,12 @@ It puts in **one app that works offline** what you need **before** an emergency 
 | 📖 **Offline Wikipedia** | Choose and download the parts of Wikipedia you need (for example medicine) and read them with no connection. Files come from Kiwix; the reader is built into the app. On Android the download keeps going with the app in the background. |
 | 📡 **Chat with nearby phones** *(Android, experimental)* | Messages over **Bluetooth, with no internet and no phone network**. Messages hop from phone to phone up to 7 times; private ones are encrypted. Compatible with the **bitchat** app for Android and iPhone. |
 | 💬 **Assistant** *(experimental)* | Ask in your own words: the app searches its guides **offline** and always shows the source. On more powerful phones it can also write the answer with an AI model that runs on the phone itself. |
-| 📲 **Pass it to people without internet** | Share your plan with a **QR code**. Send the whole app to another phone over Bluetooth or Quick Share: the APK on Android, or a single-file offline copy from the browser. |
-| 🔒 **Privacy** | No account, no sign-up. Profile, supplies and messages stay on the phone; you can export them to a backup and import them again. The website server keeps no visit log. |
+| 📲 **Pass it to people without internet** | Share your plan with a **QR code**. Send the whole app to another phone over Bluetooth or Quick Share: the APK, or a single-file offline copy that opens in a browser. |
+| 🔒 **Privacy** | No account, no sign-up. Profile, supplies and messages stay on the phone; you can export them to a backup and import them again. |
 
 ## How to use it
 
-1. **Open the app** at [resilienza.cyberrebellion.site](https://resilienza.cyberrebellion.site) and install it from the browser menu ("Add to Home screen"). On Android you can also [download the APK from Releases](https://github.com/FrankEmiro/rebel-survival/releases/latest).
+1. **Download the app** from the [latest release](https://github.com/FrankEmiro/rebel-survival/releases/latest) (file `RebelSurvival.apk`) and install it: the phone will ask you to allow installs from this source.
 2. **Fill in your profile**: how many people, any pets, what you already have at home.
 3. **Prepare your supplies** with the calculators and lists, area by area.
 4. **In an emergency** tap "What is happening?" and follow the plan. Everything works without a connection.
