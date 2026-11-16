@@ -1,0 +1,23 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 576' width='1024' height='576' role='img' aria-label='Prima: cosa tenere pronto'>
+<rect width='1024' height='576' fill='#f4eedf'/>
+<rect x='10' y='10' width='1004' height='556' fill='none' stroke='#2a2a26' stroke-width='3' rx='6'/>
+<text x='512.0' y='58' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='36' font-weight='800' fill='#2a2a26'>PRIMA: COSA TENERE PRONTO</text>
+<text x='512.0' y='92' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='19' fill='#a8781f'>Ricaricare il telefono senza corrente (Energy.gov)</text>
+<g transform='translate(192.5,128.0) scale(1.225)'><g fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><rect x='22' y='38' width='70' height='44' rx='6'/><rect x='92' y='52' width='8' height='16' rx='2'/><rect x='30' y='46' width='36' height='28' fill='#3d7a3a' stroke='none'/></g></g>
+<circle cx='44.0' cy='142.0' r='14' fill='#a8781f'/><text x='44.0' y='148.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>1</text>
+<text x='266.0' y='305.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='700' fill='#2a2a26'>Powerbank e caricatori portatili,</text>
+<text x='266.0' y='325.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>tenuti sempre carichi</text>
+<g transform='translate(684.5,128.0) scale(1.225)'><g fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><rect x='16' y='42' width='88' height='56' rx='8'/><path d='M30 42 l50 -26'/><circle cx='44' cy='70' r='14'/><path d='M70 60 h22 M70 72 h22 M70 84 h14'/></g></g>
+<circle cx='536.0' cy='142.0' r='14' fill='#a8781f'/><text x='536.0' y='148.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>2</text>
+<text x='758.0' y='305.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='700' fill='#2a2a26'>Pile di riserva per i dispositivi</text>
+<text x='758.0' y='325.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>che le usano (radio, torce)</text>
+<g transform='translate(192.5,349.0) scale(1.225)'><g fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><rect x='38' y='12' width='44' height='96' rx='8'/><path d='M54 22 h12'/><circle cx='60' cy='96' r='4'/></g></g>
+<circle cx='44.0' cy='363.0' r='14' fill='#a8781f'/><text x='44.0' y='369.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>3</text>
+<text x='266.0' y='526.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='700' fill='#2a2a26'>Un caricatore da auto per il</text>
+<text x='266.0' y='546.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>telefono</text>
+<g transform='translate(694.5,349.0) scale(1.058)'><g fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><circle cx='60' cy='60' r='20' fill='#a8781f'/><path d='M90 60 L104 60'/><path d='M30 60 L16 60'/><path d='M60 90 L60 104'/><path d='M60 30 L60 16'/><path d='M81 81 L91 91'/><path d='M39 81 L29 91'/><path d='M81 39 L91 29'/><path d='M39 39 L29 29'/></g></g>
+<circle cx='536.0' cy='363.0' r='14' fill='#a8781f'/><text x='536.0' y='369.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>4</text>
+<text x='758.0' y='506.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='700' fill='#2a2a26'>Se vuoi una fonte che non si</text>
+<text x='758.0' y='526.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>esaurisce: un caricatore solare o</text>
+<text x='758.0' y='546.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>a manovella</text>
+</svg>

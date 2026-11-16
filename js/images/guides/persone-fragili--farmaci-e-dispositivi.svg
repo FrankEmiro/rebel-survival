@@ -1,0 +1,30 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 576' width='1024' height='576' role='img' aria-label='Farmaci e dispositivi'>
+<rect width='1024' height='576' fill='#f4eedf'/>
+<rect x='10' y='10' width='1004' height='556' fill='none' stroke='#2a2a26' stroke-width='3' rx='6'/>
+<text x='512.0' y='58' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='36' font-weight='800' fill='#2a2a26'>FARMACI E DISPOSITIVI</text>
+<text x='512.0' y='92' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='19' fill='#a8781f'>Persone fragili e con disabilità (Ready.gov)</text>
+<g transform='translate(130.5,128.0) scale(0.892)'><g fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><rect x='22' y='44' width='76' height='36' rx='18'/><path d='M60 44 v36'/><rect x='70' y='18' width='20' height='20' rx='4' fill='#d9cfb8'/><path d='M74 28 h12 M80 22 v12'/></g></g>
+<circle cx='44.0' cy='142.0' r='14' fill='#a8781f'/><text x='44.0' y='148.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>1</text>
+<text x='184.0' y='265.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='700' fill='#2a2a26'>Chiedi al medico o al</text>
+<text x='184.0' y='285.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>farmacista come preparare una</text>
+<text x='184.0' y='305.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>scorta di emergenza dei</text>
+<text x='184.0' y='325.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>farmaci</text>
+<g transform='translate(458.5,128.0) scale(0.892)'><g fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><rect x='22' y='44' width='76' height='36' rx='18'/><path d='M60 44 v36'/><rect x='70' y='18' width='20' height='20' rx='4' fill='#d9cfb8'/><path d='M74 28 h12 M80 22 v12'/></g></g>
+<circle cx='372.0' cy='142.0' r='14' fill='#a8781f'/><text x='372.0' y='148.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>2</text>
+<text x='512.0' y='265.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='700' fill='#2a2a26'>Elenco scritto: farmaci, dosi,</text>
+<text x='512.0' y='285.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>orari, diagnosi, allergie,</text>
+<text x='512.0' y='305.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>dispositivi con modello e</text>
+<text x='512.0' y='325.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>numero di serie</text>
+<g transform='translate(776.5,128.0) scale(1.058)'><g fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><rect x='22' y='44' width='76' height='36' rx='18'/><path d='M60 44 v36'/><rect x='70' y='18' width='20' height='20' rx='4' fill='#d9cfb8'/><path d='M74 28 h12 M80 22 v12'/></g></g>
+<circle cx='700.0' cy='142.0' r='14' fill='#a8781f'/><text x='700.0' y='148.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>3</text>
+<text x='840.0' y='285.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='700' fill='#2a2a26'>Borsa frigo e siberini per i</text>
+<text x='840.0' y='305.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>farmaci che vanno tenuti al</text>
+<text x='840.0' y='325.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>fresco</text>
+<g transform='translate(274.5,349.0) scale(1.225)'><g fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><rect x='22' y='38' width='70' height='44' rx='6'/><rect x='92' y='52' width='8' height='16' rx='2'/><rect x='30' y='46' width='36' height='28' fill='#3d7a3a' stroke='none'/></g></g>
+<circle cx='208.0' cy='363.0' r='14' fill='#a8781f'/><text x='208.0' y='369.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>4</text>
+<text x='348.0' y='526.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='700' fill='#2a2a26'>Occhiali, apparecchi acustici</text>
+<text x='348.0' y='546.0' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='500' fill='#2a2a26'>e batterie di ricambio</text>
+<g transform='translate(601.0,357.5) scale(1.250)'><g fill='none' stroke='#2a2a26' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><rect x='22' y='38' width='70' height='44' rx='6'/><rect x='92' y='52' width='8' height='16' rx='2'/><rect x='30' y='46' width='36' height='28' fill='#3d7a3a' stroke='none'/></g></g>
+<circle cx='536.0' cy='371.5' r='14' fill='#a8781f'/><text x='536.0' y='377.5' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='17' font-weight='800' fill='#fff'>5</text>
+<text x='676.0' y='537.5' text-anchor='middle' font-family='Helvetica Neue, Helvetica, Arial, sans-serif' font-size='16' font-weight='700' fill='#2a2a26'>Carrozzina elettrica…</text>
+</svg>
