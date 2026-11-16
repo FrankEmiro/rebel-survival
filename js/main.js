@@ -166,7 +166,7 @@ function registerSW() {
 const AppUpdate = (() => {
   // Indirizzo del sito: l'app Android (che gira da file interni) lo usa per sapere se c'è un APK nuovo.
   // Sul sito sono pubblicati /download/RebelSurvival.apk e /download/version.json (vedi tools/pubblica-apk.sh).
-  const SITE_URL = '';
+  const SITE_URL = 'https://resilienza.cyberrebellion.site';   // dominio del sito: cambiare qui se cambia
   const APK_PATH = '/download/RebelSurvival.apk';
   let reloading = false, taps = 0;
   const startedAt = Date.now();
