@@ -32,17 +32,36 @@ Quando manca la corrente, l'acqua o la rete telefonica, le informazioni servono 
 
 Mette in **un'unica app che funziona offline** quello che serve **prima** di un'emergenza (scorte, piani, kit) e quello che serve **durante** (cosa fare passo per passo, strumenti, comunicare con chi è vicino). È un'app Android e si scarica gratis da GitHub.
 
+## 📱 Come si presenta
+
+<table>
+  <tr>
+    <td align="center"><img src="docs/screenshots/avviso.png" width="190" alt="Avviso iniziale"><br><sub><b>Avviso iniziale</b><br>chiaro sui rischi</sub></td>
+    <td align="center"><img src="docs/screenshots/home.png" width="190" alt="Home"><br><sub><b>Home</b><br>il tuo livello di preparazione</sub></td>
+    <td align="center"><img src="docs/screenshots/emergenza.png" width="190" alt="Emergenza"><br><sub><b>Emergenza</b><br>strumenti e piano passo per passo</sub></td>
+    <td align="center"><img src="docs/screenshots/scenari.png" width="190" alt="Scelta dello scenario"><br><sub><b>Scenari</b><br>scegli la situazione</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/screenshots/guida-rischio.png" width="190" alt="Guida a rischio alto"><br><sub><b>Guide con avvisi</b><br>«Rischio alto» ben visibile</sub></td>
+    <td align="center"><img src="docs/screenshots/chiedi.png" width="190" alt="Chiedi"><br><sub><b>Chiedi</b><br>risposte dalle guide, offline</sub></td>
+    <td align="center"><img src="docs/screenshots/chat.png" width="190" alt="Chat Bluetooth"><br><sub><b>Chat vicini</b><br>Bluetooth, senza rete</sub></td>
+    <td align="center"><img src="docs/screenshots/livella.png" width="190" alt="Livella"><br><sub><b>Livella</b><br>la bolla del telefono</sub></td>
+  </tr>
+</table>
+
+<sub>Le schermate sono dell'app, con dati di esempio. I nomi nella chat sono inventati.</sub>
+
 ## ✨ Funzioni principali
 
 | | |
 |---|---|
 | 🚨 **Cosa sta succedendo?** | Scegli la situazione e l'app ti dà il piano da seguire, passo per passo. **21 scenari**: blackout breve e lungo, terremoto, alluvione, maremoto, vulcano, incendio, ondata di caldo, tempesta invernale, evacuazione, mancanza di acqua, cibo o gas, pandemia, crisi economica, attacco informatico, conflitto, incidente nucleare o radiologico, sopravvivenza in natura e altri. |
-| 📚 **Guide da più fonti** | **47 guide** in 8 aree (acqua, cibo, energia, calore, salute, comunicazioni, mobilità, casa e persone), con schemi illustrati. Abbiamo cercato di raccogliere e mettere insieme le informazioni di più fonti (Protezione civile, OMS, Ready.gov, ERC e altre), con il link alla fonte dove c'è. **Non garantiamo che siano complete, corrette o aggiornate.** Le guide con fonti non ufficiali o ancora da controllare sono segnate **«Cautela»** e si possono nascondere. In più ci sono le **guide PDF della Protezione civile**. |
+| 📚 **Guide da più fonti** | **47 guide** in 8 aree (acqua, cibo, energia, calore, salute, comunicazioni, mobilità, casa e persone), con schemi illustrati. Abbiamo cercato di raccogliere e mettere insieme le informazioni di più fonti (Protezione civile, OMS, Ready.gov, ERC e altre), con il link alla fonte dove c'è. **Non garantiamo che siano complete, corrette o aggiornate.** Le guide con fonti non ufficiali o ancora da controllare sono segnate **«Cautela»**, e quelle dove un errore può essere grave **«Rischio alto»** con un avviso ben visibile: si possono nascondere. In più ci sono le **guide PDF della Protezione civile**. |
 | 🧮 **Calcolatori delle scorte** | Quanta acqua e quanto cibo servono alla tua famiglia, per quanti giorni ti basta l'energia, il riscaldamento, il carburante. Sono stime approssimative basate su raccomandazioni pubbliche e sul tuo profilo: non sono una garanzia. |
 | 🎒 **Scorte e kit** | Cosa hai già e cosa ti manca, area per area: acqua, cibo, energia, salute, igiene, zaino di emergenza. Con la **lista della spesa** pronta. |
-| 🔦 **Strumenti** | Torcia, segnale SOS, bussola, posizione GPS, mappa con i confini di comuni, province e regioni, stato di batteria e rete. Lo schermo può restare acceso. |
+| 🔦 **Strumenti** | Torcia, segnale SOS, bussola, **livella a bolla**, posizione GPS, mappa con i confini di comuni, province e regioni, stato di batteria e rete. Lo schermo può restare acceso. |
 | 📖 **Wikipedia offline** | Scegli e scarica le parti di Wikipedia che ti servono, per esempio la medicina, e leggile senza rete. I file vengono da Kiwix; il lettore è dentro l'app. Su Android il download continua anche con l'app in secondo piano. |
-| 📡 **Chat tra telefoni vicini** *(Android, sperimentale)* | Messaggi via **Bluetooth, senza internet né rete telefonica**. I messaggi passano di telefono in telefono fino a 7 passaggi, quelli privati sono cifrati. È compatibile con l'app **bitchat** per Android e iPhone. |
+| 📡 **Chat tra telefoni vicini** *(Android, sperimentale)* | Messaggi via **Bluetooth, senza internet né rete telefonica**, con messaggi pronti («Sto bene», «Ho bisogno di aiuto»), invio della posizione, **foto, messaggi vocali e piccoli file**. I messaggi passano di telefono in telefono fino a 7 passaggi, quelli privati sono cifrati. È compatibile con l'app **bitchat** per Android e iPhone. |
 | 💬 **Assistente** *(sperimentale)* | Fai una domanda a parole tue: l'app cerca la risposta nelle sue guide, **offline**, e ti mostra sempre la fonte. Sui telefoni più potenti può anche scrivere la risposta con un modello AI che gira sul telefono stesso. |
 | 📲 **Passala a chi non ha internet** | Condividi il tuo piano con un **codice QR**. Passa l'app intera a un altro telefono con Bluetooth o Quick Share: l'APK, oppure una copia offline in un unico file che si apre con il browser. |
 | 🔒 **Privacy** | Niente account e niente registrazione. Profilo, scorte e messaggi restano sul telefono; puoi esportarli in un backup e reimportarli. |

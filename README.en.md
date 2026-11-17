@@ -32,17 +32,36 @@ When power, water or the phone network go down, you need information right away,
 
 It puts in **one app that works offline** what you need **before** an emergency (supplies, plans, kits) and what you need **during** one (what to do step by step, tools, talking to people nearby). It is an Android app, free to download from GitHub.
 
+## 📱 What it looks like
+
+<table>
+  <tr>
+    <td align="center"><img src="docs/screenshots/avviso.png" width="190" alt="Opening notice"><br><sub><b>Opening notice</b><br>clear about the risks</sub></td>
+    <td align="center"><img src="docs/screenshots/home.png" width="190" alt="Home"><br><sub><b>Home</b><br>your preparedness level</sub></td>
+    <td align="center"><img src="docs/screenshots/emergenza.png" width="190" alt="Emergency"><br><sub><b>Emergency</b><br>tools and a step-by-step plan</sub></td>
+    <td align="center"><img src="docs/screenshots/scenari.png" width="190" alt="Choosing a scenario"><br><sub><b>Scenarios</b><br>pick the situation</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/screenshots/guida-rischio.png" width="190" alt="High-risk guide"><br><sub><b>Guides with warnings</b><br>a visible "High risk" notice</sub></td>
+    <td align="center"><img src="docs/screenshots/chiedi.png" width="190" alt="Ask"><br><sub><b>Ask</b><br>answers from the guides, offline</sub></td>
+    <td align="center"><img src="docs/screenshots/chat.png" width="190" alt="Bluetooth chat"><br><sub><b>Nearby chat</b><br>Bluetooth, no network</sub></td>
+    <td align="center"><img src="docs/screenshots/livella.png" width="190" alt="Level"><br><sub><b>Level</b><br>your phone's bubble level</sub></td>
+  </tr>
+</table>
+
+<sub>Screenshots are from the app (Italian interface), with sample data. Names in the chat are made up.</sub>
+
 ## ✨ Highlights
 
 | | |
 |---|---|
 | 🚨 **What is happening?** | Pick the situation and the app gives you the plan to follow, step by step. **21 scenarios**: short and long blackout, earthquake, flood, tsunami, volcano, wildfire, heat wave, winter storm, evacuation, lack of water, food or gas, pandemic, economic crisis, cyberattack, conflict, nuclear or radiological incident, survival in the wild and more. |
-| 📚 **Guides from several sources** | **47 guides** in 8 areas (water, food, energy, heat, health, communications, mobility, home and people), with illustrated diagrams. We have tried to gather and combine information from several sources (Italian Civil Protection, WHO, Ready.gov, ERC and others), with a link to the source where available. **We do not guarantee it is complete, correct or up to date.** Guides with unofficial or still unchecked sources are marked **"Caution"** and can be hidden. Plus the **Italian Civil Protection PDF guides**. |
+| 📚 **Guides from several sources** | **47 guides** in 8 areas (water, food, energy, heat, health, communications, mobility, home and people), with illustrated diagrams. We have tried to gather and combine information from several sources (Italian Civil Protection, WHO, Ready.gov, ERC and others), with a link to the source where available. **We do not guarantee it is complete, correct or up to date.** Guides with unofficial or still unchecked sources are marked **"Caution"**, and those where a mistake could be serious **"High risk"** with a prominent warning; they can be hidden. Plus the **Italian Civil Protection PDF guides**. |
 | 🧮 **Supply calculators** | How much water and food your family needs, how many days your energy lasts, heating, fuel. They are rough estimates based on public recommendations and your profile: not a guarantee. |
 | 🎒 **Supplies and kits** | What you already have and what is missing, area by area: water, food, energy, health, hygiene, go-bag. With a ready **shopping list**. |
-| 🔦 **Tools** | Flashlight, SOS signal, compass, GPS position, map with Italian municipal, provincial and regional borders, battery and network status. The screen can stay on. |
+| 🔦 **Tools** | Flashlight, SOS signal, compass, **bubble level**, GPS position, map with Italian municipal, provincial and regional borders, battery and network status. The screen can stay on. |
 | 📖 **Offline Wikipedia** | Choose and download the parts of Wikipedia you need (for example medicine) and read them with no connection. Files come from Kiwix; the reader is built into the app. On Android the download keeps going with the app in the background. |
-| 📡 **Chat with nearby phones** *(Android, experimental)* | Messages over **Bluetooth, with no internet and no phone network**. Messages hop from phone to phone up to 7 times; private ones are encrypted. Compatible with the **bitchat** app for Android and iPhone. |
+| 📡 **Chat with nearby phones** *(Android, experimental)* | Messages over **Bluetooth, with no internet and no phone network**, with ready-made messages ("I'm fine", "I need help"), position sharing, **photos, voice messages and small files**. Messages hop from phone to phone up to 7 times; private ones are encrypted. Compatible with the **bitchat** app for Android and iPhone. |
 | 💬 **Assistant** *(experimental)* | Ask in your own words: the app searches its guides **offline** and always shows the source. On more powerful phones it can also write the answer with an AI model that runs on the phone itself. |
 | 📲 **Pass it to people without internet** | Share your plan with a **QR code**. Send the whole app to another phone over Bluetooth or Quick Share: the APK, or a single-file offline copy that opens in a browser. |
 | 🔒 **Privacy** | No account, no sign-up. Profile, supplies and messages stay on the phone; you can export them to a backup and import them again. |
