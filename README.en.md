@@ -32,6 +32,18 @@ When power, water or the phone network go down, you need information right away,
 
 It puts in **one app that works offline** what you need **before** an emergency (supplies, plans, kits) and what you need **during** one (what to do step by step, tools, talking to people nearby). It is an Android app, free to download from GitHub.
 
+## 📲 Pass it to people without internet
+
+**The app can be passed from phone to phone, without internet and without Google Play.** If you have the Android app installed, go to **Profile → App → "Passa l'app a un altro telefono"** (pass the app to another phone): the app prepares its own copy and opens Android's share sheet, so you can send it over **Bluetooth or Quick Share** to anyone nearby.
+
+<p align="center"><img src="docs/screenshots/t-passa-app.png" width="320" alt="Profile, App: pass the app to another phone"></p>
+
+1. **Whoever has the app** taps the button and picks Bluetooth or Quick Share.
+2. **Whoever receives it** opens the file and installs it (Android asks to allow installing from this source). No internet and no account needed.
+3. **Now they have it too** and can pass it on: in an area with no network, many phones can get the app without ever downloading it from the internet.
+
+The copy does not contain your data (profile, supplies, messages). If the receiver is not on Android, there is also a **single-file offline copy** that opens in a browser. For chat between nearby phones, see below.
+
 ## 📱 What it looks like
 
 <table>

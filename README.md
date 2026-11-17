@@ -32,6 +32,18 @@ Quando manca la corrente, l'acqua o la rete telefonica, le informazioni servono 
 
 Mette in **un'unica app che funziona offline** quello che serve **prima** di un'emergenza (scorte, piani, kit) e quello che serve **durante** (cosa fare passo per passo, strumenti, comunicare con chi è vicino). È un'app Android e si scarica gratis da GitHub.
 
+## 📲 Passala a chi non ha internet
+
+**L'app si passa da telefono a telefono, senza internet e senza Google Play.** Se hai l'app Android installata, vai in **Profilo → App → «Passa l'app a un altro telefono»**: l'app prepara la sua copia e apre la condivisione di Android, così la mandi con **Bluetooth o Quick Share** a chi ti sta vicino.
+
+<p align="center"><img src="docs/screenshots/t-passa-app.png" width="320" alt="Profilo, App: Passa l'app a un altro telefono"></p>
+
+1. **Chi ha l'app** tocca «Passa l'app a un altro telefono» e sceglie Bluetooth o Quick Share.
+2. **Chi la riceve** apre il file e la installa (Android chiede di consentire l'installazione da questa fonte). Non serve internet, né un account.
+3. **Ora anche lui ce l'ha**, e può passarla a sua volta: così in una zona senza rete molti telefoni possono avere l'app, senza averla mai scaricata da internet.
+
+La copia non contiene i tuoi dati (profilo, scorte, messaggi). Se chi la riceve non usa Android, c'è anche una **copia offline in un unico file** che si apre con il browser. Per le chat tra telefoni vicini vedi più sotto.
+
 ## 📱 Come si presenta
 
 <table>
