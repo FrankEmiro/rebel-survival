@@ -4016,3 +4016,4 @@ input, select, textarea { font-family: 'Nunito', sans-serif; font-size: 1rem; }
 .level-bubble { position: absolute; left: 50%; top: 50%; width: 26px; height: 26px; margin: -13px 0 0 -13px; border-radius: 50%; background: var(--accent, #f59e0b); opacity: .9; transition: transform .08s linear; }
 
 .disclaimer-alert { border: 2px solid #c0392b; background: rgba(192,57,43,0.18); border-radius: var(--radius); padding: 10px 12px; }
+.chat-quick { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }

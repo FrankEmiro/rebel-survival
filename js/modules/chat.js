@@ -49,20 +49,49 @@ const ChatModule = (() => {
 
   function send() {
     const inp = document.getElementById('chat-text');
-    const text = (inp?.value || '').trim();
-    if (!text || !state.running) return;
+    if (sendText((inp?.value || '').trim())) { inp.value = ''; document.getElementById('chat-text')?.focus(); }
+  }
+
+  // Invia un testo a chi è selezionato (tutti i vicini o una persona)
+  function sendText(text) {
+    if (!text || !state.running) return false;
     if (state.to === 'all') {
-      if (!A().meshSend(text)) return;
+      if (!A().meshSend(text)) return false;
       msgs.push({ id: 'me-' + Date.now(), mine: true, text, ts: Date.now(), conv: 'all' });
     } else {
       const id = A().meshSendPrivate(state.to, text);
-      if (!id) return;
+      if (!id) return false;
       msgs.push({ id, mine: true, text, ts: Date.now(), conv: state.to, priv: true, status: 'inviato' });
     }
     save();
-    inp.value = '';
     render();
-    document.getElementById('chat-text')?.focus();
+    return true;
+  }
+
+  // Messaggi pronti: un tocco invece di scrivere
+  const QUICK = ['Sto bene', 'Ho bisogno di aiuto', 'Serve un medico'];
+  function quick(i) { sendText(QUICK[i]); }
+
+  // Posizione: va a tutti i vicini se è selezionato «Tutti», quindi chiede un secondo tocco
+  let posArmed = false, posTimer = null;
+  function sharePos() {
+    const btn = document.getElementById('chat-pos');
+    if (!state.running || !btn) return;
+    if (state.to === 'all' && !posArmed) {
+      posArmed = true;
+      btn.textContent = 'Tocca ancora: la vedrà chiunque sia vicino';
+      clearTimeout(posTimer); posTimer = setTimeout(() => { posArmed = false; render(); }, 6000);
+      return;
+    }
+    posArmed = false; clearTimeout(posTimer);
+    if (!navigator.geolocation) { renderStatus('Posizione non disponibile su questo telefono.'); return; }
+    btn.disabled = true; btn.textContent = 'Cerco la posizione…';
+    navigator.geolocation.getCurrentPosition(p => {
+      const c = p.coords;
+      sendText('La mia posizione: ' + c.latitude.toFixed(5) + ', ' + c.longitude.toFixed(5) + ' (precisione circa ' + Math.round(c.accuracy) + ' m)');
+      render();
+    }, () => { renderStatus('Non riesco a leggere la posizione: controlla che il GPS sia acceso e il permesso dato.'); render(); },
+    { enableHighAccuracy: true, timeout: 20000, maximumAge: 30000 });
   }
 
   function setNick(v) { A().meshSetNick(v); }
@@ -89,6 +118,7 @@ const ChatModule = (() => {
         <input id="chat-nick" type="text" maxlength="32" placeholder="Es. Marco – via Roma" onchange="ChatModule.setNick(this.value)"></label>
       <div class="chat-peers" id="chat-peers"></div>
       <div class="chat-list" id="chat-list"></div>
+      <div class="chat-quick" id="chat-quick"></div>
       <div class="chat-send">
         <input id="chat-text" type="text" maxlength="2000" onkeydown="if(event.key==='Enter')ChatModule.send()">
         <button id="chat-send-btn" class="btn btn-primary" onclick="ChatModule.send()" aria-label="Invia"><i class="ph ph-paper-plane-tilt"></i></button>
@@ -132,9 +162,13 @@ const ChatModule = (() => {
     if (inp.placeholder !== ph) inp.placeholder = ph;
     if (inp.disabled === state.running) inp.disabled = !state.running;
     document.getElementById('chat-send-btn').disabled = !state.running;
+    posArmed = false;
+    document.getElementById('chat-quick').innerHTML = state.running
+      ? QUICK.map((q, i) => `<button class="chat-peer" onclick="ChatModule.quick(${i})">${esc(q)}</button>`).join('')
+        + `<button class="chat-peer" id="chat-pos" onclick="ChatModule.sharePos()"><i class="ph ph-map-pin"></i> Invia la mia posizione</button>` : '';
     document.getElementById('chat-clear').innerHTML = msgs.length ? `<button class="btn btn-link chat-clear" onclick="ChatModule.clearAll()"><i class="ph ph-trash"></i> Cancella i messaggi da questo telefono</button>` : '';
   }
 
   window.RSMeshEvent = onEvent;
-  return { init: render, render, start, stop, send, setNick, talkTo, clearAll, available, onEvent };
+  return { init: render, render, start, stop, send, quick, sharePos, setNick, talkTo, clearAll, available, onEvent };
 })();
