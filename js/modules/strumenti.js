@@ -20,6 +20,8 @@ const StrumentiModule = (() => {
 
   /* ── MAPPA ── */
   let _compassDeg         = 0;   // angolo corrente accumulato (non wrappato) per evitare spin
+  let _compassSmooth = null;      // media circolare del nord
+  let _compassAbsFn = null;       // ascoltatore del sensore assoluto
   let _compassAbsDetected = false;  // true se riceviamo heading assoluto (iOS o Android absolute)
 
   let _map            = null;
@@ -61,35 +63,44 @@ const StrumentiModule = (() => {
     }
 
     _compassAbsDetected = false;
+    _compassSmooth = null;
+    let gotAbsEvent = false;   // se il telefono dà l'orientamento assoluto, si ignora quello relativo
 
-    compassListener = e => {
+    // Prima la bussola saltava perché due sensori diversi (assoluto e relativo) arrivavano a turno
+    // con valori diversi. Ora si usa UN solo sensore e il valore è addolcito (media circolare).
+    const handle = (e, isAbsEvent) => {
       let h;
       if (e.webkitCompassHeading != null) {
-        // iOS — sempre assoluto
-        h = e.webkitCompassHeading;
+        h = e.webkitCompassHeading;                   // iOS: sempre assoluto
         _compassAbsDetected = true;
       } else if (e.alpha != null) {
+        if (isAbsEvent) { gotAbsEvent = true; _compassAbsDetected = true; }
+        else if (gotAbsEvent) return;                 // c'è già l'assoluto: ignora il relativo
+        else if (e.absolute === true) _compassAbsDetected = true;
+        else _compassStatus('⚠️ Nord non sicuro — calibra muovendo il telefono a forma di 8');
         h = (360 - e.alpha + 360) % 360;
-        if (e.absolute === true) {
-          _compassAbsDetected = true;
-        } else if (!_compassAbsDetected) {
-          // Android con solo orientamento relativo — avvisa di calibrare
-          _compassStatus('⚠️ Nord relativo — calibra ruotando il tel. a forma di ∞');
-        }
       }
       if (h == null) return;
-      compassHeading = Math.round(h);
+      // media circolare (evita il salto tra 359° e 0°)
+      const r = h * Math.PI / 180;
+      if (_compassSmooth == null) _compassSmooth = { x: Math.cos(r), y: Math.sin(r) };
+      else { _compassSmooth.x += 0.15 * (Math.cos(r) - _compassSmooth.x); _compassSmooth.y += 0.15 * (Math.sin(r) - _compassSmooth.y); }
+      compassHeading = Math.round((Math.atan2(_compassSmooth.y, _compassSmooth.x) * 180 / Math.PI + 360) % 360);
       _compassUpdate();
+      if (_compassAbsDetected && gotAbsEvent) _compassStatus('');
     };
+    _compassAbsFn = e => handle(e, true);
+    compassListener = e => handle(e, false);
 
-    window.addEventListener('deviceorientationabsolute', compassListener, true);
+    window.addEventListener('deviceorientationabsolute', _compassAbsFn, true);
     window.addEventListener('deviceorientation',          compassListener, true);
     _compassStatus('');
   }
 
   function stopCompass() {
     if (compassListener) {
-      window.removeEventListener('deviceorientationabsolute', compassListener, true);
+      if (_compassAbsFn) window.removeEventListener('deviceorientationabsolute', _compassAbsFn, true);
+      _compassAbsFn = null; _compassSmooth = null;
       window.removeEventListener('deviceorientation',          compassListener, true);
       compassListener = null;
     }
@@ -282,6 +293,43 @@ const StrumentiModule = (() => {
       _compassStatus('In attesa del sensore...');
       startCompass();
     }
+  }
+
+  /* ── LIVELLA (bolla) ── */
+  let levelFn = null, _lvl = { x: 0, y: 0 };
+  async function toggleLevel() {
+    const btn = document.getElementById('st-level-toggle');
+    const st = document.getElementById('level-status');
+    if (levelFn) {
+      window.removeEventListener('deviceorientation', levelFn, true);
+      levelFn = null; if (btn) btn.textContent = 'Attiva';
+      if (st) st.textContent = 'Livella ferma';
+      return;
+    }
+    if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+      try { if (await DeviceOrientationEvent.requestPermission() !== 'granted') { if (st) st.textContent = 'Permesso negato'; return; } }
+      catch (e) { if (st) st.textContent = 'Impossibile richiedere il permesso'; return; }
+    }
+    if (btn) btn.textContent = 'Stop';
+    if (st) st.textContent = 'In attesa del sensore...';
+    levelFn = e => {
+      if (e.beta == null || e.gamma == null) return;
+      // filtro per non far tremare la bolla
+      _lvl.x += 0.25 * (e.gamma - _lvl.x);
+      _lvl.y += 0.25 * (e.beta - _lvl.y);
+      const MAX = 15;                                   // oltre ±15° la bolla resta sul bordo
+      const cl = v => Math.max(-MAX, Math.min(MAX, v));
+      const bub = document.getElementById('level-bubble');
+      if (bub) bub.style.transform = `translate(${cl(_lvl.x) / MAX * 45}px, ${cl(_lvl.y) / MAX * 45}px)`;
+      const rad = Math.PI / 180;
+      const tilt = Math.acos(Math.max(-1, Math.min(1, Math.cos(_lvl.x * rad) * Math.cos(_lvl.y * rad)))) / rad;
+      const val = document.getElementById('level-deg');
+      if (val) val.textContent = tilt.toFixed(1).replace('.', ',') + '°';
+      const box = document.getElementById('level-box');
+      if (box) box.classList.toggle('level-ok', tilt < 1);
+      if (st) st.textContent = tilt < 1 ? 'In piano' : 'Appoggia il telefono su una superficie piana. Avanti/indietro ' + _lvl.y.toFixed(1).replace('.', ',') + '° · destra/sinistra ' + _lvl.x.toFixed(1).replace('.', ',') + '°';
+    };
+    window.addEventListener('deviceorientation', levelFn, true);
   }
 
   /* ── GPS ── */
@@ -959,6 +1007,23 @@ const StrumentiModule = (() => {
           <p class="st-status" id="compass-status">Premi Attiva e tieni il telefono in piano</p>
         </div>
 
+        <!-- LIVELLA -->
+        <div class="st-card" id="st-card-level">
+          <div class="st-card-hdr">
+            <span><span class="st-hdr-ico"><i class="ph ph-ruler"></i></span> Livella</span>
+            <button class="st-toggle" id="st-level-toggle" onclick="StrumentiModule.toggleLevel()">Attiva</button>
+          </div>
+          <div class="level-wrap">
+            <div class="level-box" id="level-box">
+              <div class="level-cross-h"></div><div class="level-cross-v"></div>
+              <div class="level-center"></div>
+              <div class="level-bubble" id="level-bubble"></div>
+            </div>
+            <div class="compass-deg-val" id="level-deg">—°</div>
+          </div>
+          <p class="st-status" id="level-status">Premi Attiva e appoggia il telefono su una superficie</p>
+        </div>
+
         <!-- POSIZIONE -->
         <div class="st-card" id="st-card-gps">
           <div class="st-card-hdr">
@@ -1014,6 +1079,7 @@ const StrumentiModule = (() => {
 
   function destroy() {
     if (compassListener) stopCompass();
+    if (levelFn) { window.removeEventListener('deviceorientation', levelFn, true); levelFn = null; }
     if (gpsWatchId !== null) { navigator.geolocation.clearWatch(gpsWatchId); gpsWatchId = null; }
     if (torchOn) toggleTorch();
     if (sosActive) _stopSOS();
@@ -1025,7 +1091,7 @@ const StrumentiModule = (() => {
   }
 
   return {
-    init, destroy, quickHtml, goTo, toggleCompass, toggleGPS, toggleTorch, toggleSOS, copyCoords,
+    init, destroy, quickHtml, goTo, toggleCompass, toggleLevel, toggleGPS, toggleTorch, toggleSOS, copyCoords,
     _saveHomeLocation, _tilesRadiusChange, _downloadTilesPack, _deleteTilesPack,
   };
 

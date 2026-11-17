@@ -7,7 +7,7 @@
    Contenuti: Wikipedia, licenza CC BY-SA 4.0, pacchetti di Kiwix.
    ============================================================ */
 const WikiModule = (() => {
-  const ROOT_DIR = 'rs-zim', SIZE = 16 * 1048576, IDLE_MS = 60000, TRIES = 8;
+  const ROOT_DIR = 'rs-zim', SIZE = 16 * 1048576, IDLE_MS = 60000, TRIES = 8, CONC = 3;   // CONC: pezzi scaricati insieme (più veloce con server lenti)
   const LIST_URL = 'https://lb.download.kiwix.org/zim/wikipedia/';        // elenco file (CORS aperto)
   const FILE_URL = 'https://mirror.download.kiwix.org/zim/wikipedia/';    // download (CORS + Range)
 
@@ -156,28 +156,57 @@ const WikiModule = (() => {
       if (est && est.quota && est.quota - est.usage < (meta.total - have) * 1.02) {
         throw new Error(`spazio insufficiente: servono ${fmt(meta.total - have)}, ne restano ${fmt(est.quota - est.usage)}`);
       }
-      const show = got => {
-        busy.pct = (have + got) / meta.total * 100; busy.msg = `${fmt(have + got)} di ${fmt(meta.total)}`; _progress();
+      const inflight = {};       // pezzo → byte già arrivati (per la barra di avanzamento)
+      let lastMove = Date.now();
+      const show = () => {
+        lastMove = Date.now();
+        const got = Object.values(inflight).reduce((x, y) => x + y, 0);
+        busy.pct = Math.min(100, (have + got) / meta.total * 100); busy.msg = `${fmt(have + got)} di ${fmt(meta.total)}`; _progress();
         if (bg && Date.now() - bgLast > 2000) { bgLast = Date.now(); try { bg.bgProgress(bgTitle, busy.msg, Math.floor(busy.pct)); } catch (e) {} }
       };
-      show(0);
-      for (const i of missing) {
-        const [s, e] = span(meta, i);
-        for (let t = 1; ; t++) {
-          try {
-            if (!navigator.onLine) await new Promise(r => window.addEventListener('online', r, { once: true }));
-            const blob = await fetchPart(url, s, e, ac.signal, show);
-            await writeFile(d, partName(i), blob);
-            have += blob.size;
-            break;
-          } catch (err) {
-            if (ac.signal.aborted) throw new Error('fermato');
-            if (err && err.name === 'QuotaExceededError') throw new Error('spazio finito sul telefono');
-            if (t >= TRIES) throw new Error('connessione assente o troppo lenta');
-            await wait(3000 * t);
+      show();
+      // se la pagina torna in primo piano e non si muove nulla da un po', riparte il pezzo bloccato
+      const onVis = () => { if (!document.hidden && Date.now() - lastMove > 20000) busy.kick && busy.kick(); };
+      document.addEventListener('visibilitychange', onVis);
+      let fatal = null;
+      const queue = missing.slice();
+      const worker = async () => {
+        while (queue.length && !fatal) {
+          const i = queue.shift();
+          const [s0, e0] = span(meta, i);
+          for (let t = 1; ; t++) {
+            // ogni tentativo ha un suo "kick" per poter essere riavviato
+            const sub = new AbortController();
+            const onAbort = () => sub.abort();
+            ac.signal.addEventListener('abort', onAbort, { once: true });
+            busy.kicks = busy.kicks || new Set();
+            const kick = () => sub.abort();
+            busy.kicks.add(kick);
+            try {
+              if (!navigator.onLine) await new Promise(r => window.addEventListener('online', r, { once: true }));
+              inflight[i] = 0;
+              const blob = await fetchPart(url, s0, e0, sub.signal, got => { inflight[i] = got; show(); });
+              await writeFile(d, partName(i), blob);
+              delete inflight[i]; have += blob.size; show();
+              break;
+            } catch (err) {
+              delete inflight[i];
+              if (ac.signal.aborted) { fatal = fatal || new Error('fermato'); return; }
+              if (err && err.name === 'QuotaExceededError') { fatal = new Error('spazio finito sul telefono'); return; }
+              if (t >= TRIES) { fatal = fatal || new Error('connessione assente o troppo lenta'); return; }
+              await wait(3000 * Math.min(t, 5));
+            } finally {
+              busy && busy.kicks && busy.kicks.delete(kick);
+              ac.signal.removeEventListener('abort', onAbort);
+            }
           }
         }
-      }
+      };
+      busy.kick = () => { (busy.kicks || []).forEach(k => k()); };
+      try {
+        await Promise.all(Array.from({ length: Math.min(CONC, missing.length || 1) }, worker));
+      } finally { document.removeEventListener('visibilitychange', onVis); }
+      if (fatal) throw fatal;
       meta.done = true;
       await writeFile(d, 'meta.json', new Blob([JSON.stringify(meta)]));
       busy = null;
@@ -396,8 +425,8 @@ const WikiModule = (() => {
           <strong>${esc(busy.name)}</strong>
           <div class="progress-bar-container mt-8"><div id="wiki-prog" class="progress-bar" style="width:${busy.pct.toFixed(1)}%"></div></div>
           <p id="wiki-prog-msg" class="pf-note">${esc(busy.msg)}</p>
-          <button class="btn btn-outline btn-sm" onclick="WikiModule.stop()"><i class="ph ph-pause"></i> Pausa</button>
-          <p class="pf-note">Tieni l'app aperta durante il download.</p>
+          <button class="btn btn-outline btn-sm" onclick="WikiModule.stop()"><i class="ph ph-stop-circle"></i> Ferma il download</button>
+          <p class="pf-note">Puoi fermarlo quando vuoi e riprenderlo dopo: le parti già scaricate restano. Su Android lo puoi fermare anche dalla notifica.</p>
         </div>` : ''}
       ${mine.length ? `<h2 class="pf-group-title">I tuoi pacchetti</h2>
         ${mine.map(b => `<div class="card wiki-book">

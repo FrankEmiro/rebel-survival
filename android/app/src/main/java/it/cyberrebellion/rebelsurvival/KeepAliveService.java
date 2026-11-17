@@ -25,6 +25,9 @@ public class KeepAliveService extends Service {
     static final int ID = 7101;
     static final long MAX_MS = 6L * 60 * 60 * 1000;   // limite di sicurezza: 6 ore
 
+    static final String ACTION_PAUSE = "it.cyberrebellion.rebelsurvival.PAUSE_DOWNLOAD";
+    /** Chiamato quando l'utente tocca «Ferma» nella notifica: la pagina interrompe il download. */
+    static volatile Runnable onPause = null;
     static volatile boolean running = false;
     private PowerManager.WakeLock cpu;
     private WifiManager.WifiLock wifi;
@@ -48,11 +51,14 @@ public class KeepAliveService extends Service {
         }
         Intent open = c.getPackageManager().getLaunchIntentForPackage(c.getPackageName());
         PendingIntent pi = PendingIntent.getActivity(c, 0, open, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent pause = new Intent(c, KeepAliveService.class).setAction(ACTION_PAUSE);
+        PendingIntent pp = PendingIntent.getService(c, 1, pause, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
         Notification.Builder b = new Notification.Builder(c, CHANNEL)
                 .setSmallIcon(android.R.drawable.stat_sys_download)
                 .setContentTitle(title)
                 .setContentText(text)
                 .setContentIntent(pi)
+                .addAction(new Notification.Action.Builder(null, "Ferma", pp).build())
                 .setOngoing(true)
                 .setOnlyAlertOnce(true);
         if (pct >= 0) b.setProgress(100, pct, false); else b.setProgress(0, 0, true);
@@ -61,6 +67,11 @@ public class KeepAliveService extends Service {
 
     @Override
     public int onStartCommand(Intent i, int flags, int startId) {
+        if (i != null && ACTION_PAUSE.equals(i.getAction())) {
+            Runnable r = onPause;
+            if (r != null) r.run();          // la pagina ferma il download e chiude il servizio da sola
+            return START_NOT_STICKY;
+        }
         String title = i != null && i.getStringExtra("title") != null ? i.getStringExtra("title") : "Download in corso";
         String text = i != null && i.getStringExtra("text") != null ? i.getStringExtra("text") : "";
         Notification n = build(this, title, text, i != null ? i.getIntExtra("pct", -1) : -1);

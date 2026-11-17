@@ -3996,3 +3996,13 @@ input, select, textarea { font-family: 'Nunito', sans-serif; font-size: 1rem; }
 .chat-send { display: flex; gap: 6px; position: sticky; bottom: 0; background: var(--bg-primary, #131810); padding: 6px 0; }
 .chat-send input { flex: 1; min-width: 0; }
 .chat-clear { margin-top: 8px; font-size: 0.85rem; }
+
+/* Livella (bolla) */
+.level-wrap { display: flex; align-items: center; justify-content: center; gap: 18px; padding: 8px 0; }
+.level-box { position: relative; width: 120px; height: 120px; border-radius: 50%; border: 2px solid var(--border, #444); background: var(--bg-card-hover, #222); overflow: hidden; }
+.level-box.level-ok { border-color: #10b981; box-shadow: 0 0 10px rgba(16,185,129,.5); }
+.level-cross-h, .level-cross-v { position: absolute; background: var(--border, #444); opacity: .6; }
+.level-cross-h { left: 0; right: 0; top: 50%; height: 1px; }
+.level-cross-v { top: 0; bottom: 0; left: 50%; width: 1px; }
+.level-center { position: absolute; left: 50%; top: 50%; width: 30px; height: 30px; margin: -15px 0 0 -15px; border: 1px dashed var(--text-secondary, #999); border-radius: 50%; }
+.level-bubble { position: absolute; left: 50%; top: 50%; width: 26px; height: 26px; margin: -13px 0 0 -13px; border-radius: 50%; background: var(--accent, #f59e0b); opacity: .9; transition: transform .08s linear; }

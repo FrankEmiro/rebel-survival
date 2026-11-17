@@ -364,6 +364,7 @@ public class MainActivity extends Activity {
                 if (Build.VERSION.SDK_INT >= 33 && !has(Manifest.permission.POST_NOTIFICATIONS)) {
                     requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, REQ_NOTIFY);
                 }
+                KeepAliveService.onPause = () -> runOnUiThread(() -> web.evaluateJavascript("typeof WikiModule !== \"undefined\" && WikiModule.stop()", null));
                 try { KeepAliveService.start(MainActivity.this, title); } catch (Exception e) { /* senza servizio il download va solo in primo piano */ }
             });
         }
