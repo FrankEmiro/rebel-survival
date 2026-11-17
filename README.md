@@ -76,6 +76,69 @@ Mette in **un'unica app che funziona offline** quello che serve **prima** di un'
 | 📲 **Passala a chi non ha internet** | Condividi il tuo piano con un **codice QR**. Passa l'app intera a un altro telefono con Bluetooth o Quick Share: l'APK, oppure una copia offline in un unico file che si apre con il browser. |
 | 🔒 **Privacy** | Niente account e niente registrazione. Profilo, scorte e messaggi restano sul telefono; puoi esportarli in un backup e reimportarli. |
 
+## 🧰 Tutti gli strumenti
+
+Ecco, uno per uno, gli strumenti dell'app (schermate vere, con dati di esempio). Sono stime e aiuti pratici, non sostituiscono i soccorsi.
+
+### Emergenza
+
+<table>
+  <tr>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/t-numeri.png" width="200" alt="Chiama 112 e numeri utili"><br><sub><b>Chiama 112 e numeri utili</b><br>Un tasto per il 112, numeri di emergenza e un tuo numero personale.</sub></td>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/t-torcia.png" width="200" alt="Torcia"><br><sub><b>Torcia</b><br>Usa il flash della fotocamera.</sub></td>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/t-sos.png" width="200" alt="Segnale SOS"><br><sub><b>Segnale SOS</b><br>Lampeggio dello schermo, suono e vibrazione in Morse. Non invia messaggi né chiamate.</sub></td>
+  </tr>
+  <tr>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/t-bussola.png" width="200" alt="Bussola"><br><sub><b>Bussola</b><br>Orientamento con il sensore del telefono.</sub></td>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/t-livella.png" width="200" alt="Livella"><br><sub><b>Livella</b><br>La bolla del telefono, per appoggiarlo su una superficie.</sub></td>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/t-posizione.png" width="200" alt="Posizione"><br><sub><b>Posizione</b><br>Le coordinate GPS, da dire ai soccorsi.</sub></td>
+  </tr>
+  <tr>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/t-mappa.png" width="200" alt="Mappa"><br><sub><b>Mappa</b><br>OpenStreetMap con confini di regioni, province e comuni; salvi una posizione per la mappa senza connessione.</sub></td>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/t-telefono.png" width="200" alt="Stato del telefono"><br><sub><b>Stato del telefono</b><br>Batteria e rete.</sub></td>
+  </tr>
+</table>
+
+### Piano e scorte
+
+<table>
+  <tr>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/scenari.png" width="200" alt="Scelta dello scenario"><br><sub><b>Scelta dello scenario</b><br>Scegli la situazione e segui il piano passo per passo.</sub></td>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/scorte.png" width="200" alt="Scorte"><br><sub><b>Scorte</b><br>Cosa hai, area per area; si salva da solo.</sub></td>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/t-kit.png" width="200" alt="Checklist di un'area"><br><sub><b>Checklist di un'area</b><br>Scorte, fonti alternative e cosa avere in casa.</sub></td>
+  </tr>
+  <tr>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/acqua.png" width="200" alt="Calcolatore acqua"><br><sub><b>Calcolatore acqua</b><br>Quanta ne serve e per quanti giorni basta.</sub></td>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/t-cibo.png" width="200" alt="Calcolatore cibo"><br><sub><b>Calcolatore cibo</b><br>Giorni coperti e cosa comprare.</sub></td>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/t-energia.png" width="200" alt="Calcolatore energia"><br><sub><b>Calcolatore energia</b><br>Autonomia elettrica e priorità dei consumi.</sub></td>
+  </tr>
+  <tr>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/t-riscaldamento.png" width="200" alt="Calcolatore riscaldamento"><br><sub><b>Calcolatore riscaldamento</b><br>Quanto combustibile serve e consigli per risparmiare calore.</sub></td>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/t-carburante.png" width="200" alt="Calcolatore carburante"><br><sub><b>Calcolatore carburante</b><br>Autonomia e alternative alla macchina.</sub></td>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/t-spesa.png" width="200" alt="Lista della spesa"><br><sub><b>Lista della spesa</b><br>Calcolata su ciò che manca; stampa, PDF o copia testo.</sub></td>
+  </tr>
+</table>
+
+### Sapere e comunicare
+
+<table>
+  <tr>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/guide.png" width="200" alt="Guide"><br><sub><b>Guide</b><br>Funzionano senza connessione.</sub></td>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/guida-rischio.png" width="200" alt="Avvisi sulle guide"><br><sub><b>Avvisi sulle guide</b><br>«Rischio alto» ben visibile.</sub></td>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/chiedi.png" width="200" alt="Chiedi"><br><sub><b>Chiedi</b><br>Risposte dalle guide, offline, con la fonte.</sub></td>
+  </tr>
+  <tr>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/wikipedia.png" width="200" alt="Wikipedia offline"><br><sub><b>Wikipedia offline</b><br>Scegli tu cosa scaricare.</sub></td>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/chat.png" width="200" alt="Chat vicini (Android)"><br><sub><b>Chat vicini (Android)</b><br>Bluetooth, senza rete.</sub></td>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/t-qr.png" width="200" alt="Condividi il piano"><br><sub><b>Condividi il piano</b><br>Codice QR da inquadrare con un altro telefono.</sub></td>
+  </tr>
+  <tr>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/profilo.png" width="200" alt="Profilo e backup"><br><sub><b>Profilo e backup</b><br>Dati solo sul telefono, backup e ripristino.</sub></td>
+  </tr>
+</table>
+
+<sub>Alcuni strumenti dipendono dal telefono: bussola, livella e posizione richiedono i sensori; la chat vicini c'è solo su Android.</sub>
+
 ## Come si usa
 
 1. **Scarica l'app** dall'[ultima release](https://github.com/FrankEmiro/rebel-survival/releases/latest) (file `RebelSurvival.apk`) e installala: il telefono ti chiederà di consentire l'installazione da questa fonte.

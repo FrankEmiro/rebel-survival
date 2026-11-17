@@ -76,6 +76,69 @@ It puts in **one app that works offline** what you need **before** an emergency 
 | 📲 **Pass it to people without internet** | Share your plan with a **QR code**. Send the whole app to another phone over Bluetooth or Quick Share: the APK, or a single-file offline copy that opens in a browser. |
 | 🔒 **Privacy** | No account, no sign-up. Profile, supplies and messages stay on the phone; you can export them to a backup and import them again. |
 
+## 🧰 All the tools
+
+Here, one by one, are the app's tools (real screenshots, with sample data). They are estimates and practical aids, not a substitute for emergency services.
+
+### Emergency
+
+<table>
+  <tr>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/t-numeri.png" width="200" alt="Call 112 and useful numbers"><br><sub><b>Call 112 and useful numbers</b><br>One button for 112, emergency numbers and your own personal number.</sub></td>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/t-torcia.png" width="200" alt="Flashlight"><br><sub><b>Flashlight</b><br>Uses the camera flash.</sub></td>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/t-sos.png" width="200" alt="SOS signal"><br><sub><b>SOS signal</b><br>Screen flashing, sound and vibration in Morse. It does not send messages or make calls.</sub></td>
+  </tr>
+  <tr>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/t-bussola.png" width="200" alt="Compass"><br><sub><b>Compass</b><br>Orientation using the phone's sensor.</sub></td>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/t-livella.png" width="200" alt="Level"><br><sub><b>Level</b><br>The phone's bubble level.</sub></td>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/t-posizione.png" width="200" alt="Position"><br><sub><b>Position</b><br>GPS coordinates to tell rescuers.</sub></td>
+  </tr>
+  <tr>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/t-mappa.png" width="200" alt="Map"><br><sub><b>Map</b><br>OpenStreetMap with region, province and municipality borders; save a position for the map without a connection.</sub></td>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/t-telefono.png" width="200" alt="Phone status"><br><sub><b>Phone status</b><br>Battery and network.</sub></td>
+  </tr>
+</table>
+
+### Plan and supplies
+
+<table>
+  <tr>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/scenari.png" width="200" alt="Choosing a scenario"><br><sub><b>Choosing a scenario</b><br>Pick the situation and follow the step-by-step plan.</sub></td>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/scorte.png" width="200" alt="Supplies"><br><sub><b>Supplies</b><br>What you have, area by area; it saves by itself.</sub></td>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/t-kit.png" width="200" alt="Area checklist"><br><sub><b>Area checklist</b><br>Stored supplies, alternative sources and what to keep at home.</sub></td>
+  </tr>
+  <tr>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/acqua.png" width="200" alt="Water calculator"><br><sub><b>Water calculator</b><br>How much you need and how many days it lasts.</sub></td>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/t-cibo.png" width="200" alt="Food calculator"><br><sub><b>Food calculator</b><br>Days covered and what to buy.</sub></td>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/t-energia.png" width="200" alt="Energy calculator"><br><sub><b>Energy calculator</b><br>Electric autonomy and consumption priorities.</sub></td>
+  </tr>
+  <tr>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/t-riscaldamento.png" width="200" alt="Heating calculator"><br><sub><b>Heating calculator</b><br>How much fuel you need and tips to save heat.</sub></td>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/t-carburante.png" width="200" alt="Fuel calculator"><br><sub><b>Fuel calculator</b><br>Autonomy and alternatives to the car.</sub></td>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/t-spesa.png" width="200" alt="Shopping list"><br><sub><b>Shopping list</b><br>Calculated on what is missing; print, PDF or copy as text.</sub></td>
+  </tr>
+</table>
+
+### Knowledge and communication
+
+<table>
+  <tr>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/guide.png" width="200" alt="Guides"><br><sub><b>Guides</b><br>Work without a connection.</sub></td>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/guida-rischio.png" width="200" alt="Guide warnings"><br><sub><b>Guide warnings</b><br>A visible "High risk" notice.</sub></td>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/chiedi.png" width="200" alt="Ask"><br><sub><b>Ask</b><br>Answers from the guides, offline, with the source.</sub></td>
+  </tr>
+  <tr>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/wikipedia.png" width="200" alt="Offline Wikipedia"><br><sub><b>Offline Wikipedia</b><br>You choose what to download.</sub></td>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/chat.png" width="200" alt="Nearby chat (Android)"><br><sub><b>Nearby chat (Android)</b><br>Bluetooth, no network.</sub></td>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/t-qr.png" width="200" alt="Share the plan"><br><sub><b>Share the plan</b><br>A QR code another phone can scan.</sub></td>
+  </tr>
+  <tr>
+    <td align="center" valign="top" width="33%"><img src="docs/screenshots/profilo.png" width="200" alt="Profile and backup"><br><sub><b>Profile and backup</b><br>Data only on your phone, backup and restore.</sub></td>
+  </tr>
+</table>
+
+<sub>Some tools depend on the phone: compass, level and position need the sensors; nearby chat is Android-only.</sub>
+
 ## How to use it
 
 1. **Download the app** from the [latest release](https://github.com/FrankEmiro/rebel-survival/releases/latest) (file `RebelSurvival.apk`) and install it: the phone will ask you to allow installs from this source.
