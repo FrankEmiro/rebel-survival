@@ -3772,6 +3772,8 @@ input, select, textarea { font-family: 'Nunito', sans-serif; font-size: 1rem; }
 .as-src span { color: var(--text-secondary); font-weight: 400; }
 .as-card p, .as-list li { font-size: 0.9rem; line-height: 1.5; color: var(--text-primary); }
 .as-list { padding-left: 18px; display: flex; flex-direction: column; gap: 4px; }
+.as-caution-high { border: 1px solid #c0392b; background: rgba(192,57,43,0.18); color: var(--text-primary); font-size: 0.85rem; line-height: 1.4; }
+.as-caution-high strong { color: #e74c3c; }
 .as-caution { font-size: 0.78rem; color: var(--warning); background: var(--warning-bg); border-radius: var(--radius-sm); padding: 6px 8px; margin-bottom: 8px; }
 .as-open { margin-top: 10px; background: none; border: 1px solid var(--border-accent); color: var(--accent); border-radius: var(--radius);
   padding: 6px 10px; font: inherit; font-size: 0.82rem; cursor: pointer; }
@@ -4012,3 +4014,5 @@ input, select, textarea { font-family: 'Nunito', sans-serif; font-size: 1rem; }
 .level-cross-v { top: 0; bottom: 0; left: 50%; width: 1px; }
 .level-center { position: absolute; left: 50%; top: 50%; width: 30px; height: 30px; margin: -15px 0 0 -15px; border: 1px dashed var(--text-secondary, #999); border-radius: 50%; }
 .level-bubble { position: absolute; left: 50%; top: 50%; width: 26px; height: 26px; margin: -13px 0 0 -13px; border-radius: 50%; background: var(--accent, #f59e0b); opacity: .9; transition: transform .08s linear; }
+
+.disclaimer-alert { border: 2px solid #c0392b; background: rgba(192,57,43,0.18); border-radius: var(--radius); padding: 10px 12px; }

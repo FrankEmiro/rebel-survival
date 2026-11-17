@@ -324,7 +324,8 @@ function initDisclaimer() {
 
   btn.addEventListener('click', () => {
     overlay.classList.add('hidden');
-    localStorage.setItem('disclaimer_accepted', '1');
+    // Salvato solo su questo dispositivo (data e ora della conferma), non inviato a nessuno
+    localStorage.setItem('disclaimer_accepted', new Date().toISOString());
     OnboardingModule.maybeStart();
   });
 

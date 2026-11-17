@@ -154,8 +154,8 @@ const AssistenteModule = (() => {
 
   function _caution(c) {
     if (c.kind !== 'guide' || typeof GUIDE_CAUTION === 'undefined' || !GUIDE_CAUTION[c.id]) return '';
-    if (GUIDE_CAUTION[c.id] === 'alto') return `<div class="as-caution"><i class="ph ph-warning"></i> Guida a RISCHIO ALTO: un errore può essere grave. Indicazioni non verificate su fonti ufficiali: non usarla come unica fonte e, nel dubbio, chiama il 112.</div>`;
-    return `<div class="as-caution"><i class="ph ph-warning"></i> Guida con etichetta «Cautela»: indicazioni non ancora verificate su fonti ufficiali. Usale con prudenza.</div>`;
+    if (GUIDE_CAUTION[c.id] === 'alto') return `<div class="as-caution as-caution-high"><i class="ph ph-warning-octagon"></i> <strong>RISCHIO ALTO.</strong> Questa risposta viene da una guida NON verificata su fonti ufficiali e un errore può causare avvelenamento, danni gravi o morte. NON agire solo su questa base: nel dubbio non mangiare, non usare e non dare nulla a nessuno, e chiama il 112.</div>`;
+    return `<div class="as-caution as-caution-high"><i class="ph ph-warning"></i> <strong>ATTENZIONE: guida NON verificata.</strong> Le indicazioni non sono state controllate su fonti ufficiali e, se applicate male, possono essere pericolose. Usale solo come orientamento, non come unica fonte, e segui sempre le istruzioni delle autorità. Nel dubbio chiama il 112.</div>`;
   }
 
   function _card(c) {
