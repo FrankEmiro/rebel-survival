@@ -3502,6 +3502,12 @@ input, select, textarea { font-family: 'Nunito', sans-serif; font-size: 1rem; }
   font-weight: 700; color: #e74c3c; border: 1px solid rgba(231, 76, 60, 0.5); border-radius: 4px;
   padding: 1px 6px; text-transform: uppercase; letter-spacing: 0.04em; }
 
+/* Rischio alto: avviso rafforzato */
+.guide-caution.high { border-width: 2px; background: rgba(192, 57, 43, 0.22); }
+.guide-caution.high strong { font-size: 1rem; text-transform: uppercase; letter-spacing: 0.03em; }
+.guide-caution.high p { font-size: 0.9rem; font-weight: 600; }
+.guide-caution-badge.high { background: #c0392b; color: #fff; border-color: #c0392b; }
+
 /* Link privacy / condizioni */
 .sidebar-legal { padding: 16px 20px; font-size: 0.75rem; color: var(--text-secondary); }
 .sidebar-legal a, .home-legal a, .disclaimer-footer-note a { color: var(--text-secondary); text-decoration: underline; }

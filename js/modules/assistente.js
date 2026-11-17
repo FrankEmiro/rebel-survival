@@ -154,6 +154,7 @@ const AssistenteModule = (() => {
 
   function _caution(c) {
     if (c.kind !== 'guide' || typeof GUIDE_CAUTION === 'undefined' || !GUIDE_CAUTION[c.id]) return '';
+    if (GUIDE_CAUTION[c.id] === 'alto') return `<div class="as-caution"><i class="ph ph-warning"></i> Guida a RISCHIO ALTO: un errore può essere grave. Indicazioni non verificate su fonti ufficiali: non usarla come unica fonte e, nel dubbio, chiama il 112.</div>`;
     return `<div class="as-caution"><i class="ph ph-warning"></i> Guida con etichetta «Cautela»: indicazioni non ancora verificate su fonti ufficiali. Usale con prudenza.</div>`;
   }
 

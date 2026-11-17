@@ -73,10 +73,10 @@ const GuideModule = (() => {
 
     const caution = (typeof GUIDE_CAUTION !== 'undefined') ? GUIDE_CAUTION[g.id] : null;
     const cautionBadge = caution
-      ? `<span class="guide-caution-badge"><i class="ph ph-warning"></i> Cautela</span>` : '';
+      ? `<span class="guide-caution-badge${caution === 'alto' ? ' high' : ''}"><i class="ph ph-warning"></i> ${caution === 'alto' ? 'Rischio alto' : 'Cautela'}</span>` : '';
     const cautionBox = caution
-      ? `<div class="guide-caution" role="alert"><i class="ph ph-warning-octagon"></i>
-           <div><strong>Attenzione — da usare con cautela</strong><p>${GUIDE_CAUTION_TEXT[caution]}</p></div>
+      ? `<div class="guide-caution${caution === 'alto' ? ' high' : ''}" role="alert"><i class="ph ph-warning-octagon"></i>
+           <div><strong>${caution === 'alto' ? 'Attenzione — rischio alto, extra cautela' : 'Attenzione — da usare con cautela'}</strong><p>${GUIDE_CAUTION_TEXT[caution]}</p></div>
          </div>` : '';
 
     return `

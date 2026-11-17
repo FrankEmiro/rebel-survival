@@ -2677,12 +2677,12 @@ const GUIDE_CAUTION = {
   'ipotermia-prevenzione':         'salute',
   'kit-medico':                    'salute',
   'primo-soccorso':                'salute',
-  'farmaci-scorta':                'salute',
+  'farmaci-scorta':                'alto',
   'survival-acqua-natura':         'salute',
-  'survival-piante':               'salute',
+  'survival-piante':               'alto',
   'survival-trappole':             'salute',
-  'survival-primo-soccorso-campo': 'salute',
-  'survival-conservazione-cibo':   'salute',
+  'survival-primo-soccorso-campo': 'alto',
+  'survival-conservazione-cibo':   'alto',
   'cibo-cottura-campo':            'pratica',
   'isolamento-stanza':             'pratica',
   'comm-pmr446':                   'pratica',
@@ -2692,7 +2692,9 @@ const GUIDE_CAUTION = {
   'survival-riparo':               'pratica',
 };
 
+// 'alto' = guide in cui un errore può avvelenare o ferire gravemente: avviso rafforzato (v121).
 const GUIDE_CAUTION_TEXT = {
+  alto:    'ATTENZIONE, RISCHIO ALTO. Un errore in questa guida può causare avvelenamento, danni gravi o morte. Le indicazioni NON sono ancora verificate da una fonte ufficiale e un testo o un disegno non bastano per riconoscere con certezza una pianta, un fungo o un farmaco. Se hai anche solo un dubbio, NON mangiare, NON usare e NON dare a nessuno ciò che non conosci con certezza assoluta. Non usare questa guida come unica fonte. Se qualcuno sta male o pensi di aver ingerito qualcosa di tossico, chiama subito il 112 o il Centro antiveleni, senza aspettare che compaiano i sintomi.',
   salute:  'Guida a rischio: contiene indicazioni su salute, acqua, cibo o farmaci non ancora verificate da una fonte sanitaria ufficiale. Se applicate male possono essere pericolose. Usala con cautela, solo come orientamento. In caso di dubbio chiama il 112 o il tuo medico e segui le autorità sanitarie.',
   pratica: 'Guida non verificata: le indicazioni non sono ancora state controllate su fonti ufficiali italiane e alcune pratiche possono essere pericolose. Usala con cautela, solo come orientamento, e segui sempre le istruzioni delle autorità.',
 };
