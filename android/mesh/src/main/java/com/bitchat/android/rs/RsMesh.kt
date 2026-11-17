@@ -37,7 +37,8 @@ object RsMesh {
 
     private val delegate = object : MeshDelegate {
         override fun didReceiveMessage(message: BitchatMessage) {
-            if (message.type != BitchatMessageType.Message || message.sender == "system") return
+            if (message.sender == "system") return
+            if (message.type != BitchatMessageType.Message) { emitMedia(message); return }
             emit(JSONObject()
                 .put("type", "msg").put("id", message.id)
                 .put("from", message.senderPeerID ?: "").put("nick", message.sender)
@@ -55,6 +56,72 @@ object RsMesh {
         override fun decryptChannelMessage(encryptedContent: ByteArray, channel: String): String? = null
         override fun getNickname(): String? = nickname()
         override fun isFavorite(peerID: String): Boolean = false
+    }
+
+    /** Oltre questa dimensione il file ricevuto non viene passato alla pagina (resta solo l'avviso). */
+    private const val MAX_EMIT_BYTES = 1_500_000L
+
+    /** Immagine, audio o file ricevuto: la pagina lo riceve come base64 e lo salva da sé. */
+    private fun emitMedia(message: BitchatMessage) {
+        try {
+            val f = java.io.File(message.content)
+            val kind = when (message.type) {
+                BitchatMessageType.Image -> "image"
+                BitchatMessageType.Audio -> "audio"
+                else -> "file"
+            }
+            val o = JSONObject()
+                .put("type", "media").put("id", message.id).put("kind", kind)
+                .put("from", message.senderPeerID ?: "").put("nick", message.sender)
+                .put("name", f.name).put("size", f.length()).put("ts", message.timestamp.time)
+                .put("private", message.isPrivate)
+            if (f.exists() && f.length() <= MAX_EMIT_BYTES) {
+                o.put("data", android.util.Base64.encodeToString(f.readBytes(), android.util.Base64.NO_WRAP))
+                o.put("mime", mimeFor(f.name, kind))
+            } else o.put("tooBig", true)
+            try { f.delete() } catch (_: Exception) { }   // la pagina ne tiene una copia: niente file in giro
+            emit(o)
+        } catch (_: Exception) { }
+    }
+
+    private fun mimeFor(name: String, kind: String): String {
+        val n = name.lowercase()
+        return when {
+            n.endsWith(".png") -> "image/png"
+            n.endsWith(".webp") -> "image/webp"
+            n.endsWith(".jpg") || n.endsWith(".jpeg") -> "image/jpeg"
+            n.endsWith(".m4a") || n.endsWith(".mp4") || n.endsWith(".aac") -> "audio/mp4"
+            n.endsWith(".ogg") || n.endsWith(".opus") -> "audio/ogg"
+            n.endsWith(".mp3") -> "audio/mpeg"
+            n.endsWith(".wav") -> "audio/wav"
+            n.endsWith(".pdf") -> "application/pdf"
+            n.endsWith(".txt") -> "text/plain"
+            kind == "image" -> "image/jpeg"
+            kind == "audio" -> "audio/mp4"
+            else -> "application/octet-stream"
+        }
+    }
+
+    /**
+     * Invia un file (immagine, audio, documento). peerID vuoto = tutti i vicini (non cifrato),
+     * altrimenti messaggio privato cifrato. Ritorna: ok | handshake (riprova tra poco) | wait | blocked | error.
+     */
+    @JvmStatic fun sendMedia(peerID: String, name: String, mime: String, base64: String): String {
+        val m = mesh ?: return "error"
+        return try {
+            val bytes = android.util.Base64.decode(base64, android.util.Base64.DEFAULT)
+            val file = com.bitchat.android.model.BitchatFilePacket(name.take(120), bytes.size.toLong(), mime, bytes)
+            if (peerID.isEmpty()) { m.sendFileBroadcast(file); "ok" }
+            else {
+                val id = java.util.UUID.randomUUID().toString().uppercase()
+                when (val p = m.prepareFilePrivate(peerID, file, id, false)) {
+                    is com.bitchat.android.mesh.PrivateMediaPreparation.Ready -> if (p.transfer.commit()) "ok" else "error"
+                    com.bitchat.android.mesh.PrivateMediaPreparation.NeedsHandshake -> { m.initiateNoiseHandshake(peerID); "handshake" }
+                    com.bitchat.android.mesh.PrivateMediaPreparation.AwaitingPeerState -> "wait"
+                    else -> "blocked"
+                }
+            }
+        } catch (_: Exception) { "error" }
     }
 
     private var prefsContext: Context? = null

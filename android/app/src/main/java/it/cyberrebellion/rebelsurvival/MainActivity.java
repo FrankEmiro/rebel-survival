@@ -53,7 +53,7 @@ public class MainActivity extends Activity {
     static final String START = "https://" + HOST + "/index.html";
     static final String APK_NAME = "RebelSurvival.apk";   // nome del file condiviso (rinomina prodotto: cambiare qui)
 
-    private static final int REQ_LOCATION = 1, REQ_CAMERA = 2, REQ_FILE = 3, REQ_BT = 4, REQ_NOTIFY = 5;
+    private static final int REQ_LOCATION = 1, REQ_CAMERA = 2, REQ_FILE = 3, REQ_BT = 4, REQ_NOTIFY = 5, REQ_MIC = 6;
 
     private WebView web;
     private GeolocationPermissions.Callback geoCb;
@@ -239,8 +239,68 @@ public class MainActivity extends Activity {
         catch (Exception e) { meshEvent("{\"type\":\"error\",\"code\":\"start\"}"); }
     }
 
+    // ── Messaggio vocale per la chat: registra in un file AAC piccolo (voce, 16 kHz mono, ~24 kbit/s) ──
+    private android.media.MediaRecorder rec;
+    private File recFile;
+    private long recStart;
+    private static final int VOICE_MAX_MS = 30000;
+
+    private void voiceBegin() {
+        try {
+            voiceCancel();
+            recFile = new File(getCacheDir(), "voce.m4a");
+            rec = new android.media.MediaRecorder();
+            rec.setAudioSource(android.media.MediaRecorder.AudioSource.MIC);
+            rec.setOutputFormat(android.media.MediaRecorder.OutputFormat.MPEG_4);
+            rec.setAudioEncoder(android.media.MediaRecorder.AudioEncoder.AAC);
+            rec.setAudioChannels(1);
+            rec.setAudioSamplingRate(16000);
+            rec.setAudioEncodingBitRate(24000);
+            rec.setMaxDuration(VOICE_MAX_MS);
+            rec.setOutputFile(recFile.getAbsolutePath());
+            rec.setOnInfoListener((mr, what, extra) -> {
+                if (what == android.media.MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED) voiceFinish();
+            });
+            rec.prepare();
+            rec.start();
+            recStart = System.currentTimeMillis();
+            meshEvent("{\"type\":\"voice\",\"state\":\"recording\",\"max\":" + VOICE_MAX_MS + "}");
+        } catch (Exception e) {
+            voiceCancel();
+            meshEvent("{\"type\":\"voice\",\"state\":\"error\"}");
+        }
+    }
+
+    private void voiceCancel() {
+        if (rec != null) {
+            try { rec.stop(); } catch (Exception ignored) { }
+            try { rec.release(); } catch (Exception ignored) { }
+            rec = null;
+        }
+        if (recFile != null) { try { recFile.delete(); } catch (Exception ignored) { } recFile = null; }
+    }
+
+    /** Ferma la registrazione e passa la voce alla pagina (base64), che poi decide se inviarla. */
+    private void voiceFinish() {
+        if (rec == null || recFile == null) return;
+        long ms = System.currentTimeMillis() - recStart;
+        File f = recFile;
+        try { rec.stop(); } catch (Exception e) { rec.release(); rec = null; recFile = null; f.delete();
+            meshEvent("{\"type\":\"voice\",\"state\":\"error\"}"); return; }
+        rec.release(); rec = null; recFile = null;
+        try {
+            byte[] b = new byte[(int) f.length()];
+            try (FileInputStream in = new FileInputStream(f)) { int o = 0; while (o < b.length) { int n = in.read(b, o, b.length - o); if (n < 0) break; o += n; } }
+            String data = android.util.Base64.encodeToString(b, android.util.Base64.NO_WRAP);
+            meshEvent("{\"type\":\"voice\",\"state\":\"done\",\"ms\":" + ms + ",\"mime\":\"audio/mp4\",\"data\":\"" + data + "\"}");
+        } catch (Exception e) {
+            meshEvent("{\"type\":\"voice\",\"state\":\"error\"}");
+        } finally { f.delete(); }
+    }
+
     @Override
     protected void onDestroy() {
+        voiceCancel();
         // Senza servizio in background la chat resta attiva solo con l'app aperta
         if (isFinishing()) { RsMesh.stop(); KeepAliveService.stop(this); }
         super.onDestroy();
@@ -249,6 +309,11 @@ public class MainActivity extends Activity {
     @Override
     public void onRequestPermissionsResult(int code, String[] perms, int[] res) {
         if (code == REQ_NOTIFY) return;   // senza permesso il download continua lo stesso, solo senza notifica visibile
+        if (code == REQ_MIC) {
+            if (res.length > 0 && res[0] == PackageManager.PERMISSION_GRANTED) voiceBegin();
+            else meshEvent("{\"type\":\"voice\",\"state\":\"denied\"}");
+            return;
+        }
         if (code == REQ_BT) {
             if (hasBt()) startMesh(); else meshEvent("{\"type\":\"error\",\"code\":\"permission\"}");
             return;
@@ -348,6 +413,18 @@ public class MainActivity extends Activity {
         public void meshStart() {
             runOnUiThread(() -> { if (hasBt()) startMesh(); else requestPermissions(btPerms(), REQ_BT); });
         }
+        /** Immagine, audio o file: peerID vuoto = tutti i vicini. Ritorna ok | handshake | wait | blocked | error. */
+        @JavascriptInterface public String meshSendMedia(String peerID, String name, String mime, String base64) {
+            return RsMesh.sendMedia(peerID, name, mime, base64);
+        }
+        @JavascriptInterface public void voiceStart() {
+            runOnUiThread(() -> {
+                if (has(Manifest.permission.RECORD_AUDIO)) voiceBegin();
+                else requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, REQ_MIC);
+            });
+        }
+        @JavascriptInterface public void voiceStop() { runOnUiThread(MainActivity.this::voiceFinish); }
+        @JavascriptInterface public void voiceAbort() { runOnUiThread(MainActivity.this::voiceCancel); }
         @JavascriptInterface public void meshStop() { RsMesh.stop(); }
         @JavascriptInterface public boolean meshRunning() { return RsMesh.INSTANCE.getRunning(); }
         @JavascriptInterface public String meshMe() { return RsMesh.myPeerID(); }

@@ -4017,3 +4017,8 @@ input, select, textarea { font-family: 'Nunito', sans-serif; font-size: 1rem; }
 
 .disclaimer-alert { border: 2px solid #c0392b; background: rgba(192,57,43,0.18); border-radius: var(--radius); padding: 10px 12px; }
 .chat-quick { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+
+.chat-img { display: block; max-width: 100%; max-height: 260px; border-radius: 8px; }
+.chat-aud { width: 100%; max-width: 260px; }
+.chat-file { white-space: normal; text-align: left; }
+.chat-pend { border: 1px solid var(--accent); border-radius: var(--radius); padding: 10px; margin-bottom: 8px; display: flex; flex-direction: column; gap: 8px; font-size: 0.85rem; }

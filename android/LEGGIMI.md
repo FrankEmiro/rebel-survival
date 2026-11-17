@@ -18,7 +18,8 @@ Si può anche passare a un altro telefono con Bluetooth o Quick Share, da Profil
 La pagina parla con l'app tramite `window.RSAndroid`, e lo usa anche per capire di essere dentro l'app. Le funzioni sono:
 - `version`, `shareApp`, `shareData`, `keepScreenOn`;
 - per i download in secondo piano: `bgStart`, `bgProgress`, `bgStop`;
-- per la chat: `meshStart`, `meshStop`, `meshRunning`, `meshMe`, `meshPeers`, `meshSend`, `meshSendPrivate`, `meshNick`, `meshSetNick`.
+- per la chat: `meshStart`, `meshStop`, `meshRunning`, `meshMe`, `meshPeers`, `meshSend`, `meshSendPrivate`, `meshNick`, `meshSetNick`;
+- per foto, file e voce nella chat: `meshSendMedia`, `voiceStart`, `voiceStop`, `voiceAbort` (registra in AAC, max 30 s; permesso Microfono).
 
 Gli eventi della chat arrivano alla pagina con `window.RSMeshEvent({...})`.
 
@@ -29,6 +30,7 @@ Gli eventi della chat arrivano alla pagina con `window.RSMeshEvent({...})`.
   - posizione;
   - fotocamera;
   - Bluetooth («Dispositivi nelle vicinanze»);
+  - microfono (solo per i messaggi vocali della chat);
   - notifiche;
   - servizio in primo piano per i download.
 
