@@ -47,6 +47,16 @@ Mette in **un'unica app che funziona offline** quello che serve **prima** di un'
     <td align="center"><img src="docs/screenshots/chat.png" width="190" alt="Chat Bluetooth"><br><sub><b>Chat vicini</b><br>Bluetooth, senza rete</sub></td>
     <td align="center"><img src="docs/screenshots/livella.png" width="190" alt="Livella"><br><sub><b>Livella</b><br>la bolla del telefono</sub></td>
   </tr>
+  <tr>
+    <td align="center"><img src="docs/screenshots/scorte.png" width="190" alt="Scorte"><br><sub><b>Scorte</b><br>cosa hai, per area</sub></td>
+    <td align="center"><img src="docs/screenshots/acqua.png" width="190" alt="Acqua"><br><sub><b>Acqua</b><br>quanta ne serve e quanta ne hai</sub></td>
+    <td align="center"><img src="docs/screenshots/guide.png" width="190" alt="Guide"><br><sub><b>Guide</b><br>anche senza connessione</sub></td>
+    <td align="center"><img src="docs/screenshots/wikipedia.png" width="190" alt="Wikipedia offline"><br><sub><b>Wikipedia offline</b><br>scarichi tu cosa tenere</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/screenshots/bussola.png" width="190" alt="Bussola"><br><sub><b>Bussola</b><br>e altri strumenti</sub></td>
+    <td align="center"><img src="docs/screenshots/profilo.png" width="190" alt="Profilo"><br><sub><b>Profilo</b><br>dati solo sul telefono, backup</sub></td>
+  </tr>
 </table>
 
 <sub>Le schermate sono dell'app, con dati di esempio. I nomi nella chat sono inventati.</sub>

@@ -47,6 +47,16 @@ It puts in **one app that works offline** what you need **before** an emergency 
     <td align="center"><img src="docs/screenshots/chat.png" width="190" alt="Bluetooth chat"><br><sub><b>Nearby chat</b><br>Bluetooth, no network</sub></td>
     <td align="center"><img src="docs/screenshots/livella.png" width="190" alt="Level"><br><sub><b>Level</b><br>your phone's bubble level</sub></td>
   </tr>
+  <tr>
+    <td align="center"><img src="docs/screenshots/scorte.png" width="190" alt="Supplies"><br><sub><b>Supplies</b><br>what you have, by area</sub></td>
+    <td align="center"><img src="docs/screenshots/acqua.png" width="190" alt="Water"><br><sub><b>Water</b><br>how much you need and have</sub></td>
+    <td align="center"><img src="docs/screenshots/guide.png" width="190" alt="Guides"><br><sub><b>Guides</b><br>work without a connection</sub></td>
+    <td align="center"><img src="docs/screenshots/wikipedia.png" width="190" alt="Offline Wikipedia"><br><sub><b>Offline Wikipedia</b><br>you choose what to keep</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/screenshots/bussola.png" width="190" alt="Compass"><br><sub><b>Compass</b><br>and other tools</sub></td>
+    <td align="center"><img src="docs/screenshots/profilo.png" width="190" alt="Profile"><br><sub><b>Profile</b><br>data only on your phone, backup</sub></td>
+  </tr>
 </table>
 
 <sub>Screenshots are from the app (Italian interface), with sample data. Names in the chat are made up.</sub>
