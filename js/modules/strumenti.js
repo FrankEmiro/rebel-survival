@@ -615,13 +615,15 @@ const StrumentiModule = (() => {
     { id: 'torch',   icon: 'ph-flashlight',  label: 'Torcia',      act: 'StrumentiModule.toggleTorch()' },
     { id: 'sos',     icon: 'ph-siren',       label: 'Segnale SOS', act: 'StrumentiModule.toggleSOS()' },
     { id: 'compass', icon: 'ph-compass',     label: 'Bussola',     act: "StrumentiModule.goTo('compass')" },
+    { id: 'level',   icon: 'ph-ruler', label: 'Livella',   act: "StrumentiModule.goTo('level')" },
+    { id: 'chat',    icon: 'ph-bluetooth',   label: 'Chat vicini', act: "navigateTo('chat')", onlyIf: () => typeof ChatModule !== 'undefined' && ChatModule.available() },
     { id: 'gps',     icon: 'ph-map-pin',     label: 'Posizione',   act: "StrumentiModule.goTo('gps')" },
     { id: 'map',     icon: 'ph-map-trifold', label: 'Mappa',       act: "StrumentiModule.goTo('map')" },
     { id: 'phone',   icon: 'ph-device-mobile', label: 'Telefono',  act: "StrumentiModule.goTo('phone')" },
   ];
   function quickHtml() {
     return `<div class="st-quick" role="group" aria-label="Strumenti rapidi">
-      ${QUICK.map(q => {
+      ${QUICK.filter(q => !q.onlyIf || q.onlyIf()).map(q => {
         const on = (q.id === 'torch' && torchOn) || (q.id === 'sos' && sosActive);
         const sub = on ? (q.id === 'torch' ? 'Accesa' : 'In corso') : '';
         return `<button class="st-quick-btn${on ? ' on' : ''}" id="qt-${q.id}" onclick="${q.act}"${q.id === 'torch' || q.id === 'sos' ? ` aria-pressed="${on}"` : ''}>
@@ -648,6 +650,7 @@ const StrumentiModule = (() => {
     card.scrollIntoView({ block: 'start', behavior: 'smooth' });
     if (id === 'compass' && !compassListener) toggleCompass();
     if (id === 'gps' && gpsWatchId === null) toggleGPS();
+    if (id === 'level' && !levelFn) toggleLevel();
   }
 
   /* ── WAKE LOCK ── */
