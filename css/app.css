@@ -2805,6 +2805,9 @@ input, select, textarea { font-family: 'Nunito', sans-serif; font-size: 1rem; }
 }
 .guide-source-link:hover { color: var(--accent); }
 .guide-source-link i { font-size: 0.75rem; }
+.guide-sources { margin-top: 12px; font-size: 0.8rem; }
+.guide-sources ul { list-style: none; margin: 6px 0 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.guide-sources .guide-source-link { text-decoration: underline; word-break: break-word; }
 
 /* ============================================================
    MAPPA LEAFLET — Strumenti di Campo

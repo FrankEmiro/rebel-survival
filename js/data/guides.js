@@ -12,6 +12,11 @@ const GUIDES_DATA = [
     icon: 'ph-drop',
     category: 'acqua',
     source: 'CDC · EPA · OMS · SODIS (Eawag)',
+    sources: [
+      { n: 'CDC — Come rendere sicura l\'acqua in emergenza (bollitura, candeggina, filtri)', u: 'https://www.cdc.gov/water-emergency/about/index.html' },
+      { n: 'EPA — Disinfezione d\'emergenza dell\'acqua potabile (tabella gocce 6% e 8,25%, odore di cloro)', u: 'https://www.epa.gov/ground-water-and-drinking-water/emergency-disinfection-drinking-water' },
+      { n: 'Eawag — SODIS, disinfezione solare (pagina generale del metodo)', u: 'https://eawag.ch/en/department/sandec/projects/swp/solar-water-disinfection-sodis' },
+    ],
     readTime: '4 min',
     quickRef: [
       'Bollitura: bollore vigoroso per 1 minuto (3 minuti sopra i 2.000 m) — il modo più sicuro per uccidere i germi',
@@ -82,6 +87,9 @@ const GUIDES_DATA = [
     category: 'acqua',
     // Fonti: OMS Technical Note 9 (quantità minime in emergenza); Ready.gov «Water» (contenitori, pulizia, sostituzione)
     source: 'OMS · Ready.gov',
+    sources: [
+      { n: 'Ready.gov — Water (contenitori, pulizia, sostituzione ogni 6 mesi, caldo)', u: 'https://ready.gov/water' },
+    ],
     readTime: '2 min',
     quickRef: [
       'Minimo OMS in emergenza: 7,5 litri a persona al giorno con l\'igiene di base (2,5–3 litri solo per bere e cucinare)',

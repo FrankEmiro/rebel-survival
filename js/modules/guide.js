@@ -79,6 +79,11 @@ const GuideModule = (() => {
            <div><strong>${caution === 'alto' ? 'Attenzione — rischio alto, extra cautela' : 'Attenzione — da usare con cautela'}</strong><p>${GUIDE_CAUTION_TEXT[caution]}</p></div>
          </div>` : '';
 
+    const srcLinks = (g.sources || []).map(x =>
+      `<li><a class="guide-source-link" href="${x.u}" target="_blank" rel="noopener noreferrer"><i class="ph ph-arrow-square-out"></i> ${x.n}</a></li>`).join('');
+    const sourcesBox = srcLinks
+      ? `<div class="guide-sources"><span class="guide-related-label">Fonti (pagina da cui viene l'informazione; serve la rete):</span><ul>${srcLinks}</ul></div>` : '';
+
     return `
       <div class="guide-card2${isOpen ? ' open' : ''}" id="guide2-${g.id}">
         <div class="guide-card2-header" onclick="GuideModule._toggleCard('${g.id}')">
@@ -107,6 +112,7 @@ const GuideModule = (() => {
 
           <!-- Related guides -->
           ${related ? `<div class="guide-related"><span class="guide-related-label">Correlate:</span>${related}</div>` : ''}
+          ${sourcesBox}
         </div>
       </div>`;
   }
