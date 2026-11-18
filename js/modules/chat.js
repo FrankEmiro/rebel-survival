@@ -61,6 +61,7 @@ const ChatModule = (() => {
     else if (e.type === 'error') { state.running = false; state.error = ERRORS[e.code] || ERRORS.start; }
     else if (e.type === 'msg') {
       if (msgs.some(m => m.id === e.id)) return;
+      if (boardIncoming(e)) { if (currentSection === 'chat') render(); return; }
       msgs.push({ id: e.id, from: e.from, nick: e.nick, text: e.text, ts: e.ts || Date.now(), priv: !!e.private, conv: e.private ? e.from : 'all' });
       save();
     } else if (e.type === 'media') {
@@ -257,6 +258,101 @@ const ChatModule = (() => {
     { enableHighAccuracy: true, timeout: 10000, maximumAge: 30000 });
   }
 
+
+  /* ── Bacheca: cosa serve e cosa si può dare ──
+     Gli annunci viaggiano come messaggi a «Tutti i vicini» con un testo fisso, quindi funzionano
+     solo col Bluetooth e senza server. Chi pubblica li rilancia ogni BOARD_REPEAT_MS finché la chat è accesa.
+     Durata e ritmo sono scelte nostre (non provate su telefono): si cambiano qui. */
+  const BOARD_KEY = 'rs-bacheca', BOARD_HIDE = 'rs-bacheca-nascosti';
+  const BOARD_TTL_MS = 24 * 3600 * 1000;       // un annuncio sparisce dopo 24 ore
+  const BOARD_REPEAT_MS = 10 * 60 * 1000;      // chi pubblica lo rilancia ogni 10 minuti
+  const BOARD_CATS = ['Acqua', 'Cibo', 'Medicine', 'Generatore', 'Carburante', 'Attrezzi', 'Ricovero', 'Trasporto', 'Aiuto manuale', 'Altro'];
+  const MED_NOTE = 'Medicine: non prendere farmaci ricevuti da sconosciuti senza il parere di un medico o di un farmacista. Per un\'emergenza chiama il 112 o il 118.';
+  const BOARD_RE = /^📋 (OFFRO|CERCO) — ([^—\n]{1,30}) — ([^\n]{0,120}?) \(rif\. ([a-z0-9]{6})\)$/;
+  const RESOLVED_RE = /^✅ RISOLTO \(rif\. ([a-z0-9]{6})\)$/;
+  let board = [], hidden = { items: [], senders: [] }, tab = 'msg', boardMsg = '';
+  try { board = JSON.parse(localStorage.getItem(BOARD_KEY) || '[]'); } catch (e) { board = []; }
+  try { hidden = Object.assign(hidden, JSON.parse(localStorage.getItem(BOARD_HIDE) || '{}')); } catch (e) {}
+  const boardSave = () => { try { localStorage.setItem(BOARD_KEY, JSON.stringify(board.slice(-200))); localStorage.setItem(BOARD_HIDE, JSON.stringify(hidden)); } catch (e) {} };
+  const boardLive = () => { const lim = Date.now() - BOARD_TTL_MS; board = board.filter(b => b.ts > lim); return board; };
+  const boardKey = b => b.from + '/' + b.rif;
+  const newRif = () => Math.random().toString(36).slice(2, 8).padEnd(6, '0');
+
+  // Riconosce gli annunci in arrivo; restituisce true se il messaggio è per la bacheca
+  function boardIncoming(e) {
+    if (e.private || typeof e.text !== 'string') return false;
+    let m = RESOLVED_RE.exec(e.text);
+    if (m) {
+      const it = board.find(b => b.rif === m[1] && b.from === e.from);
+      if (it) { it.done = true; boardSave(); }
+      return true;
+    }
+    m = BOARD_RE.exec(e.text);
+    if (!m || !BOARD_CATS.includes(m[2])) return false;
+    const it = board.find(b => b.rif === m[4] && b.from === e.from);
+    if (it) { it.ts = Date.now(); }
+    else board.push({ rif: m[4], from: e.from, nick: e.nick, kind: m[1] === 'OFFRO' ? 'offro' : 'cerco', cat: m[2], text: m[3], ts: Date.now() });
+    boardSave();
+    return true;
+  }
+  function boardText(b) { return '📋 ' + (b.kind === 'offro' ? 'OFFRO' : 'CERCO') + ' — ' + b.cat + ' — ' + b.text + ' (rif. ' + b.rif + ')'; }
+  function boardPost() {
+    const cat = document.getElementById('bb-cat')?.value, kind = document.getElementById('bb-kind')?.value;
+    const text = (document.getElementById('bb-text')?.value || '').replace(/[—\r\n()]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 100);
+    if (!state.running) { boardMsg = 'Accendi prima la chat (tasto in alto): senza Bluetooth l\'annuncio non parte.'; render(); return; }
+    if (!BOARD_CATS.includes(cat) || !text) { boardMsg = 'Scegli la categoria e scrivi quanto e che cosa (esempio: 20 litri, zona piazza).'; render(); return; }
+    const b = { rif: newRif(), from: 'me', mine: true, kind: kind === 'offro' ? 'offro' : 'cerco', cat, text, ts: Date.now(), sent: Date.now() };
+    if (!A().meshSend(boardText(b))) { boardMsg = 'Annuncio non inviato: riprova.'; render(); return; }
+    board.push(b); boardSave();
+    boardMsg = 'Annuncio pubblicato. Lo vede chi è vicino e lo rilancio ogni 10 minuti finché la chat resta accesa. Non è detto che arrivi a tutti.';
+    render();
+  }
+  function boardDone(rif) {
+    const b = board.find(x => x.mine && x.rif === rif); if (!b) return;
+    b.done = true; boardSave();
+    if (state.running) A().meshSend('✅ RISOLTO (rif. ' + rif + ')');
+    render();
+  }
+  function boardHide(key) { hidden.items.push(key); boardSave(); render(); }
+  function boardHideSender(from) { if (from && from !== 'me') hidden.senders.push(from); boardSave(); render(); }
+  function boardClear() { board = []; hidden = { items: [], senders: [] }; boardSave(); render(); }
+  function boardRepeat() {
+    if (!state.running || !A() || !A().meshSend) return;
+    const now = Date.now();
+    boardLive().filter(b => b.mine && !b.done && now - (b.sent || 0) > BOARD_REPEAT_MS).forEach(b => { if (A().meshSend(boardText(b))) b.sent = now; });
+    boardSave();
+  }
+  setInterval(boardRepeat, 60 * 1000);
+  function setTab(t) { tab = t === 'board' ? 'board' : 'msg'; render(); }
+  function boardMedWarn() {
+    const el = document.getElementById('bb-med'); if (!el) return;
+    el.style.display = document.getElementById('bb-cat')?.value === 'Medicine' ? '' : 'none';
+  }
+  function boardHtml() {
+    const items = boardLive().filter(b => !hidden.items.includes(boardKey(b)) && !hidden.senders.includes(b.from))
+      .sort((a, c) => c.ts - a.ts);
+    const row = b => `<div class="chat-msg bb-item${b.done ? ' bb-done' : ''}">
+        <div class="chat-meta"><strong>${b.kind === 'offro' ? 'OFFRO' : 'CERCO'}</strong> · ${esc(b.cat)} · ${b.mine ? 'Tu' : esc(b.nick || peerNick(b.from))} · ${time(b.ts)}${b.done ? ' · risolto' : ''}</div>
+        <div class="chat-text">${esc(b.text)}</div>
+        ${b.cat === 'Medicine' ? `<div class="chat-meta">${esc(MED_NOTE)}</div>` : ''}
+        <div class="bb-actions">${b.mine
+          ? (b.done ? '' : `<button class="chat-peer" onclick="ChatModule.boardDone('${esc(b.rif)}')">Segna come risolto</button>`)
+          : `<button class="chat-peer" onclick="ChatModule.boardHide('${esc(boardKey(b))}')">Nascondi</button><button class="chat-peer" onclick="ChatModule.boardHideSender('${esc(b.from)}')">Nascondi questa persona</button>`}</div>
+      </div>`;
+    const col = (k, t) => { const l = items.filter(b => b.kind === k); return `<h4 class="bb-h">${t} (${l.length})</h4>` + (l.length ? l.map(row).join('') : '<p class="pf-note">Nessun annuncio.</p>'); };
+    return `<div class="chat-warn"><i class="ph ph-info"></i> <span>Gli annunci li vede chiunque sia vicino e durano 24 ore. Il nome è scelto da chi scrive e può essere falso: non scrivere indirizzi precisi né dati personali, e non fidarti ciecamente. Non sostituisce il 112.</span></div>
+      <div class="bb-form">
+        <select id="bb-kind"><option value="cerco">Cerco</option><option value="offro">Offro</option></select>
+        <select id="bb-cat" onchange="ChatModule.boardMedWarn()">${BOARD_CATS.map(c => `<option>${c}</option>`).join('')}</select>
+        <input id="bb-text" type="text" maxlength="100" placeholder="Quanto e che cosa (es. 20 litri, zona piazza)">
+        <p id="bb-med" class="chat-error" style="display:none">${esc(MED_NOTE)}</p>
+        <button class="btn btn-primary" onclick="ChatModule.boardPost()"><i class="ph ph-megaphone"></i> Pubblica</button>
+      </div>
+      ${boardMsg ? `<p class="chat-error"><i class="ph ph-info"></i> ${esc(boardMsg)}</p>` : ''}
+      ${col('cerco', 'Cercano')}${col('offro', 'Offrono')}
+      ${board.length || hidden.items.length || hidden.senders.length ? `<button class="btn btn-link chat-clear" onclick="ChatModule.boardClear()"><i class="ph ph-trash"></i> Cancella la bacheca da questo telefono</button>` : ''}`;
+  }
+
   function setNick(v) { A().meshSetNick(v); }
   function talkTo(id) { state.to = id; render(); }
 
@@ -279,6 +375,9 @@ const ChatModule = (() => {
       <div id="chat-err"></div>
       <label class="chat-nick">Il tuo nome nella chat
         <input id="chat-nick" type="text" maxlength="32" placeholder="Es. Marco – via Roma" onchange="ChatModule.setNick(this.value)"></label>
+      <div class="chat-peers" id="chat-tabs"></div>
+      <div id="chat-boardview"></div>
+      <div id="chat-msgview">
       <div class="chat-peers" id="chat-peers"></div>
       <div class="chat-list" id="chat-list"></div>
       <div class="chat-quick" id="chat-quick"></div>
@@ -287,7 +386,8 @@ const ChatModule = (() => {
         <input id="chat-text" type="text" maxlength="2000" onkeydown="if(event.key==='Enter')ChatModule.send()">
         <button id="chat-send-btn" class="btn btn-primary" onclick="ChatModule.send()" aria-label="Invia"><i class="ph ph-paper-plane-tilt"></i></button>
       </div>
-      <div id="chat-clear"></div>`;
+      <div id="chat-clear"></div>
+      </div>`;
     document.getElementById('chat-nick').value = A().meshNick() || '';
   }
 
@@ -300,6 +400,17 @@ const ChatModule = (() => {
     }
     try { state.running = A().meshRunning(); if (state.running) { state.me = A().meshMe(); state.peers = JSON.parse(A().meshPeers()).peers || []; } } catch (e) {}
     if (!root.querySelector('#chat-text') || !root.querySelector('#chat-bar')) shell(root);
+    document.getElementById('chat-tabs').innerHTML = `<button class="chat-peer ${tab === 'msg' ? 'active' : ''}" onclick="ChatModule.setTab('msg')"><i class="ph ph-chats"></i> Messaggi</button><button class="chat-peer ${tab === 'board' ? 'active' : ''}" onclick="ChatModule.setTab('board')"><i class="ph ph-push-pin"></i> Bacheca</button>`;
+    document.getElementById('chat-msgview').style.display = tab === 'msg' ? '' : 'none';
+    const bv = document.getElementById('chat-boardview');
+    if (tab === 'board') {
+      const keep = { k: document.getElementById('bb-kind')?.value, c: document.getElementById('bb-cat')?.value, t: document.getElementById('bb-text')?.value };
+      bv.innerHTML = boardHtml();
+      if (keep.k) document.getElementById('bb-kind').value = keep.k;
+      if (keep.c) document.getElementById('bb-cat').value = keep.c;
+      if (keep.t) document.getElementById('bb-text').value = keep.t;
+      boardMedWarn();
+    } else bv.innerHTML = '';
     const conv = msgs.filter(m => m.conv === state.to).slice(-150);
     const toLabel = state.to === 'all' ? 'Tutti i vicini' : peerNick(state.to);
 
@@ -348,5 +459,5 @@ const ChatModule = (() => {
   }
 
   window.RSMeshEvent = onEvent;
-  return { init: render, render, start, stop, send, quick, sharePos, sosDown, sosUp, pickFile, sendPending, cancelPending, toggleVoice, setNick, talkTo, clearAll, available, onEvent };
+  return { init: render, render, start, stop, send, quick, sharePos, sosDown, sosUp, setTab, boardPost, boardDone, boardHide, boardHideSender, boardClear, boardMedWarn, pickFile, sendPending, cancelPending, toggleVoice, setNick, talkTo, clearAll, available, onEvent };
 })();

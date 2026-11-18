@@ -4028,3 +4028,10 @@ input, select, textarea { font-family: 'Nunito', sans-serif; font-size: 1rem; }
 .chat-sos.holding { animation: chat-sos-hold 2s linear forwards; }
 @keyframes chat-sos-hold { from { background: #c62828; box-shadow: inset 0 0 0 0 #7f0000; } to { background: #7f0000; box-shadow: inset 0 0 0 40px #7f0000; } }
 .chat-msg.sos { border: 2px solid #c62828; }
+
+/* Chat: bacheca */
+.bb-form { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+.bb-h { margin: 12px 0 6px; }
+.bb-item { max-width: 100%; align-self: stretch; margin-bottom: 6px; }
+.bb-done { opacity: 0.55; }
+.bb-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
