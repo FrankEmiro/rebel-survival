@@ -136,6 +136,9 @@ const GUIDES_DATA = [
     icon: 'ph-cloud-rain',
     category: 'acqua',
     source: 'FM 21-76 · FEMA',
+    sources: [
+      { n: 'CDC – Raccolta dell\'acqua piovana e salute (non potabile senza trattamento; contaminanti dal tetto; deviatore della prima pioggia)', u: 'https://www.cdc.gov/drinking-water/about/collecting-rainwater-and-your-health-an-overview.html' },
+    ],
     readTime: '3 min',
     quickRef: [
       'Stima raccolta: mm pioggia × m² tetto × 0.8 = litri raccolti',
@@ -180,6 +183,10 @@ const GUIDES_DATA = [
     icon: 'ph-waves',
     category: 'acqua',
     source: 'FM 21-76',
+    sources: [
+      { n: 'CDC – Come trovare acqua pulita in emergenza (scaldabagno, tubature, ghiaccio, fiumi e pioggia da trattare)', u: 'https://www.cdc.gov/water-emergency/about/how-to-find-clean-water-in-an-emergency.html' },
+      { n: 'CDC – Come rendere sicura l\'acqua (caloriferi e caldaie dell\'impianto di riscaldamento da non usare)', u: 'https://www.cdc.gov/water-emergency/about/index.html' },
+    ],
     readTime: '3 min',
     quickRef: [
       'Priorità fonti: pozzo privato > raccolta pioggia > fiume/torrente > fontane pubbliche',
