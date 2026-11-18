@@ -4022,3 +4022,9 @@ input, select, textarea { font-family: 'Nunito', sans-serif; font-size: 1rem; }
 .chat-aud { width: 100%; max-width: 260px; }
 .chat-file { white-space: normal; text-align: left; }
 .chat-pend { border: 1px solid var(--accent); border-radius: var(--radius); padding: 10px; margin-bottom: 8px; display: flex; flex-direction: column; gap: 8px; font-size: 0.85rem; }
+
+/* Chat: SOS con posizione */
+.chat-sos { width: 100%; padding: 14px 10px; border: 2px solid #c62828; border-radius: 10px; background: #c62828; color: #fff; font: inherit; font-weight: 700; cursor: pointer; touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+.chat-sos.holding { animation: chat-sos-hold 2s linear forwards; }
+@keyframes chat-sos-hold { from { background: #c62828; box-shadow: inset 0 0 0 0 #7f0000; } to { background: #7f0000; box-shadow: inset 0 0 0 40px #7f0000; } }
+.chat-msg.sos { border: 2px solid #c62828; }

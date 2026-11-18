@@ -219,6 +219,44 @@ const ChatModule = (() => {
     { enableHighAccuracy: true, timeout: 20000, maximumAge: 30000 });
   }
 
+  // SOS: tasto da tenere premuto per 2 secondi. Va sempre a TUTTI i vicini, con la posizione se il GPS risponde.
+  const SOS_PREFIX = '🆘 SOS';
+  let sosTimer = null, sosBusy = false;
+  function sosDown(ev) {
+    if (ev && ev.preventDefault) ev.preventDefault();
+    const b = document.getElementById('chat-sos');
+    if (!state.running || sosBusy || !b) return;
+    b.classList.add('holding');
+    clearTimeout(sosTimer);
+    sosTimer = setTimeout(sosFire, 2000);
+  }
+  function sosUp() {
+    clearTimeout(sosTimer); sosTimer = null;
+    document.getElementById('chat-sos')?.classList.remove('holding');
+  }
+  function sosSend(extra) {
+    const text = SOS_PREFIX + ' — ho bisogno di aiuto. ' + extra;
+    if (!A().meshSend(text)) { sosBusy = false; renderStatus('SOS non inviato: riprova.'); render(); return; }
+    msgs.push({ id: 'me-' + Date.now(), mine: true, text, ts: Date.now(), conv: 'all' });
+    save();
+    state.to = 'all';
+    sosBusy = false;
+    note = 'SOS inviato ai telefoni vicini. Il Bluetooth ha poca portata: non è detto che qualcuno lo riceva. Se puoi, chiama il 112.';
+    render();
+  }
+  function sosFire() {
+    sosTimer = null; sosBusy = true;
+    const b = document.getElementById('chat-sos');
+    if (b) { b.classList.remove('holding'); b.textContent = 'Cerco la posizione…'; }
+    if (navigator.vibrate) navigator.vibrate(200);
+    if (!navigator.geolocation) { sosSend('Posizione non disponibile.'); return; }
+    navigator.geolocation.getCurrentPosition(p => {
+      const c = p.coords;
+      sosSend('La mia posizione: ' + c.latitude.toFixed(5) + ', ' + c.longitude.toFixed(5) + ' (precisione circa ' + Math.round(c.accuracy) + ' m)');
+    }, () => sosSend('Posizione non disponibile (GPS spento o senza permesso).'),
+    { enableHighAccuracy: true, timeout: 10000, maximumAge: 30000 });
+  }
+
   function setNick(v) { A().meshSetNick(v); }
   function talkTo(id) { state.to = id; render(); }
 
@@ -277,7 +315,7 @@ const ChatModule = (() => {
         ${state.to !== 'all' && !state.peers.some(p => p.id === state.to) ? `<button class="chat-peer active"><i class="ph ph-lock-simple"></i> ${esc(toLabel)} (non in zona)</button>` : ''}`;
     const list = document.getElementById('chat-list');
     const html = conv.length ? conv.map(m => `
-          <div class="chat-msg ${m.mine ? 'mine' : ''}">
+          <div class="chat-msg ${m.mine ? 'mine' : ''}${(m.text || '').startsWith(SOS_PREFIX) ? ' sos' : ''}">
             <div class="chat-meta">${m.mine ? 'Tu' : esc(m.nick || peerNick(m.from))} · ${time(m.ts)}${m.status ? ' · ' + esc(m.status) : ''}</div>
             ${m.kind ? mediaHtml(m) : `<div class="chat-text">${esc(m.text)}</div>`}
           </div>`).join('') : `<p class="pf-note">Nessun messaggio ${state.to === 'all' ? 'per tutti' : 'con ' + esc(toLabel)}.</p>`;
@@ -290,8 +328,9 @@ const ChatModule = (() => {
     if (inp.disabled === state.running) inp.disabled = !state.running;
     document.getElementById('chat-send-btn').disabled = !state.running;
     posArmed = false;
-    document.getElementById('chat-quick').innerHTML = state.running
-      ? QUICK.map((q, i) => `<button class="chat-peer" onclick="ChatModule.quick(${i})">${esc(q)}</button>`).join('')
+    if (!sosTimer && !sosBusy) document.getElementById('chat-quick').innerHTML = state.running
+      ? `<button class="chat-sos" id="chat-sos" onpointerdown="ChatModule.sosDown(event)" onpointerup="ChatModule.sosUp()" onpointerleave="ChatModule.sosUp()" onpointercancel="ChatModule.sosUp()" oncontextmenu="return false"><i class="ph ph-siren"></i> SOS con posizione — tieni premuto 2 secondi</button>`
+        + QUICK.map((q, i) => `<button class="chat-peer" onclick="ChatModule.quick(${i})">${esc(q)}</button>`).join('')
         + `<button class="chat-peer" id="chat-pos" onclick="ChatModule.sharePos()"><i class="ph ph-map-pin"></i> Invia la mia posizione</button>`
         + `<button class="chat-peer" onclick="ChatModule.pickFile('image')"><i class="ph ph-image"></i> Foto</button>`
         + `<button class="chat-peer" id="chat-mic" onclick="ChatModule.toggleVoice()">${micLabel()}</button>`
@@ -309,5 +348,5 @@ const ChatModule = (() => {
   }
 
   window.RSMeshEvent = onEvent;
-  return { init: render, render, start, stop, send, quick, sharePos, pickFile, sendPending, cancelPending, toggleVoice, setNick, talkTo, clearAll, available, onEvent };
+  return { init: render, render, start, stop, send, quick, sharePos, sosDown, sosUp, pickFile, sendPending, cancelPending, toggleVoice, setNick, talkTo, clearAll, available, onEvent };
 })();
