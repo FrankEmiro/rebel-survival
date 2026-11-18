@@ -1331,6 +1331,7 @@ const SettingsModule = (() => {
         </button>
         <a class="legal-link" href="/legal/privacy.html">Privacy</a>
         <a class="legal-link" href="/legal/condizioni.html">Condizioni d'uso</a>
+        <a class="legal-link" href="/legal/licenze.html">Licenze</a>
       </div>
     `;
 

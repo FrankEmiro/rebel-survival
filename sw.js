@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kit-resilienza-v127';
+const CACHE_NAME = 'kit-resilienza-v128';
 const CDN_CACHE  = 'kit-resilienza-cdn-v51';
 
 // Asset locali — cache-first
@@ -10,6 +10,7 @@ const LOCAL_ASSETS = [
   '/legal/legal.css',
   '/legal/privacy.html',
   '/legal/condizioni.html',
+  '/legal/licenze.html',
   '/fonts/jetbrains-mono-latin-1.woff2',
   '/fonts/jetbrains-mono-latin-ext-0.woff2',
   '/fonts/nunito-latin-3.woff2',
