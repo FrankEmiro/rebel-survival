@@ -32,6 +32,12 @@ When power, water or the phone network go down, you need information right away,
 
 It puts in **one app that works offline** what you need **before** an emergency (supplies, plans, kits) and what you need **during** one (what to do step by step, tools, talking to people nearby). It is an Android app, free to download from GitHub.
 
+## 🎬 The video (51 seconds)
+
+<p align="center"><a href="docs/video/rebel-survival-promo.mp4"><img src="docs/video/rebel-survival-promo-poster.png" width="640" alt="Watch the Rebel Survival intro video"></a></p>
+
+<p align="center"><a href="docs/video/rebel-survival-promo.mp4">▶ Watch the video</a> (7 MB, original music, Italian text). The screens are the real app; the chat and bulletin-board messages are examples.</p>
+
 ## 📲 Pass it to people without internet
 
 **The app can be passed from phone to phone, without internet and without Google Play.** If you have the Android app installed, go to **Profile → App → "Passa l'app a un altro telefono"** (pass the app to another phone): the app prepares its own copy and opens Android's share sheet, so you can send it over **Bluetooth or Quick Share** to anyone nearby.

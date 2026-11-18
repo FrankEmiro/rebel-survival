@@ -32,6 +32,12 @@ Quando manca la corrente, l'acqua o la rete telefonica, le informazioni servono 
 
 Mette in **un'unica app che funziona offline** quello che serve **prima** di un'emergenza (scorte, piani, kit) e quello che serve **durante** (cosa fare passo per passo, strumenti, comunicare con chi è vicino). È un'app Android e si scarica gratis da GitHub.
 
+## 🎬 Il video (51 secondi)
+
+<p align="center"><a href="docs/video/rebel-survival-promo.mp4"><img src="docs/video/rebel-survival-promo-poster.png" width="640" alt="Guarda il video di presentazione di Rebel Survival"></a></p>
+
+<p align="center"><a href="docs/video/rebel-survival-promo.mp4">▶ Guarda il video</a> (7 MB, con musica originale). Le schermate sono quelle vere dell'app; i messaggi della chat e della bacheca sono di esempio.</p>
+
 ## 📲 Passala a chi non ha internet
 
 **L'app si passa da telefono a telefono, senza internet e senza Google Play.** Se hai l'app Android installata, vai in **Profilo → App → «Passa l'app a un altro telefono»**: l'app prepara la sua copia e apre la condivisione di Android, così la mandi con **Bluetooth o Quick Share** a chi ti sta vicino.
