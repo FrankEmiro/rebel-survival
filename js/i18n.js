@@ -63,9 +63,9 @@ const I18n = (() => {
     // Pagine legali: in inglese i link aprono la versione inglese (legal/en/)
     const LEGAL_EN = { 'privacy.html': 'privacy.html', 'condizioni.html': 'terms.html', 'licenze.html': 'licenses.html' };
     document.addEventListener('click', e => {
-      const a = e.target.closest && e.target.closest('a[href^="/legal/"]');
+      const a = e.target.closest && e.target.closest('a[href^="/legal/"], a[href^="legal/"]');
       if (!a) return;
-      const m = a.getAttribute('href').match(/^\/legal\/([a-z]+\.html)$/);
+      const m = a.getAttribute('href').match(/^\/?legal\/([a-z]+\.html)$/);
       if (m && LEGAL_EN[m[1]]) a.setAttribute('href', '/legal/en/' + LEGAL_EN[m[1]]);
     }, true);
     const meta = document.querySelector('meta[name="description"]');
