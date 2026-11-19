@@ -39,7 +39,8 @@ const GuideModule = (() => {
         .slice(0, 40);
       const imgKey = `${g.id}--${slug}`;
       const imgSvg = typeof GUIDE_IMG_SVG !== 'undefined' && GUIDE_IMG_SVG.has(imgKey);
-      const imgOff = !imgSvg && typeof GUIDE_IMG_HIDDEN !== 'undefined' && GUIDE_IMG_HIDDEN.has(imgKey);
+      // In inglese le illustrazioni non si mostrano: i testi dentro le immagini sono in italiano
+      const imgOff = I18n.get() !== 'it' || (!imgSvg && typeof GUIDE_IMG_HIDDEN !== 'undefined' && GUIDE_IMG_HIDDEN.has(imgKey));
       const imgSrc = `/js/images/guides/${imgKey}.${imgSvg ? 'svg' : 'webp'}`;
 
       let body = '';

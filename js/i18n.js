@@ -12,7 +12,10 @@ const I18n = (() => {
   let lang = 'it';
   try { const v = JSON.parse(localStorage.getItem(KEY)); if (LANGS[v]) lang = v; } catch {}
 
+  // Le guide hanno un dizionario a parte (grande): si carica solo se la lingua è l'inglese
+  if (lang === 'en' && !window.RS_EN_GUIDES) document.write('<script src="js/data/i18n/en_guides.js"><\/script>');
   const dict = () => window.RS_EN || {};
+  const gdict = () => window.RS_EN_GUIDES || {};
   const pats = () => window.RS_EN_PAT || [];
   const ATTRS = ['placeholder', 'title', 'aria-label', 'alt'];
   const SKIP = new Set(['SCRIPT', 'STYLE', 'TEXTAREA', 'CODE']);
@@ -23,6 +26,7 @@ const I18n = (() => {
     const core = m[2].replace(/\s+/g, ' ');
     if (!core) return null;
     let out = dict()[core];
+    if (out === undefined) out = gdict()[core];
     if (out === undefined) {
       for (const [re, rep] of pats()) { if (re.test(core)) { out = core.replace(re, rep); break; } }
     }
