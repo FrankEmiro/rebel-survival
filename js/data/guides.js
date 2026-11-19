@@ -236,6 +236,10 @@ const GUIDES_DATA = [
     icon: 'ph-package',
     category: 'cibo',
     source: 'USDA · FM 21-76 · ISS',
+    sources: [
+      { n: 'ISS e Ministero della Salute – Linee guida per le conserve in ambito domestico (botulismo, pastorizzazione, conserve poco acide, carne e pesce)', u: 'https://www.iss.it/documents/20126/2293568/LineeGuidaConserve_light.pdf/f76af27b-51bb-4675-158b-7433f66d07de?t=1575730710064' },
+      { n: 'CDC – Conserve fatte in casa e botulismo (vasetti gonfi, con odore strano o muffa da buttare)', u: 'https://www.cdc.gov/botulism/prevention/home-canned-foods.html' },
+    ],
     readTime: '4 min',
     quickRef: [
       'Carne fresca: max 2–4h a 20°C — cuoci immediatamente',
@@ -306,6 +310,10 @@ const GUIDES_DATA = [
     // Fonti: Ready.gov «Food»; Commissione europea, linee guida 72 ore (3/11/2026); Alertswiss «Piano d'emergenza»;
     // 2.100 kcal a persona al giorno: Manuale Sphere / UNHCR (usato dal calcolatore Cibo)
     source: 'Ready.gov · Commissione UE · Alertswiss · Sphere',
+    sources: [
+      { n: 'Commissione europea – Linee guida sull\'autonomia di almeno 72 ore (cibo conservabile a temperatura ambiente, acqua, luce, medicine, igiene, radio, contanti, animali)', u: 'https://civil-protection-knowledge-network.europa.eu/system/files/2026-11/sufficiency-of-at-least-72-hours-under-the-eu-preparedness-union-strategy.pdf' },
+      { n: 'Ready.gov – Prepara un kit (apriscatole, cibo in luogo fresco e asciutto, sostituire gli scaduti, cibo per animali)', u: 'https://www.ready.gov/kit' },
+    ],
     readTime: '3 min',
     quickRef: [
       'Almeno 72 ore di autonomia (Commissione UE); meglio scorte per più giorni',
@@ -521,6 +529,11 @@ const GUIDES_DATA = [
     // Comune di Ravenna, Protezione civile, «Rischio black out elettrico»;
     // Commissione europea, linee guida di preparazione 72 ore (3/11/2026); Alertswiss «Piano d'emergenza»
     source: 'Ready.gov · Energy.gov · Protezione civile (Ravenna) · Commissione UE · Alertswiss',
+    sources: [
+      { n: 'Ready.gov – Interruzione di corrente (frigo 4 ore, freezer 48 ore, cibo oltre 40 °F per 2 ore, apparecchi spenti, fornelli a gas, farmaci in frigo)', u: 'https://www.ready.gov/power-outages' },
+      { n: 'Protezione Civile – Vademecum «Protezione civile in famiglia», capitolo black out (torcia e radio a pile, frigo chiuso, ascensore, telefono, ritorno della corrente)', u: 'https://www.protezionecivile.gov.it/static/40f6aa132a339e223934865d7a37341d/vademecum_pc_ita.pdf' },
+      { n: 'Commissione europea – Linee guida sull\'autonomia di almeno 72 ore (radio a batterie, power bank, contanti)', u: 'https://civil-protection-knowledge-network.europa.eu/system/files/2026-11/sufficiency-of-at-least-72-hours-under-the-eu-preparedness-union-strategy.pdf' },
+    ],
     readTime: '4 min',
     quickRef: [
       'Spegni o stacca gli apparecchi accesi: al ritorno la corrente può arrivare con sbalzi che li danneggiano',
@@ -581,6 +594,10 @@ const GUIDES_DATA = [
     // Fonti: Energy.gov «Keeping Mobile Devices Charged»; Ready.gov «Power Outages» e «Get Tech Ready»;
     // FCC/FEMA «Tips for communicating in an emergency»; Commissione europea (powerbank carichi)
     source: 'Energy.gov · Ready.gov · FCC/FEMA · Commissione UE',
+    sources: [
+      { n: 'FCC/FEMA – Consigli per comunicare in emergenza (luminosità, modalità aereo, ricarica in auto all\'aperto, chiamate brevi)', u: 'https://docs.fcc.gov/public/attachments/DOC-309723A1.pdf' },
+      { n: 'Ready.gov – Interruzione di corrente (power bank)', u: 'https://www.ready.gov/power-outages' },
+    ],
     readTime: '3 min',
     quickRef: [
       'Prima dell\'emergenza: powerbank carichi, pile di riserva e caricatore da auto',
@@ -664,6 +681,10 @@ const GUIDES_DATA = [
     icon: 'ph-engine',
     category: 'energia',
     source: 'Ready.gov (FEMA) · CDC · CPSC · Protezione civile',
+    sources: [
+      { n: 'CDC – Monossido di carbonio (generatore solo all\'aperto a più di 20 piedi da finestre, porte e prese d\'aria; mai in casa o garage; sintomi; rilevatori)', u: 'https://www.cdc.gov/carbon-monoxide/about/index.html' },
+      { n: 'Ready.gov – Interruzione di corrente (generatore ad almeno 20 piedi, rilevatori di CO su ogni piano)', u: 'https://www.ready.gov/power-outages' },
+    ],
     readTime: '3 min',
     quickRef: [
       'SOLO all\'aperto: mai in casa, in garage o in locali semichiusi. Il monossido di carbonio (CO) non ha colore né odore e uccide senza preavviso',
@@ -709,6 +730,9 @@ const GUIDES_DATA = [
     // Fonti: CDC «Potential Sanitation Solutions During an Emergency Response»; NC DHHS «Toilet use during an emergency»;
     // Oregon OEM e Washington County (OR) «Disaster sanitation»; Ready.gov «Build a kit»
     source: 'CDC · NC DHHS · Oregon OEM · Ready.gov',
+    sources: [
+      { n: 'NC DHHS – Come usare il bagno in emergenza (sacco dentro un sacco, materiale assorbente, secchio da 5 galloni, lavare le mani)', u: 'https://www.ncdhhs.gov/toilet-use-during-emergency/open' },
+    ],
     readTime: '3 min',
     quickRef: [
       'Prima prova un bagno funzionante di un vicino o di un locale vicino',
@@ -760,6 +784,9 @@ const GUIDES_DATA = [
     category: 'casa',
     // Fonti: Ready.gov «Utility Shut-off & Safety» (archivio) e «Safety skills»; Adams County OEM (CO)
     source: 'Ready.gov · Adams County OEM',
+    sources: [
+      { n: 'Ready.gov – Competenze di sicurezza (gas, corrente, acqua: dove sono i rubinetti, ordine degli interruttori, chi riapre il gas)', u: 'https://www.ready.gov/safety-skills' },
+    ],
     readTime: '2 min',
     quickRef: [
       'Impara ORA dove sono i rubinetti di gas e acqua e il quadro elettrico, e insegnalo a tutti in casa',
@@ -801,6 +828,9 @@ const GUIDES_DATA = [
     category: 'casa',
     // Fonti: Ready.gov «Pets and Animals»; Commissione europea, linee guida 72 ore (3/11/2026)
     source: 'Ready.gov · Commissione UE',
+    sources: [
+      { n: 'Ready.gov – Animali domestici (evacuare con gli animali, rifugi che non li accettano, microchip, kit, trasportino)', u: 'https://www.ready.gov/pets' },
+    ],
     readTime: '3 min',
     quickRef: [
       'Se devi evacuare, porta con te anche gli animali: non lasciarli chiusi in casa',
@@ -853,6 +883,9 @@ const GUIDES_DATA = [
     category: 'casa',
     // Fonte: Ready.gov «Coping with Disaster»
     source: 'Ready.gov',
+    sources: [
+      { n: 'Ready.gov – Affrontare un disastro (parlare dei sentimenti, routine, notizie, quando chiedere aiuto)', u: 'https://www.ready.gov/coping-disaster' },
+    ],
     readTime: '3 min',
     quickRef: [
       'È normale avere paura, rabbia o tristezza: parlarne aiuta',
@@ -900,6 +933,9 @@ const GUIDES_DATA = [
     category: 'casa',
     // Fonti: Ready.gov «People with Disabilities»; Comune di Ravenna, Protezione civile (apparecchi elettromedicali)
     source: 'Ready.gov · Protezione civile',
+    sources: [
+      { n: 'Ready.gov – Persone con disabilità (rete di aiuto, apparecchi a corrente, farmaci in frigo, batterie, carrozzina, trasporto, registro)', u: 'https://www.ready.gov/disability' },
+    ],
     readTime: '3 min',
     quickRef: [
       'Crea una rete di persone che possano aiutarti e di\' loro dove sono le tue scorte',
