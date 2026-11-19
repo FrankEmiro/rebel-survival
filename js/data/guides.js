@@ -160,7 +160,7 @@ const GUIDES_DATA = [
       },
       {
         heading: 'Qualità e purificazione',
-        content: 'L\'acqua piovana raccolta dal tetto contiene: polvere atmosferica, escrementi di uccelli, residui di tegole/lamiere, possibili metalli pesanti. Non è mai potabile diretta. Trattamento minimo prima del consumo: filtro fisico (sedimenti) + bollitura o candeggina. Per uso irrigazione orto: nessun trattamento necessario — vantaggio enorme.',
+        content: 'L\'acqua piovana raccolta dal tetto contiene: polvere atmosferica, escrementi di uccelli, residui di tegole/lamiere, possibili metalli pesanti. Non è mai potabile diretta. Trattamento minimo prima del consumo: filtro fisico (sedimenti) + bollitura o candeggina. Per irrigare le piante da mangiare il CDC consiglia acqua di rete o in bottiglia: quella piovana raccolta dal tetto può contaminarle. Usala non trattata solo per piante non commestibili.',
       },
       {
         heading: 'Sistema improvvisato in emergenza',
@@ -293,7 +293,7 @@ const GUIDES_DATA = [
           'In Italia la gran parte dei casi di botulismo viene da conserve fatte in casa, soprattutto sott\'olio e non acide (ISS)',
           'Sterilizzare i vasetti vuoti serve solo per l\'igiene: non rende sicura la conserva',
           'Per sott\'olio e sott\'aceto segui passo per passo le «Linee guida per la corretta preparazione delle conserve alimentari in ambito domestico» di ISS e Ministero della Salute',
-          'Gli alimenti poco acidi vanno sterilizzati in pentola a pressione, come indicano le linee guida',
+          'Gli alimenti poco acidi (pH sopra 4,6) non si possono rendere sicuri in casa con la pentola a pressione: non raggiunge le temperature che distruggono le spore del botulino (ISS). Meglio preferire alimenti in vasetti industriali o congelati',
           'Non consumare mai vasetti con il coperchio gonfio, bollicine o odore strano',
         ],
       },
@@ -395,7 +395,7 @@ const GUIDES_DATA = [
           'Svuota l\'acqua, copri con garza o tessuto non tessuto tenuto con elastico',
           'Risciacqua 2 volte al giorno (mattina e sera), tieni il vasetto inclinato per drenare',
           'Giorni 2–3: compaiono i germinelli. Giorni 5–7: pronti da mangiare',
-          'Conserva in frigo (se disponibile) max 3 giorni. Consuma crudi o saltati',
+          'Conserva in frigo (se disponibile) max 3 giorni. Meglio cotti: i germogli crudi sono sconsigliati a bambini, anziani, donne in gravidanza e persone con difese immunitarie basse (FDA)',
           'Semi utilizzabili: lenticchie, piselli, fagioli mungo, ravanello, broccoli, erba medica',
         ],
       },
@@ -1068,7 +1068,7 @@ const GUIDES_DATA = [
           'Base: lana merino o materiale tecnico — MAI cotone (trattiene umidità, raffredda)',
           'Mid: pile, maglione lana, gilet piumino',
           'Outer: giacca antivento impermeabile (blocca convezione)',
-          'Testa: cappello di lana — il 30–40% del calore si disperde dalla testa',
+          'Testa: copri sempre la testa con un cappello di lana',
           'Mani: guanti anche in casa, soprattutto di notte',
           'Piedi: calze di lana + stivali o pantofole isolate — il freddo ai piedi abbassa tutta la temperatura percepita',
         ],
@@ -1108,7 +1108,7 @@ const GUIDES_DATA = [
         heading: 'Trattamento ipotermia lieve',
         steps: [
           'Porta al riparo da vento, pioggia, pavimento freddo — immediatamente',
-          'Rimuovi TUTTI gli indumenti bagnati — tessuto bagnato raffredda 25× più del freddo secco',
+          'Rimuovi TUTTI gli indumenti bagnati — un tessuto bagnato ti raffredda molto più in fretta del freddo secco',
           'Asciuga il corpo completamente con asciugamani asciutti',
           'Avvolgi in coperte asciutte, coperta termica mylar, o sacco a pelo',
           'Bevanda calda dolce (non alcolica): tè, brodo, acqua calda con zucchero',
@@ -1123,7 +1123,7 @@ const GUIDES_DATA = [
           'Muovi il paziente il MENO possibile e MOLTO delicatamente (rischio aritmia)',
           'Orizzontale, mai verticale — il sangue freddo agli arti non deve affluire al cuore di colpo',
           'Coperte da ogni lato incluso sotto (il freddo sale dal suolo)',
-          'Coperta termica mylar: riflette il 90% del calore corporeo residuo',
+          'Coperta termica mylar: riflette parte del calore corporeo',
           'NON somministrare bevande se incosciente — rischio soffocamento',
           'Se assenza di polso e respiro: inizia RCP e continua fino all\'arrivo del 118',
         ],
@@ -1301,7 +1301,7 @@ const GUIDES_DATA = [
       },
       {
         heading: 'Scadenze — la verità',
-        content: 'La data di scadenza garantisce potenza e sicurezza certificate dal produttore. Ricerche militari USA (per le scorte) mostrano che molti farmaci mantengono il 90%+ di efficacia per 10–15 anni oltre la scadenza se conservati correttamente. Eccezioni importanti: insulina (non usare mai scaduta), nitrati per cuore, adrenalina (EpiPen), antibiotici liquidi (solidi sono più stabili), tetracicline (possono diventare tossiche). Regola pratica: farmaci solidi (compresse, capsule) conservati al fresco e buio: considera buoni fino a 2–3 anni oltre la data.',
+        content: 'La data di scadenza garantisce potenza e sicurezza certificate dal produttore. Dopo la scadenza il produttore non garantisce più efficacia e sicurezza: chiedi sempre il parere di un medico o di un farmacista prima di usare un farmaco scaduto. Non usare mai scaduti, in particolare: insulina, nitrati per il cuore, adrenalina (EpiPen), antibiotici.',
       },
     ],
     relatedGuides: ['kit-medico', 'primo-soccorso'],
@@ -1521,7 +1521,7 @@ const GUIDES_DATA = [
           'Antenna: sempre verticale e all\'esterno del corpo — il corpo assorbe il segnale',
           'In città: pareti e solai attenuano il segnale. Usa corridoi e aperture per mantenere linea visiva',
           'Batterie cariche: portata cala significativamente con batterie scariche',
-          'Ripetitore: un walkie-talkie in posizione elevata può funzionare da relé tra due punti',
+          'Posizione elevata: da un punto alto (collina, piano alto) la portata di solito aumenta',
           'Manutenzione: pulisci i contatti delle batterie ogni 3 mesi con alcol isopropilico',
         ],
       },
@@ -1879,14 +1879,14 @@ const GUIDES_DATA = [
       },
       {
         heading: 'Restare al chiuso',
-        content: 'Chiudi porte e finestre, spegni ventilazione e condizionatori. Più muri e più massa ci sono tra te e l\'esterno, meglio è. Resta dentro almeno 24 ore, o finché le autorità non dicono di uscire. Tieni la radio accesa. Il pericolo maggiore è nelle prime ore e cala rapidamente.',
+        content: 'Chiudi porte e finestre, spegni ventilazione e condizionatori. Più muri e più massa ci sono tra te e l\'esterno, meglio è. Resta dentro finché le autorità non dicono di uscire: la Protezione Civile indica, in modo orientativo, fino a 48 ore (Ready.gov indica almeno 24 ore). Tieni la radio accesa. Il pericolo maggiore è nelle prime ore e cala rapidamente.',
       },
       {
         heading: 'Decontaminazione',
         steps: [
           'Togli i vestiti esterni senza scuoterli e mettili in un sacchetto chiuso',
           'Lavati con acqua e sapone, senza strofinare forte, no balsamo',
-          'Lava occhi, naso e orecchie',
+          'Se non puoi fare la doccia, lava comunque con acqua e sapone occhi, orecchie e bocca: un semplice getto d\'acqua sul corpo non basta',
           'Metti vestiti puliti: gli animali fuori vanno lavati prima di entrare',
         ],
       },
@@ -2564,7 +2564,7 @@ const GUIDES_DATA = [
           'CRAUTI: cavolo affettato fine + 20g sale/kg, pressa con mani fino a che produce liquido, metti in vaso, comprimi, copri col liquido stesso',
           'VERDURE FERMENTATE: stessa tecnica per carote, cetrioli, barbabietole, fagiolini',
           'TEMPERATURA: 15–22°C ottimale — in estate va veloce (3–5 giorni), in inverno più lento (2–3 settimane)',
-          'CONTROLLO: il liquido deve sempre coprire le verdure — se affiora muffa bianca in superficie, rimuovila, non gettare tutto',
+          'CONTROLLO: il liquido deve sempre coprire le verdure — se affiora muffa in superficie, scarta tutto (come indicato anche nella guida «Conservazione Alimenti senza Frigo»)',
           'PRONTO: quando ha sapore acidulo piacevole e non sa di "marcio" — la fermentazione attiva lo preserva',
         ],
       },
@@ -2592,11 +2592,11 @@ const GUIDES_DATA = [
     source: 'FM 21-76 · ICAO Distress Signals · Corpo Nazionale Soccorso Alpino (CNSAS)',
     readTime: '4 min',
     quickRef: [
-      'Segnale internazionale di soccorso: 3 segnali qualsiasi a intervalli regolari (3 fischi, 3 fuochi, SOS)',
+      'Segnale internazionale di soccorso: 3 segnali a intervalli regolari (3 fuochi, SOS). In montagna col fischietto: 6 segnali in 10 secondi, pausa di 1 minuto, ripeti (CAI/CNSAS)',
       'Specchio di segnalazione: visibile fino a 16km — più efficace di qualsiasi altro segnale',
       'Fumo di giorno: pneumatici, gomma, plastica fanno fumo NERO visibile; foglie verdi → fumo BIANCO',
       'Mantieni sempre una posizione nota — non vagare senza segnare il percorso',
-      'CNSAS: 118 per emergenze montagna; VHF canale 16 in mare; PLB/EPIRB per localizzazione satellitare',
+      'Se c\'è campo: chiama prima il 112 (dove non esiste il 112, il 118). CNSAS per la montagna; VHF canale 16 in mare; PLB/EPIRB per localizzazione satellitare',
     ],
     sections: [
       {
@@ -2614,9 +2614,9 @@ const GUIDES_DATA = [
       {
         heading: 'Segnali sonori',
         steps: [
-          'FISCHIETTO: 3 fischi brevi + pausa (6 sec) + ripeti — porta a 1–2km in bosco',
+          'FISCHIETTO (richiesta di soccorso in montagna, CAI/CNSAS): 6 fischi in 10 secondi, poi pausa di 1 minuto, e ripeti',
           'Fischietto Fox 40 o Storm (no palla interna — funziona anche bagnato)',
-          'RISPOSTA: 2 fischi = ti abbiamo sentito, stai fermo — 3 fischi = continua a segnalare',
+          'RISPOSTA dei soccorritori: 3 segnali al minuto. Se senti la risposta, continua a segnalare e resta fermo',
           'VOCE: usa SOLO "AIUTO" — non urlare il nome, si disperde. Urla verso il vento, non contro',
           'COLPI SU ALBERO: 3 colpi ritmici con bastone su tronco — trasmette le vibrazioni lontano',
         ],
