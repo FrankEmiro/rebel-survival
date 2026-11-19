@@ -1576,6 +1576,10 @@ const GUIDES_DATA = [
     category: 'mobilita',
     // Fonti: Ready.gov «Build a Kit»; Commissione europea, linee guida 72 ore (3/11/2026); Alertswiss «Piano d'emergenza»
     source: 'Ready.gov · Commissione UE · Alertswiss',
+    sources: [
+      { n: 'Ready.gov – Prepara un kit (fischietto, mascherina, teli e nastro, pinza per le utenze, radio, torcia, primo soccorso, documenti, sacco a pelo, kit al lavoro e in auto)', u: 'https://www.ready.gov/kit' },
+      { n: 'Commissione europea – Linee guida sull\'autonomia di almeno 72 ore (zaino di evacuazione, contanti, radio, power bank)', u: 'https://civil-protection-knowledge-network.europa.eu/system/files/2026-11/sufficiency-of-at-least-72-hours-under-the-eu-preparedness-union-strategy.pdf' },
+    ],
     readTime: '3 min',
     quickRef: [
       'Uno zaino pronto da prendere al volo, in un posto che tutta la famiglia conosce',
@@ -1647,6 +1651,9 @@ const GUIDES_DATA = [
     icon: 'ph-map-trifold',
     category: 'mobilita',
     source: 'OpenStreetMap',
+    sources: [
+      { n: 'Organic Maps – sito ufficiale (mappe offline con dati OpenStreetMap, senza registrazione)', u: 'https://organicmaps.app/' },
+    ],
     readTime: '2 min',
     quickRef: [
       'Scarica le mappe ADESSO — in emergenza la rete è sovraccarica o assente',
@@ -1693,6 +1700,9 @@ const GUIDES_DATA = [
     category: 'mobilita',
     // Fonti: Ready.gov «Evacuation»; Protezione civile «Io non rischio» (piano comunale, istruzioni delle autorità)
     source: 'Ready.gov · Protezione civile',
+    sources: [
+      { n: 'Ready.gov – Evacuazione (seguire le autorità, partire presto, più destinazioni, mezzo serbatoio, niente scorciatoie, cavi a terra)', u: 'https://www.ready.gov/evacuation' },
+    ],
     readTime: '3 min',
     quickRef: [
       'Segui sempre le istruzioni delle autorità (sindaco, Protezione civile): se dicono di andare via, vai',
@@ -1792,6 +1802,10 @@ const GUIDES_DATA = [
     icon: 'ph-shield-slash',
     category: 'comm',
     source: 'Ready.gov (FEMA) · Polizia Postale',
+    sources: [
+      { n: 'Ready.gov – Sicurezza informatica (aggiornamenti, password e verifica in due passaggi, backup cifrati, controllare gli estratti conto, scollegare il dispositivo)', u: 'https://www.ready.gov/cybersecurity' },
+      { n: 'Polizia Postale – Commissariato di P.S. online (segnalazioni e denunce di reati informatici, phishing)', u: 'https://www.commissariatodips.it' },
+    ],
     readTime: '3 min',
     quickRef: [
       'Prima: aggiorna telefono, computer e app; password diverse e verifica in due passaggi',
@@ -1890,6 +1904,10 @@ const GUIDES_DATA = [
     // Fonti: Ready.gov «Home Fires» e «Power Outages»; CPSC «Portable Generator Safety Alert»
     // (carburanti); FEMA «Use generators safely» (vapori)
     source: 'Ready.gov · CPSC · FEMA',
+    sources: [
+      { n: 'Ready.gov – Incendi domestici (rilevatori di fumo su ogni piano, estintore in cucina, candele e stufe lontane dai materiali infiammabili, piano di fuga, porta calda)', u: 'https://www.ready.gov/home-fires' },
+      { n: 'CDC – Monossido di carbonio (generatore solo all\'aperto, a più di 20 piedi da finestre e porte)', u: 'https://www.cdc.gov/carbon-monoxide/about/index.html' },
+    ],
     readTime: '3 min',
     quickRef: [
       'Rilevatori di fumo su ogni piano, cantina compresa. Cambia le pile due volte l\'anno (salvo pile al litio da 10 anni)',
