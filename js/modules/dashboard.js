@@ -272,8 +272,12 @@ const DashboardModule = (() => {
     if (!btn || btn.disabled) return;
     btn.disabled = true;
     btn.innerHTML = '<i class="ph ph-spinner"></i> Download…';
-    await _downloadBatch('kit-resilienza-map', MAP_PACK_PATHS, prog);
-    Storage.set('offline-map', 'done');
+    if (CountryMaps.get() === 'ITA') {
+      await _downloadBatch('kit-resilienza-map', MAP_PACK_PATHS, prog);
+      Storage.set('offline-map', 'done');
+    } else {
+      try { await CountryMaps.load(CountryMaps.get()); } catch (e) { if (prog) prog.textContent = 'Non riuscito: controlla la connessione'; btn.disabled = false; btn.innerHTML = '<i class="ph ph-download-simple"></i> Riprova'; return; }
+    }
     refreshOfflineCard();
   }
 
@@ -285,7 +289,8 @@ const DashboardModule = (() => {
 
   function _buildOfflineCard() {
     const guidesOk = !!Storage.get('offline-guides');
-    const mapOk    = !!Storage.get('offline-map');
+    const mapIso   = CountryMaps.get(), mapIta = mapIso === 'ITA', mapName = CountryMaps.name(mapIso);
+    const mapOk    = CountryMaps.isOffline(mapIso);
     if (guidesOk && mapOk) return '';
 
     const guideItem = guidesOk
@@ -309,13 +314,13 @@ const DashboardModule = (() => {
 
     const mapItem = mapOk
       ? `<div class="op-item op-done">
-          <i class="ph ph-map-trifold"></i><span>Mappa Vettoriale Italia</span>
+          <i class="ph ph-map-trifold"></i><span>Mappa Vettoriale ${mapName}</span>
           <span class="op-ok"><i class="ph ph-check-circle"></i> Offline</span>
         </div>`
       : `<div class="op-item">
           <div class="op-info">
             <i class="ph ph-map-trifold"></i>
-            <div><strong>Mappa Vettoriale Italia</strong><span class="op-size">~42 MB · Comuni + Province</span></div>
+            <div><strong>Mappa Vettoriale ${mapName}</strong><span class="op-size">${mapIta ? '~42 MB · Comuni + Province' : 'pochi MB · Regioni + Province (senza comuni)'}</span></div>
           </div>
           <div class="op-action">
             <span id="op-map-prog" class="op-prog"></span>

@@ -579,6 +579,15 @@ const SettingsModule = (() => {
 
   function _htmlProfilo() { return `
     <div class="card">
+      <h3><i class="ph ph-globe-hemisphere-west"></i> Paese</h3>
+      <div class="form-group">
+        <label for="s-paese">Paese (per la mappa dei confini)</label>
+        <select id="s-paese" onchange="CountryMaps.choose(this.value)">${CountryMaps.options()}</select>
+        <p class="pf-note">Per l'Italia i confini sono già nell'app. Per gli altri paesi vengono scaricati una volta (pochi MB, senza i comuni) e poi restano nel telefono.</p>
+      </div>
+    </div>
+
+    <div class="card">
       <h3><i class="ph ph-users"></i> Composizione Famiglia</h3>
       <div class="form-row">
         <div class="form-group">

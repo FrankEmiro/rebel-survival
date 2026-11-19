@@ -702,19 +702,25 @@ const StrumentiModule = (() => {
     }).addTo(_map);
 
     // Carica regioni e province in parallelo
-    Promise.all([
-      fetch('/js/data/italy-regions.geojson').then(r => r.json()),
-      fetch('/js/data/italy-provinces.geojson').then(r => r.json()),
-    ]).then(([regioni, province]) => {
-      _layerRegioni  = _geoLayer(regioni,  'reg_name',  'map-region-tooltip').addTo(_map);
-      _layerProvince = _geoLayer(province, 'prov_name', 'map-region-tooltip');
+    const iso = CountryMaps.get();
+    const loading = iso === 'ITA'
+      ? Promise.all([
+          fetch('/js/data/italy-regions.geojson').then(r => r.json()),
+          fetch('/js/data/italy-provinces.geojson').then(r => r.json()),
+        ]).then(([r, p]) => ({ r, p, rn: 'reg_name', pn: 'prov_name', comuni: true, l1: 'Regioni', l2: 'Province' }))
+      // altri paesi: confini da geoBoundaries (livello 1 e 2, senza comuni)
+      : CountryMaps.load(iso).then(c => (c.adm1
+          ? { r: c.adm1, p: c.adm2, rn: 'shapeName', pn: 'shapeName', comuni: false, l1: 'Regioni / Stati', l2: 'Province / Distretti' }
+          : { r: c.adm2, p: null, rn: 'shapeName', pn: 'shapeName', comuni: false, l1: 'Province / Distretti', l2: '' }));
+    loading.then(({ r: regioni, p: province, rn, pn, comuni, l1, l2 }) => {
+      _layerRegioni  = _geoLayer(regioni,  rn, 'map-region-tooltip').addTo(_map);
+      _layerProvince = province ? _geoLayer(province, pn, 'map-region-tooltip') : null;
+      if (!comuni) { try { _map.fitBounds(_layerRegioni.getBounds()); } catch (e) {} }
 
       // Layer control — base + overlays
-      const overlays = {
-        '<span class="map-lbl">Regioni</span>':  _layerRegioni,
-        '<span class="map-lbl">Province</span>': _layerProvince,
-        '<span class="map-lbl">Comuni <small>(zoom 10+)</small></span>': _dummyComuniLayer(),
-      };
+      const overlays = { [`<span class="map-lbl">${l1}</span>`]: _layerRegioni };
+      if (_layerProvince) overlays[`<span class="map-lbl">${l2}</span>`] = _layerProvince;
+      if (comuni) overlays['<span class="map-lbl">Comuni <small>(zoom 10+)</small></span>'] = _dummyComuniLayer();
       L.control.layers({ 'OSM': _layerOSM }, overlays, { collapsed: false, position: 'topright' }).addTo(_map);
 
       // Attiva/disattiva comuni in base allo zoom e al toggle

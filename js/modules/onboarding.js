@@ -34,7 +34,7 @@ const OnboardingModule = (() => {
     { key: 'montagna', icon: 'ph-mountains', label: 'Montagna / molto freddo', desc: 'Sotto -10 °C in inverno', vals: { temp_min: -12, temp_max: 26, ri_zona: 'f' } },
   ];
 
-  const STEPS = ['persone', 'casa', 'clima', 'scenario', 'scorte'];
+  const STEPS = ['paese', 'persone', 'casa', 'clima', 'scenario', 'scorte'];
 
   let step = 0;
   let data = {};
@@ -52,6 +52,7 @@ const OnboardingModule = (() => {
     step = 0;
     const p = SettingsModule.get();
     data = {
+      paese: CountryMaps.get(),
       adulti: p.adulti || 2, bambini: p.bambini || 0, anziani: p.anziani || 0,
       ha_neonato: !!p.ha_neonato, mobilita_ridotta: !!p.mobilita_ridotta, ha_animali: !!p.ha_animali,
       shelter_key: p.riparo_materiale === 'veicolo' ? 'auto' : (p.tipo_abitazione || 'casa'),
@@ -96,6 +97,10 @@ const OnboardingModule = (() => {
 
   function _body() {
     switch (STEPS[step]) {
+      case 'paese':
+        return `<h2>In che paese ti trovi?</h2>
+          <p class="ob-sub">Serve per la mappa dei confini (regioni e province). Le guide restano le stesse. Puoi cambiarlo dopo in Impostazioni.</p>
+          <select class="ob-select" aria-label="Paese" onchange="OnboardingModule._set('paese', this.value, true)">${CountryMaps.options(data.paese)}</select>`;
       case 'persone':
         return `<h2>Quante persone siete?</h2>
           <p class="ob-sub">Servono per calcolare quanta acqua e cibo ti servono.</p>
@@ -228,7 +233,8 @@ const OnboardingModule = (() => {
   }
 
   function _finish() {
-    const { shelter_key, show_all_scenari, clima_key, ha_auto, ...rest } = data;
+    const { shelter_key, show_all_scenari, clima_key, ha_auto, paese, ...rest } = data;
+    CountryMaps.choose(paese || CountryMaps.get());
     const sh = ALL_SHELTERS.find(x => x.key === shelter_key) || ALL_SHELTERS[1];
     const profilo = { ...SettingsModule.get(), ...rest, tipo_abitazione: sh.tipo, ...(sh.extra || {}) };
     // Senza veicolo: niente carburante né task di mobilità su strada

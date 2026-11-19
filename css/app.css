@@ -3270,6 +3270,7 @@ input, select, textarea { font-family: 'Nunito', sans-serif; font-size: 1rem; }
   border: 1px solid var(--border-accent); background: var(--bg-card); color: var(--text-primary);
   font-family: 'JetBrains Mono', monospace; }
 .ob-num:focus { outline: none; border-color: var(--accent); }
+.ob-select { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border-accent); background: var(--bg-card); color: var(--text-primary); font-size: 1rem; }
 .ob-options { display: flex; flex-direction: column; gap: 8px; }
 .ob-opt { display: flex; align-items: center; gap: 10px; text-align: left; width: 100%;
   padding: 12px; border-radius: var(--radius); border: 1px solid var(--border);
