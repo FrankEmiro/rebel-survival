@@ -23,7 +23,7 @@ const WikiModule = (() => {
     { key: 'all_maxi',       label: 'Tutta Wikipedia — completa',             desc: 'Tutte le voci con immagini. Serve molto spazio.' },
   ];
   // se non c'è internet per leggere l'elenco aggiornato (date e dimensioni del 15/11/2026)
-  const FALLBACK = {
+  const FALLBACK_IT = {
     medicine_nopic: ['wikipedia_it_medicine_nopic_2026-10.zim', '98M'],
     top_mini:       ['wikipedia_it_top_mini_2026-10.zim', '114M'],
     medicine_maxi:  ['wikipedia_it_medicine_maxi_2026-10.zim', '261M'],
@@ -33,8 +33,19 @@ const WikiModule = (() => {
     all_nopic:      ['wikipedia_it_all_nopic_2026-08.zim', '8.4G'],
     all_maxi:       ['wikipedia_it_all_maxi_2026-08.zim', '30G'],
   };
+  // inglese: solo i pacchetti piccoli e medi (i «tutta Wikipedia» pesano da 13 a 119 GB)
+  const FALLBACK_EN = {
+    medicine_nopic: ['wikipedia_en_medicine_nopic_2026-10.zim', '1.0G'],
+    top_mini:       ['wikipedia_en_top_mini_2026-09.zim', '283M'],
+    medicine_maxi:  ['wikipedia_en_medicine_maxi_2026-10.zim', '1.7G'],
+    top_nopic:      ['wikipedia_en_top_nopic_2026-09.zim', '2.6G'],
+    top_maxi:       ['wikipedia_en_top_maxi_2026-09.zim', '6.5G'],
+  };
+  const LANGS = { it: { name: 'Italiano', fb: FALLBACK_IT, keys: null }, en: { name: 'Inglese', fb: FALLBACK_EN, keys: Object.keys(FALLBACK_EN) } };
+  const getLang = () => (Storage.get('wiki-lang') === 'en' ? 'en' : 'it');
+  const flavoursOf = lang => FLAVOURS.filter(f => !LANGS[lang].keys || LANGS[lang].keys.includes(f.key));
 
-  let catalog = null;           // { key: [file, sizeLabel] }
+  let catalog = {};             // lingua → { key: [file, sizeLabel] }
   let busy = null;              // { name, pct, abort }
   let reader = null;            // { name, z, title, history: [], urls: [] }
   const esc = s => Utils.escapeHtml(String(s ?? ''));
@@ -74,27 +85,29 @@ const WikiModule = (() => {
   }
 
   /* ── elenco pacchetti disponibili ── */
-  async function loadCatalog() {
-    if (catalog) return catalog;
-    catalog = Storage.get('wiki-catalog') || { ...FALLBACK };
-    if (!navigator.onLine) return catalog;
+  async function loadCatalog(lang = getLang()) {
+    if (catalog[lang]) return catalog[lang];
+    const skey = lang === 'it' ? 'wiki-catalog' : 'wiki-catalog-' + lang;
+    catalog[lang] = Storage.get(skey) || { ...LANGS[lang].fb };
+    if (!navigator.onLine) return catalog[lang];
     try {
       const html = await (await fetch(LIST_URL, { cache: 'no-store' })).text();
       const found = {};
-      const re = /(wikipedia_it_([a-z]+_[a-z]+)_(\d{4}-\d{2})\.zim)<\/a>\s+\S+\s+\S+\s+(\S+)/g;
+      const re = new RegExp('(wikipedia_' + lang + '_([a-z]+_[a-z]+)_(\\d{4}-\\d{2})\\.zim)<\\/a>\\s+\\S+\\s+\\S+\\s+(\\S+)', 'g');
       let m;
       while ((m = re.exec(html))) {
         const [, file, key, date, size] = m;
-        if (!FLAVOURS.some(f => f.key === key)) continue;
+        if (!flavoursOf(lang).some(f => f.key === key)) continue;
         if (!found[key] || found[key][2] < date) found[key] = [file, size, date];
       }
       if (Object.keys(found).length) {
-        catalog = {};
-        Object.entries(found).forEach(([k, v]) => { catalog[k] = [v[0], v[1]]; });
-        Storage.set('wiki-catalog', catalog);
+        const c = {};
+        Object.entries(found).forEach(([k, v]) => { c[k] = [v[0], v[1]]; });
+        catalog[lang] = c;
+        Storage.set(skey, c);
       }
     } catch (e) { /* resta l'elenco salvato */ }
-    return catalog;
+    return catalog[lang];
   }
   const sizeLabel = s => String(s).replace(/G$/, ' GB').replace(/M$/, ' MB').replace('.', ',');
   const dateOf = file => (file.match(/_(\d{4})-(\d{2})\.zim$/) || []).slice(1).reverse().join('/');
@@ -121,10 +134,11 @@ const WikiModule = (() => {
     } finally { clearTimeout(timer); signal.removeEventListener('abort', stop); }
   }
 
-  async function download(key) {
+  async function download(key, lang = getLang()) {
     if (busy) return;
-    const cat = await loadCatalog();
-    const [file] = cat[key] || FALLBACK[key];
+    if (!LANGS[lang]) lang = 'it';
+    const cat = await loadCatalog(lang);
+    const [file] = cat[key] || LANGS[lang].fb[key];
     const name = file.replace(/\.zim$/, ''), url = FILE_URL + file;
     const ac = new AbortController();
     busy = { name, pct: 0, abort: () => ac.abort(), msg: 'Preparo il download…' };
@@ -143,7 +157,7 @@ const WikiModule = (() => {
         const total = +((res.headers.get('Content-Range') || '').split('/')[1] || 0);
         if (res.status !== 206 || !total) throw new Error('il server non risponde come previsto');
         const fl = FLAVOURS.find(f => f.key === key);
-        meta = { url, file, key, label: fl ? fl.label : file, total, n: Math.ceil(total / SIZE), done: false };
+        meta = { url, file, key, lang, label: (fl ? fl.label : file) + (lang === 'en' ? ' (inglese)' : ''), total, n: Math.ceil(total / SIZE), done: false };
         await writeFile(d, 'meta.json', new Blob([JSON.stringify(meta)]));
       }
       const est = await navigator.storage.estimate?.();
@@ -415,9 +429,10 @@ const WikiModule = (() => {
       root.innerHTML = `<div class="alert alert-info"><i class="ph ph-info"></i><div>Wikipedia offline non è disponibile qui${window.RS_OFFLINE_COPY ? ' (copia offline)' : ''}: usa l'app installata o un browser recente.</div></div>`;
       return;
     }
-    const [mine, cat, est] = await Promise.all([books(), loadCatalog(), navigator.storage.estimate?.().catch(() => null)]);
+    const lang = getLang();
+    const [mine, cat, est] = await Promise.all([books(), loadCatalog(lang), navigator.storage.estimate?.().catch(() => null)]);
     const free = est && est.quota ? fmt(est.quota - est.usage) : null;
-    const byKey = {}; mine.forEach(b => { if (b.meta.key) byKey[b.meta.key] = b; });
+    const byKey = {}; mine.forEach(b => { if (b.meta.key && (b.meta.lang || 'it') === lang) byKey[b.meta.key] = b; });
     root.innerHTML = `
       ${message ? `<div class="alert alert-info mb-12"><i class="ph ph-info"></i><div>${esc(message)}</div></div>` : ''}
       <p class="pf-note"><i class="ph ph-wifi-slash"></i> Scarica ora, con internet, le parti di Wikipedia che ti servono: poi le leggi anche senza rete. Nessun pacchetto è scaricato di base.${free ? ` Spazio libero per l'app: <strong>${free}</strong>.` : ''}</p>
@@ -433,17 +448,20 @@ const WikiModule = (() => {
           <div><strong>${esc(b.meta.label)}</strong><div class="pf-note">${fmt(b.meta.total)}${b.meta.done ? '' : ' · incompleto'}</div></div>
           <div class="flex gap-8">
             ${b.meta.done ? `<button class="btn btn-sm" onclick="WikiModule.openBook('${esc(b.name)}')"><i class="ph ph-book-open"></i> Apri</button>`
-              : (b.meta.key && !busy ? `<button class="btn btn-sm" onclick="WikiModule.download('${b.meta.key}')"><i class="ph ph-play"></i> Riprendi</button>` : '')}
+              : (b.meta.key && !busy ? `<button class="btn btn-sm" onclick="WikiModule.download('${b.meta.key}','${b.meta.lang || 'it'}')"><i class="ph ph-play"></i> Riprendi</button>` : '')}
             ${busy ? '' : `<button class="btn btn-outline btn-sm" onclick="WikiModule.remove('${esc(b.name)}')" aria-label="Elimina"><i class="ph ph-trash"></i></button>`}
           </div></div>`).join('')}` : ''}
       <h2 class="pf-group-title">Pacchetti disponibili</h2>
-      ${FLAVOURS.filter(f => cat[f.key]).map(f => {
+      <div class="pf-note mb-8">Lingua di Wikipedia:
+        ${Object.keys(LANGS).map(l => `<button class="btn btn-sm ${l === lang ? '' : 'btn-outline'}" ${busy ? 'disabled' : ''} onclick="WikiModule.setLang('${l}')">${LANGS[l].name}</button>`).join(' ')}</div>
+      ${lang === 'en' ? '<p class="pf-note">In inglese ci sono solo i pacchetti piccoli e medi: «Tutta Wikipedia» pesa da 13 a 119 GB, troppo per un telefono.</p>' : ''}
+      ${flavoursOf(lang).filter(f => cat[f.key]).map(f => {
         const [file, size] = cat[f.key];
         const has = byKey[f.key] && byKey[f.key].meta.file === file;
         return `<div class="card wiki-book">
           <div><strong>${esc(f.label)}</strong><div class="pf-note">${esc(f.desc)} · ${sizeLabel(size)} · aggiornato ${dateOf(file)}</div></div>
           ${has ? '<span class="pf-note">già presente</span>'
-            : `<button class="btn btn-sm" ${busy || !navigator.onLine ? 'disabled' : ''} onclick="WikiModule.download('${f.key}')"><i class="ph ph-download-simple"></i> Scarica</button>`}
+            : `<button class="btn btn-sm" ${busy || !navigator.onLine ? 'disabled' : ''} onclick="WikiModule.download('${f.key}','${lang}')"><i class="ph ph-download-simple"></i> Scarica</button>`}
         </div>`;
       }).join('')}
       <div class="pf-actions mt-12">
@@ -452,9 +470,11 @@ const WikiModule = (() => {
       <p class="pf-note">Contenuti di Wikipedia, licenza CC BY-SA 4.0. Pacchetti preparati da Kiwix (kiwix.org). Wikipedia non è una fonte ufficiale.</p>`;
   }
 
+  function setLang(l) { if (busy || !LANGS[l]) return; Storage.set('wiki-lang', l); render(); }
+
   function stop() { if (busy) busy.abort(); }
 
   function init() { if (!reader) render(); }
 
-  return { _openSource, init, download, importFile, remove, openBook, back, home, library, stop, _search, _pick };
+  return { _openSource, init, setLang, download, importFile, remove, openBook, back, home, library, stop, _search, _pick };
 })();
