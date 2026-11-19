@@ -60,6 +60,14 @@ const I18n = (() => {
   function init() {
     document.documentElement.lang = lang;
     if (lang === 'it') return;
+    // Pagine legali: in inglese i link aprono la versione inglese (legal/en/)
+    const LEGAL_EN = { 'privacy.html': 'privacy.html', 'condizioni.html': 'terms.html', 'licenze.html': 'licenses.html' };
+    document.addEventListener('click', e => {
+      const a = e.target.closest && e.target.closest('a[href^="/legal/"]');
+      if (!a) return;
+      const m = a.getAttribute('href').match(/^\/legal\/([a-z]+\.html)$/);
+      if (m && LEGAL_EN[m[1]]) a.setAttribute('href', '/legal/en/' + LEGAL_EN[m[1]]);
+    }, true);
     const meta = document.querySelector('meta[name="description"]');
     if (meta) { const r = tr(meta.content); if (r) meta.content = r.trim(); }
     const tt = tr(document.title); if (tt) document.title = tt.trim();

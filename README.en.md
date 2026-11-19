@@ -22,7 +22,7 @@
   <a href="https://github.com/FrankEmiro/rebel-survival/releases/latest"><b>⬇ Download for Android</b></a>
 </p>
 
-> 🏴 **Rebel Survival is a [Cyber Rebellion](https://cyberrebellion.site/en/) project.** The app is free and its code is public. The app and its guides are available in **Italian and English** (choose at first start or in Profile) and draw on Italian official sources where possible. In English the guide diagrams are hidden because they contain Italian text; the legal pages, the Civil Protection PDF guides and the screenshots here are in Italian. Ideas, bug reports and corrections to the guides are welcome in the [issues](https://github.com/FrankEmiro/rebel-survival/issues).
+> 🏴 **Rebel Survival is a [Cyber Rebellion](https://cyberrebellion.site/en/) project.** The app is free and its code is public. The app and its guides are available in **Italian and English** (choose at first start or in Profile) and draw on Italian official sources where possible. In English the guide diagrams are hidden because they contain Italian text; the Civil Protection PDF guides and the screenshots here are in Italian. The legal pages have an English translation (the Italian text prevails). Ideas, bug reports and corrections to the guides are welcome in the [issues](https://github.com/FrankEmiro/rebel-survival/issues).
 
 ## The problem
 
