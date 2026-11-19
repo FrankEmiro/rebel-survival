@@ -988,6 +988,9 @@ const GUIDES_DATA = [
     icon: 'ph-house-line',
     category: 'calore',
     source: 'FEMA · FM 21-76',
+    sources: [
+      { n: 'Ready.gov – Maltempo invernale (isolare la casa con guarnizioni e sigillanti; rilevatori di CO; mai il forno a gas per scaldare)', u: 'https://www.ready.gov/winter-weather' },
+    ],
     readTime: '3 min',
     quickRef: [
       'Isola UNA sola stanza — quella più piccola, con meno finestre, esposta a sud',
@@ -1031,6 +1034,10 @@ const GUIDES_DATA = [
     icon: 'ph-flame',
     category: 'calore',
     source: 'FM 21-76 · FEMA',
+    sources: [
+      { n: 'CDC – Monossido di carbonio (mai scaldare con il forno a gas; generatore solo all\'aperto; sintomi; rilevatori a batteria)', u: 'https://www.cdc.gov/carbon-monoxide/about/index.html' },
+      { n: 'Ready.gov – Maltempo invernale (rilevatori di CO su ogni piano; mai fornelli o forno a gas per scaldare)', u: 'https://www.ready.gov/winter-weather' },
+    ],
     readTime: '4 min',
     quickRef: [
       'Stufa legna/pellet: buona soluzione, ma produce anche lei monossido di carbonio (CO): canna fumaria pulita e controlli del tecnico',
@@ -1081,6 +1088,9 @@ const GUIDES_DATA = [
     icon: 'ph-snowflake',
     category: 'calore',
     source: 'FM 4-25.11 · FM 21-76',
+    sources: [
+      { n: 'CDC – Prevenire i problemi del freddo (segni di ipotermia, togliere i vestiti bagnati, bevande calde senza alcol, RCP; sotto 35 °C è emergenza)', u: 'https://www.cdc.gov/winter-weather/prevention/index.html' },
+    ],
     readTime: '3 min',
     quickRef: [
       'Ipotermia lieve (33–36°C): brividi forti — riparo, asciugatura, bevanda calda dolce',
@@ -1193,6 +1203,9 @@ const GUIDES_DATA = [
     icon: 'ph-heart',
     category: 'medico',
     source: 'FM 4-25.11 · IRC',
+    sources: [
+      { n: 'Resuscitation Council UK – Linee guida 2025 sul supporto di base delle funzioni vitali (compressioni 5–6 cm, 100–120 al minuto, 30:2, solo compressioni se non addestrati)', u: 'https://www.resus.org.uk/professional-library/2025-resuscitation-guidelines/adult-basic-life-support-guidelines' },
+    ],
     readTime: '5 min',
     quickRef: [
       'ABCDE: Airway (vie aeree) → Breathing → Circulation → Disability → Exposure',
@@ -1303,6 +1316,10 @@ const GUIDES_DATA = [
     category: 'comm',
     // Fonti: Ready.gov «Make a Plan» ed «Evacuation»; Alertswiss «Piano d'emergenza»; FCC/FEMA (SMS)
     source: 'Ready.gov · Alertswiss · FCC/FEMA',
+    sources: [
+      { n: 'Ready.gov – Fai un piano (domande su allerte, riparo, evacuazione; luogo di ritrovo; contatti; provare il piano)', u: 'https://www.ready.gov/plan' },
+      { n: 'FCC/FEMA – Consigli per comunicare in emergenza (SMS quando la chiamata non passa, chiamate brevi)', u: 'https://docs.fcc.gov/public/attachments/DOC-309723A1.pdf' },
+    ],
     readTime: '3 min',
     quickRef: [
       'Decidete prima come vi contattate e dove vi ritrovate se siete separati',
@@ -1365,6 +1382,11 @@ const GUIDES_DATA = [
     // Fonti: Alertswiss «Piano d'emergenza»; Commissione europea, linee guida 72 ore (3/11/2026);
     // FCC/FEMA (SMS quando la chiamata non passa); Comune di Ravenna, Protezione civile; Energy.gov
     source: 'Alertswiss · Commissione UE · FCC/FEMA · Protezione civile',
+    sources: [
+      { n: 'Commissione europea – Linee guida sull\'autonomia di almeno 72 ore (radio a batterie, contanti, piano di famiglia, informazioni quando i servizi non funzionano)', u: 'https://civil-protection-knowledge-network.europa.eu/system/files/2026-11/sufficiency-of-at-least-72-hours-under-the-eu-preparedness-union-strategy.pdf' },
+      { n: 'FCC/FEMA – Consigli per comunicare in emergenza (SMS, chiamate brevi, rete congestionata)', u: 'https://docs.fcc.gov/public/attachments/DOC-309723A1.pdf' },
+      { n: 'Protezione Civile – Vademecum «Protezione civile in famiglia» (radio a pile, telefono solo per emergenza)', u: 'https://www.protezionecivile.gov.it/static/40f6aa132a339e223934865d7a37341d/vademecum_pc_ita.pdf' },
+    ],
     readTime: '3 min',
     quickRef: [
       'Le notizie e le istruzioni delle autorità arrivano via radio: tieni una radio a pile (FM, meglio anche DAB+)',
@@ -1464,6 +1486,9 @@ const GUIDES_DATA = [
     icon: 'ph-broadcast',
     category: 'comm',
     source: 'ETSI · Protezione Civile',
+    sources: [
+      { n: 'CEPT/ECC – Decisione ECC/DEC/(15)05 sul PMR446 (banda armonizzata 446,0–446,2 MHz, esenzione dalla licenza individuale)', u: 'https://docdb.cept.org/document/448' },
+    ],
     readTime: '3 min',
     quickRef: [
       'PMR446: libero da licenza in Europa, 16 canali analogici dal 2016 (i modelli più vecchi ne hanno 8), max 0,5 W',
@@ -1816,6 +1841,10 @@ const GUIDES_DATA = [
     icon: 'ph-radioactive',
     category: 'medico',
     source: 'Protezione Civile · FEMA Ready.gov · CDC',
+    sources: [
+      { n: 'Protezione Civile – Rischio radiologico e nucleare: cosa sapere e cosa fare (riparo al chiuso, finestre e aerazione spente, seminterrato, vestiti in sacchetto, iodoprofilassi solo su indicazione)', u: 'https://www.protezionecivile.gov.it/static/80faded4b853f0b5254a184defc3ebc2/nucleare-sintesi.pdf' },
+      { n: 'Ready.gov – Esplosione nucleare (resta dentro, 24 ore, togliere gli abiti esterni, lavarsi, animali)', u: 'https://www.ready.gov/nuclear-explosion' },
+    ],
     readTime: '3 min',
     quickRef: [
       'Entra, resta dentro, ascolta: tre azioni che salvano più vite',
