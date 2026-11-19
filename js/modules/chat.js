@@ -242,7 +242,7 @@ const ChatModule = (() => {
     save();
     state.to = 'all';
     sosBusy = false;
-    note = 'SOS inviato ai telefoni vicini. Il Bluetooth ha poca portata: non è detto che qualcuno lo riceva. Se puoi, chiama il 112.';
+    note = 'SOS inviato ai telefoni vicini. Il Bluetooth ha poca portata: non è detto che qualcuno lo riceva. Se puoi, chiama il ' + EMG() + '.';
     render();
   }
   function sosFire() {
@@ -267,7 +267,7 @@ const ChatModule = (() => {
   const BOARD_TTL_MS = 24 * 3600 * 1000;       // un annuncio sparisce dopo 24 ore
   const BOARD_REPEAT_MS = 10 * 60 * 1000;      // chi pubblica lo rilancia ogni 10 minuti
   const BOARD_CATS = ['Acqua', 'Cibo', 'Medicine', 'Generatore', 'Carburante', 'Attrezzi', 'Ricovero', 'Trasporto', 'Aiuto manuale', 'Altro'];
-  const MED_NOTE = 'Medicine: non prendere farmaci ricevuti da sconosciuti senza il parere di un medico o di un farmacista. Per un\'emergenza chiama il 112 o il 118.';
+  const MED_NOTE = () => 'Medicine: non prendere farmaci ricevuti da sconosciuti senza il parere di un medico o di un farmacista. Per un\'emergenza chiama il ' + EMG() + '.';
   const BOARD_RE = /^📋 (OFFRO|CERCO) — ([^—\n]{1,30}) — ([^\n]{0,120}?) \(rif\. ([a-z0-9]{6})\)$/;
   const RESOLVED_RE = /^✅ RISOLTO \(rif\. ([a-z0-9]{6})\)$/;
   let board = [], hidden = { items: [], senders: [] }, tab = 'msg', boardMsg = '';
@@ -334,18 +334,18 @@ const ChatModule = (() => {
     const row = b => `<div class="chat-msg bb-item${b.done ? ' bb-done' : ''}">
         <div class="chat-meta"><strong>${b.kind === 'offro' ? 'OFFRO' : 'CERCO'}</strong> · ${esc(b.cat)} · ${b.mine ? 'Tu' : esc(b.nick || peerNick(b.from))} · ${time(b.ts)}${b.done ? ' · risolto' : ''}</div>
         <div class="chat-text">${esc(b.text)}</div>
-        ${b.cat === 'Medicine' ? `<div class="chat-meta">${esc(MED_NOTE)}</div>` : ''}
+        ${b.cat === 'Medicine' ? `<div class="chat-meta">${esc(MED_NOTE())}</div>` : ''}
         <div class="bb-actions">${b.mine
           ? (b.done ? '' : `<button class="chat-peer" onclick="ChatModule.boardDone('${esc(b.rif)}')">Segna come risolto</button>`)
           : `<button class="chat-peer" onclick="ChatModule.boardHide('${esc(boardKey(b))}')">Nascondi</button><button class="chat-peer" onclick="ChatModule.boardHideSender('${esc(b.from)}')">Nascondi questa persona</button>`}</div>
       </div>`;
     const col = (k, t) => { const l = items.filter(b => b.kind === k); return `<h4 class="bb-h">${t} (${l.length})</h4>` + (l.length ? l.map(row).join('') : '<p class="pf-note">Nessun annuncio.</p>'); };
-    return `<div class="chat-warn"><i class="ph ph-info"></i> <span>Gli annunci li vede chiunque sia vicino e durano 24 ore. Il nome è scelto da chi scrive e può essere falso: non scrivere indirizzi precisi né dati personali, e non fidarti ciecamente. Non sostituisce il 112.</span></div>
+    return `<div class="chat-warn"><i class="ph ph-info"></i> <span>Gli annunci li vede chiunque sia vicino e durano 24 ore. Il nome è scelto da chi scrive e può essere falso: non scrivere indirizzi precisi né dati personali, e non fidarti ciecamente. Non sostituisce il ${EMG()}.</span></div>
       <div class="bb-form">
         <select id="bb-kind"><option value="cerco">Cerco</option><option value="offro">Offro</option></select>
         <select id="bb-cat" onchange="ChatModule.boardMedWarn()">${BOARD_CATS.map(c => `<option>${c}</option>`).join('')}</select>
         <input id="bb-text" type="text" maxlength="100" placeholder="Quanto e che cosa (es. 20 litri, zona piazza)">
-        <p id="bb-med" class="chat-error" style="display:none">${esc(MED_NOTE)}</p>
+        <p id="bb-med" class="chat-error" style="display:none">${esc(MED_NOTE())}</p>
         <button class="btn btn-primary" onclick="ChatModule.boardPost()"><i class="ph ph-megaphone"></i> Pubblica</button>
       </div>
       ${boardMsg ? `<p class="chat-error"><i class="ph ph-info"></i> ${esc(boardMsg)}</p>` : ''}
@@ -370,7 +370,7 @@ const ChatModule = (() => {
         Usa il Bluetooth: arriva a chi è vicino, e i messaggi possono passare di telefono in telefono attraverso altre persone con la chat accesa.
         Funziona solo con l'app aperta. È compatibile con l'app <em>bitchat</em>.
         I messaggi a «Tutti i vicini» li può leggere chiunque sia vicino; quelli a una persona sono cifrati.
-        Puoi inviare anche foto, messaggi vocali e piccoli file (lenti via Bluetooth). Non sostituisce il 112.</span></div>
+        Puoi inviare anche foto, messaggi vocali e piccoli file (lenti via Bluetooth). Non sostituisce il ${EMG()}.</span></div>
       <div class="chat-bar" id="chat-bar"></div>
       <div id="chat-err"></div>
       <label class="chat-nick">Il tuo nome nella chat

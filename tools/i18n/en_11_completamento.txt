@@ -1159,3 +1159,13 @@ DURANTE ||| DURING
 PREALLARME ||| PRE-ALERT
 SUBITO ||| IMMEDIATELY
 FUOCO ||| FIRE
+Ambulanza ||| Ambulance
+Vigili del Fuoco ||| Fire Brigade
+Polizia ||| Police
+Guardia Costiera ||| Coast Guard
+Emergenza ambientale ||| Environmental emergency
+Altro numero ||| Other number
+(e 115, 118 se serve) ||| (and 115, 118 if needed)
+e segui le istruzioni della Protezione Civile e delle autorità sanitarie. ||| and follow the instructions of Civil Protection and the health authorities.
+Per questo paese non ho un numero di emergenza verificato: cerca quello ufficiale e salvalo con «Aggiungi un tuo numero». ||| For this country I do not have a verified emergency number: look up the official one and save it with "Add your own number".
+In pericolo? Chiama subito il numero di emergenza locale. ||| In danger? Call the local emergency number right away.

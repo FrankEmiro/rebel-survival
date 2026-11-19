@@ -154,8 +154,8 @@ const AssistenteModule = (() => {
 
   function _caution(c) {
     if (c.kind !== 'guide' || typeof GUIDE_CAUTION === 'undefined' || !GUIDE_CAUTION[c.id]) return '';
-    if (GUIDE_CAUTION[c.id] === 'alto') return `<div class="as-caution as-caution-high"><i class="ph ph-warning-octagon"></i> <strong>RISCHIO ALTO.</strong> Questa risposta viene da una guida NON verificata su fonti ufficiali e un errore può causare avvelenamento, danni gravi o morte. NON agire solo su questa base: nel dubbio non mangiare, non usare e non dare nulla a nessuno, e chiama il 112.</div>`;
-    return `<div class="as-caution as-caution-high"><i class="ph ph-warning"></i> <strong>ATTENZIONE: guida NON verificata.</strong> Le indicazioni non sono state controllate su fonti ufficiali e, se applicate male, possono essere pericolose. Usale solo come orientamento, non come unica fonte, e segui sempre le istruzioni delle autorità. Nel dubbio chiama il 112.</div>`;
+    if (GUIDE_CAUTION[c.id] === 'alto') return `<div class="as-caution as-caution-high"><i class="ph ph-warning-octagon"></i> <strong>RISCHIO ALTO.</strong> Questa risposta viene da una guida NON verificata su fonti ufficiali e un errore può causare avvelenamento, danni gravi o morte. NON agire solo su questa base: nel dubbio non mangiare, non usare e non dare nulla a nessuno, e chiama il ${EMG()}.</div>`;
+    return `<div class="as-caution as-caution-high"><i class="ph ph-warning"></i> <strong>ATTENZIONE: guida NON verificata.</strong> Le indicazioni non sono state controllate su fonti ufficiali e, se applicate male, possono essere pericolose. Usale solo come orientamento, non come unica fonte, e segui sempre le istruzioni delle autorità. Nel dubbio chiama il ${EMG()}.</div>`;
   }
 
   function _card(c) {
@@ -232,7 +232,7 @@ const AssistenteModule = (() => {
         <ul>
           <li>Risponde con quello che "sa" il modello, <b>non con le guide</b> dell'app.</li>
           <li>È un modello molto piccolo: <b>può sbagliare o inventare</b> numeri, dosi, distanze, procedure e fatti, anche con tono sicuro.</li>
-          <li><b>Non usarla</b> per decisioni su salute e sicurezza: per quelle segui le guide e le autorità. In pericolo chiama il 112.</li>
+          <li><b>Non usarla</b> per decisioni su salute e sicurezza: per quelle segui le guide e le autorità. In pericolo chiama il ${EMG()}.</li>
         </ul>
         <div class="as-ai-btns"><button class="as-open" onclick="AssistenteModule.acceptFree(true)">Ho capito, attiva</button>
           <button class="as-link" onclick="AssistenteModule.acceptFree(false)">Annulla</button></div>
@@ -422,7 +422,7 @@ const AssistenteModule = (() => {
   function _unknownNumbers(answer, source, partial) {
     let t = String(answer).replace(/^\s*\d+[.)]\s/gm, ' ').replace(/\[\d+\]/g, ' ');
     if (partial) t = t.replace(/\d+(?:[.,]\d*)?$/, '');   // numero ancora in scrittura
-    const ok = new Set([..._numbers(source), '112']);
+    const ok = new Set([..._numbers(source), '112', ...Object.values(CountryMaps.emergency()).filter(v => /^\d+$/.test(v || ''))]);
     return [...new Set(_numbers(t).filter(n => !ok.has(n)))];
   }
 
@@ -752,7 +752,7 @@ const AssistenteModule = (() => {
     const txt = esc(ai.text.trim()).replace(/\n/g, '<br>') || '…';
     return head + `<p class="as-aitext">${txt}${ai.status === 'run' ? ' <span class="as-cursor">▍</span>' : ''}</p>
       <p class="as-ainote">${ai.free
-        ? 'Risposta libera di un\'AI piccola sul tuo telefono, NON basata sulle guide: può essere sbagliata o inventata. Non usarla per decisioni su salute e sicurezza; in pericolo chiama il 112.'
+        ? 'Risposta libera di un\'AI piccola sul tuo telefono, NON basata sulle guide: può essere sbagliata o inventata. Non usarla per decisioni su salute e sicurezza; in pericolo chiama il ' + EMG() + '.'
         : 'Scritta da un\'AI sul tuo telefono riassumendo il primo passaggio qui sotto. Può sbagliare: controlla sempre i passaggi.'}</p>`;
   }
 
@@ -761,7 +761,7 @@ const AssistenteModule = (() => {
     if (!root) return;
     if (!root.dataset.ready) {
       root.innerHTML = `
-        <div class="as-warn"><i class="ph ph-phone-call"></i> In pericolo? Chiama subito il <a href="tel:112">112</a>.</div>
+        <div class="as-warn"><i class="ph ph-phone-call"></i> In pericolo? Chiama subito il ${EMGLINK()}.</div>
         <div id="as-thread" class="as-thread" aria-live="polite"></div>
         <div id="as-mode" class="as-mode"></div>
         <form class="as-form" onsubmit="return AssistenteModule.submit(event)">

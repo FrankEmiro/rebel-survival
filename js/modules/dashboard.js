@@ -713,8 +713,12 @@ const DashboardModule = (() => {
   function renderEmergency() {
     const root = document.getElementById('emg-root');
     if (!root) return;
-    // 112 sempre in cima: è la prima cosa da poter fare
-    root.innerHTML = `<a class="emg-call emg-call-top" href="tel:112"><i class="ph ph-phone-call"></i> Chiama 112</a>`
+    // Il numero di soccorso del paese sempre in cima: è la prima cosa da poter fare
+    const em = CountryMaps.emergency();
+    root.innerHTML = (em.gen
+        ? `<a class="emg-call emg-call-top" href="tel:${em.gen}"><i class="ph ph-phone-call"></i> Chiama ${em.gen}</a>`
+        : `<p class="emg-note"><i class="ph ph-warning"></i> Per questo paese non ho un numero di emergenza verificato: cerca quello ufficiale e salvalo con «Aggiungi un tuo numero».</p>`)
+      + (em.official ? '' : `<p class="emg-note"><i class="ph ph-info"></i> Numeri indicati per ${_esc(CountryMaps.name())}: controllali su fonti ufficiali del tuo paese. Le guide e i piani dell'app citano per lo più i numeri italiani (112, 118, 115).</p>`)
       + (typeof StrumentiModule !== 'undefined' ? StrumentiModule.quickHtml() : '')
       + _buildEmergency(SettingsModule.get(), SettingsModule.get().scenario_id);
   }
@@ -731,7 +735,7 @@ const DashboardModule = (() => {
   const _extraPhase = p => {
     const azioni = [];
     if (p.mobilita_ridotta) azioni.push(
-      'Chi fa fatica a muoversi: non lasciarlo solo e non usare l\'ascensore. Quando chiami il 112 dillo subito',
+      'Chi fa fatica a muoversi: non lasciarlo solo e non usare l\'ascensore. Quando chiami il ' + EMG() + ' dillo subito',
       'Scegli un percorso senza scale e chiedi aiuto a un vicino prima che serva');
     if (p.ha_neonato) azioni.push(
       'Neonato: tieni a portata latte, biberon, pannolini e una coperta. Usa solo acqua bollita per il latte');
@@ -816,18 +820,15 @@ const DashboardModule = (() => {
           <button type="submit" class="btn btn-primary btn-sm"><i class="ph ph-check"></i> Salva</button>
         </div>
       </form>` : `<button class="emg-add" onclick="DashboardModule.addNumero()"><i class="ph ph-plus"></i> Aggiungi un tuo numero</button>`;
+    const em = CountryMaps.emergency();
+    const lnk = (n, ico, nome) => `<a href="tel:${n}"><i class="ph ph-${ico}"></i> <span>${n}</span> ${nome}</a>`;
+    const main = [em.amb && lnk(em.amb, 'first-aid', 'Ambulanza'), em.fire && lnk(em.fire, 'fire-extinguisher', 'Vigili del Fuoco')].filter(Boolean).join('');
+    const more = (em.official
+      ? [lnk(em.police, 'police-car', 'Polizia'), lnk('1530', 'boat', 'Guardia Costiera'), lnk('1515', 'tree', 'Emergenza ambientale')]
+      : [em.police && lnk(em.police, 'police-car', 'Polizia'), em.alt && lnk(em.alt, 'phone', 'Altro numero')]).filter(Boolean).join('');
     return `<div class="emg-calls">
-      <div class="emg-call-row">
-        <a href="tel:118"><i class="ph ph-first-aid"></i> 118 Ambulanza</a>
-        <a href="tel:115"><i class="ph ph-fire-extinguisher"></i> 115 Vigili del Fuoco</a>
-      </div>
-      <details class="emg-more"><summary>Altri numeri</summary>
-        <div class="emg-call-row">
-          <a href="tel:113"><i class="ph ph-police-car"></i> 113 Polizia</a>
-          <a href="tel:1530"><i class="ph ph-boat"></i> 1530 Guardia Costiera</a>
-          <a href="tel:1515"><i class="ph ph-tree"></i> 1515 Emergenza ambientale</a>
-        </div>
-      </details>
+      ${main ? `<div class="emg-call-row">${main}</div>` : ''}
+      ${more ? `<details class="emg-more"><summary>Altri numeri</summary><div class="emg-call-row">${more}</div></details>` : ''}
       <div class="emg-call-row emg-mine">${mine}</div>
       ${form}
     </div>`;
@@ -1202,7 +1203,7 @@ const DashboardModule = (() => {
         <button class="home-act home-act-emg" onclick="navigateTo('strumenti')">
           <i class="ph ph-siren"></i>
           <strong>Sta succedendo adesso?</strong>
-          <span>112${scObj ? `, passi per ${scObj.titolo}` : ''}, torcia e SOS</span>
+          <span>${EMG()}${scObj ? `, passi per ${scObj.titolo}` : ''}, torcia e SOS</span>
         </button>
         <button class="home-act home-act-ask" onclick="navigateTo('assistente')">
           <i class="ph ph-chats-circle"></i>
@@ -1253,5 +1254,5 @@ const DashboardModule = (() => {
 
   function init() { render(); }
 
-  return { init, render, renderEmergency, computeLevel, waterDays: _waterDays, _nowToggle, _foldToggle, setMode, addNumero, saveNumero, delNumero, emgCheck, emgJump, emgNext, emgPrev, emgReset, toggleTask, toggleAllTasks, refreshOfflineCard, openGuide, goToTask, openScenarioPicker, _pickScenario, downloadGuidesPack, downloadMapPack };
+  return { init, render, renderEmergency, refreshEmergency: () => _refresh(), computeLevel, waterDays: _waterDays, _nowToggle, _foldToggle, setMode, addNumero, saveNumero, delNumero, emgCheck, emgJump, emgNext, emgPrev, emgReset, toggleTask, toggleAllTasks, refreshOfflineCard, openGuide, goToTask, openScenarioPicker, _pickScenario, downloadGuidesPack, downloadMapPack };
 })();

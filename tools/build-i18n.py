@@ -15,6 +15,13 @@ for f in sorted(glob.glob(os.path.join(src, 'en_*.txt'))):
         it = re.sub(r'\s+', ' ', it.strip())
         en = en.strip()
         d[it] = en.replace('␣', ' ') if '␣' in en else en  # ␣ = spazio finale/iniziale voluto
+# Numero di soccorso del paese scelto: per ogni voce con «112» si aggiungono le varianti con gli altri numeri generali (tabella EMERGENCY in js/modules/paesi.js)
+_nums = sorted(set(re.findall(r"\b[A-Z]{3}: \['(\d+)'", open(os.path.join(ROOT, 'js', 'modules', 'paesi.js'), encoding='utf-8').read())) - {'112'})
+for _it, _en in list(d.items()):
+    if '112' in _it:
+        for _n in _nums:
+            d.setdefault(_it.replace('112', _n), _en.replace('112', _n))
+        d.setdefault(_it.replace('112', 'numero di emergenza locale'), _en.replace('112', 'the local emergency number' if 'call 112' not in _en and 'Call 112' not in _en else 'local emergency number'))
 pat = open(os.path.join(src, 'en_pat.js'), encoding='utf-8').read()
 out = ('/* Generato da tools/build-i18n.py: NON modificare a mano (modifica tools/i18n/ e rilancia lo script). */\n'
        'window.RS_EN = ' + json.dumps(d, ensure_ascii=False, indent=0) + ';\n' + pat + '\n')
