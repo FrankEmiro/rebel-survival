@@ -1,0 +1,288 @@
+Torna indietro ||| Go back
+Indietro ||| Back
+Preparati alle emergenze ||| Be ready for emergencies
+Privacy ||| Privacy
+Condizioni d'uso ||| Terms of use
+Licenze ||| Licences
+Benvenuto in Rebel Survival ||| Welcome to Rebel Survival
+In un minuto ti dico a che ||| In one minute I will tell you
+livello di preparazione ||| what level of preparedness
+sei (72 ore, 2 settimane, 30 giorni) e quale azione fare per prima. ||| you have reached (72 hours, 2 weeks, 30 days) and which action to take first.
+Inizia (1 minuto) ||| Start (1 minute)
+Fabbisogno idrico, scorte e purificazione ||| Water needs, supplies and purification
+Scorte alimentari a lunga conservazione ||| Long-life food supplies
+Autonomia elettrica e priorità consumi ||| Electrical autonomy and consumption priorities
+Combustibile alternativo e autonomia termica ||| Alternative fuel and heating autonomy
+Carburante ||| Fuel
+Autonomia mobilità e piano spostamenti ||| Mobility autonomy and travel plan
+Tutto quello che avete, per area: si salva da solo e aggiorna la Home. La lista della spesa è calcolata su ciò che manca. ||| Everything you have, by area: it saves itself and updates the Home screen. The shopping list is calculated from what is missing.
+Cosa ho ||| What I have
+Cosa comprare ||| What to buy
+Chat tra telefoni vicini ||| Chat between nearby phones
+Messaggi via Bluetooth senza internet né rete telefonica (sperimentale) ||| Messages over Bluetooth with no internet or phone network (experimental)
+Chat vicini ||| Nearby chat
+Senza internet né rete telefonica ||| No internet or phone network
+Risposte prese dalle guide dell'app, anche senza internet ||| Answers taken from the app's guides, even without internet
+Funzionano anche senza connessione ||| They also work without a connection
+Fai una domanda ||| Ask a question
+Es. «come rendo potabile l'acqua?» — rispondo con le guide ||| E.g. “how do I make water safe to drink?” — I answer with the guides
+Wikipedia offline ||| Offline Wikipedia
+Scegli cosa scaricare (medicina, voci principali, tutta Wikipedia) e leggila senza internet ||| Choose what to download (medicine, main articles, all of Wikipedia) and read it without internet
+Scegli tu cosa scaricare: poi funziona senza internet ||| You choose what to download: then it works without internet
+Chi siete e dove vivete, i vostri dati e le impostazioni dell'app ||| Who you are and where you live, your data and the app settings
+Avviso importante ||| Important notice
+LEGGI CON ATTENZIONE. ||| READ CAREFULLY.
+è uno strumento informativo e orientativo, ||| is an informational and guidance tool,
+non è una fonte ufficiale e non sostituisce i soccorsi, i medici e le autorità ||| it is not an official source and does not replace the emergency services, doctors and authorities
+Un errore può farti male. ||| A mistake can hurt you.
+Alcune indicazioni (piante e funghi, farmaci, acqua, cibo, primo soccorso, fuoco, ripari) possono causare ||| Some instructions (plants and mushrooms, medicines, water, food, first aid, fire, shelters) can cause
+avvelenamento, ferite gravi o morte ||| poisoning, serious injury or death
+se applicate male. ||| if applied incorrectly.
+Le guide con l'etichetta ||| Guides with the label
+«Cautela» ||| “Caution”
+«Rischio alto» ||| “High risk”
+NON sono verificate ||| are NOT verified
+da una fonte ufficiale. Non usarle come unica fonte e ||| by an official source. Do not use them as your only source and
+nel dubbio NON fare ||| when in doubt do NOT do
+Non mangiare, non usare e non dare a nessuno ||| Do not eat, use or give to anyone
+piante, funghi, acqua, cibo o farmaci che non riconosci con certezza assoluta. ||| plants, mushrooms, water, food or medicines that you do not recognise with absolute certainty.
+I calcoli e le stime sono ||| Calculations and estimates are
+approssimativi ||| approximate
+e non tengono conto della tua situazione personale. ||| and do not take your personal situation into account.
+emergenza reale ||| real emergency
+(e 115, 118 se serve) e segui le istruzioni della Protezione Civile e delle autorità sanitarie. ||| (and 115, 118 if needed) and follow the instructions of Civil Protection and the health authorities.
+Usi l'app ||| You use the app
+a tuo rischio ||| at your own risk
+: nei limiti consentiti dalla legge l'autore ||| : to the extent permitted by law the author
+non risponde ||| is not liable
+di decisioni prese sulla base di questa app. ||| for decisions made on the basis of this app.
+I dati che inserisci restano ||| The data you enter stays
+solo sul tuo dispositivo ||| only on your device
+e non ci vengono inviati. Se usi la mappa, le immagini vengono scaricate da OpenStreetMap. ||| and is not sent to us. If you use the map, the images are downloaded from OpenStreetMap.
+Usando l'app dichiari di aver letto e compreso questo avviso, le ||| By using the app you declare that you have read and understood this notice, the
+condizioni d'uso ||| terms of use
+e l' ||| and the␣
+informativa privacy ||| privacy notice
+Ho letto e capito i rischi, continua ||| I have read and understood the risks, continue
+Passo 1 di 6 ||| Step 1 of 6
+Lingua / Language ||| Lingua / Language
+In che paese ti trovi? ||| Which country are you in?
+Serve per la mappa dei confini (regioni e province). Le guide restano le stesse. Puoi cambiarlo dopo in Impostazioni. ||| It is used for the boundary map (regions and provinces). The guides stay the same. You can change it later in Settings.
+Paese ||| Country
+Albania ||| Albania
+Algeria ||| Algeria
+Arabia Saudita ||| Saudi Arabia
+Argentina ||| Argentina
+Australia ||| Australia
+Austria ||| Austria
+Belgio ||| Belgium
+Bielorussia ||| Belarus
+Bosnia ed Erzegovina ||| Bosnia and Herzegovina
+Brasile ||| Brazil
+Bulgaria ||| Bulgaria
+Canada ||| Canada
+Cechia ||| Czechia
+Cile ||| Chile
+Cipro ||| Cyprus
+Colombia ||| Colombia
+Croazia ||| Croatia
+Danimarca ||| Denmark
+Egitto ||| Egypt
+Emirati Arabi Uniti ||| United Arab Emirates
+Estonia ||| Estonia
+Filippine ||| Philippines
+Finlandia ||| Finland
+Francia ||| France
+Germania ||| Germany
+Giappone ||| Japan
+Giordania ||| Jordan
+Grecia ||| Greece
+Irlanda ||| Ireland
+Islanda ||| Iceland
+Israele ||| Israel
+Italia ||| Italy
+Kosovo ||| Kosovo
+Lettonia ||| Latvia
+Libano ||| Lebanon
+Libia ||| Libya
+Lituania ||| Lithuania
+Lussemburgo ||| Luxembourg
+Macedonia del Nord ||| North Macedonia
+Malta ||| Malta
+Marocco ||| Morocco
+Messico ||| Mexico
+Moldavia ||| Moldova
+Montenegro ||| Montenegro
+Norvegia ||| Norway
+Nuova Zelanda ||| New Zealand
+Paesi Bassi ||| Netherlands
+Perù ||| Peru
+Polonia ||| Poland
+Portogallo ||| Portugal
+Regno Unito ||| United Kingdom
+Romania ||| Romania
+Serbia ||| Serbia
+Slovacchia ||| Slovakia
+Slovenia ||| Slovenia
+Spagna ||| Spain
+Stati Uniti ||| United States
+Sudafrica ||| South Africa
+Svezia ||| Sweden
+Svizzera ||| Switzerland
+Tunisia ||| Tunisia
+Turchia ||| Türkiye
+Ucraina ||| Ukraine
+Ungheria ||| Hungary
+Più tardi ||| Later
+Avanti ||| Next
+Ti stai preparando per ||| You are preparing for
+Nessuna situazione scelta ||| No situation chosen
+DA INIZIARE ||| TO START
+Meno di 72 ore di autonomia ||| Less than 72 hours of autonomy
+Sta succedendo adesso? ||| Is it happening now?
+112, torcia e SOS ||| 112, torch and SOS
+Hai un dubbio? Chiedi ||| Have a doubt? Ask
+Rispondo con le guide, anche offline ||| I answer with the guides, even offline
+Comunic. ||| Comms
+Zaino e spesa ||| Go-bag and shopping
+Anche offline ||| Also offline
+I tuoi prossimi passi ||| Your next steps
+Aggiorna i dati per risolvere ||| Update your data to solve this
+PRIMA ||| FIRST
+· tocca per aggiornare i tuoi dati ||| · tap to update your data
+Apri guida ||| Open guide
+Aggiorna i dati ||| Update data
+POI ||| THEN
+DOPO ||| AFTER
+Vedi tutte le azioni ||| See all actions
+Per cosa vuoi prepararti? ||| What do you want to prepare for?
+Nessuna in particolare ||| None in particular
+Le azioni si basano sul tuo profilo ||| Actions are based on your profile
+Blackout Breve ||| Short Blackout
+Interruzione elettricità < 24 ore ||| Power cut < 24 hours
+Blackout Prolungato ||| Prolonged Blackout
+Interruzione elettricità > 24 ore ||| Power cut > 24 hours
+Interruzione Gas ||| Gas Outage
+Stop fornitura gas metano ||| Natural gas supply stopped
+Razionamento Energetico ||| Energy Rationing
+Fasce orarie limitate (es. 6h/giorno) ||| Limited time slots (e.g. 6 h/day)
+Interruzione Forniture Alimentari ||| Food Supply Disruption
+Scaffali vuoti, prezzi alle stelle ||| Empty shelves, soaring prices
+Emergenza Acqua ||| Water Emergency
+Acquedotto interrotto o non potabile ||| Water mains cut or water not drinkable
+Evacuazione Rapida ||| Rapid Evacuation
+Devi lasciare casa in 30-60 minuti ||| You must leave home within 30-60 minutes
+Sisma significativo — danni strutturali possibili ||| Significant earthquake — structural damage possible
+Esondazione o rischio allagamento zona ||| Flooding or flood risk in the area
+Onde di maremoto su una zona costiera ||| Tsunami waves on a coastal area
+Eruzione vulcanica ||| Volcanic Eruption
+Allarme o eruzione di un vulcano attivo ||| Alert or eruption of an active volcano
+Ondata di Caldo ||| Heatwave
+Temperature estreme (> 38°C) per più giorni ||| Extreme temperatures (> 38°C) for several days
+Tempesta Invernale ||| Winter Storm
+Gelo estremo, neve abbondante, strade bloccate ||| Extreme cold, heavy snow, blocked roads
+Pandemia / Quarantena ||| Pandemic / Quarantine
+Lockdown, isolamento obbligatorio, ospedali saturi ||| Lockdown, mandatory isolation, overloaded hospitals
+Crisi Economica ||| Economic Crisis
+Inflazione severa, prezzi alle stelle, forniture instabili ||| Severe inflation, soaring prices, unstable supplies
+Incendio Zona ||| Area Fire
+Incendio boschivo o industriale nelle vicinanze ||| Wildfire or industrial fire nearby
+Blackout Rete Mobile ||| Mobile Network Blackout
+Telefonia e internet assenti per ore/giorni ||| Phone and internet down for hours/days
+Banche, pagamenti e servizi online bloccati o compromessi ||| Banks, payments and online services blocked or compromised
+Attacco Militare / Conflitto ||| Military Attack / Conflict
+Allarme aereo, bombardamenti, guerra vicina ||| Air raid alert, bombing, war nearby
+Incidente Nucleare / Radiologico ||| Nuclear / Radiological Incident
+Esplosione nucleare o nube radioattiva ||| Nuclear explosion or radioactive cloud
+Survival in Natura ||| Wilderness Survival
+Disperso o isolato in ambiente naturale ||| Lost or isolated in the wild
+In pericolo? Chiama subito il ||| In danger? Call right away
+Fai una domanda con parole tue. Ti rispondo con i passaggi delle guide di questa app, indicando sempre da dove vengono. Funziona senza internet. ||| Ask a question in your own words. I answer with passages from this app's guides, always saying where they come from. It works without internet.
+Come rendo potabile l'acqua? ||| How do I make water safe to drink?
+Cosa metto nello zaino di emergenza? ||| What goes in the emergency go-bag?
+Come fermo un'emorragia? ||| How do I stop bleeding?
+Cosa faccio se manca la corrente? ||| What do I do if the power goes out?
+Scrivi la tua domanda… ||| Write your question…
+La tua domanda ||| Your question
+Nuova conversazione ||| New conversation
+La tua situazione ||| Your situation
+Sono gli stessi dati delle Scorte: se li cambi qui, si aggiornano anche lì. ||| This is the same data as in Supplies: if you change it here, it updates there too.
+Acqua che hai in casa (litri) ||| Water you have at home (litres)
+Raccogli acqua piovana? ||| Do you collect rainwater?
+Sì ||| Yes
+Superficie tetto (m²) ||| Roof area (m²)
+Area di raccolta disponibile ||| Available collection area
+Calcolo per ||| Calculated for
+(lo cambi in Profilo › Famiglia e casa) ||| (change it in Profile › Family and home)
+Con quello che hai copri circa ||| What you have covers about
+Per 30 giorni (minimo) ti mancano ||| For 30 days (minimum) you are short by
+Calcola quanto te ne serve ||| Work out how much you need
+Giorni da coprire ||| Days to cover
+Clima ||| Climate
+Temperato (Nord Italia) ||| Temperate (Northern Italy)
+Caldo / Estate ||| Hot / Summer
+Freddo / Inverno ||| Cold / Winter
+Risultato ||| Result
+Litri minimi (bere e cucinare) ||| Minimum litres (drinking and cooking)
+Litri consigliati (con igiene) ||| Recommended litres (with hygiene)
+Fabbisogno minimo/giorno ||| Minimum need/day
+Fabbisogno raccomandato/giorno ||| Recommended need/day
+Raccolta pioggia stimata/giorno ||| Estimated rainwater collection/day
+Autonomia con solo raccolta pioggia ||| Autonomy with rainwater collection only
+Contenitori Consigliati ||| Recommended Containers
+Quantità ||| Quantity
+Bottiglie 1,5L (scorta immediata) ||| 1.5 L bottles (immediate supply)
+Rotazione mensile ||| Monthly rotation
+Taniche 10L (HDPE alimentare) ||| 10 L jerrycans (food-grade HDPE)
+Durata 6-12 mesi ||| Lasts 6-12 months
+Fusti 60L (stoccaggio) ||| 60 L drums (storage)
+Per cantina/garage ||| For cellar/garage
+Cisterna 1.000L (IBC) ||| 1,000 L tank (IBC)
+Soluzione definitiva ||| Long-term solution
+Metodi di Purificazione ||| Purification Methods
+Combina sempre almeno due metodi per sicurezza massima. ||| Always combine at least two methods for maximum safety.
+🔥 Bollitura ||| 🔥 Boiling
+1 min a 100°C (3 min sopra 2.000m) ||| 1 min at 100°C (3 min above 2,000 m)
+🧴 Candeggina (5-6%) ||| 🧴 Bleach (5-6%)
+4 gocce/L acqua torbida · 2 gocce/L limpida · attendi 30 min ||| 4 drops/L cloudy water · 2 drops/L clear water · wait 30 min
+🔵 Pastiglie Cloro ||| 🔵 Chlorine Tablets
+1 pastiglia/L · attendi 30 min ||| 1 tablet/L · wait 30 min
+🌊 Filtro a sabbia/ghiaia ||| 🌊 Sand/gravel filter
+Prima filtra sedimenti, poi disinfezione chimica ||| First filter out sediment, then chemical disinfection
+☀️ Solarizzazione (SODIS) ||| ☀️ Solar disinfection (SODIS)
+Bottiglia PET trasparente al sole per 6h (cielo sereno) ||| Clear PET bottle in the sun for 6 h (clear sky)
+Per quanti giorni hai cibo in casa? ||| For how many days do you have food at home?
+Stima a occhio: quanti giorni mangereste tutti con quello che c'è ||| Estimate by eye: how many days you would all eat with what you have
+Con quello che hai copri ||| What you have covers
+Per 30 giorni ti mancano ||| For 30 days you are short by
+Calcola cosa comprare ||| Work out what to buy
+Budget disponibile (€) ||| Available budget (€)
+Opzionale, per stima costo ||| Optional, for a cost estimate
+Giorni coperti ||| Days covered
+Costo stimato ||| Estimated cost
+Lista Scorte ||| Supplies List
+🖨 Stampa ||| 🖨 Print
+Carboidrati ||| Carbohydrates
+Pasta di semola ||| Durum wheat pasta
+Riso bianco ||| White rice
+Crackers/gallette ||| Crackers/rice cakes
+Proteine ||| Protein
+Legumi secchi (ceci/lenticchie/fagioli) ||| Dried legumes (chickpeas/lentils/beans)
+Tonno in scatola ||| Canned tuna
+Grassi ||| Fats
+Olio extravergine oliva ||| Extra virgin olive oil
+Frutta secca (noci/mandorle) ||| Nuts (walnuts/almonds)
+Dolcificanti ||| Sweeteners
+Zucchero bianco ||| White sugar
+Miele ||| Honey
+Passata di pomodoro ||| Tomato passata
+Condimenti ||| Seasonings
+Sale fino ||| Fine salt
+Latticini ||| Dairy
+Latte UHT intero ||| Whole UHT milk
+Note Importanti ||| Important Notes
+Integrare con vitamine e sali minerali. Aggiungere sementi per orto d'emergenza. ||| Supplement with vitamins and minerals. Add seeds for an emergency garden.
+Rotazione scorte ||| Stock rotation
+Consuma e rimpiazza ogni 3-6 mesi ||| Use and replace every 3-6 months
+Conservazione ottimale ||| Optimal storage
+Luogo fresco, buio, asciutto — 15-18°C ||| Cool, dark, dry place — 15-18°C

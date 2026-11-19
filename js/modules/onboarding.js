@@ -98,7 +98,9 @@ const OnboardingModule = (() => {
   function _body() {
     switch (STEPS[step]) {
       case 'paese':
-        return `<h2>In che paese ti trovi?</h2>
+        return `<h2>Lingua / Language</h2>
+          ${I18n.select('')}
+          <h2 style="margin-top:20px">In che paese ti trovi?</h2>
           <p class="ob-sub">Serve per la mappa dei confini (regioni e province). Le guide restano le stesse. Puoi cambiarlo dopo in Impostazioni.</p>
           <select class="ob-select" aria-label="Paese" onchange="OnboardingModule._set('paese', this.value, true)">${CountryMaps.options(data.paese)}</select>`;
       case 'persone':

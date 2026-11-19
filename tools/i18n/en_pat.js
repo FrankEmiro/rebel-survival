@@ -1,0 +1,58 @@
+(function () {
+  const D = window.RS_EN;
+  const T = s => (D[s] !== undefined ? D[s] : s);
+  const UNIT = { ore: 'hours', ora: 'hour', giorni: 'days', giorno: 'day', settimane: 'weeks', settimana: 'week', mesi: 'months', mese: 'month', anni: 'years', anno: 'year' };
+  const U = s => s.replace(/\b(ore|ora|giorni|giorno|settimane|settimana|mesi|mese|anni|anno)\b/g, m => UNIT[m]);
+  const AREA = { 'Acqua': 'Water', 'Cibo': 'Food', 'Energia': 'Energy', 'Calore': 'Heat', 'Comunic.': 'Comms', 'Mobilità': 'Mobility' };
+  const VAL = { 'Nessuna': 'None', 'Nessuno': 'None' };
+  window.RS_EN_PAT = [
+    [/^(\d+) gg$/, '$1 d'],
+    [/^(\d+) persone$/, '$1 people'],
+    [/^1 persona$/, '1 person'],
+    [/^Livello (\d+) di (\d+)$/, 'Level $1 of $2'],
+    [/^Passo (\d+) di (\d+)$/, 'Step $1 of $2'],
+    [/^(Acqua|Cibo|Energia|Calore|Comunic\.|Mobilità): (.+), da fare$/, (m, a, v) => AREA[a] + ': ' + (VAL[v] || v) + ', to do'],
+    [/^Per il livello (\d+) \((.+)\): \+(\d+) L di acqua e \+(\d+) giorni di cibo$/, (m, l, t, w, f) => `For level ${l} (${U(t)}): +${w} L of water and +${f} days of food`],
+    [/^Per arrivare al livello (\d+) \((.+)\) — in quest'ordine$/, (m, l, t) => `To reach level ${l} (${U(t)}) — in this order`],
+    [/^Porta l'acqua a (\d+) L: ti mancano (\d+) L \(circa (\d+) bottiglie da 1,5 L\)$/, 'Bring water up to $1 L: you are short by $2 L (about $3 bottles of 1.5 L)'],
+    [/^Porta il cibo a (\d+) giorni: ti mancano (\d+) giorni di scorte \(riso, pasta, legumi, scatolette\)$/, 'Bring food up to $1 days: you are short by $2 days of supplies (rice, pasta, legumes, tins)'],
+    [/^Pianifica menù settimanale dalle scorte: prima fresco e aperto, poi scatolame, poi secco$/, 'Plan a weekly menu from your supplies: fresh and opened first, then tinned, then dry'],
+    [/^Durata: (\d+) (anni|anno|mesi|mese) · (.+)$/, (m, n, u, r) => `Lasts: ${n} ${UNIT[u]} · ${r}`],
+    [/^Durata: indefinita · (.+)$/, 'Lasts: indefinitely · $1'],
+    [/^Durata (\d+) (anni|anno|mesi|mese)$/, (m, n, u) => `Lasts ${n} ${UNIT[u]}`],
+    [/^Durata (\d+)-(\d+) (mesi|anni)$/, (m, a, b, u) => `Lasts ${a}-${b} ${UNIT[u]}`],
+    [/^· (\d+)\/(\d+) oggetti$/, '· $1/$2 items'],
+    [/^(\d+) su (\d+)$/, '$1 of $2'],
+    [/^(\d+) (ore|settimane|giorni)$/, (m, n, u) => `${n} ${UNIT[u]}`],
+    [/^([\d.,]+) sett\.$/, '$1 wks'],
+    [/^([\d.,]+) km\/sett$/, '$1 km/week'],
+    [/^([\d.,]+) L\/sett · ([\d.,]+) sett\. autonomia$/, '$1 L/week · $2 weeks of autonomy'],
+    [/^Autonomia sufficiente per (\d+) settimane\.$/, 'Autonomy sufficient for $1 weeks.'],
+    [/^(\d+) guide disponibili offline$/, '$1 guides available offline'],
+    [/^~?([\d.,]+ [MG]B) · (\d+) file$/, '~$1 · $2 files'],
+    [/^Acqua: (\d+) litri in tutto$/, 'Water: $1 litres in total'],
+    [/^Nessuna scorta inserita\. Acquista almeno ([\d.,]+) kg\.$/, 'No stock entered. Buy at least $1 kg.'],
+    [/^autonomia \(3 L\/persona\/giorno\)$/, 'autonomy (3 L/person/day)'],
+    [/^autonomia · (\d+) kcal\/giorno fam\.$/, 'autonomy · $1 kcal/day family'],
+    [/^kcal\/giorno \(([\d.]+) a persona\)$/, 'kcal/day ($1 per person)'],
+    [/^(\d+) pz$/, '$1 pcs'],
+    [/^(\d+) pz \+ (\d+) scatola$/, '$1 pcs + $2 box'],
+    [/^(\d+) L\/giorno$/, '$1 L/day'],
+    [/^([\d.,]+) kWh\/g$/, '$1 kWh/day'],
+    [/^\(([\d.,]+)W × ([\d.,]+)h\)$/, '($1 W × $2 h)'],
+    [/^Per (\d+) giorni \(minimo\) ti mancano$/, 'For $1 days (minimum) you are short by'],
+    [/^Per (\d+) giorni ti mancano$/, 'For $1 days you are short by'],
+    [/^Scenario attivo: (.+)$/, (m, s) => 'Active scenario: ' + T(s)],
+    [/^Piano d'Azione: (.+)$/, (m, s) => 'Action Plan: ' + T(s)],
+    [/^(.+\.) · ([\d.,]+ [MG]B) · aggiornato (\d+\/\d+)$/, (m, d, sz, dt) => T(d) + ' · ' + sz.replace(',', '.') + ' · updated ' + dt],
+    [/^Importare il backup del (.+)\? I dati attuali verranno sovrascritti\.$/, 'Import the backup from $1? Your current data will be overwritten.'],
+    [/^Troppe tile da scaricare \((\d+)\)\. Riduci il raggio \(max consigliato ~(\d+) tile per non sovraccaricare i server OSM pubblici\)\.$/, 'Too many tiles to download ($1). Reduce the radius (recommended max ~$2 tiles so as not to overload the public OSM servers).'],
+    [/^Altri scenari \((\d+)\)$/, 'More scenarios ($1)'],
+    [/^(\d)\. (.+)$/, (m, n, r) => n + '. ' + T(r)],
+    [/^([\d.,]+) kWh\/giorno$/, '$1 kWh/day'],
+    [/^(\d+)\+ giorni$/, '$1+ days'],
+    [/^(.+) · ([\d.,]+) kWh\/g$/, '$1 · $2 kWh/day'],
+    [/^112, passi per (.+), torcia e SOS$/, (m, s) => '112, steps for ' + T(s) + ', torch and SOS'],
+    [/^(\d+) \/ (\d+) byte usati$/, '$1 / $2 bytes used'],
+  ];
+})();

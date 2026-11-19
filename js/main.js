@@ -336,6 +336,7 @@ function initDisclaimer() {
 
 // App init
 document.addEventListener('DOMContentLoaded', () => {
+  I18n.init();
   if (typeof CopiaOffline !== 'undefined') CopiaOffline.initCopy();
   // Scorte unificate: le vecchie spunte doppie passano ai dati del Profilo (una volta sola)
   if (typeof KitModule !== 'undefined' && KitModule.migrate) KitModule.migrate();

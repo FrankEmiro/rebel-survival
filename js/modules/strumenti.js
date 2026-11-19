@@ -739,7 +739,7 @@ const StrumentiModule = (() => {
         L.DomEvent.on(btn, 'click', e => {
           L.DomEvent.stopPropagation(e);
           if (gpsPos) _map.setView([gpsPos.latitude, gpsPos.longitude], 13);
-          else alert('Attiva prima il GPS');
+          else alert(I18n.t('Attiva prima il GPS'));
         });
         return btn;
       },
@@ -881,7 +881,7 @@ const StrumentiModule = (() => {
   }
 
   function _saveHomeLocation() {
-    if (!gpsPos) { alert('Attiva prima il GPS per acquisire la posizione da salvare'); return; }
+    if (!gpsPos) { alert(I18n.t('Attiva prima il GPS per acquisire la posizione da salvare')); return; }
     Storage.set('home-location', { lat: gpsPos.latitude, lon: gpsPos.longitude, savedAt: new Date().toISOString() });
     Storage.remove('tiles-pack-done'); // la posizione è cambiata: il pacchetto scaricato non è più valido
     _renderTilesPack();
@@ -899,7 +899,7 @@ const StrumentiModule = (() => {
     const radius = Storage.get('tiles-radius') || 5;
     const urls = _tilesForRadius(home.lat, home.lon, radius);
     if (urls.length > TILES_MAX_COUNT) {
-      alert(`Troppe tile da scaricare (${urls.length}). Riduci il raggio (max consigliato ~${TILES_MAX_COUNT} tile per non sovraccaricare i server OSM pubblici).`);
+      alert(I18n.t(`Troppe tile da scaricare (${urls.length}). Riduci il raggio (max consigliato ~${TILES_MAX_COUNT} tile per non sovraccaricare i server OSM pubblici).`));
       return;
     }
     const btn = document.getElementById('st-tiles-btn');
@@ -913,7 +913,7 @@ const StrumentiModule = (() => {
   }
 
   async function _deleteTilesPack() {
-    if (!confirm('Eliminare le tile scaricate per uso offline?')) return;
+    if (!confirm(I18n.t('Eliminare le tile scaricate per uso offline?'))) return;
     await caches.delete(TILES_CACHE);
     Storage.remove('tiles-pack-done');
     _renderTilesPack();

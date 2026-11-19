@@ -1,0 +1,14 @@
+Riduci superficie da 80 a 20m² → -75% consumo ||| Reduce the area from 80 to 20 m² → -75% consumption
+15°C di notte invece di 18°C → -25% consumo ||| 15°C at night instead of 18°C → -25% consumption
+Riflettono 90% calore corporeo ||| Reflect 90% of body heat
+Riflettono 90% del calore corporeo ||| Reflect 90% of body heat
+Malattie, sintomi, farmaci, primo soccorso. Senza immagini. ||| Diseases, symptoms, medicines, first aid. No images.
+Le voci più lette, solo la parte iniziale. ||| The most-read articles, introduction only.
+Come «Medicina — solo testo», con immagini e schemi. ||| Like “Medicine — text only”, with images and diagrams.
+Le voci più lette, intere, senza immagini. ||| The most-read articles, complete, no images.
+Tutte le voci, solo la parte iniziale. ||| All articles, introduction only.
+Le voci più lette, intere, con immagini. ||| The most-read articles, complete, with images.
+Tutte le voci intere, senza immagini. ||| All articles, complete, no images.
+Tutte le voci con immagini. Serve molto spazio. ||| All articles with images. Needs a lot of space.
+scenario ||| scenario
+No internet ||| No internet

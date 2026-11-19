@@ -1,0 +1,42 @@
+Quante persone siete? ||| How many of you are there?
+Servono per calcolare quanta acqua e cibo ti servono. ||| This is used to work out how much water and food you need.
+Adulti ||| Adults
+14–65 anni ||| 14–65 years
+Meno ||| Fewer
+Più ||| More
+Bambini ||| Children
+sotto i 14 anni ||| under 14
+Anziani ||| Older people
+oltre 65 anni ||| over 65
+Dove ti trovi? ||| Where are you?
+Cambia i consigli su riparo, calore e scorte. ||| This changes the advice on shelter, heat and supplies.
+Ho un tetto ||| I have a roof
+Appartamento ||| Flat
+Casa di campagna / isolata ||| Country / isolated house
+Ospite o centro accoglienza ||| Guest or reception centre
+Sono all'aperto o in emergenza ||| I am outdoors or in an emergency
+Auto o camper ||| Car or camper
+Tenda o accampamento ||| Tent or camp
+Nessun riparo (da costruire) ||| No shelter (to be built)
+Che clima fa dove sei? ||| What is the climate where you are?
+Serve per capire se il freddo è un rischio e quanto riscaldamento ti serve. ||| This is used to work out whether cold is a risk and how much heating you need.
+Mite ||| Mild
+Inverni sopra lo zero (centro-sud, coste) ||| Winters above freezing (centre-south, coasts)
+Inverni freddi ||| Cold winters
+Gelo e neve in inverno (pianura nord, collina) ||| Frost and snow in winter (northern plains, hills)
+Montagna / molto freddo ||| Mountains / very cold
+Sotto -10 °C in inverno ||| Below -10 °C in winter
+Scegli un'opzione per continuare ||| Choose an option to continue
+Cosa ti preoccupa di più? ||| What worries you most?
+Adatta le azioni consigliate. Puoi cambiarlo quando vuoi. ||| It adapts the recommended actions. You can change it whenever you like.
+Non so — preparazione generale ||| I don't know — general preparedness
+Cosa hai già in casa? ||| What do you already have at home?
+Stima a occhio. Anche zero va bene: ti dirò da dove partire. ||| Estimate by eye. Zero is fine too: I will tell you where to start.
+Acqua in bottiglia / taniche ||| Bottled water / jerrycans
+litri totali ||| total litres
+Cibo che dura ||| Long-lasting food
+giorni per tutta la famiglia ||| days for the whole family
+Ho una radio a batterie o a manovella ||| I have a battery or hand-crank radio
+Uso un'auto o un mezzo (serve il carburante) ||| I use a car or vehicle (fuel needed)
+Ho un kit di primo soccorso completo ||| I have a complete first-aid kit
+Vedi il mio livello ||| See my level

@@ -584,8 +584,8 @@ const ListaSpesaModule = (() => {
       });
     });
     navigator.clipboard?.writeText(text).then(() => {
-      alert('Lista copiata negli appunti!');
-    }).catch(() => alert('Usa il tasto Stampa per salvare la lista.'));
+      alert(I18n.t('Lista copiata negli appunti!'));
+    }).catch(() => alert(I18n.t('Usa il tasto Stampa per salvare la lista.')));
   }
 
   function init() {

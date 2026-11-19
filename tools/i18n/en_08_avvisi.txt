@@ -1,0 +1,11 @@
+Importare questo piano? I dati attuali verranno sovrascritti. ||| Import this plan? Your current data will be overwritten.
+Compila tutti i campi ||| Fill in all the fields
+Lista copiata negli appunti! ||| List copied to the clipboard!
+Usa il tasto Stampa per salvare la lista. ||| Use the Print button to save the list.
+Azzerare la checklist per questo scenario? ||| Reset the checklist for this scenario?
+Azzerare tutte le dimensioni e i task manuali? I dati salvati verranno eliminati. ||| Reset all sizes and manual tasks? Saved data will be deleted.
+Backup importato correttamente. ||| Backup imported successfully.
+Errore: file non valido o corrotto. ||| Error: invalid or corrupted file.
+Attiva prima il GPS ||| Turn on GPS first
+Attiva prima il GPS per acquisire la posizione da salvare ||| Turn on GPS first to get the position to save
+Eliminare le tile scaricate per uso offline? ||| Delete the map tiles downloaded for offline use?

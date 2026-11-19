@@ -1,0 +1,81 @@
+Download… ||| Download…
+Scarica ora, con internet, le parti di Wikipedia che ti servono: poi le leggi anche senza rete. Nessun pacchetto è scaricato di base. Spazio libero per l'app: ||| Download now, with internet, the parts of Wikipedia you need: then you can read them without a network too. No package is downloaded by default. Free space for the app:
+Pacchetti disponibili ||| Available packages
+Lingua di Wikipedia: ||| Wikipedia language:
+Inglese ||| English
+Medicina — solo testo ||| Medicine — text only
+Voci più importanti — riassunto ||| Most important articles — summary
+Medicina — con immagini ||| Medicine — with images
+Voci più importanti — testo completo ||| Most important articles — full text
+Tutta Wikipedia — riassunto ||| All of Wikipedia — summary
+Voci più importanti — con immagini ||| Most important articles — with images
+Tutta Wikipedia — testo completo ||| All of Wikipedia — full text
+Tutta Wikipedia — completa ||| All of Wikipedia — complete
+Importa un file .zim dal telefono ||| Import a .zim file from the phone
+Contenuti di Wikipedia, licenza CC BY-SA 4.0. Pacchetti preparati da Kiwix (kiwix.org). Wikipedia non è una fonte ufficiale. ||| Wikipedia content, licence CC BY-SA 4.0. Packages prepared by Kiwix (kiwix.org). Wikipedia is not an official source.
+— Le minacce e le task sono calibrate su questo scenario. ||| — Threats and tasks are calibrated to this scenario.
+Rimuovi scenario attivo ||| Remove active scenario
+Reset ||| Reset
+IMMEDIATO ||| IMMEDIATE
+ODORE DI GAS? NON toccare interruttori, NON accendere fiamme, NON usare il telefono in casa ||| SMELL OF GAS? Do NOT touch switches, do NOT light flames, do NOT use the phone indoors
+Se senti odore di gas: apri le finestre, esci all'aperto e chiama il 115 (Vigili del Fuoco) da fuori ||| If you smell gas: open the windows, go outside and call 115 (Fire Brigade) from outside
+Se non senti odore: chiudi il rubinetto gas principale ||| If you do not smell gas: close the main gas tap
+Verifica se interruzione è locale o diffusa (chiama il numero del tuo distributore) ||| Check whether the outage is local or widespread (call your supplier's number)
+RISCALDAMENTO ALTERNATIVO ||| ALTERNATIVE HEATING
+Attiva stufa a pellet/legna se disponibile ||| Light the pellet/wood stove if available
+Stufa a GPL/gas: solo in ambienti ventilati e mai accesa mentre dormi (monossido di carbonio) ||| LPG/gas stove: only in ventilated rooms and never left on while you sleep (carbon monoxide)
+Concentra le persone in una stanza sola e riscalda quella ||| Gather everyone in one room and heat only that one
+Usa coperte termiche, abbigliamento a strati ||| Use thermal blankets, layered clothing
+Isola porte e finestre con tessuti/nastro ||| Seal doors and windows with fabric/tape
+ACQUA CALDA & CUCINA ||| HOT WATER & COOKING
+Fornello da campeggio o a GPL per cucinare ||| Camping or LPG stove for cooking
+Acqua calda: riscalda pentole sul fornello alternativo ||| Hot water: heat pots on the alternative stove
+Riduci le docce: lavati con poca acqua tiepida ||| Cut down on showers: wash with a little lukewarm water
+Non usare mai barbecue o braciere in casa ||| Never use a barbecue or brazier indoors
+Condividi piano ||| Share plan
+Genera QR ||| Generate QR
+Importa ||| Import
+Fai inquadrare questo codice da un altro dispositivo con l'app aperta per copiare dimensioni, checklist kit e task. ||| Have another device scan this code with the app open to copy sizes, kit checklist and tasks.
+Chiama 112 ||| Call 112
+Strumenti rapidi ||| Quick tools
+Torcia ||| Torch
+Segnale SOS ||| SOS signal
+Livella ||| Spirit level
+Cosa sta succedendo? ||| What is happening?
+Scegli la situazione e ti guido un passo alla volta. ||| Choose the situation and I will guide you one step at a time.
+Scegli la situazione ||| Choose the situation
+118 Ambulanza ||| 118 Ambulance
+115 Vigili del Fuoco ||| 115 Fire Brigade
+Altri numeri ||| Other numbers
+113 Polizia ||| 113 Police
+1530 Guardia Costiera ||| 1530 Coast Guard
+1515 Emergenza ambientale ||| 1515 Environmental emergency
+Aggiungi un tuo numero ||| Add your own number
+Accendi o spegni la torcia ||| Turn the torch on or off
+Spenta ||| Off
+Usa il flash della fotocamera ||| Uses the camera flash
+Avvia o ferma il segnale SOS ||| Start or stop the SOS signal
+Avvia ||| Start
+Lampeggio dello schermo, suono e vibrazione in codice Morse. Non invia messaggi né chiamate. ||| Screen flashing, sound and vibration in Morse code. It does not send messages or make calls.
+Attiva ||| Turn on
+Premi Attiva e tieni il telefono in piano ||| Press Turn on and keep the phone flat
+Premi Attiva e appoggia il telefono su una superficie ||| Press Turn on and place the phone on a surface
+Premi Attiva per leggere le coordinate: servono per dire ai soccorsi dove sei ||| Press Turn on to read the coordinates: they tell the rescuers where you are
+Il punto arancione è la tua posizione ||| The orange dot is your position
+Zoom in ||| Zoom in
+Zoom out ||| Zoom out
+Centra su posizione ||| Centre on position
+Imposta meta (tap sulla mappa) ||| Set destination (tap on the map)
+Fullscreen ||| Fullscreen
+Layers ||| Layers
+Regioni ||| Regions
+Province ||| Provinces
+contributors · Regioni © ISTAT CC BY ||| contributors · Regions © ISTAT CC BY
+Salva una posizione di riferimento per scaricare la mappa dell'area circostante e usarla senza connessione. ||| Save a reference position to download the map of the surrounding area and use it without a connection.
+Salva posizione attuale (GPS attivo) ||| Save current position (GPS on)
+Stato del telefono ||| Phone status
+In carica ||| Charging
+Connesso ||| Connected
+Tipo ||| Type
+Velocità ||| Speed
+La chat tra telefoni vicini funziona solo nell'app Android di Rebel Survival. ||| Chat between nearby phones only works in the Rebel Survival Android app.

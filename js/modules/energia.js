@@ -136,7 +136,7 @@ const EnergiaModule = (() => {
     const nome = document.getElementById('en-custom-nome').value.trim();
     const watt = parseFloat(document.getElementById('en-custom-watt').value);
     const hDay = parseFloat(document.getElementById('en-custom-hday').value);
-    if (!nome || !watt || !hDay) { alert('Compila tutti i campi'); return; }
+    if (!nome || !watt || !hDay) { alert(I18n.t('Compila tutti i campi')); return; }
     const id = 'custom_' + Date.now();
     customDevices.push({ id, nome, watt, hDay, priorita: 99, categoria: 'Personalizzato' });
     document.getElementById('en-custom-nome').value = '';

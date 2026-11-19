@@ -1,0 +1,130 @@
+Adulti (14–65 anni) ||| Adults (14–65 years)
+Bambini (sotto i 14 anni) ||| Children (under 14)
+Anziani (oltre 65 anni) ||| Older people (over 65)
+C'è un neonato (sotto 1 anno) ||| There is a baby (under 1 year)
+Qualcuno fa fatica a muoversi o a usare le scale ||| Someone has difficulty moving or using stairs
+Ho animali domestici ||| I have pets
+Abitazione / Riparo ||| Home / Shelter
+Tipo di riparo ||| Type of shelter
+Appartamento / condominio ||| Flat / apartment block
+Casa rurale / campagna ||| Rural house / countryside
+Isolata / fuori rete ||| Isolated / off-grid
+Ospite / centro accoglienza ||| Guest / reception centre
+Tenda / accampamento ||| Tent / camp
+Rifugio improvvisato ||| Improvised shelter
+Nessun riparo — da costruire ||| No shelter — to be built
+Superficie (m²) ||| Area (m²)
+Isolamento termico ||| Thermal insulation
+Buono (cappotto) ||| Good (external insulation)
+Materiale riparo ||| Shelter material
+Tenda da campeggio (3 stagioni) ||| Camping tent (3 seasons)
+Tenda expedition (4 stagioni) ||| Expedition tent (4 seasons)
+Telo impermeabile / tarp ||| Waterproof sheet / tarp
+Materiali naturali ||| Natural materials
+Veicolo (auto/furgone) ||| Vehicle (car/van)
+Da costruire ||| To be built
+Superficie coperta (m²) ||| Covered area (m²)
+Costruzione rifugio — linee guida rapide ||| Building a shelter — quick guidelines
+Clima Locale ||| Local Climate
+Usato per calcolare riscaldamento, scoring e auto-rilevamento minacce. ||| Used to calculate heating, scoring and automatic threat detection.
+Fresco ||| Cool
+Minima invernale (°C) ||| Winter minimum (°C)
+Es: -5°C montagna, +5°C costa ||| E.g. -5°C mountains, +5°C coast
+Massima estiva (°C) ||| Summer maximum (°C)
+Pioggia annua (mm) ||| Annual rainfall (mm)
+Min storico ||| Record low
+▼ Ora ||| ▼ Now
+Max storico ||| Record high
+Situazione ||| Situation
+Per cosa vuoi prepararti ||| What you want to prepare for
+Da scegliere ||| To choose
+Seleziona lo ||| Select the
+scenario attuale ||| current scenario
+: determina i rischi prioritari e le azioni nella Home. ||| : it determines the priority risks and the actions on the Home screen.
+BASSO ||| LOW
+MEDIO ||| MEDIUM
+FREDDO ||| COLD
+CUSTOM ||| CUSTOM
+Personalizzato ||| Custom
+Scegli tu quali minacce attivare ||| Choose which threats to activate
+Configura sotto → ||| Configure below →
+I tuoi dati ||| Your data
+Restano solo su questo dispositivo. ||| They stay only on this device.
+Salva un backup ||| Save a backup
+Ripristina un backup ||| Restore a backup
+Condividi con un familiare ||| Share with a family member
+Rifai le domande iniziali ||| Redo the initial questions
+Cancella tutti i dati ||| Delete all data
+Versione ||| Version
+Cerca aggiornamenti ||| Check for updates
+Scarica l'aggiornamento ||| Download the update
+Passa l'app a un altro telefono ||| Pass the app to another phone
+Funziona anche senza internet: crea un file da inviare con Bluetooth o Quick Share. Chi lo riceve lo apre con il browser. Non contiene guide PDF, mappa e AI, e non contiene i tuoi dati. ||| It also works without internet: it creates a file to send by Bluetooth or Quick Share. Whoever receives it opens it with the browser. It does not contain PDF guides, map or AI, and it does not contain your data.
+Scarica l'app Android ||| Download the Android app
+App completa con tutto dentro: funziona senza internet e si passa ad altri telefoni via Bluetooth. Il telefono chiederà di consentire l'installazione da questa fonte. ||| Complete app with everything inside: it works without internet and can be passed to other phones via Bluetooth. The phone will ask you to allow installation from this source.
+Le guide con fonti non ufficiali o non ancora verificate non compariranno in Guide e in «Chiedi». ||| Guides with unofficial or not yet verified sources will not appear in Guides and in “Ask”.
+Funzioni sperimentali (AI nella sezione «Chiedi») ||| Experimental features (AI in the “Ask” section)
+Solo per prove: possono essere lente o sbagliare. ||| For testing only: they may be slow or wrong.
+Sostieni il progetto ||| Support the project
+Rebel Survival è gratuita e senza pubblicità. Se ti è utile puoi sostenere chi la sviluppa con una donazione libera: serve a mantenerla e aggiornarla. Non cambia nulla nell'app e non dà accesso a funzioni in più. ||| Rebel Survival is free and ad-free. If it is useful to you, you can support its developer with a voluntary donation: it helps maintain and update it. It changes nothing in the app and gives no access to extra features.
+Sostieni con una donazione ||| Support with a donation
+Segnala un errore o proponi un'idea ||| Report an error or suggest an idea
+Aziende, scuole e associazioni possono diventare ||| Companies, schools and associations can become
+sponsor ||| sponsors
+: il nome compare nel README del progetto. Gli sponsor non influenzano il contenuto delle guide. Per informazioni apri una segnalazione nel progetto. ||| : the name appears in the project README. Sponsors do not influence the content of the guides. For information open an issue in the project.
+Profilo aggiornato — Home aggiornata ||| Profile updated — Home updated
+Elettrico ||| Electric
+Consumo (L/100km o kWh/100km) ||| Consumption (L/100 km or kWh/100 km)
+Serbatoio (L o kWh) ||| Tank (L or kWh)
+Km percorsi / settimana (abituali) ||| Km driven / week (usual)
+Scorta extra che hai (L) ||| Extra reserve you have (L)
+Max legale uso privato: 10L (taniche omologate) ||| Legal max for private use: 10 L (approved cans)
+Calcola la tua autonomia ||| Work out your autonomy
+Settimane da coprire ||| Weeks to cover
+km serbatoio pieno ||| km on a full tank
+Settimane autonomia tot. ||| Total autonomy weeks
+L necessari per X sett. ||| L needed for X weeks
+Piano Riduzione Spostamenti ||| Travel Reduction Plan
+🟢 Normale ||| 🟢 Normal
+Nessuna restrizione, uso normale ||| No restrictions, normal use
+🟡 Parziale ||| 🟡 Partial
+Elimina spostamenti non essenziali (svago, shopping) ||| Cut non-essential trips (leisure, shopping)
+🔴 Critico ||| 🔴 Critical
+Solo approvvigionamento e emergenze ||| Only supplies and emergencies
+🚨 Lockdown ||| 🚨 Lockdown
+Solo evacuazione e assistenza medica ||| Only evacuation and medical care
+Alternative alla Macchina ||| Alternatives to the Car
+Bicicletta ||| Bicycle
+0-15 km · ideale per approvvigionamenti locali ||| 0-15 km · ideal for local errands
+Bici elettrica ||| E-bike
+0-50 km · ricarica con pannelli solari (250W = 2-3h) ||| 0-50 km · charge with solar panels (250 W = 2-3 h)
+Moto/scooter ||| Motorbike/scooter
+3-4L/100km · consuma 50% in meno dell'auto ||| 3-4 L/100 km · uses 50% less than a car
+Carpooling ||| Carpooling
+Organizza con vicini: dividi consumi e percorsi ||| Organise with neighbours: share fuel use and routes
+Lavoro remoto ||| Remote work
+Elimina completamente i pendolamenti ||| Completely eliminates commuting
+In emergenza energetica, prioritizza: approvvigionamento cibo/acqua, evacuazione, assistenza medica. Elimina tutti gli spostamenti non essenziali. ||| In an energy emergency, prioritise: food/water supply, evacuation, medical care. Cut all non-essential trips.
+Conservazione Carburante ||| Fuel Storage
+Limite legale privati ||| Legal limit for private individuals
+10L in tanica omologata · fino a 20L con dichiarazione prefettura ||| 10 L in an approved can · up to 20 L with a prefecture declaration
+Durata benzina ||| Petrol shelf life
+3-6 mesi (con stabilizzatore fino a 12 mesi) ||| 3-6 months (up to 12 months with stabiliser)
+Durata diesel ||| Diesel shelf life
+6-12 mesi (in luogo fresco e buio) ||| 6-12 months (in a cool, dark place)
+Rotazione ||| Rotation
+Usa la scorta ogni 3 mesi e rimpiazza ||| Use the stock every 3 months and replace it
+Contenuto Offline Disponibile ||| Offline Content Available
+Scarica per usare l'app completamente senza connessione ||| Download to use the app completely without a connection
+Immagini Guide ||| Guide Images
+Mappa Vettoriale Italia ||| Vector Map of Italy
+~42 MB · Comuni + Province ||| ~42 MB · Municipalities + Provinces
+— nessuna connessione necessaria. ||| — no connection needed.
+Cerca nelle guide... ||| Search the guides...
+In breve — leggi in 30 secondi ||| In brief — read in 30 seconds
+Correlate: ||| Related:
+Fonti (pagina da cui viene l'informazione; serve la rete): ||| Sources (page the information comes from; needs a connection):
+Cautela ||| Caution
+Attenzione — da usare con cautela ||| Warning — use with caution
+Rischio alto ||| High risk
+Attenzione — rischio alto, extra cautela ||| Warning — high risk, extra caution

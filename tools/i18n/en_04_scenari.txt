@@ -1,0 +1,136 @@
+zona elevata, riparata dal vento, lontano da corsi d'acqua e alberi morti ||| elevated ground, sheltered from the wind, away from watercourses and dead trees
+Struttura: ||| Structure:
+palo orizzontale su forcelle, rami diagonali, copertura foglie ≥30cm ||| horizontal pole on forks, diagonal branches, leaf covering ≥30 cm
+Suolo: ||| Ground:
+foglie secche ≥15cm — il freddo sale dal basso più che dall'alto ||| dry leaves ≥15 cm — the cold comes up from below more than down from above
+Dimensioni: ||| Size:
+più piccolo = più caldo ||| smaller = warmer
+Tempo: ||| Time:
+2–4h per rifugio base, iniziare 3h prima del buio ||| 2–4 h for a basic shelter, start 3 h before dark
+Fabbisogno termico critico ||| Critical heat requirement
+— senza isolamento il consumo calore è 3–5× superiore. Priorità: sacco a pelo adeguato, isolamento dal suolo. ||| — without insulation, heat consumption is 3–5× higher. Priority: an adequate sleeping bag, insulation from the ground.
+BLACKOUT ||| BLACKOUT
+CARBURANTE ||| FUEL
+Se c'è campo: chiama prima il 112 (dove non esiste il 112, il 118). CNSAS per la montagna; VHF canale 16 in mare; PLB/EPIRB per localizzazione satellitare ||| If there is signal: call 112 first (where 112 does not exist, 118). CNSAS for the mountains; VHF channel 16 at sea; PLB/EPIRB for satellite location
+SPECCHIO (heliograph): tieni lo specchio vicino all'occhio, mira attraverso il foro centrale, direziona il riflesso verso l'aereo/elicottero ||| MIRROR (heliograph): hold the mirror close to your eye, aim through the central hole, direct the reflection towards the aircraft/helicopter
+Stampa / Salva PDF ||| Print / Save PDF
+Stampa le guide o salvale come PDF per averle offline senza dispositivi. ||| Print the guides or save them as PDF to have them offline without devices.
+Salva come PDF ||| Save as PDF
+Nella finestra che si apre, imposta ||| In the window that opens, set
+Destinazione → Salva come PDF ||| Destination → Save as PDF
+e clicca Salva. ||| and click Save.
+Guide Ufficiali — Protezione Civile ||| Official Guides — Civil Protection
+Licenza CC BY 4.0 · Fonte: sito Io non rischio. Dipartimento della Protezione Civile — Presidenza del Consiglio dei Ministri ||| Licence CC BY 4.0 · Source: the Io non rischio website. Department of Civil Protection — Presidency of the Council of Ministers
+Nessuna fonte energia alternativa dichiarata ||| No alternative energy source declared
+ENERGIA −77 ||| ENERGY −77
+CIBO −60 ||| FOOD −60
+COMM −60 ||| COMMS −60
+CALORE −48 ||| HEAT −48
+MOBILITA −40 ||| MOBILITY −40
+Frigorifero: consuma o sposta i perishables entro le prime 4h dal blackout ||| Fridge: use or move perishables within the first 4 h of the blackout
+CRITICO ||| CRITICAL
+NON aprire frigo/congelatore: mantiene freddo 4–6h — pianifica i pasti da ora ||| Do NOT open the fridge/freezer: it stays cold for 4–6 h — plan your meals from now
+Cucina in batch durante le fasce: zuppe e legumi per 2–3 giorni, raffredda rapido ||| Batch-cook during the time slots: soups and legumes for 2–3 days, cool quickly
+Organizza turni con vicini per accesso al generatore — divide il consumo e il carico termico ||| Organise shifts with neighbours for access to the generator — shares fuel use and heat load
+COMM. ||| COMMS
+Non uscire durante la tempesta: radio per aggiornamenti, check famiglia ogni 2h ||| Do not go out during the storm: radio for updates, check on the family every 2 h
+Carica ADESSO tutti i dispositivi e power bank — spegni elettrodomestici non essenziali ||| Charge ALL devices and power banks NOW — switch off non-essential appliances
+Chiama numero guasti fornitore + radio FM per aggiornamenti sulla durata ||| Call the supplier's fault number + FM radio for updates on how long it will last
+Scorta legna/pellet al coperto + kit sbloccaggio auto (catene, pala, sale) ||| Store firewood/pellets under cover + car unblocking kit (chains, shovel, salt)
+Installa/verifica fonte energia alternativa ||| Install/check an alternative energy source
+Power bank 20.000mAh per ogni adulto ||| 20,000 mAh power bank for each adult
+Pannello solare portatile 100W+ con uscita USB-C ||| Portable solar panel 100 W+ with USB-C output
+Rilevatori CO installati se usi combustibili al chiuso ||| CO detectors installed if you burn fuel indoors
+Definisci protocollo blackout: priorità consumi, lista azioni ||| Define a blackout protocol: consumption priorities, action list
+Sicurezza casa: estintore, rilevatore CO, rinforzo serrature ||| Home safety: extinguisher, CO detector, reinforced locks
+Stacca corrente dal quadro elettrico se l'acqua sale entro 30cm dalle prese ||| Switch off the power at the fuse box if water rises to within 30 cm of the sockets
+Raziona carburante generatore: usa solo nelle fasce critiche (cottura, ricarica, pompa acqua) ||| Ration generator fuel: use only in critical time slots (cooking, charging, water pump)
+Mappa le fasce orarie con energia: concentra lavatrice, cottura e ricariche in quelle finestre ||| Map the time slots with power: concentrate washing, cooking and charging in those windows
+Disconnetti tutti i dispositivi in stand-by nelle fasce off — risparmio fino al 20% ||| Disconnect all standby devices during the off slots — saves up to 20%
+Kit 72h sotto il letto: acqua, torcia, radio, farmaci, copia documenti ||| 72 h kit under the bed: water, torch, radio, medicines, copies of documents
+URGENTE ||| URGENT
+Dopo la scossa: stai fuori — rientra SOLO dopo verifica strutturale delle autorità competenti ||| After the shock: stay outside — go back in ONLY after a structural check by the competent authorities
+Priorità carica: dispositivi medici (insulina frigo, CPAP, concentratore O2) ||| Charging priority: medical devices (insulin fridge, CPAP, oxygen concentrator)
+Scorte acqua insufficienti (0L), nessuna fonte alternativa ||| Water supplies insufficient (0 L), no alternative source
+ACQUA −90 ||| WATER −90
+CIBO −55 ||| FOOD −55
+MOBILITA −30 ||| MOBILITY −30
+Accumula acqua: 3 L/persona/giorno × 30 giorni in taniche ||| Stockpile water: 3 L/person/day × 30 days in jerrycans
+Acquista filtro portatile (Sawyer / LifeStraw) ||| Buy a portable filter (Sawyer / LifeStraw)
+Imposta sistema raccolta acqua piovana ||| Set up a rainwater collection system
+Scorta candeggina non profumata per purificazione (4 gocce/L) ||| Store unscented bleach for purification (4 drops/L)
+Acqua post-sisma non garantita: usa solo scorte o acqua purificata (bollitura 1 min) ||| Water after an earthquake is not guaranteed: use only supplies or purified water (boil 1 min)
+Soglie anti-allagamento + sacchi di sabbia per porte e finestre basse ||| Flood barriers + sandbags for doors and low windows
+Sposta farmaci, documenti e beni vitali al piano superiore ||| Move medicines, documents and vital items to the upper floor
+Rimuovi materiale infiammabile entro 10m dalla casa; tieni prato irrigato ||| Remove flammable material within 10 m of the house; keep the lawn watered
+Tubature esposte: lascia scorrere acqua a filo nelle ore di gelo — previene rotture e allagamenti ||| Exposed pipes: let water trickle during freezing hours — prevents bursts and flooding
+Ore 11–17 al chiuso: tapparelle abbassate sul lato soleggiato — apri tutte le finestre di notte ||| 11:00–17:00 indoors: blinds down on the sunny side — open all windows at night
+Non usare acqua corrente: solo imbottigliata o filtrata fino a deroga revocata ||| Do not use tap water: only bottled or filtered until the ban is lifted
+Riempi SUBITO vasche, secchi e ogni contenitore disponibile — l'acquedotto può cedere ulteriormente ||| Fill baths, buckets and every available container IMMEDIATELY — the water supply may fail further
+Protocollo purificazione attivo: 1 min ebollizione o 2 gocce candeggina/L + 30 min attesa ||| Purification protocol active: boil for 1 min or 2 drops bleach/L + wait 30 min
+Raziona: 3L/persona/giorno tra bere e cucinare · poca acqua per igiene · acqua sporca per WC e pulizie ||| Ration: 3 L/person/day for drinking and cooking · little water for hygiene · dirty water for the toilet and cleaning
+Fissa mobili pesanti alle pareti (librerie, armadi) — prevenzione crollo ||| Secure heavy furniture to the walls (bookcases, wardrobes) — prevents collapse
+Dopo alluvione: guanti e stivali per il fango (leptospirosi) — non toccare acqua a mani nude ||| After a flood: gloves and boots for the mud (leptospirosis) — do not touch water with bare hands
+Qualità aria: finestre chiuse, mascherina FFP2 se esci — evita attività fisica all'aperto ||| Air quality: windows closed, FFP2 mask if you go out — avoid physical activity outdoors
+Documenti in busta impermeabile nella go-bag (CI, passaporto, polizze) ||| Documents in a waterproof envelope in the go-bag (ID, passport, policies)
+Animali domestici: trasportino/guinzaglio pronti — i rifugi di emergenza possono non accettarli ||| Pets: carrier/lead ready — emergency shelters may not accept them
+Identifica luoghi freschi vicini: centri diurni comunali, biblioteche, amici ||| Identify cool places nearby: municipal day centres, libraries, friends
+Check giornaliero anziani e bambini: sintomi colpo di calore, 2L acqua/giorno ||| Daily check on older people and children: heatstroke symptoms, 2 L water/day
+Gas off ||| Gas off
+Nessun riscaldamento alternativo, minima invernale 0°C ||| No alternative heating, winter minimum 0°C
+CALORE −78 ||| HEAT −78
+Cucinare senza metano: fornello GPL da campeggio — 1 cartuccia 227g = ~2h cottura ||| Cooking without natural gas: camping LPG stove — 1 cartridge of 227 g = ~2 h of cooking
+Attiva riscaldamento alternativo (pellet/legna/GPL) ||| Set up alternative heating (pellets/wood/LPG)
+Stocca combustibile alternativo 30+ giorni ||| Stock alternative fuel for 30+ days
+Chiudi rubinetto gas principale + ventila subito + non usare interruttori elettrici ||| Close the main gas tap + ventilate immediately + do not use electric switches
+Acqua calda: pentola su fonte alternativa · riduci docce a 1/giorno con acqua tiepida ||| Hot water: pot on an alternative source · cut showers to 1/day with lukewarm water
+Cibo scarso ||| Low food
+Scorte alimentari: 0 giorni (target: 30+) ||| Food supplies: 0 days (target: 30+)
+CIBO −90 ||| FOOD −90
+MOBILITA −45 ||| MOBILITY −45
+COMM −30 ||| COMMS −30
+Scorte alimentari 30+ giorni ||| Food supplies 30+ days
+Fornello da campo + cartucce gas (min 3 per 30gg) ||| Camp stove + gas cartridges (min 3 per 30 days)
+Avvia orto emergenza (ravanelli 25gg, lattuga 45gg) ||| Start an emergency garden (radishes 25 days, lettuce 45 days)
+Apriscatole manuale + set utensili da campo ||| Manual tin opener + camp utensil set
+Filiera corta: mercati locali, baratto, orti condivisi, gruppi acquisto ||| Short supply chain: local markets, bartering, shared gardens, buying groups
+Cucina di sussistenza: zuppe di legumi, pane fatto in casa, conserve e fermentati fai-da-te ||| Subsistence cooking: legume soups, home-made bread, DIY preserves and ferments
+Frigo a 5°C ottimale — apri una volta per pasto con lista ingredienti già preparata ||| Fridge at 5°C is optimal — open it once per meal with the ingredient list already prepared
+Filiera corta: identifica mercati locali, agricoltori diretti, gruppi acquisto solidale (GAS) ||| Short supply chain: identify local markets, direct farmers, solidarity buying groups
+Impara fermentazione: crauti in 7 giorni, kimchi in 14 — conserva verdure senza energia ||| Learn fermentation: sauerkraut in 7 days, kimchi in 14 — preserve vegetables without energy
+Zero sprechi: bucce e fondi per brodo, pane secco in pan di pane, avanzi proteici in frittata ||| Zero waste: peels and scraps for stock, dry bread in breadcrumbs, protein leftovers in an omelette
+Rete di vicinato: identifica vicini, competenze, persone fragili ||| Neighbourhood network: identify neighbours, skills, vulnerable people
+Farmaci OTC 30+ giorni: paracetamolo, ibuprofene, antidiarroico (loperamide), sali ORS ||| OTC medicines for 30+ days: paracetamol, ibuprofen, anti-diarrhoeal (loperamide), ORS salts
+Riserva contanti fuori banca: 1-3 mesi di spese essenziali in casa ||| Cash reserve outside the bank: 1-3 months of essential expenses at home
+Consolida spostamenti: più commissioni in una sola uscita — valuta bici per tratte brevi ||| Consolidate trips: several errands in one outing — consider a bike for short journeys
+Contanti + carta carburante prepagata in go-bag (ATM potrebbero non funzionare) ||| Cash + prepaid fuel card in the go-bag (ATMs may not work)
+0L stoccati vs 100km/settimana ||| 0 L stored vs 100 km/week
+MOBILITA −20 ||| MOBILITY −20
+Fai il pieno + tanica 10-20L approvata ||| Fill the tank + approved 10-20 L can
+Go-bag pronto: documenti, contanti, farmaci, cambio ||| Go-bag ready: documents, cash, medicines, change of clothes
+Mappe offline scaricate (Maps.me o Organic Maps) ||| Offline maps downloaded (Maps.me or Organic Maps)
+Percorsi alternativi e punti rifornimento identificati ||| Alternative routes and refuelling points identified
+Piano evacuazione: route, punto ritrovo fuori comune, zaino pronto ||| Evacuation plan: route, meeting point outside the municipality, go-bag ready
+Piano fuga: percorsi lontani da boschi, punto ritrovo prestabilito ||| Escape plan: routes away from woods, pre-agreed meeting point
+Tieni l'auto parcheggiata in uscita e carica — ordine di evacuazione può arrivare in 30 min ||| Keep the car parked facing out and fuelled — an evacuation order can come within 30 min
+Farmaci salvavita in go-bag + foglio scritto con allergie, condizioni mediche, terapie ||| Life-saving medicines in the go-bag + a written sheet with allergies, medical conditions, treatments
+No internet ||| No internet
+Nessun canale di comunicazione di emergenza (radio/walkie/satellite) ||| No emergency communication channel (radio/walkie-talkie/satellite)
+COMM −80 ||| COMMS −80
+Radio FM/AM portatile a manovella ||| Portable hand-crank FM/AM radio
+Coppia walkie-talkie PMR446 (canale e codice concordati in famiglia) ||| Pair of PMR446 walkie-talkies (channel and code agreed in the family)
+Lista contatti emergenza stampata + piano ritrovo fisso ||| Printed emergency contact list + fixed meeting plan
+Tutti i power bank caricati e mantenuti > 80% ||| All power banks charged and kept above 80%
+Protocollo isolamento: stanza dedicata, bagno separato, turni cucina ||| Isolation protocol: dedicated room, separate bathroom, kitchen shifts
+Radio FM: annota le frequenze di RAI Radio 1 della tua zona (le onde medie RAI sono spente dal 2022) ||| FM radio: note the RAI Radio 1 frequencies for your area (RAI medium wave has been switched off since 2022)
+Recati al punto di ritrovo fisico prestabilito — lascia nota cartacea sulla porta di casa ||| Go to the pre-agreed physical meeting point — leave a paper note on your front door
+Walkie-talkie PMR446 sul canale concordato: check ogni 4h con familiari nel raggio di 2–5km ||| PMR446 walkie-talkies on the agreed channel: check in every 4 h with family within 2–5 km
+Aggiorna sistema e app di telefono e computer; attiva la verifica in due passaggi ||| Update the system and apps on your phone and computer; turn on two-step verification
+Password robuste e diverse per ogni account, con un gestore di password ||| Strong, different passwords for every account, with a password manager
+Backup regolare di file e foto importanti su un supporto protetto ||| Regular backup of important files and photos on a protected medium
+Tieni stampati i numeri della banca per bloccare carte e conti ||| Keep the bank's numbers printed to block cards and accounts
+Zona pulita/sporca per ingressi: cambio vestiti all'entrata, borsa spesa isolata fuori ||| Clean/dirty zone at the entrance: change clothes at the door, keep the shopping bag outside
+Mostra solo le 3 principali ||| Show only the top 3
+Lista generata con i tuoi dati. Seleziona uno ||| List generated from your data. Select a
+scenario ||| scenario
+per aggiungere priorità e item specifici. ||| to add specific priorities and items.

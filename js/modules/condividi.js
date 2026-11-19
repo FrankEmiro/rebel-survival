@@ -164,7 +164,7 @@ const CondividiModule = (() => {
     const msg = document.getElementById('condividi-import-msg');
     try {
       const payload = JSON.parse(str);
-      if (!confirm('Importare questo piano? I dati attuali verranno sovrascritti.')) return;
+      if (!confirm(I18n.t('Importare questo piano? I dati attuali verranno sovrascritti.'))) return;
       Storage.importAll(payload);
       if (typeof SettingsModule !== 'undefined') SettingsModule.init();
       if (typeof DashboardModule !== 'undefined') DashboardModule.render();

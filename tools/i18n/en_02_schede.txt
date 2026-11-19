@@ -1,0 +1,380 @@
+Barattoli vetro o buste sottovuoto per cereali ||| Glass jars or vacuum bags for cereals
+Acqua per cottura ||| Water for cooking
++0.5L/persona/giorno per cucinare pasta/riso ||| +0.5 L/person/day for cooking pasta/rice
+Pannelli solari che hai (Wp totali) ||| Solar panels you have (total Wp)
+Es: 2 pannelli da 400W = 800 ||| E.g. 2 panels of 400 W = 800
+Batteria che hai (kWh) ||| Battery you have (kWh)
+Capacità utile (LiFePO4 ~90%) ||| Usable capacity (LiFePO4 ~90%)
+Generatore che hai (Watt) ||| Generator you have (watts)
+Potenza nominale ||| Rated power
+Stagione (influenza produzione solare) ||| Season (affects solar production)
+Estate (max produzione) ||| Summer (max production)
+Primavera/Autunno ||| Spring/Autumn
+Inverno (min produzione) ||| Winter (min production)
+Dispositivi da Alimentare ||| Devices to Power
+Seleziona i dispositivi essenziali e modifica watt/ore se necessario. I watt proposti sono valori di esempio: per un calcolo preciso usa quelli scritti sull'etichetta o sul libretto del tuo apparecchio. ||| Select the essential devices and change watts/hours if needed. The watts shown are example values: for an accurate calculation use those written on the label or in the manual of your appliance.
+Frigorifero ||| Refrigerator
+W × ||| W ×
+h/g ||| h/day
+Congelatore ||| Freezer
+Illuminazione LED (4 ambienti) ||| LED lighting (4 rooms)
+Illuminazione ||| Lighting
+Smartphone (ricarica) ||| Smartphone (charging)
+Pompa acqua (se pozzo) ||| Water pump (if well)
+Laptop ||| Laptop
+Lavoro ||| Work
+Router WiFi ||| WiFi router
+TV 40" ||| 40" TV
+Intrattenimento ||| Entertainment
+Lavatrice (per ciclo) ||| Washing machine (per cycle)
+Domestico ||| Household
+Microonde ||| Microwave
+Cucina ||| Kitchen
+Boiler elettrico ||| Electric water heater
+Acqua calda ||| Hot water
+Dispositivo personalizzato ||| Custom device
+Nome dispositivo ||| Device name
+Watt ||| Watts
+Ore/giorno ||| Hours/day
++ Aggiungi ||| + Add
+kWh/giorno selezionati ||| kWh/day selected
+kWh/giorno prodotti ||| kWh/day produced
+Autonomia batteria ||| Battery autonomy
+Deficit: ||| Deficit:
+. Usa la batteria o riduci i consumi. ||| . Use the battery or reduce consumption.
+Priorità Consumi ||| Consumption Priorities
+In caso di autonomia limitata, spegni dall'ultimo verso il primo ||| If autonomy is limited, switch off from the last to the first
+Radio portatile ||| Portable radio
+Carburante Generatore (se usato) ||| Generator Fuel (if used)
+Nessun generatore inserito. ||| No generator entered.
+Superficie riscaldata (m²) ||| Heated area (m²)
+Livello isolamento ||| Insulation level
+Scarso (anni '60-'70) ||| Poor (1960s-70s)
+Medio (finestre doppie) ||| Medium (double-glazed windows)
+Buono (cappotto termico) ||| Good (external insulation)
+Ottimo (casa passiva) ||| Excellent (passive house)
+Zona climatica ||| Climate zone
+C – Roma, Firenze ||| C – Rome, Florence
+D – Milano, Torino ||| D – Milan, Turin
+E – Venezia, Trento ||| E – Venice, Trento
+F – Montagna ||| F – Mountains
+B – Napoli, Palermo ||| B – Naples, Palermo
+Riscaldamento alternativo che hai ||| Alternative heating you have
+Stufa a pellet ||| Pellet stove
+Stufa a GPL ||| LPG stove
+Combustibile che hai in scorta (kg o L) ||| Fuel you have in stock (kg or L)
+Inserisci 0 se non hai scorte ||| Enter 0 if you have no stock
+Combustibile da calcolare ||| Fuel to calculate
+Legna da ardere ||| Firewood
+Kerosene / Gasolio ||| Kerosene / Diesel
+GPL (bombola) ||| LPG (cylinder)
+Ore riscaldamento/giorno ||| Heating hours/day
+Temperatura target (°C) ||| Target temperature (°C)
+Min. confortevole: 18°C ||| Min. comfortable: 18°C
+kWh/giorno necessari ||| kWh/day needed
+Combustibile/giorno ||| Fuel/day
+Totale per ||| Total for
+Confronto Combustibili ||| Fuel Comparison
+Combustibile ||| Fuel
+Al giorno ||| Per day
+Legna (faggio/quercia) ||| Wood (beech/oak)
+Pellet di legno A1 ||| A1 wood pellets
+scelto ||| chosen
+Kerosene/gasolio ||| Kerosene/diesel
+Quantità calcolate con i poteri calorifici della tabella nazionale MASE/ISPRA e i rendimenti minimi di legge per le stufe a legna e a pellet. I costi sono solo indicativi: controlla i prezzi attuali. ||| Quantities are calculated with the calorific values of the national MASE/ISPRA table and the legal minimum efficiencies for wood and pellet stoves. Costs are only indicative: check current prices.
+Consigli Risparmio Calore ||| Heat-Saving Tips
+Isola una stanza sola ||| Heat just one room
+Tende termiche ||| Thermal curtains
+-15% dispersione finestre ||| -15% heat loss through windows
+Bozze porte/finestre ||| Draughts around doors/windows
+Nastro isolante: risparmio 10-20% ||| Draught-proofing tape: saves 10-20%
+Temperatura notturna ||| Night-time temperature
+Abbigliamento termico ||| Thermal clothing
+Ogni °C in meno → -7% consumo energetico ||| Every °C lower → -7% energy consumption
+Attenzione CO: ||| Beware of CO:
+Non usare MAI stufe a kerosene/gpl in ambienti chiusi senza ventilazione. Installa rilevatore CO. ||| NEVER use kerosene/LPG stoves in closed rooms without ventilation. Install a CO detector.
+Apri un'area e segna cosa avete già. Le quantità e le voci principali aggiornano subito la Home; la lista della spesa usa gli stessi dati. ||| Open an area and mark what you already have. Quantities and the main items update the Home screen straight away; the shopping list uses the same data.
+Cosa avete già ||| What you already have
+Scorte e fonti ||| Supplies and sources
+Scorte Stoccate ||| Stored Supplies
+Acqua disponibile ||| Available water
+Bottiglie + taniche + cisterne — aggiorna quando cambia ||| Bottles + jerrycans + tanks — update when it changes
+Fonti Alternative ||| Alternative Sources
+Pozzo privato ||| Private well
+Raccolta pioggia ||| Rainwater collection
+Fiume / sorgente ||| River / spring
+Filtro portatile (Sawyer/LifeStraw) ||| Portable filter (Sawyer/LifeStraw)
+Superficie tetto raccolta (m²) ||| Collection roof area (m²)
+Raccolta stimata = pioggia_mm × m² × 0.8 / 1000 = L/anno ||| Estimated collection = rain_mm × m² × 0.8 / 1000 = L/year
+Calcolatore acqua dettagliato → ||| Detailed water calculator →
+Da avere in casa ||| To have at home
+Taniche HDPE 10L con coperchio ||| 10 L HDPE jerrycans with lid
+Per stoccaggio lungo termine ||| For long-term storage
+Candeggina non profumata (5-6%) ||| Unscented bleach (5-6%)
+Disinfezione acqua ||| Water disinfection
+Pastiglie purificazione acqua ||| Water purification tablets
+Backup filtro ||| Filter backup
+Giorni di scorte ||| Days of supplies
+Scorte Alimentari ||| Food Supplies
+Autonomia alimentare ||| Food autonomy
+Giorni di autonomia per tutta la famiglia — aggiorna dopo ogni acquisto ||| Days of autonomy for the whole family — update after each purchase
+Fabbisogno di riferimento ||| Reference requirement
+Per le scorte l'app calcola 2.100 kcal a persona al giorno: è il valore medio usato per pianificare gli aiuti alimentari nelle emergenze (Manuale Sphere, UNHCR). Bambini, anziani, donne in gravidanza o allattamento e chi fa lavori pesanti possono avere bisogni diversi. ||| For supplies the app calculates 2,100 kcal per person per day: this is the average value used to plan food aid in emergencies (Sphere Handbook, UNHCR). Children, older people, pregnant or breastfeeding women and people doing heavy work may have different needs.
+Target di Riferimento ||| Reference Targets
+Minimo emergenza ||| Emergency minimum
+Crisi 2–4 settimane ||| 2–4 week crisis
+Preparazione seria ||| Serious preparation
+Autonomia completa ||| Full autonomy
+Calcolatore scorte dettagliato → ||| Detailed supplies calculator →
+Fondamentale! ||| Essential!
+Fornello da campeggio + ricariche gas ||| Camping stove + gas refills
+Per cottura senza elettricità ||| For cooking without electricity
+Risparmia carburante di cottura ||| Saves cooking fuel
+Multivitaminici e sali minerali ||| Multivitamins and mineral salts
+Integrazione dieta emergenza ||| Emergency diet supplement
+Pannelli, batterie, generatore ||| Panels, batteries, generator
+energia alternativa ||| alternative energy
+Fonti Disponibili ||| Available Sources
+Pannelli solari ||| Solar panels
+Batteria stazionaria ||| Stationary battery
+Pannelli — potenza (Wp) ||| Panels — power (Wp)
+Es: 2 × 400W = 800Wp ||| E.g. 2 × 400 W = 800 Wp
+Batteria — capacità (kWh) ||| Battery — capacity (kWh)
+Generatore — potenza (W) ||| Generator — power (W)
+Stagione Attuale ||| Current Season
+opzionale ||| optional
+Estate (max produzione solare) ||| Summer (max solar production)
+Primavera / Autunno ||| Spring / Autumn
+Influenza la stima della produzione solare giornaliera nel dashboard. ||| Affects the daily solar production estimate on the dashboard.
+Calcolatore autonomia dettagliato → ||| Detailed autonomy calculator →
+Pile AA/AAA di scorta ||| Spare AA/AAA batteries
+Per radio e torce ||| For radios and torches
+Candele + accendino + fiammiferi ||| Candles + lighter + matches
+Backup illuminazione ||| Lighting backup
+Lanterne solari ricaricabili ||| Rechargeable solar lanterns
+Senza costi operativi ||| No running costs
+Lampada a dinamo/manovella ||| Dynamo/hand-crank lamp
+Senza batterie ||| No batteries
+Power bank 20.000mAh (x2) ||| 20,000 mAh power bank (x2)
+Ricarica smartphone ||| Smartphone charging
+Stufe e combustibile ||| Stoves and fuel
+riscaldamento alternativo ||| alternative heating
+Stufa a legna / camino ||| Wood stove / fireplace
+GPL / bombole ||| LPG / cylinders
+Combustibile stoccato ||| Stored fuel
+Legna, pellet o GPL in kg equivalenti ||| Wood, pellets or LPG in equivalent kg
+Zona Climatica ||| Climate Zone
+A – Siracusa, Lampedusa (GG 600) ||| A – Syracuse, Lampedusa (HDD 600)
+B – Palermo, Napoli (GG 900) ||| B – Palermo, Naples (HDD 900)
+C – Roma, Firenze (GG 1400) ||| C – Rome, Florence (HDD 1400)
+D – Milano, Torino (GG 2100) ||| D – Milan, Turin (HDD 2100)
+E – Venezia, Trento (GG 2800) ||| E – Venice, Trento (HDD 2800)
+F – Bolzano, alta montagna (GG 3800) ||| F – Bolzano, high mountains (HDD 3800)
+Calcolatore combustibile dettagliato → ||| Detailed fuel calculator →
+Coperte termiche di emergenza (x4) ||| Emergency thermal blankets (x4)
+Abbigliamento termico layering (tutti) ||| Layered thermal clothing (everyone)
+Base, mid, outer layer ||| Base, mid, outer layer
+Auto e spostamenti ||| Car and travel
+Carburante e kit in auto ||| Fuel and car kit
+autonomia carburante ||| fuel autonomy
+Carburante Disponibile ||| Available Fuel
+Carburante stoccato ||| Stored fuel
+Serbatoio pieno + taniche approvate — aggiorna dopo ogni rifornimento ||| Full tank + approved jerrycans — update after each refuel
+Il Tuo Veicolo ||| Your Vehicle
+Tipo carburante ||| Fuel type
+Diesel ||| Diesel
+Elettrico (kWh) ||| Electric (kWh)
+Consumo (L/100km) ||| Consumption (L/100 km)
+Serbatoio (L) ||| Tank (L)
+Km percorsi a settimana (media) ||| Km driven per week (average)
+km/sett ||| km/week
+Calcolatore mobilità dettagliato → ||| Detailed mobility calculator →
+Emergenza Stradale ||| Roadside Emergency
+Triangolo di emergenza + gilet rifrangente ||| Warning triangle + high-visibility vest
+Obbligatorio per legge ||| Required by law
+Kit primo soccorso auto ||| Car first-aid kit
+Con coperta termica ||| With thermal blanket
+Cavi avviamento ||| Jump leads
+Per batteria scarica ||| For a flat battery
+Compressore aria portatile 12V ||| Portable 12 V air compressor
+Gonfia pneumatici ||| Inflates tyres
+Kit riparazione rapida pneumatici ||| Quick tyre repair kit
+Fix-a-flat o kit tappabuchi ||| Tyre sealant or plug kit
+Torcia impermeabile ||| Waterproof torch
+Scorte in Auto ||| Supplies in the Car
+Acqua (2L per persona) ||| Water (2 L per person)
+Min. 48h ||| Min. 48 h
+Cibo emergenza 48h (barrette, frutta secca) ||| 48 h emergency food (bars, nuts)
+Cambio vestiti + impermeabile ||| Change of clothes + waterproof
+Caricabatterie auto USB ||| USB car charger
+Ricarica dispositivi ||| Device charging
+Tanica carburante omologata 10L ||| Approved 10 L fuel can
+Scorta emergenza ||| Emergency reserve
+Carta stradale cartacea zona ||| Paper road map of the area
+Senza GPS funziona ||| Works without GPS
+Mappe offline scaricate (Maps.me) ||| Offline maps downloaded (Maps.me)
+Funziona senza dati ||| Works without data
+Bussola ||| Compass
+Come siete preparati ||| How prepared you are
+Radio, internet, contatti ||| Radio, internet, contacts
+emergenza +internet ||| emergency + internet
+Nessun canale ||| No channel
+Connettività Internet ||| Internet Connectivity
+Internet disponibile ora ||| Internet available now
+Tipo connessione ||| Connection type
+Fibra ottica (FTTH/FTTC) ||| Fibre optic (FTTH/FTTC)
+ADSL / VDSL ||| ADSL / VDSL
+Mobile 4G/5G (SIM dati) ||| Mobile 4G/5G (data SIM)
+Satellitare (Starlink / HughesNet) ||| Satellite (Starlink / HughesNet)
+Nessuna connessione ||| No connection
+In blackout prolungato: fibra/ADSL cade entro 4–8h (UPS router). Mobile regge fino a esaurimento celle. Satellite è l'unica opzione resiliente. ||| In a prolonged blackout: fibre/ADSL drops within 4–8 h (router UPS). Mobile holds until the cells run out. Satellite is the only resilient option.
+Comunicazione di Emergenza ||| Emergency Communication
+Canali indipendenti dalla rete internet e dalla corrente elettrica. ||| Channels independent of the internet and of mains electricity.
+Radio FM/AM a manovella ||| Hand-crank FM/AM radio
+Walkie-talkie PMR446 ||| PMR446 walkie-talkies
+Telefono satellitare (Iridium / Garmin) ||| Satellite phone (Iridium / Garmin)
+Rete mesh locale (Meshtastic / LoRa) ||| Local mesh network (Meshtastic / LoRa)
+Radio FM ||| FM radio
+— ricezione notizie in emergenza (RAI Radio 1 e radio locali: annota le frequenze della tua zona). Solo ricezione, nessuna trasmissione. ||| — receiving news in an emergency (RAI Radio 1 and local stations: note the frequencies for your area). Receive only, no transmission.
+— comunicazione locale 0.5–3 km, canale e codice concordati in famiglia, batterie AA/AAA. ||| — local communication 0.5–3 km, channel and code agreed in the family, AA/AAA batteries.
+Sat phone ||| Sat phone
+— funziona ovunque, indipendente da infrastrutture terrestri. Costo elevato. ||| — works anywhere, independent of ground infrastructure. High cost.
+Mesh LoRa ||| LoRa mesh
+— rete peer-to-peer autonoma, range fino a 5–10 km in campo aperto, nessun abbonamento. ||| — autonomous peer-to-peer network, range up to 5–10 km in open country, no subscription.
+Contatti emergenza stampati (non solo digitali) ||| Emergency contacts printed (not only digital)
+Piano minimo: ||| Minimum plan:
+punto di ritrovo fisso + orari di check-in via walkie-talkie ogni 12h + lista contatti fuori zona (parente/amico in altra città reperibile telefonicamente). ||| a fixed meeting point + check-in times by walkie-talkie every 12 h + a list of contacts outside the area (a relative/friend in another city reachable by phone).
+Kit medico, farmaci, corsi ||| Medical kit, medicines, courses
+preparazione medica ||| medical preparedness
+Kit e Scorte Mediche ||| Medical Kit and Supplies
+Kit medico completo ||| Complete medical kit
+Garze, bende, disinfettante, cerotti, forbici, laccio, termometro ||| Gauze, bandages, disinfectant, plasters, scissors, tourniquet, thermometer
+Farmaci cronici disponibili ||| Chronic medicines available
+Per tutti i membri della famiglia che ne hanno bisogno ||| For all family members who need them
+Manuale primo soccorso (cartaceo) ||| First-aid manual (paper)
+Usabile offline, senza dispositivi ||| Usable offline, without devices
+Scorta farmaci cronici ||| Chronic medicine stock
+0 = nessuna scorta — target minimo: 30 giorni ||| 0 = no stock — minimum target: 30 days
+Formazione ||| Training
+Corso BLS / Primo Soccorso completato ||| BLS / First Aid course completed
+Almeno 1 adulto in famiglia ||| At least 1 adult in the family
+Croce Rossa Italiana offre corsi BLS-D a circa €50-80. Verifica ||| The Italian Red Cross offers BLS-D courses at about €50-80. Check
+per la sede più vicina. ||| for the nearest branch.
+Farmaci OTC da Scorta ||| Over-the-Counter Medicines in Stock
+Paracetamolo / Ibuprofene ||| Paracetamol / Ibuprofen
+— dolore e febbre ||| — pain and fever
+— reazioni allergiche ||| — allergic reactions
+— antidiarroico, previene disidratazione ||| — anti-diarrhoeal, prevents dehydration
+Carbone vegetale ||| Activated charcoal
+— intossicazioni alimentari lievi ||| — mild food poisoning
+Sali ORS ||| ORS salts
+— reidratazione (o fai-da-te: 1L acqua + 6 cucch. zucchero + 1 cucch. sale) ||| — rehydration (or DIY: 1 L water + 6 tsp sugar + 1 tsp salt)
+Antidolorifici (paracetamolo, ibuprofene) ||| Painkillers (paracetamol, ibuprofen)
+Scorta 3 mesi ||| 3-month stock
+Antibiotici (con prescrizione) ||| Antibiotics (with prescription)
+Consulta il medico in anticipo ||| Consult your doctor in advance
+Antisettico (acqua ossigenata, betadine) ||| Antiseptic (hydrogen peroxide, betadine)
+Sicurezza in casa ||| Safety at Home
+Estintore, rilevatore CO, vicini ||| Extinguisher, CO detector, neighbours
+sicurezza attiva ||| active safety
+Estintore a polvere (min. 2kg) ||| Powder extinguisher (min. 2 kg)
+Posizionato vicino a cucina e uscita ||| Placed near the kitchen and exit
+Rilevatore CO installato ||| CO detector installed
+Obbligatorio se usi combustibili al chiuso ||| Required if you burn fuel indoors
+Serrature rinforzate (porte principali) ||| Reinforced locks (main doors)
+Triplo punto o catenaccio di sicurezza ||| Triple-point or security deadbolt
+Luci di emergenza / torce disponibili ||| Emergency lights / torches available
+Una per stanza + prese di emergenza ricaricabili ||| One per room + rechargeable emergency sockets
+Generatore posizionato correttamente ||| Generator positioned correctly
+All'aperto, ad almeno 6 m da finestre, porte e garage ||| Outdoors, at least 6 m from windows, doors and garages
+Rete di Comunità ||| Community Network
+Rete di vicinato attiva ||| Active neighbourhood network
+Hai identificato vicini fidati con competenze utili ||| You have identified trusted neighbours with useful skills
+medici, meccanici, elettricisti, agricoltori ||| doctors, mechanics, electricians, farmers
+nel raggio di 2km ||| within 2 km
+Individua le ||| Identify the
+vicine (anziani soli, disabili) — controlla il loro stato in emergenza ||| neighbours at risk (older people living alone, disabled) — check on them in an emergency
+gruppo Telegram / WhatsApp di quartiere ||| neighbourhood Telegram / WhatsApp group
+ora, prima dell'emergenza ||| now, before the emergency
+Definisci un ||| Define a
+punto di ritrovo fisico ||| physical meeting point
+nel quartiere per scenari senza telefono ||| in the neighbourhood for scenarios without a phone
+CO — Monossido di Carbonio: ||| CO — Carbon Monoxide:
+incolore, inodore, letale. Non usare MAI barbecue, carbonella o generatori in spazi chiusi. Sintomi: mal di testa, nausea, confusione → esci subito. ||| colourless, odourless, lethal. NEVER use barbecues, charcoal or generators in enclosed spaces. Symptoms: headache, nausea, confusion → get out immediately.
+Igiene, documenti, contanti ||| Hygiene, documents, cash
+Sapone, carta, copie, soldi ||| Soap, paper, copies, money
+Sapone solido scorta 3 mesi ||| Bar soap, 3-month stock
+Durata indefinita ||| Indefinite shelf life
+Salviettine umidificate (10 confezioni) ||| Wet wipes (10 packs)
+Igiene senza acqua corrente ||| Hygiene without running water
+Carta igienica (scorta 3 mesi) ||| Toilet paper (3-month stock)
+Alcool isopropilico 70% (2L) ||| Isopropyl alcohol 70% (2 L)
+Disinfezione superfici e ferite ||| Disinfecting surfaces and wounds
+WC chimico portatile ||| Portable chemical toilet
+Se acquedotto interrotto ||| If the water mains are cut
+Copie documenti in busta impermeabile ||| Document copies in a waterproof envelope
+Carta identità, codice fiscale, polizze ||| ID card, tax code, policies
+Contanti (500€+ in tagli piccoli) ||| Cash (€500+ in small notes)
+I bancomat non funzionano senza elettricità ||| Cash machines do not work without electricity
+Copia polizze assicurative ||| Copy of insurance policies
+Zaino d'emergenza ||| Emergency Go-Bag
+Pronto da prendere e andare ||| Ready to grab and go
+Zaino pronto ||| Go-bag ready
+Zaino d'emergenza pronto (72 ore) ||| Emergency go-bag ready (72 hours)
+Documenti, contanti, cambio, farmaci, acqua, cibo ||| Documents, cash, change of clothes, medicines, water, food
+Kit medico e farmaci → sezione ||| Medical kit and medicines → section
+· Radio e walkie → sezione ||| · Radio and walkie-talkies → section
+Zaino resistente 40-60L impermeabile ||| Sturdy waterproof 40-60 L backpack
+Base del go-bag ||| Base of the go-bag
+Acqua & Cibo ||| Water & Food
+Acqua 3L in borraccia filtrante ||| 3 L of water in a filter bottle
+LifeStraw integrata ||| Built-in LifeStraw
+Barrette energetiche (9 pezzi) ||| Energy bars (9 pieces)
+72h × 3 pasti ||| 72 h × 3 meals
+Frutta secca e cioccolato fondente ||| Nuts and dark chocolate
+Alta densità calorica ||| High calorie density
+Riparo & Calore ||| Shelter & Warmth
+Tenda bivacco / sacco a pelo ||| Bivouac tent / sleeping bag
+Per riparo di emergenza ||| For emergency shelter
+Coperta termica emergenza (x2) ||| Emergency thermal blanket (x2)
+Accendino + fiammiferi impermeabili ||| Lighter + waterproof matches
+Abbigliamento layering per 3 giorni ||| Layered clothing for 3 days
+Compatto e termico ||| Compact and thermal
+Impermeabile leggero ||| Lightweight waterproof
+Telefono + power bank carico ||| Phone + charged power bank
+Radio tascabile a manovella ||| Pocket hand-crank radio
+Fischietto di segnalazione ||| Signalling whistle
+Segnale soccorso ||| Rescue signal
+Lista contatti emergenza stampata ||| Printed emergency contact list
+Salute & Primo Soccorso ||| Health & First Aid
+Kit primo soccorso compatto ||| Compact first-aid kit
+Farmaci personali 7 giorni ||| Personal medicines, 7 days
+Priorità assoluta ||| Top priority
+Antidolorifici + antistaminici ||| Painkillers + antihistamines
+Salviettine disinfettanti ||| Disinfectant wipes
+Documenti & Valore ||| Documents & Valuables
+Documenti in busta impermeabile ||| Documents in a waterproof envelope
+CI, passaporto, tessera sanitaria ||| ID card, passport, health card
+Contanti (200€ in tagli piccoli) ||| Cash (€200 in small notes)
+Copia chiavi importanti ||| Copy of important keys
+Casa, auto, ufficio ||| Home, car, office
+USB con copie digitali documenti ||| USB stick with digital copies of documents
+Cifrata ||| Encrypted
+Coltellino multiuso / Leatherman ||| Multi-tool knife / Leatherman
+Torcia frontale LED + pile ||| LED head torch + batteries
+Corda 10m ||| 10 m rope
+Mille usi ||| A thousand uses
+Sacchi spazzatura robusti grandi (5) ||| Large heavy-duty bin bags (5)
+Impermeabilizzazione, riparo ||| Waterproofing, shelter
+Nastro adesivo resistente (Duct tape) ||| Strong adhesive tape (duct tape)
+Riparazioni rapide ||| Quick repairs
+Stampa ||| Print
+Chi siete ||| Who you are
+Famiglia e casa ||| Family and home
+Chi siete e dove vivete ||| Who you are and where you live
+Casa indipendente ||| Detached house
+Lingua dell'app ||| App language
+Cambiando lingua l'app si ricarica. Le guide e alcune parti sono ancora solo in italiano. ||| Changing the language reloads the app. The guides and some parts are still in Italian only.
+Paese (per la mappa dei confini) ||| Country (for the boundary map)
+Per l'Italia i confini sono già nell'app. Per gli altri paesi vengono scaricati una volta (pochi MB, senza i comuni) e poi restano nel telefono. ||| For Italy the boundaries are already in the app. For other countries they are downloaded once (a few MB, without municipalities) and then stay on the phone.
+Composizione Famiglia ||| Household

@@ -505,7 +505,7 @@ const SettingsModule = (() => {
   }
 
   function _resetScCheck(scenId) {
-    if (!confirm('Azzerare la checklist per questo scenario?')) return;
+    if (!confirm(I18n.t('Azzerare la checklist per questo scenario?'))) return;
     Storage.remove('sc-checks-' + scenId);
     _renderScenarioTab();
   }
@@ -578,6 +578,15 @@ const SettingsModule = (() => {
   }
 
   function _htmlProfilo() { return `
+    <div class="card">
+      <h3><i class="ph ph-translate"></i> Lingua / Language</h3>
+      <div class="form-group">
+        <label for="s-lingua">Lingua dell'app</label>
+        ${I18n.select('s-lingua')}
+        <p class="pf-note">Cambiando lingua l'app si ricarica. Le guide e alcune parti sono ancora solo in italiano.</p>
+      </div>
+    </div>
+
     <div class="card">
       <h3><i class="ph ph-globe-hemisphere-west"></i> Paese</h3>
       <div class="form-group">
@@ -1203,7 +1212,7 @@ const SettingsModule = (() => {
 
   /* ── RESET ── */
   function reset() {
-    if (!confirm('Azzerare tutte le dimensioni e i task manuali? I dati salvati verranno eliminati.')) return;
+    if (!confirm(I18n.t('Azzerare tutte le dimensioni e i task manuali? I dati salvati verranno eliminati.'))) return;
     Storage.set('profilo', {});
     Storage.set('task-checks', {});
     Storage.remove('onboarded');
@@ -1246,13 +1255,13 @@ const SettingsModule = (() => {
         try {
           const payload = JSON.parse(ev.target.result);
           const dateLabel = (payload.exportedAt || '').slice(0, 10) || 'selezionato';
-          if (!confirm(`Importare il backup del ${dateLabel}? I dati attuali verranno sovrascritti.`)) return;
+          if (!confirm(I18n.t(`Importare il backup del ${dateLabel}? I dati attuali verranno sovrascritti.`))) return;
           Storage.importAll(payload);
           init();
           if (typeof DashboardModule !== 'undefined') DashboardModule.render();
-          alert('Backup importato correttamente.');
+          alert(I18n.t('Backup importato correttamente.'));
         } catch {
-          alert('Errore: file non valido o corrotto.');
+          alert(I18n.t('Errore: file non valido o corrotto.'));
         }
       };
       reader.readAsText(file);
