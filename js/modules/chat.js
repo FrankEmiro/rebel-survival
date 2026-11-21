@@ -82,6 +82,15 @@ const ChatModule = (() => {
 
   function start() { state.error = ''; A().meshStart(); renderStatus('Accendo…'); }
   function stop() { A().meshStop(); }
+  /* Wi-Fi Aware (secondo trasporto accanto al Bluetooth): solo sui telefoni compatibili, nell'app Android. */
+  function wifiInfo() { try { return A().meshWifi ? JSON.parse(A().meshWifi()) : null; } catch (e) { return null; } }
+  function wifiToggle() { const w = wifiInfo(); if (!w || !w.supported) return; A().meshWifiSet(!w.enabled); setTimeout(render, 400); }
+  function wifiHtml() {
+    const w = wifiInfo();
+    if (!w) return '';
+    if (!w.supported) return `<span class="chat-status"><i class="ph ph-wifi-slash"></i> Wi-Fi vicino non disponibile su questo telefono</span>`;
+    return `<button class="btn btn-secondary" onclick="ChatModule.wifiToggle()"><i class="ph ph-wifi-high"></i> ${w.enabled ? 'Wi-Fi vicino: acceso' : 'Wi-Fi vicino: spento'}</button>`;
+  }
 
   function send() {
     const inp = document.getElementById('chat-text');
@@ -418,7 +427,8 @@ const ChatModule = (() => {
         ${state.running
           ? `<button class="btn btn-secondary" onclick="ChatModule.stop()"><i class="ph ph-power"></i> Spegni</button>`
           : `<button class="btn btn-primary" onclick="ChatModule.start()"><i class="ph ph-bluetooth"></i> Accendi la chat</button>`}
-        <span id="chat-status" class="chat-status">${state.running ? `Accesa · ${state.peers.length} vicin${state.peers.length === 1 ? 'o' : 'i'}` : 'Spenta'}</span>`;
+        <span id="chat-status" class="chat-status">${state.running ? `Accesa · ${state.peers.length} vicin${state.peers.length === 1 ? 'o' : 'i'}` : 'Spenta'}</span>
+        ${wifiHtml()}`;
     document.getElementById('chat-err').innerHTML = state.error ? `<p class="chat-error"><i class="ph ph-warning"></i> ${esc(state.error)}</p>` : '';
     document.getElementById('chat-peers').innerHTML = `
         <button class="chat-peer ${state.to === 'all' ? 'active' : ''}" onclick="ChatModule.talkTo('all')"><i class="ph ph-broadcast"></i> Tutti i vicini</button>
@@ -459,5 +469,5 @@ const ChatModule = (() => {
   }
 
   window.RSMeshEvent = onEvent;
-  return { init: render, render, start, stop, send, quick, sharePos, sosDown, sosUp, setTab, boardPost, boardDone, boardHide, boardHideSender, boardClear, boardMedWarn, pickFile, sendPending, cancelPending, toggleVoice, setNick, talkTo, clearAll, available, onEvent };
+  return { init: render, render, start, stop, wifiToggle, send, quick, sharePos, sosDown, sosUp, setTab, boardPost, boardDone, boardHide, boardHideSender, boardClear, boardMedWarn, pickFile, sendPending, cancelPending, toggleVoice, setNick, talkTo, clearAll, available, onEvent };
 })();

@@ -13,13 +13,13 @@ Questi pacchetti sono in `src/main/java/com/bitchat/android/`:
 - `sync`: sincronizzazione dei messaggi tra i telefoni;
 - `crypto` e `identity`: chiavi e identità del telefono;
 - `services`, `service`, `favorites` e `spam`: servizi di supporto;
-- `ui/debug`: solo le impostazioni, senza schermate.
+- `ui/debug`: solo le impostazioni, senza schermate;
+- `wifiaware` (21/11/2026): secondo trasporto Wi‑Fi Aware accanto al Bluetooth, copiato dallo stesso commit di bitchat. Cambiata solo la notifica dei messaggi privati ad app chiusa (passa da `RsBackgroundMessages`). Serve Android 8 o più recente e un telefono con chip compatibile; negli altri resta solo il Bluetooth. Acceso di default, si spegne dalla schermata Chat (`RSAndroid.meshWifiSet`). Non è Wi‑Fi Direct. **Non provato su telefoni veri.**
 
 ## Modifiche di Rebel Survival (2026-11-16)
 - **Tolti:**
   - messaggi via internet (Nostr e Tor): restano solo i sostituti vuoti in `nostr/RsNostrStubs.kt`;
   - voce in diretta: resta solo il sostituto `features/voice/LiveVoiceManager.kt`;
-  - Wi‑Fi Aware: resta solo il sostituto `wifiaware/WifiAwareController.kt`;
   - tutte le schermate Compose.
 - **Notifiche:**
   - i testi sono in italiano (`res/values/strings.xml`);

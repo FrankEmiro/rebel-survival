@@ -223,6 +223,14 @@ public class MainActivity extends Activity {
                 ? new String[]{Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_ADVERTISE, Manifest.permission.BLUETOOTH_CONNECT}
                 : new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
     }
+    /** Permessi da chiedere: Bluetooth, più (Android 13+) «dispositivi Wi-Fi vicini» per il Wi-Fi Aware. Solo il Bluetooth è obbligatorio. */
+    private String[] meshPerms() {
+        String[] bt = btPerms();
+        if (Build.VERSION.SDK_INT < 33) return bt;
+        String[] all = java.util.Arrays.copyOf(bt, bt.length + 1);
+        all[bt.length] = Manifest.permission.NEARBY_WIFI_DEVICES;
+        return all;
+    }
     private boolean hasBt() {
         for (String p : btPerms()) if (!has(p)) return Build.VERSION.SDK_INT < 31 && has(Manifest.permission.ACCESS_COARSE_LOCATION);
         return true;
@@ -411,7 +419,7 @@ public class MainActivity extends Activity {
         /** Chat Bluetooth: accende la rete (chiede i permessi se servono). Il risultato arriva come evento. */
         @JavascriptInterface
         public void meshStart() {
-            runOnUiThread(() -> { if (hasBt()) startMesh(); else requestPermissions(btPerms(), REQ_BT); });
+            runOnUiThread(() -> { if (hasBt()) startMesh(); else requestPermissions(meshPerms(), REQ_BT); });
         }
         /** Immagine, audio o file: peerID vuoto = tutti i vicini. Ritorna ok | handshake | wait | blocked | error. */
         @JavascriptInterface public String meshSendMedia(String peerID, String name, String mime, String base64) {
@@ -426,6 +434,9 @@ public class MainActivity extends Activity {
         @JavascriptInterface public void voiceStop() { runOnUiThread(MainActivity.this::voiceFinish); }
         @JavascriptInterface public void voiceAbort() { runOnUiThread(MainActivity.this::voiceCancel); }
         @JavascriptInterface public void meshStop() { RsMesh.stop(); }
+        /** Wi-Fi Aware della chat: stato (JSON) e interruttore. */
+        @JavascriptInterface public String meshWifi() { return RsMesh.wifiAwareJson().toString(); }
+        @JavascriptInterface public void meshWifiSet(boolean on) { RsMesh.setWifiAware(on); }
         @JavascriptInterface public boolean meshRunning() { return RsMesh.INSTANCE.getRunning(); }
         @JavascriptInterface public String meshMe() { return RsMesh.myPeerID(); }
         @JavascriptInterface public String meshPeers() { return RsMesh.peersJson().toString(); }

@@ -1,0 +1,3 @@
+Wi-Fi vicino: acceso ||| Nearby Wi-Fi: on
+Wi-Fi vicino: spento ||| Nearby Wi-Fi: off
+Wi-Fi vicino non disponibile su questo telefono ||| Nearby Wi-Fi is not available on this phone

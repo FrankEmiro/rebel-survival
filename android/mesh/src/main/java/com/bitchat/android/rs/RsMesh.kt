@@ -33,6 +33,8 @@ object RsMesh {
         try { com.bitchat.android.services.AppStateStore.initializeConversationPersistence(c) } catch (_: Exception) { }
         try { com.bitchat.android.ui.debug.DebugPreferenceManager.init(c) } catch (_: Exception) { }
         try { com.bitchat.android.service.MeshServicePreferences.init(c) } catch (_: Exception) { }
+        // Wi-Fi Aware acceso di default (si può spegnere con wifiAware(false)); sui telefoni non compatibili resta solo il Bluetooth.
+        try { com.bitchat.android.wifiaware.WifiAwareController.initialize(c, wifiAwareOn()) } catch (_: Exception) { }
     }
 
     private val delegate = object : MeshDelegate {
@@ -128,6 +130,23 @@ object RsMesh {
     /** Da chiamare all'avvio dell'app: serve solo per leggere e salvare il nome (non accende il Bluetooth). */
     @JvmStatic fun attach(ctx: Context) { prefsContext = ctx.applicationContext }
     private fun prefs() = (appContext ?: prefsContext)?.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+
+    @JvmStatic fun wifiAwareOn(): Boolean = prefs()?.getBoolean("wifi_aware", true) ?: true
+
+    @JvmStatic fun setWifiAware(on: Boolean) {
+        prefs()?.edit()?.putBoolean("wifi_aware", on)?.apply()
+        try { com.bitchat.android.wifiaware.WifiAwareController.setEnabled(on) } catch (_: Exception) { }
+    }
+
+    /** Stato del Wi-Fi Aware per la schermata: supported, enabled, running, peers (vicini collegati via Wi-Fi). */
+    @JvmStatic fun wifiAwareJson(): JSONObject {
+        val c = com.bitchat.android.wifiaware.WifiAwareController
+        return JSONObject()
+            .put("supported", c.supported.value)
+            .put("enabled", wifiAwareOn())
+            .put("running", c.running.value)
+            .put("peers", c.connectedPeers.value.size)
+    }
 
     @JvmStatic fun nickname(): String? = prefs()?.getString("nickname", null)
 
