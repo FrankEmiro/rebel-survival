@@ -110,5 +110,6 @@
     [/^Un'AI che gira sul tuo telefono scrive la risposta usando solo i passaggi delle guide\. Su questo telefono userà il (.+) \(modello (.+)\)\. Va scaricata una volta \(circa (.+), servono (.+) liberi; meglio con il Wi‑Fi\) da server pubblici \(jsDelivr, Hugging Face, GitHub\); poi funziona senza internet\. Le tue domande non escono dal telefono\. Vedi la$/, (m, e, mo, a, b) => "An AI running on your phone writes the answer using only the steps in the guides. On this phone it will use the " + e.replace('scheda grafica', 'graphics card').replace('processore', 'processor') + ' (model ' + mo + '). It must be downloaded once (about ' + a + ', ' + b + ' free needed; better on Wi‑Fi) from public servers (jsDelivr, Hugging Face, GitHub); then it works without internet. Your questions do not leave the phone. See the'],
     [/^(\d+) confezion[ei]$/, '$1 packs'],
     [/^Numeri indicati per (.+): controllali su fonti ufficiali del tuo paese\. Le guide e i piani dell'app citano per lo più i numeri italiani \(112, 118, 115\)\.$/, (m, c) => 'Numbers shown for ' + (((window.I18n && I18n.tr(c)) || c).trim()) + ': check them against official sources in your country. The app\'s guides and plans mostly quote the Italian numbers (112, 118, 115).'],
+    [/^Percorso (\d\d\/\d\d \d\d:\d\d)$/, 'Route $1'],
   ];
 })();

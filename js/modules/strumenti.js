@@ -36,6 +36,7 @@ const StrumentiModule = (() => {
   let _waypointMarker = null;
   let _waypointLine   = null;
   let _settingWaypoint = false;
+  let _mapFixed = false;
 
   /* ── UTILITY ── */
   function deg2card(d) {
@@ -179,21 +180,24 @@ const StrumentiModule = (() => {
 
   /* ── HEADING ICON (GPS marker con cono direzionale) ── */
   function _makeHeadingIcon(heading) {
-    const hasCone = heading != null;
-    const cone = hasCone
-      ? `<polygon points="20,2 14,18 26,18" fill="#c9a84c" opacity="0.65"/>`
-      : '';
+    const h = heading != null ? heading : _curHeading();
+    const has = h != null;
+    // con la direzione nota: fascio luminoso + grossa freccia gialla con bordo scuro e bianco; altrimenti un punto con alone
+    const body = has
+      ? `<g style="transform:rotate(${h}deg);transform-origin:36px 36px">
+           <path d="M36 36 L12 -8 A46 46 0 0 1 60 -8 Z" fill="#ffd54a" opacity="0.28"/>
+           <path d="M36 6 L54 58 L36 47 L18 58 Z" fill="#ffc400" stroke="#111" stroke-width="5" stroke-linejoin="round" paint-order="stroke"/>
+           <path d="M36 6 L54 58 L36 47 L18 58 Z" fill="#ffc400" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/>
+         </g>`
+      : `<circle cx="36" cy="36" r="22" fill="#ffc400" opacity="0.25" class="gps-pulse"/>
+         <circle cx="36" cy="36" r="11" fill="#ffc400" stroke="#111" stroke-width="5"/>
+         <circle cx="36" cy="36" r="11" fill="#ffc400" stroke="#fff" stroke-width="3"/>`;
     return L.divIcon({
-      className: '',
-      html: `<svg viewBox="0 0 40 40" width="40" height="40"
-               style="transform:rotate(${hasCone ? heading : 0}deg);overflow:visible;display:block">
-               ${cone}
-               <circle cx="20" cy="20" r="8" fill="#c9a84c" stroke="white" stroke-width="2.5"/>
-               <circle cx="20" cy="20" r="3" fill="white"/>
-             </svg>`,
-      iconSize: [40, 40],
-      iconAnchor: [20, 20],
-      popupAnchor: [0, -20],
+      className: 'gps-arrow',
+      html: `<svg viewBox="0 0 72 72" width="72" height="72" style="overflow:visible;display:block">${body}</svg>`,
+      iconSize: [72, 72],
+      iconAnchor: [36, 36],
+      popupAnchor: [0, -30],
     });
   }
 
@@ -244,7 +248,8 @@ const StrumentiModule = (() => {
     if (btn) btn.classList.remove('active');
   }
 
-  function _onMapClickWaypoint(e) {
+  function _onMapClickWaypoint(e) { _setWaypointAt(e.latlng, 'Meta'); }
+  function _setWaypointAt(latlng, nome) {
     _settingWaypoint = false;
     const wpIcon = L.divIcon({
       className: '',
@@ -256,8 +261,8 @@ const StrumentiModule = (() => {
       iconSize: [24, 36],
       iconAnchor: [12, 36],
     });
-    _waypointMarker = L.marker(e.latlng, { icon: wpIcon }).addTo(_map);
-    _waypointMarker.bindPopup(`<b>Meta</b><br>${e.latlng.lat.toFixed(5)}, ${e.latlng.lng.toFixed(5)}`);
+    _waypointMarker = L.marker(latlng, { icon: wpIcon }).addTo(_map);
+    _waypointMarker.bindPopup(`<b>${_esc(nome)}</b><br>${latlng.lat.toFixed(5)}, ${latlng.lng.toFixed(5)}`);
     _updateWaypointLine();
     const btn = document.querySelector('.map-waypoint-btn');
     if (btn) btn.classList.add('active');
@@ -282,6 +287,270 @@ const StrumentiModule = (() => {
       if (btn) btn.classList.add('active');
       _map.once('click', _onMapClickWaypoint);
     }
+  }
+
+
+  /* ── LUOGHI SALVATI, PERCORSO REGISTRATO, RITORNO ──
+     Tutto resta nel telefono (Storage: 'luoghi', 'percorsi', 'percorso-corrente').
+     Si registra solo con l'app aperta sugli Strumenti e il GPS acceso: a schermo spento il browser/WebView non dà la posizione. */
+  const _esc = t => String(t).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+  const MAX_PERCORSI = 15, MAX_PUNTI = 3000, PASSO_M = 8;
+  let _placeLayer = null, _placeMarkers = {}, _pendingPlace = null;
+  let _rec = null;            // { id, nome, t0, pts:[[lat,lon,t]] } mentre si registra
+  let _recLine = null, _backLine = null, _backShowLine = null;
+  let _back = null;           // { nome, pts, idx } mentre si torna indietro
+  let _settingPlace = false;
+
+  const _luoghi = () => Storage.get('luoghi', []) || [];
+  const _percorsi = () => Storage.get('percorsi', []) || [];
+  const _fmtDist = km => km < 1 ? Math.round(km * 1000) + ' m' : km.toFixed(1) + ' km';
+  const _pad = n => String(n).padStart(2, '0');
+  const _stamp = t => { const d = new Date(t); return `${_pad(d.getDate())}/${_pad(d.getMonth() + 1)} ${_pad(d.getHours())}:${_pad(d.getMinutes())}`; };
+  const _lenKm = pts => { let s = 0; for (let i = 1; i < pts.length; i++) s += _haversineKm(pts[i-1][0], pts[i-1][1], pts[i][0], pts[i][1]); return s; };
+
+  // Direzione verso cui si guarda: bussola se accesa, altrimenti direzione di marcia del GPS (solo se ci si muove)
+  function _curHeading() {
+    if (compassHeading != null) return compassHeading;
+    if (gpsPos && gpsPos.heading != null && !isNaN(gpsPos.heading) && (gpsPos.speed || 0) > 0.5) return gpsPos.heading;
+    return null;
+  }
+
+  function _placeIcon() {
+    return L.divIcon({
+      className: '',
+      html: `<svg viewBox="0 0 24 36" width="26" height="38" style="overflow:visible">
+               <path d="M12 0 C5.4 0 0 5.4 0 12 C0 21 12 36 12 36 C12 36 24 21 24 12 C24 5.4 18.6 0 12 0Z" fill="#3d8bd9" stroke="white" stroke-width="1.5"/>
+               <circle cx="12" cy="12" r="4" fill="white"/></svg>`,
+      iconSize: [26, 38], iconAnchor: [13, 38], popupAnchor: [0, -34], tooltipAnchor: [0, -34],
+    });
+  }
+
+  function _placeTip(p) {
+    let s = _esc(p.label);
+    if (gpsPos) s += ' · ' + _fmtDist(_haversineKm(gpsPos.latitude, gpsPos.longitude, p.lat, p.lon));
+    return s;
+  }
+  function _placePopup(p) {
+    let d = '';
+    if (gpsPos) {
+      const km = _haversineKm(gpsPos.latitude, gpsPos.longitude, p.lat, p.lon), b = _bearingDeg(gpsPos.latitude, gpsPos.longitude, p.lat, p.lon);
+      d = `<div>${_fmtDist(km)} · ${Math.round(b)}° ${deg2card(b)}</div>`;
+    }
+    return `<b>${_esc(p.label)}</b><br>${p.lat.toFixed(5)}, ${p.lon.toFixed(5)}${d}
+      <div class="map-pop-act"><button onclick="StrumentiModule.placeGo('${p.id}')">Vai qui</button><button onclick="StrumentiModule.placeDel('${p.id}')">Elimina</button></div>`;
+  }
+  function _drawPlaces() {
+    if (!_map) return;
+    if (!_placeLayer) _placeLayer = L.layerGroup().addTo(_map);
+    _placeLayer.clearLayers(); _placeMarkers = {};
+    _luoghi().forEach(p => {
+      const m = L.marker([p.lat, p.lon], { icon: _placeIcon() }).addTo(_placeLayer);
+      m.bindTooltip(_placeTip(p), { permanent: true, direction: 'top', className: 'map-place-tip' });
+      m.bindPopup(() => _placePopup(p));
+      _placeMarkers[p.id] = m;
+    });
+  }
+  function _refreshPlaceTips() {
+    _luoghi().forEach(p => { const m = _placeMarkers[p.id]; if (m) m.setTooltipContent(_placeTip(p)); });
+  }
+
+  function _mapHint(t) { const h = document.getElementById('st-map-hint'); if (h) h.textContent = t; }
+
+  function _needGps() {
+    if (gpsWatchId === null) toggleGPS();
+  }
+
+  // Segnaposto: aggiunge un punto con etichetta (form in sovrimpressione sulla mappa)
+  function placeHere() {
+    if (!gpsPos) { _needGps(); _mapHint(I18n.t('Acquisisco la posizione… riprova tra qualche secondo')); return; }
+    _askLabel(gpsPos.latitude, gpsPos.longitude);
+  }
+  function placeOnMap() {
+    if (!_map) return;
+    _settingPlace = !_settingPlace;
+    document.getElementById('map-btn-place-map')?.classList.toggle('active', _settingPlace);
+    if (_settingPlace) {
+      _mapHint(I18n.t('Tocca la mappa dove vuoi mettere il segnaposto'));
+      _map.once('click', e => { _settingPlace = false; document.getElementById('map-btn-place-map')?.classList.remove('active'); _askLabel(e.latlng.lat, e.latlng.lng); });
+    }
+  }
+  function _askLabel(lat, lon) {
+    _pendingPlace = { lat, lon };
+    const f = document.getElementById('map-form');
+    if (!f) return;
+    f.innerHTML = `<input id="map-form-label" type="text" maxlength="40" placeholder="Nome del luogo (es. Auto, Sorgente, Punto di ritrovo)" autocomplete="off">
+      <button class="btn btn-primary btn-sm" onclick="StrumentiModule.placeSave()"><i class="ph ph-check"></i> Salva</button>
+      <button class="btn btn-outline btn-sm" onclick="StrumentiModule.placeCancel()">Annulla</button>`;
+    f.style.display = 'flex';
+    const inp = document.getElementById('map-form-label');
+    if (inp) { inp.focus(); inp.onkeydown = e => { if (e.key === 'Enter') placeSave(); }; }
+  }
+  function placeCancel() {
+    _pendingPlace = null;
+    const f = document.getElementById('map-form'); if (f) { f.style.display = 'none'; f.innerHTML = ''; }
+    _mapHint(I18n.t('Il punto arancione è la tua posizione'));
+  }
+  function placeSave() {
+    if (!_pendingPlace) return;
+    const label = (document.getElementById('map-form-label')?.value || '').trim().slice(0, 40) || I18n.t('Luogo');
+    const list = _luoghi();
+    list.push({ id: 'p' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), label, lat: _pendingPlace.lat, lon: _pendingPlace.lon, t: Date.now() });
+    Storage.set('luoghi', list);
+    placeCancel(); _drawPlaces(); _mapLists();
+  }
+  function placeDel(id) {
+    Storage.set('luoghi', _luoghi().filter(p => p.id !== id));
+    if (_map) _map.closePopup();
+    _drawPlaces(); _mapLists();
+  }
+  function placeGo(id) {
+    const p = _luoghi().find(x => x.id === id); if (!p || !_map) return;
+    _map.closePopup();
+    if (_waypointMarker) _clearWaypoint();
+    _setWaypointAt(L.latLng(p.lat, p.lon), p.label);
+    _needGps();
+    _map.setView([p.lat, p.lon], Math.max(_map.getZoom(), 14));
+  }
+  function placeShow(id) {
+    const p = _luoghi().find(x => x.id === id); if (!p || !_map) return;
+    _map.setView([p.lat, p.lon], 16);
+    if (_placeMarkers[id]) _placeMarkers[id].openPopup();
+    document.getElementById('st-map')?.scrollIntoView({ block: 'center' });
+  }
+
+  // Registrazione del percorso
+  function recToggle() {
+    if (_rec) { _recStop(); return; }
+    _needGps();
+    _rec = { id: 'r' + Date.now().toString(36), t0: Date.now(), pts: [] };
+    if (gpsPos) _recFeed();
+    _recUi();
+    _mapHint(I18n.t('Registro il percorso: tieni l\'app aperta con lo schermo acceso'));
+  }
+  function _recFeed() {
+    if (!_rec || !gpsPos) return;
+    if (gpsPos.accuracy != null && gpsPos.accuracy > 50) return;           // punto troppo impreciso: si scarta
+    const last = _rec.pts[_rec.pts.length - 1];
+    if (last && _haversineKm(last[0], last[1], gpsPos.latitude, gpsPos.longitude) * 1000 < PASSO_M) return;
+    _rec.pts.push([+gpsPos.latitude.toFixed(6), +gpsPos.longitude.toFixed(6), Date.now()]);
+    if (_rec.pts.length > MAX_PUNTI) _rec.pts = _rec.pts.filter((_, i) => i % 2 === 0 || i === _rec.pts.length - 1);
+    if (_rec.pts.length % 5 === 1) Storage.set('percorso-corrente', _rec);  // copia di sicurezza
+    if (_map) {
+      const ll = _rec.pts.map(p => [p[0], p[1]]);
+      if (_recLine) _recLine.setLatLngs(ll); else _recLine = L.polyline(ll, { color: '#3dbd6e', weight: 4, opacity: 0.9 }).addTo(_map);
+    }
+    _recUi();
+  }
+  function _recStop() {
+    const r = _rec; _rec = null;
+    Storage.remove('percorso-corrente');
+    if (_recLine && _map) { _map.removeLayer(_recLine); _recLine = null; }
+    if (r && r.pts.length >= 2) {
+      const list = _percorsi();
+      r.nome = I18n.t('Percorso') + ' ' + _stamp(r.t0);
+      r.t1 = Date.now();
+      list.push(r);
+      while (list.length > MAX_PERCORSI) list.shift();
+      Storage.set('percorsi', list);
+      _mapHint(I18n.t('Percorso salvato'));
+    } else _mapHint(I18n.t('Percorso troppo corto: non salvato'));
+    _recUi(); _mapLists();
+  }
+  function _recUi() {
+    const b = document.getElementById('map-btn-rec');
+    if (b) {
+      b.classList.toggle('active', !!_rec);
+      b.innerHTML = _rec ? `<i class="ph ph-stop-circle"></i> <span>Ferma</span> <small class="mono">${_fmtDist(_lenKm(_rec.pts))}</small>` : '<i class="ph ph-record"></i> <span>Registra percorso</span>';
+    }
+  }
+  function pathDel(id) {
+    Storage.set('percorsi', _percorsi().filter(p => p.id !== id));
+    if (_back && _back.id === id) backStop();
+    _mapLists();
+  }
+  function pathShow(id) {
+    const p = _percorsi().find(x => x.id === id); if (!p || !_map) return;
+    if (_backShowLine) _map.removeLayer(_backShowLine);
+    _backShowLine = L.polyline(p.pts.map(x => [x[0], x[1]]), { color: '#c9a84c', weight: 4, opacity: 0.85, dashArray: '2 8' }).addTo(_map);
+    _map.fitBounds(_backShowLine.getBounds(), { padding: [30, 30] });
+    document.getElementById('st-map')?.scrollIntoView({ block: 'center' });
+  }
+
+  // Ritorno lungo il percorso registrato (di notte: freccia e distanza verso il punto precedente)
+  function backStart(id) {
+    let p = id ? _percorsi().find(x => x.id === id) : null;
+    if (!p && _rec && _rec.pts.length >= 2) { p = { id: _rec.id, nome: I18n.t('Percorso in corso'), pts: _rec.pts.slice() }; }
+    if (!p) { const l = _percorsi(); p = l[l.length - 1]; }
+    if (!p || p.pts.length < 2) { _mapHint(I18n.t('Prima registra un percorso')); return; }
+    if (_rec) _recStop();
+    _needGps();
+    _back = { id: p.id, nome: p.nome, pts: p.pts, idx: p.pts.length - 1 };
+    if (_backShowLine && _map) { _map.removeLayer(_backShowLine); _backShowLine = null; }
+    _backShowLine = L.polyline(p.pts.map(x => [x[0], x[1]]), { color: '#c9a84c', weight: 4, opacity: 0.85, dashArray: '2 8' }).addTo(_map);
+    document.getElementById('map-btn-back')?.classList.add('active');
+    const d = document.getElementById('map-btn-back'); if (d) d.innerHTML = '<i class="ph ph-x-circle"></i> <span>Basta ritorno</span>';
+    _mapHint(I18n.t('Segui la freccia verso il punto di partenza'));
+    _backUpdate();
+  }
+  function backStop() {
+    _back = null;
+    if (_backLine && _map) { _map.removeLayer(_backLine); _backLine = null; }
+    if (_backShowLine && _map) { _map.removeLayer(_backShowLine); _backShowLine = null; }
+    const h = document.getElementById('map-back-hud'); if (h) h.style.display = 'none';
+    const d = document.getElementById('map-btn-back'); if (d) { d.classList.remove('active'); d.innerHTML = '<i class="ph ph-arrow-u-up-left"></i> <span>Torna indietro</span>'; }
+  }
+  function backToggle() { _back ? backStop() : backStart(); }
+  function _backUpdate() {
+    if (!_back || !gpsPos || !_map) return;
+    const pts = _back.pts, la = gpsPos.latitude, lo = gpsPos.longitude;
+    const dist = j => _haversineKm(la, lo, pts[j][0], pts[j][1]) * 1000;
+    // punto del percorso più vicino, cercando solo da dove si era arrivati verso l'inizio
+    let best = _back.idx, bd = dist(best);
+    for (let j = Math.max(0, _back.idx - 40); j <= Math.min(pts.length - 1, _back.idx + 3); j++) { const d = dist(j); if (d < bd) { bd = d; best = j; } }
+    _back.idx = best;
+    let tgt = 0;
+    for (let j = best - 1; j >= 0; j--) if (dist(j) >= 25) { tgt = j; break; }
+    const hud = document.getElementById('map-back-hud');
+    if (best === 0 && bd < 20 || dist(0) < 20) {
+      if (hud) { hud.innerHTML = '<i class="ph ph-flag-checkered"></i> <span>Sei tornato al punto di partenza</span>'; hud.style.display = 'flex'; }
+      return;
+    }
+    const t = pts[tgt], km = _haversineKm(la, lo, t[0], t[1]), b = _bearingDeg(la, lo, t[0], t[1]);
+    const left = _fmtDist(_lenKm(pts.slice(0, best + 1)) + bd / 1000);
+    const hd = _curHeading();
+    const rot = hd != null ? b - hd : b;
+    if (_backLine) _backLine.setLatLngs([[la, lo], [t[0], t[1]]]);
+    else _backLine = L.polyline([[la, lo], [t[0], t[1]]], { color: '#e85c40', weight: 4, opacity: 0.95 }).addTo(_map);
+    if (hud) {
+      hud.innerHTML = `<i class="ph ph-navigation-arrow map-back-arrow" style="transform:rotate(${Math.round(rot)}deg)"></i>
+        <span class="mono">${_fmtDist(km)} · ${Math.round(b)}° ${deg2card(b)}</span><small class="mono">${left}</small>`;
+      hud.style.display = 'flex';
+    }
+  }
+
+  function _mapLists() {
+    const el = document.getElementById('map-lists'); if (!el) return;
+    const luoghi = _luoghi(), percorsi = _percorsi();
+    const near = p => gpsPos ? ` · ${_fmtDist(_haversineKm(gpsPos.latitude, gpsPos.longitude, p.lat, p.lon))}` : '';
+    el.innerHTML = (luoghi.length || percorsi.length ? '' : '<p class="st-status text-dim" style="font-size:0.78rem">Segna i luoghi importanti (auto, sorgente, punto di ritrovo) e registra il tuo percorso per poter tornare indietro anche al buio.</p>')
+      + (luoghi.length ? `<div class="st-sub-lbl">Luoghi salvati</div>` + luoghi.map(p => `<div class="map-row"><button class="map-row-main" onclick="StrumentiModule.placeShow('${p.id}')"><i class="ph ph-map-pin"></i> <b>${_esc(p.label)}</b><small class="mono">${p.lat.toFixed(4)}, ${p.lon.toFixed(4)}${near(p)}</small></button><button class="map-row-btn" aria-label="Vai qui" title="Vai qui" onclick="StrumentiModule.placeGo('${p.id}')"><i class="ph ph-navigation-arrow"></i></button><button class="map-row-btn" aria-label="Elimina" title="Elimina" onclick="StrumentiModule.placeDel('${p.id}')"><i class="ph ph-trash"></i></button></div>`).join('') : '')
+      + (percorsi.length ? `<div class="st-sub-lbl" style="margin-top:8px">Percorsi registrati</div>` + percorsi.slice().reverse().map(p => `<div class="map-row"><button class="map-row-main" onclick="StrumentiModule.pathShow('${p.id}')"><i class="ph ph-path"></i> <b>${_esc(p.nome)}</b><small class="mono">${_fmtDist(_lenKm(p.pts))}</small></button><button class="map-row-btn" aria-label="Torna indietro" title="Torna indietro" onclick="StrumentiModule.backStart('${p.id}')"><i class="ph ph-arrow-u-up-left"></i></button><button class="map-row-btn" aria-label="Elimina" title="Elimina" onclick="StrumentiModule.pathDel('${p.id}')"><i class="ph ph-trash"></i></button></div>`).join('') : '');
+  }
+
+  // Mappa a tutto schermo: si fa con CSS (requestFullscreen non funziona in modo affidabile nell'app Android)
+  let _bigHome = null;
+  function mapBig(on) {
+    const wrap = document.querySelector('.st-map-wrap'); if (!wrap) return;
+    const big = on == null ? !wrap.classList.contains('map-big') : on;
+    // Si sposta la mappa sotto <body>: dentro la sezione (che ha trasformazioni CSS) il «fixed» non copre lo schermo
+    if (big && !_bigHome) { _bigHome = document.createComment('map'); wrap.parentNode.insertBefore(_bigHome, wrap); document.body.appendChild(wrap); }
+    else if (!big && _bigHome) { _bigHome.parentNode.insertBefore(wrap, _bigHome); _bigHome.remove(); _bigHome = null; }
+    wrap.classList.toggle('map-big', big);
+    document.body.classList.toggle('map-big-open', big);
+    const b = document.querySelector('.map-fs-btn');
+    if (b) b.innerHTML = big ? '<i class="ph ph-arrows-in"></i>' : '<i class="ph ph-arrows-out"></i>';
+    setTimeout(() => _map && _map.invalidateSize(), 120);
+    setTimeout(() => _map && _map.invalidateSize(), 400);
   }
 
   function toggleCompass() {
@@ -345,7 +614,7 @@ const StrumentiModule = (() => {
       if (btn) btn.textContent = 'Stop';
       _gpsContent('<p class="st-loading"><i class="ph ph-arrows-clockwise"></i> Acquisizione segnale GPS...</p>');
       gpsWatchId = navigator.geolocation.watchPosition(
-        pos => { gpsPos = pos.coords; _gpsUpdate(); },
+        pos => { gpsPos = pos.coords; _gpsUpdate(); _recFeed(); },
         err => {
           const msgs = { 1:'Permesso GPS negato', 2:'Posizione non disponibile', 3:'Timeout — riprova' };
           _gpsContent(`<p class="st-unavail"><i class="ph ph-warning"></i> ${msgs[err.code]||'Errore GPS'}</p>`);
@@ -399,12 +668,15 @@ const StrumentiModule = (() => {
         icon: _makeHeadingIcon(compassHeading),
         zIndexOffset: 1000,
       }).addTo(_map).bindPopup(`<b>Posizione</b><br>${lat.toFixed(5)}, ${lon.toFixed(5)}`);
+      if (!_mapFixed) { _mapFixed = true; _map.setView(latlng, 15); }   // al primo segnale la mappa si porta sulla tua posizione
       _gpsCircle = L.circle(latlng, {
         radius: acc, color: '#c9a84c', fillColor: '#c9a84c',
         fillOpacity: 0.1, weight: 1,
       }).addTo(_map);
     }
     if (_waypointMarker) _updateWaypointLine();
+    _refreshPlaceTips();
+    _backUpdate();
   }
 
   function _gpsContent(html) {
@@ -766,30 +1038,14 @@ const StrumentiModule = (() => {
         const btn = L.DomUtil.create('button', 'map-locate-btn map-fs-btn');
         btn.innerHTML = '<i class="ph ph-arrows-out"></i>';
         btn.title = 'Fullscreen';
-        L.DomEvent.on(btn, 'click', e => {
-          L.DomEvent.stopPropagation(e);
-          const wrap = document.querySelector('.st-map-wrap');
-          if (!wrap) return;
-          if (!document.fullscreenElement) {
-            wrap.requestFullscreen().catch(() => {});
-            btn.innerHTML = '<i class="ph ph-arrows-in"></i>';
-          } else {
-            document.exitFullscreen().catch(() => {});
-            btn.innerHTML = '<i class="ph ph-arrows-out"></i>';
-          }
-        });
-        document.addEventListener('fullscreenchange', () => {
-          if (!document.fullscreenElement) {
-            btn.innerHTML = '<i class="ph ph-arrows-out"></i>';
-          }
-          setTimeout(() => _map && _map.invalidateSize(), 200);
-        }, { once: false });
+        L.DomEvent.on(btn, 'click', e => { L.DomEvent.stopPropagation(e); mapBig(); });
         return btn;
       },
     });
     _map.addControl(new FullscreenBtn());
 
     _mapReady = true;
+    _drawPlaces(); _mapLists(); _recUi();
     if (gpsPos) _mapUpdateGPS();
   }
 
@@ -1053,7 +1309,16 @@ const StrumentiModule = (() => {
           <div class="st-map-wrap">
             <div id="st-map"></div>
             <div id="map-waypoint-hud" class="map-waypoint-hud" style="display:none"></div>
+            <div id="map-back-hud" class="map-back-hud" style="display:none"></div>
+            <div id="map-form" class="map-form" style="display:none"></div>
+            <div class="map-tools">
+              <button class="map-tool" onclick="StrumentiModule.placeHere()"><i class="ph ph-map-pin-plus"></i> <span>Segna qui</span></button>
+              <button class="map-tool" id="map-btn-place-map" onclick="StrumentiModule.placeOnMap()"><i class="ph ph-hand-tap"></i> <span>Segna sulla mappa</span></button>
+              <button class="map-tool" id="map-btn-rec" onclick="StrumentiModule.recToggle()"><i class="ph ph-record"></i> <span>Registra percorso</span></button>
+              <button class="map-tool" id="map-btn-back" onclick="StrumentiModule.backToggle()"><i class="ph ph-arrow-u-up-left"></i> <span>Torna indietro</span></button>
+            </div>
           </div>
+          <div id="map-lists" class="map-lists"></div>
           <p class="st-status text-dim" style="font-size:0.72rem;margin-top:6px">
             Tile © <a href="https://openstreetmap.org" target="_blank" rel="noopener" style="color:var(--text-dim)">OpenStreetMap</a> contributors · Regioni © ISTAT CC BY
           </p>
@@ -1094,13 +1359,15 @@ const StrumentiModule = (() => {
     if (sosActive) _stopSOS();
     if (wakeLock) { try { wakeLock.release(); } catch(e) {} wakeLock = null; }
     if (window.RSAndroid) RSAndroid.keepScreenOn(false);
-    if (_map) { _map.remove(); _map = null; _mapReady = false; _gpsMarker = null; _gpsCircle = null; _waypointMarker = null; _waypointLine = null; _settingWaypoint = false; _layerComuni = null; _comuniEnabled = false; _comuniLoading = false; }
+    document.body.classList.remove('map-big-open'); if (_bigHome) { document.querySelector('body > .st-map-wrap')?.remove(); _bigHome.remove(); _bigHome = null; } if (_rec) _recStop(); _back = null; _recLine = _backLine = _backShowLine = _placeLayer = null; _placeMarkers = {};
+    if (_map) { _map.remove(); _map = null; _mapReady = false; _mapFixed = false; _gpsMarker = null; _gpsCircle = null; _waypointMarker = null; _waypointLine = null; _settingWaypoint = false; _layerComuni = null; _comuniEnabled = false; _comuniLoading = false; }
     window.removeEventListener('online',  _networkUI);
     window.removeEventListener('offline', _networkUI);
   }
 
   return {
     init, destroy, quickHtml, goTo, toggleCompass, toggleLevel, toggleGPS, toggleTorch, toggleSOS, copyCoords,
+    placeHere, placeOnMap, placeSave, placeCancel, placeDel, placeGo, placeShow, recToggle, backToggle, backStart, pathDel, pathShow,
     _saveHomeLocation, _tilesRadiusChange, _downloadTilesPack, _deleteTilesPack,
   };
 

@@ -1,0 +1,26 @@
+Segna qui ||| Mark here
+Segna sulla mappa ||| Mark on the map
+Registra percorso ||| Record route
+Ferma ||| Stop
+Torna indietro ||| Go back
+Basta ritorno ||| Stop going back
+Luoghi salvati ||| Saved places
+Percorsi registrati ||| Recorded routes
+Vai qui ||| Go here
+Elimina ||| Delete
+Salva ||| Save
+Annulla ||| Cancel
+Luogo ||| Place
+Percorso ||| Route
+Percorso in corso ||| Route in progress
+Nome del luogo (es. Auto, Sorgente, Punto di ritrovo) ||| Place name (e.g. Car, Spring, Meeting point)
+Acquisisco la posizione… riprova tra qualche secondo ||| Getting your position… try again in a few seconds
+Tocca la mappa dove vuoi mettere il segnaposto ||| Tap the map where you want the marker
+Registro il percorso: tieni l'app aperta con lo schermo acceso ||| Recording the route: keep the app open with the screen on
+Percorso salvato ||| Route saved
+Percorso troppo corto: non salvato ||| Route too short: not saved
+Prima registra un percorso ||| Record a route first
+Segui la freccia verso il punto di partenza ||| Follow the arrow to the starting point
+Sei tornato al punto di partenza ||| You are back at the starting point
+Segna i luoghi importanti (auto, sorgente, punto di ritrovo) e registra il tuo percorso per poter tornare indietro anche al buio. ||| Mark the important places (car, spring, meeting point) and record your route so you can find your way back even in the dark.
+Il punto arancione è la tua posizione ||| The orange dot is your position
